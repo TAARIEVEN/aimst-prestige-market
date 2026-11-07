@@ -1234,6 +1234,7 @@
       closeBoostModal();
       window.open(`https://wa.me/60126384757?text=${encodeURIComponent(waMsg)}`, '_blank');
       alert("Boost request & receipt notice submitted! Awaiting Founder verification.");
+      renderMyListings();
     };
 
     window.approveBoost = async function(itemId) {
@@ -1312,9 +1313,12 @@
         isFounderUser = founderEmails.includes(currentUserEmail);
         currentUser = user.email.split('@')[0];
 
+        // Refresh sellers from Firestore to ensure latest verification status
+        await loadSellers();
         const sellerProfile = allSellers.find(s => s.email.toLowerCase() === currentUserEmail);
         if (sellerProfile && !sellerProfile.isVerified && !isFounderUser) {
           await signOut(auth);
+          alert("Your account is pending founder verification. Please check back soon!");
           return;
         }
 
@@ -1340,7 +1344,7 @@
       checkWelcomeModal();
       populateCourseDropdowns();
       renderCourseFilterPills();
-      await loadSellers(); // Make sure sellers are loaded before listings & auth check
+      await loadSellers();
       await loadListings();
       await loadClubs();
       updateMetrics();
@@ -1507,7 +1511,10 @@
         const querySnapshot = await getDocs(q);
         const firebaseSellers = [];
         querySnapshot.forEach((docSnap) => { firebaseSellers.push({ id: docSnap.id, ...docSnap.data() }); });
-        if (firebaseSellers.length > 0) allSellers = firebaseSellers;
+        if (firebaseSellers.length > 0) {
+          allSellers = firebaseSellers;
+          syncLocalStorage();
+        }
       } catch (err) {}
     }
 
@@ -1761,7 +1768,10 @@
       `).join('');
     };
 
-    window.renderSellerManagerTable = function() {
+    window.renderSellerManagerTable = async function() {
+      await loadSellers();
+      await loadListings();
+
       const pendingContainer = document.getElementById('pendingSellersContainer');
       const pendingBoostsContainer = document.getElementById('pendingBoostsContainer');
       const tbody = document.getElementById('sellersTableBody');
@@ -1783,9 +1793,12 @@
 
       const pending = allSellers.filter(s => !s.isVerified);
       document.getElementById('pendingCountBadge').innerText = `${pending.length} Pending`;
-      pendingContainer.innerHTML = pending.length === 0 ? `<p class="text-[11px] text-amber-800 italic">No pending sellers.</p>` : pending.map(s => `
+      pendingContainer.innerHTML = pending.length === 0 ? `<p class="text-[11px] text-amber-800 italic">No pending student verifications.</p>` : pending.map(s => `
         <div class="bg-white p-2.5 rounded-xl border border-amber-300 flex items-center justify-between text-xs">
-          <span class="font-extrabold text-slate-900">${s.username}</span>
+          <div>
+            <span class="font-extrabold text-slate-900 block">${s.username}</span>
+            <span class="text-[10px] text-slate-500">${s.email}</span>
+          </div>
           <button onclick="approveSeller('${s.id}')" class="px-2.5 py-1 rounded-lg bg-emerald-600 text-white font-bold text-[10px]">Verify</button>
         </div>
       `).join('');
@@ -1815,7 +1828,6 @@
     };
 
     window.rejectSeller = async function(id) {
-      const s = allSellers.find(x => x.id === id);
       allSellers = allSellers.filter(x => x.id !== id);
       try {
         await deleteDoc(doc(db, "verified_sellers", id));
