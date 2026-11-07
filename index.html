@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AIMST Prestige Market | We Listen, We Create, You Enjoy!</title>
   
-  <!-- PWA Manifest & Meta Tags for Cross-Platform Installation (Android, iOS, Laptops) -->
+  <!-- PWA Manifest & Meta Tags for Cross-Platform Installation -->
   <link rel="manifest" href="manifest.json">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -33,11 +33,26 @@
       box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
       border-color: #cbd5e1;
     }
+
+    .boosted-card {
+      border: 2px solid #f59e0b !important;
+      background: linear-gradient(180deg, #fffbeb 0%, #ffffff 100%) !important;
+      box-shadow: 0 8px 20px -4px rgba(245, 158, 11, 0.25) !important;
+    }
+
+    /* Hide scrollbars for clean carousel swipe */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
   </style>
 </head>
-<body class="min-h-screen font-sans selection:bg-amber-400 selection:text-slate-950 pb-28">
+<body class="min-h-screen font-sans selection:bg-amber-400 selection:text-slate-950 pb-24">
 
-  <!-- WELCOME MODAL -->
+  <!-- WELCOME POPUP MODAL -->
   <div id="welcomeModal" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4 transition-all duration-300">
     <div class="bg-white text-slate-900 rounded-3xl max-w-sm w-full p-6 sm:p-8 relative shadow-2xl text-center border-2 border-emerald-500/20 overflow-hidden">
       
@@ -62,7 +77,7 @@
       </div>
 
       <p class="relative z-10 text-xs sm:text-sm text-slate-600 leading-relaxed mb-6 px-2">
-        Discover verified notes, tech gadgets, campus services, and wishlist items directly from students. Secure, fast, and built for AIMST!
+        Discover great finds, study materials, blazer rentals, and campus announcements directly from verified students. Install our PWA app on your phone or laptop!
       </p>
 
       <button onclick="window.closeWelcomeModal()" class="relative z-10 w-full py-3.5 px-6 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold text-sm shadow-xl shadow-emerald-600/20 flex items-center justify-center space-x-3 transition-all hover:scale-[1.02]">
@@ -97,13 +112,13 @@
     <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-2 min-h-[4.2rem] flex flex-row items-center justify-between gap-1.5 sm:gap-4">
       
       <div class="flex items-center space-x-2 cursor-pointer shrink min-w-0" onclick="location.reload()">
-        <img src="market-logo.png" alt="APM Logo" class="w-8 h-8 sm:w-10 sm:h-10 rounded-xl object-contain shadow-md border border-emerald-500/30 shrink-0" onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=400'">
+        <img src="market-logo.png" alt="AIMST Prestige Market Logo" class="w-8 h-8 sm:w-10 sm:h-10 rounded-xl object-contain shadow-md border border-emerald-500/30 shrink-0" onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=400'">
         <div class="min-w-0">
           <h1 class="font-black tracking-wider text-[11px] sm:text-base text-slate-900 leading-tight truncate">
             AIMST PRESTIGE MARKET
           </h1>
           <p class="text-[7px] sm:text-[8px] uppercase tracking-widest text-emerald-600 font-bold leading-none mt-0.5 truncate">
-            Verified Student Campus Hub
+            We Listen, We Create, You Enjoy!
           </p>
         </div>
       </div>
@@ -114,10 +129,11 @@
           <span class="hidden sm:inline">Founders</span>
         </button>
 
+        <!-- Wishlist Button -->
         <button onclick="openWishlistModal()" class="px-2 py-1.5 sm:px-3 sm:py-1.5 rounded-xl bg-rose-50 hover:bg-rose-100 border border-rose-200 text-[10px] sm:text-xs font-bold text-rose-700 transition-all flex items-center space-x-1">
           <i class="fa-solid fa-heart text-rose-500"></i>
           <span class="hidden sm:inline">Wishlist</span>
-          <span id="wishlistCountBadge" class="w-4 h-4 rounded-full bg-rose-500 text-white text-[9px] flex items-center justify-center font-black">0</span>
+          <span id="wishlistCountBadge" class="px-1.5 py-0.2 rounded-full bg-rose-500 text-white font-black text-[9px]">0</span>
         </button>
 
         <button onclick="openMyListingsModal()" id="myListingsNavBtn" class="hidden px-2 py-1.5 sm:px-3 sm:py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 border border-emerald-300 text-[10px] sm:text-xs font-bold text-emerald-800 transition-all flex items-center space-x-1">
@@ -127,19 +143,19 @@
 
         <button onclick="openSellerManagerModal()" id="sellerManagerNavBtn" class="hidden px-2 py-1.5 sm:px-3 sm:py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 border border-amber-300 text-[10px] sm:text-xs font-bold text-amber-800 transition-all flex items-center space-x-1">
           <i class="fa-solid fa-users-gear text-amber-600"></i>
-          <span class="hidden sm:inline">Portal</span>
+          <span class="hidden sm:inline">Founders Portal</span>
         </button>
 
         <button id="authBtn" onclick="handleAuthClick()" class="px-2.5 py-1.5 sm:px-3 sm:py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-[10px] sm:text-xs font-bold shadow-md shadow-emerald-600/20 transition-all flex items-center space-x-1 max-w-[110px] sm:max-w-[180px]">
           <i class="fa-solid fa-user-shield text-[11px] shrink-0"></i>
-          <span id="authBtnText" class="truncate">Seller Login</span>
+          <span id="authBtnText" class="truncate">APM Seller Login</span>
         </button>
       </div>
 
     </div>
   </header>
 
-  <!-- Live Sync Bar -->
+  <!-- Live Sync Banner -->
   <div class="bg-emerald-50 border-b border-emerald-200 py-1.5 px-3 text-center text-[10px] sm:text-[11px] font-medium text-emerald-900 flex flex-wrap items-center justify-center gap-2 sm:gap-6">
     <div class="flex items-center space-x-1.5">
       <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
@@ -155,27 +171,13 @@
     </div>
   </div>
 
-  <!-- FEED MODE SWITCHER TABS (MARKETPLACE VS WANTED REQUEST BOARD) -->
-  <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 pt-4 pb-1">
-    <div class="flex rounded-2xl bg-slate-200/70 p-1 max-w-md mx-auto shadow-sm">
-      <button id="feedTabMarketplace" onclick="switchFeedMode('marketplace')" class="flex-1 py-2 rounded-xl text-xs font-black bg-white text-slate-900 shadow-sm transition-all flex items-center justify-center space-x-1.5">
-        <i class="fa-solid fa-store text-emerald-600"></i>
-        <span>Marketplace Feed</span>
-      </button>
-      <button id="feedTabWanted" onclick="switchFeedMode('wanted')" class="flex-1 py-2 rounded-xl text-xs font-black text-slate-600 hover:text-slate-900 transition-all flex items-center justify-center space-x-1.5">
-        <i class="fa-solid fa-bullhorn text-amber-600"></i>
-        <span>Wanted / Request Board</span>
-      </button>
-    </div>
-  </div>
-
-  <!-- CATEGORIES BAR -->
-  <section id="categorySectionContainer" class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 pt-4 pb-3">
-    <div class="text-center mb-3">
+  <!-- Grab-Style Quick Categories Grid Bar -->
+  <section class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 pt-5 sm:pt-7 pb-3">
+    <div class="text-center mb-4">
       <h2 class="text-lg sm:text-2xl font-black text-slate-900 tracking-tight mb-0.5">
         Explore Campus Categories
       </h2>
-      <p class="text-slate-500 text-[11px] sm:text-xs">Tap any category to filter items instantly.</p>
+      <p class="text-slate-500 text-[11px] sm:text-xs">Tap any category to filter campus items instantly.</p>
     </div>
 
     <div class="grid grid-cols-4 sm:grid-cols-4 lg:grid-cols-8 gap-2 sm:gap-3.5 mb-4">
@@ -187,11 +189,11 @@
         <span class="text-[10px] sm:text-xs font-bold text-slate-800 leading-tight">Academic Notes</span>
       </button>
 
-      <button onclick="setCategory('vehicles', this)" class="category-btn grab-card p-2.5 rounded-2xl flex flex-col items-center justify-center text-center transition-all group">
+      <button onclick="setCategory('rentals', this)" class="category-btn grab-card p-2.5 rounded-2xl flex flex-col items-center justify-center text-center transition-all group">
         <div class="w-11 h-11 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-lg mb-1.5 group-hover:scale-110 transition-all shadow-sm">
-          <i class="fa-solid fa-car-side"></i>
+          <i class="fa-solid fa-user-tie"></i>
         </div>
-        <span class="text-[10px] sm:text-xs font-bold text-slate-800 leading-tight">Belonging Rentals</span>
+        <span class="text-[10px] sm:text-xs font-bold text-slate-800 leading-tight">Blazers & Essentials</span>
       </button>
 
       <button onclick="setCategory('tech', this)" class="category-btn grab-card p-2.5 rounded-2xl flex flex-col items-center justify-center text-center transition-all group">
@@ -238,16 +240,21 @@
 
     </div>
 
-    <!-- COURSE FILTER BAR -->
-    <div id="courseFilterSection" class="bg-white p-3.5 rounded-2xl border border-slate-200 mb-4 shadow-sm">
+    <!-- DEDICATED AIMST COURSE POPUP / DROPDOWN PANEL (ONLY SHOWN WHEN ACADEMIC NOTES SELECTED) -->
+    <div id="courseFilterSection" class="bg-white p-3.5 rounded-2xl border-2 border-emerald-500/40 mb-4 shadow-lg hidden transition-all">
       <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 mb-2">
         <div class="flex items-center space-x-2">
-          <i class="fa-solid fa-filter text-emerald-600 text-xs"></i>
-          <span class="text-xs font-black uppercase tracking-wider text-slate-800">Filter AIMST Programmes (Select 1 or more):</span>
+          <i class="fa-solid fa-book-medical text-emerald-600 text-sm"></i>
+          <span class="text-xs font-black uppercase tracking-wider text-slate-900">Academic Notes Programme Filter (Select 1 or more):</span>
         </div>
-        <button onclick="clearCourseFilters()" class="text-[10px] font-bold text-emerald-700 hover:underline">
-          Reset Course Filters
-        </button>
+        <div class="flex items-center space-x-3">
+          <button onclick="clearCourseFilters()" class="text-[10px] font-bold text-emerald-700 hover:underline">
+            Reset Filters
+          </button>
+          <button onclick="toggleCourseFilterPanel()" class="px-2 py-1 rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200 text-xs font-bold">
+            <i class="fa-solid fa-xmark"></i> Close Filter
+          </button>
+        </div>
       </div>
 
       <div class="relative mb-2.5">
@@ -255,24 +262,38 @@
         <input type="text" id="courseSearchInput" oninput="renderCourseFilterPills()" placeholder="Quick search courses (e.g., MBBS, Computer Science, Foundation in Arts)..." class="w-full bg-slate-50 border border-slate-200 rounded-xl py-1.5 pl-8 pr-3 text-xs text-slate-900 focus:outline-none focus:border-emerald-500">
       </div>
 
-      <div id="coursePillsContainer" class="flex flex-wrap gap-1.5 max-h-36 overflow-y-auto p-1"></div>
+      <div id="coursePillsContainer" class="flex flex-wrap gap-1.5 max-h-40 overflow-y-auto p-1">
+        <!-- Dynamically rendered via JS -->
+      </div>
     </div>
 
     <!-- General Search Bar -->
     <div class="max-w-xl mx-auto relative mb-3">
       <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
-      <input type="text" id="searchInput" oninput="filterListings()" placeholder="Search notes, printing services, stethoscope, car rental..." class="w-full bg-white border border-slate-300 rounded-2xl py-2.5 pl-10 pr-4 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-emerald-500 shadow-sm transition-all">
+      <input type="text" id="searchInput" oninput="filterListings()" placeholder="Search notes, blazer rental, printing services, stethoscope..." class="w-full bg-white border border-slate-300 rounded-2xl py-2.5 pl-10 pr-4 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-emerald-500 shadow-sm transition-all">
     </div>
   </section>
 
   <!-- Main Content Feed -->
   <main class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 pb-10">
+    
+    <!-- TOP SPONSORED ADVERTISEMENTS SECTION -->
+    <div id="sponsoredSection" class="mb-6 hidden">
+      <div class="flex items-center space-x-2 mb-2.5">
+        <i class="fa-solid fa-rectangle-ad text-amber-500 text-sm animate-bounce"></i>
+        <h3 class="text-xs sm:text-sm font-black uppercase tracking-wider text-amber-900">Featured Campus Advertisements & Boosted Events</h3>
+      </div>
+      <div id="sponsoredGrid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2.5 sm:gap-4"></div>
+    </div>
+
     <div class="flex items-center justify-between mb-3">
-      <h3 id="feedTitleHeading" class="text-sm sm:text-base font-bold tracking-tight text-slate-900">Featured Campus Listings</h3>
+      <h3 class="text-sm sm:text-base font-bold tracking-tight text-slate-900">Featured Campus Listings</h3>
       <div id="listingCount" class="text-[11px] text-slate-500">Loading items...</div>
     </div>
 
-    <div id="listingsGrid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2.5 sm:gap-4"></div>
+    <div id="listingsGrid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2.5 sm:gap-4">
+      <!-- Dynamic cards injected via JS -->
+    </div>
   </main>
 
   <!-- AIMST Campus Clubs Section -->
@@ -284,7 +305,7 @@
             <i class="fa-solid fa-users text-teal-600"></i>
             <span>AIMST Clubs & Student Societies</span>
           </h3>
-          <p class="text-[11px] text-slate-500 mt-0.5">Join active campus communities and participate in events.</p>
+          <p class="text-[11px] text-slate-500 mt-0.5">Join active campus communities, participate in events, and build networks.</p>
         </div>
         
         <button id="addClubBtn" onclick="openAddClubModal()" class="hidden flex items-center space-x-1 px-3 py-1.5 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-bold text-xs shadow-sm transition-all">
@@ -293,17 +314,18 @@
         </button>
       </div>
 
-      <div id="clubsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4"></div>
+      <div id="clubsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
+        <!-- Dynamic Club cards injected via JS -->
+      </div>
     </div>
   </section>
 
   <!-- FLOATING BUTTONS BAR -->
   <div class="fixed bottom-6 left-4 right-4 sm:left-6 sm:right-auto z-40 flex items-center justify-between sm:justify-start sm:space-x-3 pointer-events-none">
-    
     <div id="floatingAddBtn" class="pointer-events-auto hidden">
       <button onclick="openAddListingModal()" class="flex items-center space-x-2 px-4 py-3 sm:px-5 sm:py-3.5 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold shadow-2xl shadow-emerald-600/40 ring-2 ring-white hover:scale-105 transition-all text-xs sm:text-sm">
         <i class="fa-solid fa-plus text-sm sm:text-base"></i>
-        <span>Post Listing</span>
+        <span>Post Listing / Event</span>
       </button>
     </div>
 
@@ -313,40 +335,11 @@
         <span class="inline">Refresh App</span>
       </button>
     </div>
-
-  </div>
-
-  <!-- IN-APP CHAT MODAL -->
-  <div id="chatModal" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm hidden flex items-center justify-center p-3">
-    <div class="bg-white rounded-3xl max-w-lg w-full p-5 sm:p-6 relative shadow-2xl flex flex-col h-[80vh] border border-slate-200">
-      <button onclick="closeChatModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 z-10">
-        <i class="fa-solid fa-xmark text-lg"></i>
-      </button>
-
-      <div class="border-b border-slate-200 pb-3 mb-3">
-        <h3 id="chatItemTitle" class="font-black text-sm text-slate-900 truncate">Chat about Item</h3>
-        <p id="chatSellerName" class="text-[10px] text-emerald-700 font-bold">Seller: John</p>
-      </div>
-
-      <!-- Messages Box -->
-      <div id="chatMessagesContainer" class="flex-1 overflow-y-auto space-y-2.5 p-2 bg-slate-50 rounded-2xl border border-slate-200 mb-3">
-        <!-- Dynamically populated messages -->
-      </div>
-
-      <!-- Send Input Form -->
-      <form onsubmit="handleSendChatMessage(event)" class="flex gap-2">
-        <input type="text" id="chatInputMsg" required placeholder="Type a message or negotiate price..." class="flex-1 bg-slate-100 border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-emerald-500">
-        <button type="submit" class="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md transition-all flex items-center space-x-1">
-          <i class="fa-solid fa-paper-plane text-xs"></i>
-          <span>Send</span>
-        </button>
-      </form>
-    </div>
   </div>
 
   <!-- WISHLIST MODAL -->
   <div id="wishlistModal" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm hidden flex items-center justify-center p-3">
-    <div class="bg-white rounded-3xl max-w-2xl w-full p-5 sm:p-7 relative shadow-2xl max-h-[90vh] overflow-y-auto border border-slate-200">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-5 sm:p-7 relative shadow-2xl max-h-[90vh] overflow-y-auto border border-slate-200">
       <button onclick="closeWishlistModal()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-700">
         <i class="fa-solid fa-xmark text-lg"></i>
       </button>
@@ -356,14 +349,59 @@
           <i class="fa-solid fa-heart text-rose-500"></i>
           <span>My Saved Wishlist Items</span>
         </h3>
-        <p class="text-xs text-slate-500 mt-0.5">Quickly access items you bookmarked for later.</p>
+        <p class="text-xs text-slate-500 mt-0.5">Quickly access items you saved to purchase later.</p>
       </div>
 
-      <div id="wishlistContainer" class="grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
+      <div id="wishlistContainer" class="space-y-3">
+        <!-- Wishlist items injected via JS -->
+      </div>
     </div>
   </div>
 
-  <!-- IOS INSTALL MODAL -->
+  <!-- ADVERTISEMENT BOOST MODAL (TNG QR) -->
+  <div id="boostModal" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm hidden flex items-center justify-center p-3">
+    <div class="bg-white rounded-3xl max-w-sm w-full p-6 relative shadow-2xl text-center border border-slate-200">
+      <button onclick="closeBoostModal()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-700">
+        <i class="fa-solid fa-xmark text-lg"></i>
+      </button>
+
+      <div class="w-12 h-12 rounded-2xl bg-amber-100 text-amber-700 flex items-center justify-center mx-auto mb-3 text-xl shadow-sm border border-amber-300">
+        <i class="fa-solid fa-rocket"></i>
+      </div>
+
+      <h3 class="text-lg font-black text-slate-900 mb-1">Boost Item / Event Ad</h3>
+      <p class="text-xs text-slate-600 leading-relaxed mb-3">
+        Get top placement on the homepage feed for <strong class="text-amber-800">RM 1.00 per day</strong>!
+      </p>
+
+      <div class="mb-4 text-left">
+        <label class="block text-[10px] font-bold text-slate-700 uppercase tracking-wider mb-1">Select Duration (Days)</label>
+        <select id="boostDaysSelect" onchange="updateBoostCostDisplay()" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs font-bold text-slate-900 focus:outline-none focus:border-amber-500">
+          <option value="1">1 Day (RM 1.00)</option>
+          <option value="2">2 Days (RM 2.00)</option>
+          <option value="3">3 Days (RM 3.00)</option>
+          <option value="5">5 Days (RM 5.00)</option>
+          <option value="7">7 Days (RM 7.00)</option>
+          <option value="14">14 Days (RM 14.00)</option>
+          <option value="30">30 Days (RM 30.00)</option>
+        </select>
+      </div>
+
+      <div class="bg-slate-50 p-3 rounded-2xl border border-slate-200 mb-4 inline-block w-full">
+        <img src="tng.png" alt="Touch 'n Go QR Code" class="w-40 h-40 object-contain mx-auto rounded-xl shadow-sm" onerror="this.src='https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=400'">
+        <p class="text-[11px] font-extrabold text-amber-900 uppercase tracking-wider mt-2">
+          Total to Pay: <span id="boostTotalDisplay" class="text-amber-600 text-sm font-black">RM 1.00</span>
+        </p>
+      </div>
+
+      <button id="boostSubmitBtn" onclick="submitBoostRequest()" class="w-full py-3 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs shadow-md transition-all flex items-center justify-center space-x-2">
+        <i class="fa-brands fa-whatsapp text-base"></i>
+        <span>Send Boost Receipt to Founder</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- IOS INSTALL INSTRUCTIONS MODAL -->
   <div id="iosInstallModal" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm hidden flex items-center justify-center p-3">
     <div class="bg-white rounded-3xl max-w-sm w-full p-6 relative shadow-2xl text-center border border-slate-200">
       <button onclick="closeIOSInstallModal()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-700">
@@ -375,28 +413,24 @@
       </div>
 
       <h3 class="text-lg font-black text-slate-900 mb-1">Install on iPhone / iPad</h3>
-      <p class="text-xs text-slate-600 leading-relaxed mb-4">
-        Safari browser on iOS does not support direct automated app installation prompts. Follow these 2 quick steps:
-      </p>
+      <p class="text-xs text-slate-600 leading-relaxed mb-4">Follow these 2 quick steps in Safari:</p>
 
       <div class="bg-slate-50 p-3.5 rounded-2xl border border-slate-200 mb-4 text-left space-y-2 text-xs font-medium text-slate-700">
         <div class="flex items-center space-x-2">
           <span class="w-5 h-5 rounded-full bg-emerald-600 text-white font-bold flex items-center justify-center text-[10px]">1</span>
-          <span>Tap the <strong class="text-slate-900">Share</strong> button <i class="fa-solid fa-arrow-up-from-bracket text-emerald-600"></i> at the bottom of Safari.</span>
+          <span>Tap the <strong class="text-slate-900">Share</strong> button <i class="fa-solid fa-arrow-up-from-bracket text-emerald-600"></i>.</span>
         </div>
         <div class="flex items-center space-x-2">
           <span class="w-5 h-5 rounded-full bg-emerald-600 text-white font-bold flex items-center justify-center text-[10px]">2</span>
-          <span>Scroll down and tap <strong class="text-slate-900">"Add to Home Screen"</strong> <i class="fa-solid fa-square-plus text-emerald-600"></i>.</span>
+          <span>Tap <strong class="text-slate-900">"Add to Home Screen"</strong> <i class="fa-solid fa-square-plus text-emerald-600"></i>.</span>
         </div>
       </div>
 
-      <button onclick="closeIOSInstallModal()" class="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md transition-all">
-        Got It!
-      </button>
+      <button onclick="closeIOSInstallModal()" class="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md transition-all">Got It!</button>
     </div>
   </div>
 
-  <!-- MY LISTINGS MODAL -->
+  <!-- SELLER'S OWN LISTINGS MODAL -->
   <div id="myListingsModal" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm hidden flex items-center justify-center p-3">
     <div class="bg-white rounded-3xl max-w-2xl w-full p-5 sm:p-7 relative shadow-2xl max-h-[90vh] overflow-y-auto border border-slate-200">
       <button onclick="closeMyListingsModal()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-700">
@@ -406,9 +440,9 @@
       <div class="mb-4">
         <h3 class="text-lg font-black text-slate-900 flex items-center space-x-2">
           <i class="fa-solid fa-boxes-stacked text-emerald-600"></i>
-          <span>My Listed Products & Buyer Interest</span>
+          <span>My Listed Products & Boost Status</span>
         </h3>
-        <p class="text-xs text-slate-500 mt-0.5">Track your listing activity, buyer chat clicks, and boost visibility.</p>
+        <p class="text-xs text-slate-500 mt-0.5">Track your listing activity, buyer chat clicks, and active ad boost timers.</p>
       </div>
 
       <div id="myListingsContainer" class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4"></div>
@@ -423,12 +457,8 @@
       </button>
 
       <div class="flex rounded-2xl bg-slate-100 p-1 mb-4">
-        <button id="tabLoginBtn" onclick="switchAuthTab('login')" class="flex-1 py-1.5 rounded-xl text-xs font-extrabold bg-white text-slate-900 shadow-sm transition-all">
-          Seller Login
-        </button>
-        <button id="tabRegisterBtn" onclick="switchAuthTab('register')" class="flex-1 py-1.5 rounded-xl text-xs font-extrabold text-slate-500 hover:text-slate-900 transition-all">
-          Register (Step 1)
-        </button>
+        <button id="tabLoginBtn" onclick="switchAuthTab('login')" class="flex-1 py-1.5 rounded-xl text-xs font-extrabold bg-white text-slate-900 shadow-sm transition-all">Seller Login</button>
+        <button id="tabRegisterBtn" onclick="switchAuthTab('register')" class="flex-1 py-1.5 rounded-xl text-xs font-extrabold text-slate-500 hover:text-slate-900 transition-all">New Register (Step 1)</button>
       </div>
 
       <div id="loginFormContainer" class="space-y-3">
@@ -443,9 +473,7 @@
         
         <div id="loginError" class="text-xs text-rose-600 text-center font-semibold hidden bg-rose-50 p-2.5 rounded-xl border border-rose-200"></div>
 
-        <button onclick="handleLogin()" class="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md transition-all">
-          Sign In to Seller Account
-        </button>
+        <button onclick="handleLogin()" class="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md transition-all">Sign In to Seller Account</button>
       </div>
 
       <div id="registerFormContainer" class="space-y-3 hidden">
@@ -461,15 +489,11 @@
           <input type="password" id="regPass" placeholder="••••••••" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-emerald-500">
         </div>
 
-        <button onclick="handleRegister()" class="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md transition-all">
-          Complete Step 1: Submit Registration
-        </button>
+        <button onclick="handleRegister()" id="regSubmitBtn" class="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md transition-all">Complete Step 1: Submit Registration</button>
       </div>
 
       <div class="mt-4 pt-3 border-t border-slate-200 text-center">
-        <p class="text-[10px] text-slate-500 leading-relaxed mb-2">
-          Step 2 Verification: Send student ID matrix proof to Founder Keven:
-        </p>
+        <p class="text-[10px] text-slate-500 leading-relaxed mb-2">Step 2 Verification: Send student ID matrix proof to Founder Keven:</p>
         <a href="https://wa.me/60126384757?text=Hi%20Founder%20Keven,%20I%20have%20submitted%20my%20registration%20Step%201.%20Here%20is%20my%20Student%20ID%20card%20for%20verification." target="_blank" class="w-full py-2 rounded-xl bg-emerald-50 text-emerald-800 font-bold text-xs transition-all border border-emerald-300 flex items-center justify-center space-x-1.5 shadow-sm">
           <i class="fa-brands fa-whatsapp text-sm"></i>
           <span>Send Student ID to Founder</span>
@@ -493,7 +517,7 @@
       <p id="profileEmail" class="text-xs text-slate-500 mb-3">user@apm.com</p>
 
       <div id="profileTierBadge" class="inline-block px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 font-extrabold text-xs border border-emerald-300 mb-2 uppercase tracking-wider">
-        VERIFIED STUDENT SELLER
+        VERIFIED SELLER (FREE TIER)
       </div>
 
       <div id="proCountdownContainer" class="hidden bg-amber-50 p-3 rounded-2xl border border-amber-200 mb-3 text-center">
@@ -501,9 +525,7 @@
           <i class="fa-solid fa-clock text-amber-600"></i>
           <span>Pro Subscription Time Remaining</span>
         </p>
-        <div id="proCountdownTimer" class="text-base font-black text-amber-700 tracking-wider">
-          719h 59m 59s
-        </div>
+        <div id="proCountdownTimer" class="text-base font-black text-amber-700 tracking-wider">719h 59m 59s</div>
       </div>
 
       <div class="bg-slate-50 p-3.5 rounded-2xl border border-slate-200 mb-4 text-left space-y-1.5">
@@ -511,9 +533,6 @@
           <span>Active Listing Usage:</span>
           <span id="profileListingCount" class="text-emerald-700 font-black">0 / 3 Used</span>
         </div>
-        <p class="text-[10px] text-slate-500 leading-relaxed">
-          Upgrade to APM Pro for just RM5/month to unlock up to 7 active listings and help support campus student activities!
-        </p>
       </div>
 
       <div class="space-y-2">
@@ -536,7 +555,7 @@
     </div>
   </div>
 
-  <!-- FOUNDER PORTAL MODAL -->
+  <!-- FOUNDER PORTAL -->
   <div id="sellerManagerModal" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm hidden flex items-center justify-center p-3">
     <div class="bg-white rounded-3xl max-w-3xl w-full p-5 sm:p-7 relative shadow-2xl max-h-[90vh] overflow-y-auto border border-slate-200">
       <button onclick="closeSellerManagerModal()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-700">
@@ -546,9 +565,20 @@
       <div class="mb-4">
         <h3 class="text-lg font-black text-slate-900 flex items-center space-x-2">
           <i class="fa-solid fa-user-shield text-amber-600"></i>
-          <span>Founders Verification & Governance Portal</span>
+          <span>Founders Verification & Ad Boost Portal</span>
         </h3>
         <p class="text-xs text-slate-500 mt-0.5">Strictly Managed by Founders: Keventhiran & Taarisini</p>
+      </div>
+
+      <div class="bg-gradient-to-r from-amber-50 to-orange-50 p-4 rounded-2xl border border-amber-300 mb-5">
+        <h4 class="font-bold text-xs text-amber-900 mb-2 flex items-center justify-between">
+          <span class="flex items-center space-x-1.5">
+            <i class="fa-solid fa-rocket text-amber-600"></i>
+            <span>Pending Ad Boost Approvals (RM 1.00 / day)</span>
+          </span>
+          <span id="pendingBoostsCountBadge" class="px-2 py-0.5 rounded-full bg-amber-200 text-amber-900 text-[10px] font-black">0 Pending</span>
+        </h4>
+        <div id="pendingBoostsContainer" class="space-y-2"></div>
       </div>
 
       <div class="bg-amber-50 p-4 rounded-2xl border border-amber-200 mb-5">
@@ -559,13 +589,12 @@
           </span>
           <span id="pendingCountBadge" class="px-2 py-0.5 rounded-full bg-amber-200 text-amber-900 text-[10px] font-black">0 Pending</span>
         </h4>
-
         <div id="pendingSellersContainer" class="space-y-2"></div>
       </div>
 
       <div class="relative mb-3">
         <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
-        <input type="text" id="sellerSearchInput" oninput="renderSellerManagerTable()" placeholder="Search sellers by username or email..." class="w-full bg-slate-50 border border-slate-300 rounded-xl py-2 pl-9 pr-3 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-amber-500 transition-all">
+        <input type="text" id="sellerSearchInput" oninput="renderSellerManagerTable()" placeholder="Search sellers..." class="w-full bg-slate-50 border border-slate-300 rounded-xl py-2 pl-9 pr-3 text-xs text-slate-900 focus:outline-none focus:border-amber-500">
       </div>
 
       <div class="overflow-x-auto rounded-2xl border border-slate-200">
@@ -583,7 +612,7 @@
     </div>
   </div>
 
-  <!-- ADD LISTING / WANTED REQUEST MODAL -->
+  <!-- ADD LISTING MODAL -->
   <div id="addListingModal" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm hidden flex items-center justify-center p-3">
     <div class="bg-white rounded-3xl max-w-md w-full p-6 relative shadow-2xl max-h-[90vh] overflow-y-auto border border-slate-200">
       <button onclick="closeAddListingModal()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-700">
@@ -591,28 +620,20 @@
       </button>
       
       <div class="mb-4">
-        <h3 id="addModalTitle" class="text-lg font-bold text-slate-900">Create Campus Listing</h3>
-        <p id="sellerTierIndicator" class="text-xs font-semibold text-emerald-600 mt-0.5">Checking seller tier...</p>
+        <h3 class="text-lg font-bold text-slate-900">Create Campus Listing / Announcement</h3>
+        <p id="sellerTierIndicator" class="text-xs font-semibold text-emerald-600 mt-0.5">Checking your seller tier...</p>
       </div>
 
       <form id="listingForm" onsubmit="handlePostListing(event)" class="space-y-3.5">
         <div>
-          <label class="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1">Listing Type</label>
-          <select id="itemPostTypeSelect" onchange="onPostTypeChange()" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-emerald-500 font-bold">
-            <option value="sell">I am Selling an Item / Service</option>
-            <option value="wanted">I am Looking for / Wanted Item</option>
-          </select>
-        </div>
-
-        <div>
-          <label class="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1">Category</label>
+          <label class="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1">Category Type</label>
           <select id="categorySelect" onchange="onCategoryChange()" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-emerald-500">
             <option value="academic">Academic Notes & Materials</option>
-            <option value="vehicles">Belonging Rentals (Car/Bike)</option>
+            <option value="rentals">Blazers & Essentials Rentals (Per Day)</option>
             <option value="tech">Tech & Gadgets</option>
             <option value="hostel">Hostel Essentials</option>
             <option value="services">Campus Services (Printing/Repair)</option>
-            <option value="events">Campus Events & Tickets</option>
+            <option value="events">Campus Events & Announcements</option>
           </select>
         </div>
 
@@ -623,32 +644,21 @@
 
         <div>
           <label class="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1">Title</label>
-          <input type="text" id="itemTitle" required placeholder="e.g., Year 2 MBBS Pharmacology Notes" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-emerald-500">
+          <input type="text" id="itemTitle" required placeholder="e.g., Formal Navy Blazer Size M, Deepavali Night Event Ticket" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-emerald-500">
         </div>
 
         <div>
-          <label class="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1">Price / Budget (MYR)</label>
+          <label id="priceLabel" class="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1">Price (MYR)</label>
           <input type="number" step="0.01" id="itemPrice" required placeholder="0.00" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-emerald-500">
         </div>
 
         <div>
-          <label class="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1">Standard Campus Meetup Location</label>
-          <select id="itemMeetupSpot" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-emerald-500 font-bold">
-            <option value="AIMST Cafeteria">AIMST Main Cafeteria</option>
-            <option value="Library Lobby">AIMST Library Main Lobby</option>
-            <option value="Student Hostel Lobby">Student Hostel Main Lobby</option>
-            <option value="Chancellery Building">Chancellery Building Entrance</option>
-            <option value="Village Mall (Nearby)">Village Mall Sungai Petani (Nearby)</option>
-          </select>
+          <label class="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1">WhatsApp Link or Phone Number</label>
+          <input type="text" id="itemContact" required placeholder="e.g., https://wa.me/60123456789 or +60123456789" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-emerald-500">
         </div>
 
         <div>
-          <label class="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1">WhatsApp Contact or Phone</label>
-          <input type="text" id="itemContact" required placeholder="e.g., +60123456789" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-emerald-500">
-        </div>
-
-        <div>
-          <label class="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1">Upload Product Photo</label>
+          <label class="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1">Upload Photo / Event Banner</label>
           <input type="file" id="itemImageFile" accept="image/*" required class="w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100 cursor-pointer bg-slate-50 border border-slate-300 rounded-xl p-1.5">
           
           <div id="imagePreviewContainer" class="mt-2 hidden">
@@ -658,27 +668,17 @@
 
         <div>
           <label class="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1">Description & Details</label>
-          <textarea id="itemDesc" rows="2.5" required placeholder="Provide details, condition, or meetup notes..." class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-emerald-500"></textarea>
-        </div>
-
-        <div id="listingProgressContainer" class="hidden space-y-1">
-          <div class="flex justify-between text-xs text-emerald-700 font-bold">
-            <span id="listingProgressStatus">Publishing...</span>
-            <span id="listingProgressVal">0%</span>
-          </div>
-          <div class="w-full bg-slate-100 rounded-full h-2 border border-slate-200 overflow-hidden">
-            <div id="listingProgressBar" class="bg-gradient-to-r from-emerald-500 to-teal-500 h-2 rounded-full transition-all duration-200" style="width: 0%"></div>
-          </div>
+          <textarea id="itemDesc" rows="2.5" required placeholder="Provide rental terms or event schedule..." class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-emerald-500"></textarea>
         </div>
 
         <button type="submit" id="submitListingBtn" class="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md transition-all mt-1">
-          Publish to Campus Network
+          <span>Publish to Campus Network</span>
         </button>
       </form>
     </div>
   </div>
 
-  <!-- UPGRADE MODAL -->
+  <!-- UPGRADE TO PRO MODAL -->
   <div id="upgradeModal" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm hidden flex items-center justify-center p-3">
     <div class="bg-white rounded-3xl max-w-sm w-full p-6 relative shadow-2xl text-center border border-slate-200">
       <button onclick="closeUpgradeModal()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-700">
@@ -690,18 +690,16 @@
       </div>
       
       <h3 class="text-lg font-black text-slate-900 mb-1">Upgrade to APM Pro Tier</h3>
-      <p class="text-xs text-slate-600 leading-relaxed mb-4">
-        Unlock up to <strong>7 active listings</strong> for just <strong>RM5/month</strong>. Supports platform maintenance and student activities!
-      </p>
+      <p class="text-xs text-slate-600 leading-relaxed mb-4">Upgrade to APM Pro for RM5/month to unlock up to 7 active listings!</p>
 
       <div class="bg-slate-50 p-3 rounded-2xl border border-slate-200 mb-4 inline-block">
         <img src="tng.png" alt="Touch 'n Go QR Code" class="w-48 h-48 object-contain mx-auto rounded-xl shadow-sm" onerror="this.src='https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=400'">
-        <p class="text-[10px] font-bold text-slate-500 uppercase tracking-wider mt-2">Scan with Touch 'n Go (RM5.00)</p>
+        <p class="text-[10px] font-bold text-slate-500 uppercase tracking-wider mt-2">Scan with Touch 'n Go eWallet (RM5.00)</p>
       </div>
 
-      <a href="https://wa.me/60126384757?text=Hi%20Founder%20Keven,%20I%20paid%20RM5%20for%20APM%20Pro%20Tier%20upgrade.%20Here%20is%20my%20payment%20receipt." target="_blank" class="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md transition-all flex items-center justify-center space-x-2">
+      <a href="https://wa.me/60126384757?text=Hi%20Founder%20Keven,%20I%20have%20paid%20RM5%20for%20the%20APM%20Pro%20Tier%20upgrade.%20Here%20is%20my%20payment%20receipt%20screenshot." target="_blank" class="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md transition-all flex items-center justify-center space-x-2">
         <i class="fa-brands fa-whatsapp text-base"></i>
-        <span>Send Receipt to Founder Keven</span>
+        <span>Send Payment Receipt to Founder Keven</span>
       </a>
     </div>
   </div>
@@ -715,85 +713,155 @@
       
       <div class="mb-4">
         <h3 class="text-lg font-bold text-slate-900">Register Campus Club</h3>
-        <p class="text-xs text-slate-500 mt-0.5">Add club details and WhatsApp community link</p>
+        <p class="text-xs text-slate-500 mt-0.5">Add your club or society details</p>
       </div>
 
       <form id="clubForm" onsubmit="handlePostClub(event)" class="space-y-3.5">
         <div>
           <label class="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1">Club Name</label>
-          <input type="text" id="clubName" required placeholder="e.g., AIMST Computer Science Society" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-teal-500">
+          <input type="text" id="clubName" required placeholder="e.g., Rotaract Club of AIMST" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-teal-500">
         </div>
-
         <div>
           <label class="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1">Category / Tagline</label>
-          <input type="text" id="clubCategory" required placeholder="e.g., Academic & Tech" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-teal-500">
+          <input type="text" id="clubCategory" required placeholder="e.g., Community Service, Tech" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-teal-500">
         </div>
-
         <div>
           <label class="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1">Upload Club Logo</label>
           <input type="file" id="clubLogoFile" accept="image/*" class="w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-teal-50 file:text-teal-700 hover:file:bg-teal-100 cursor-pointer bg-slate-50 border border-slate-300 rounded-xl p-1.5">
-          
-          <div id="clubLogoPreviewContainer" class="mt-2 hidden">
-            <img id="clubLogoPreview" src="" alt="Logo" class="h-16 w-16 object-cover rounded-xl border border-slate-200">
-          </div>
         </div>
-
         <div>
-          <label class="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1">WhatsApp Group Link</label>
-          <input type="text" id="clubContact" required placeholder="e.g., https://chat.whatsapp.com/..." class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-teal-500">
+          <label class="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1">WhatsApp Link or Phone Number</label>
+          <input type="text" id="clubContact" required placeholder="e.g., https://chat.whatsapp.com/... or +60123456789" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-teal-500">
         </div>
-
         <div>
-          <label class="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1">Club Description</label>
-          <textarea id="clubDesc" rows="2.5" required placeholder="Describe weekly activities and objectives..." class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-teal-500"></textarea>
+          <label class="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1">Club Description & Activities</label>
+          <textarea id="clubDesc" rows="2.5" required placeholder="Describe weekly activities..." class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-teal-500"></textarea>
         </div>
-
-        <button type="submit" class="w-full py-2.5 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-bold text-xs shadow-md transition-all mt-1">
-          Publish Club
-        </button>
+        <button type="submit" id="submitClubBtn" class="w-full py-2.5 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-bold text-xs shadow-md transition-all mt-1">Publish Club</button>
       </form>
     </div>
   </div>
 
-  <!-- FOUNDERS MODAL -->
-  <div id="foundersModal" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm hidden flex items-center justify-center p-3">
-    <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 text-center relative max-h-[90vh] overflow-y-auto border border-slate-200 shadow-2xl">
-      <button onclick="closeFoundersModal()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-700">
-        <i class="fa-solid fa-xmark text-lg"></i>
+  <!-- FOUNDERS & LEADERSHIP CAROUSEL MODAL (FEATURED PORTRAIT DESIGN LIKE 2ND IMAGE) -->
+  <div id="foundersModal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md hidden flex items-center justify-center p-3 sm:p-6">
+    <div class="bg-white rounded-3xl max-w-sm sm:max-w-md w-full p-5 sm:p-7 text-center relative shadow-2xl border border-slate-200 overflow-hidden">
+      
+      <!-- Close Button -->
+      <button onclick="closeFoundersModal()" class="absolute top-4 right-4 z-30 w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center font-bold text-base transition-all shadow-sm">
+        <i class="fa-solid fa-xmark"></i>
       </button>
       
-      <div class="w-16 h-16 rounded-2xl overflow-hidden border border-emerald-500/30 shadow-md mx-auto mb-3">
-        <img src="market-logo.png" alt="Logo" class="w-full h-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=400'">
+      <!-- Top Header Tag -->
+      <div class="mb-4 text-center">
+        <p class="text-[10px] font-black uppercase tracking-widest text-emerald-600 mb-0.5">WHO MADE IT</p>
+        <h3 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">MEET THE TEAM</h3>
       </div>
-      <h3 class="text-xl font-black text-slate-900 mb-0.5">Founders & Leadership</h3>
-      <p class="text-xs text-slate-500 mb-6">AIMST Prestige Market Core Initiative • Verified Campus Network</p>
 
-      <div class="space-y-4 text-left">
-        <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 flex flex-col sm:flex-row items-center sm:items-start space-y-3 sm:space-y-0 sm:space-x-4">
-          <img src="founder1.jpg" alt="Keven" class="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl object-cover border-2 border-emerald-500/30 shrink-0 shadow-md" onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=400'">
-          <div class="flex-1 min-w-0 text-center sm:text-left">
-            <h4 class="font-extrabold text-sm sm:text-base text-slate-900 truncate">Keventhiran Devandren</h4>
-            <p class="text-xs font-bold text-emerald-700 mb-1">Bachelor of Computer Science</p>
-            <p class="text-xs text-slate-600 leading-relaxed">Lead System Architect, Backend Database Manager & Developer of APM Platform.</p>
+      <!-- CAROUSEL WRAPPER -->
+      <div class="relative">
+        <div id="teamCarousel" class="flex overflow-x-auto snap-x snap-mandatory no-scrollbar scroll-smooth space-x-4 py-2 px-1">
+          
+          <!-- 1. KEVENTHIRAN DEVANDREN (FOUNDER & CEO) -->
+          <div class="snap-center shrink-0 w-full rounded-3xl overflow-hidden relative shadow-xl border border-slate-200 flex flex-col justify-end bg-slate-900 min-h-[380px] sm:min-h-[420px]">
+            <img src="founder1.jpg" alt="Keventhiran Devandren" class="absolute inset-0 w-full h-full object-cover object-top opacity-90" onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=800'">
+            <!-- Gradient Overlay -->
+            <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-transparent"></div>
+            
+            <!-- Watermark APM Logo Badge -->
+            <div class="absolute top-4 left-4 z-20 flex items-center space-x-2 bg-white/90 backdrop-blur-md px-3 py-1.5 rounded-2xl shadow-md border border-white/40">
+              <img src="market-logo.png" alt="APM Logo" class="w-5 h-5 object-contain" onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=400'">
+              <span class="text-[10px] font-black text-slate-900 uppercase tracking-wider">APM Executive</span>
+            </div>
+
+            <!-- Content Card -->
+            <div class="relative z-10 p-5 text-left text-white">
+              <h4 class="text-xl font-black text-white leading-tight mb-0.5">Keventhiran Devandren</h4>
+              <p class="text-xs font-bold text-emerald-400 mb-1">Bachelor of Computer Science (Hons) • AIMST University</p>
+              <span class="inline-block px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-[10px] font-black border border-emerald-400/30 uppercase tracking-wider mb-2">FOUNDER & CEO</span>
+              <p class="text-xs text-slate-300 leading-relaxed">Lead Backend Architect & Firebase Database Developer managing core system security, database structures, and platform infrastructure.</p>
+            </div>
           </div>
+
+          <!-- 2. TAARISINI SELVAKUMAR (CO-FOUNDER & CTO) -->
+          <div class="snap-center shrink-0 w-full rounded-3xl overflow-hidden relative shadow-xl border border-slate-200 flex flex-col justify-end bg-slate-900 min-h-[380px] sm:min-h-[420px]">
+            <img src="founder2.jpg" alt="Taarisini Selvakumar" class="absolute inset-0 w-full h-full object-cover object-top opacity-90" onerror="this.src='https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&q=80&w=800'">
+            <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-transparent"></div>
+            
+            <div class="absolute top-4 left-4 z-20 flex items-center space-x-2 bg-white/90 backdrop-blur-md px-3 py-1.5 rounded-2xl shadow-md border border-white/40">
+              <img src="market-logo.png" alt="APM Logo" class="w-5 h-5 object-contain" onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=400'">
+              <span class="text-[10px] font-black text-slate-900 uppercase tracking-wider">APM Executive</span>
+            </div>
+
+            <div class="relative z-10 p-5 text-left text-white">
+              <h4 class="text-xl font-black text-white leading-tight mb-0.5">Taarisini Selvakumar</h4>
+              <p class="text-xs font-bold text-emerald-400 mb-1">Bachelor of Computer Science (Hons) • AIMST University</p>
+              <span class="inline-block px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-[10px] font-black border border-emerald-400/30 uppercase tracking-wider mb-2">CO-FOUNDER & CTO</span>
+              <p class="text-xs text-slate-300 leading-relaxed">Lead Frontend Developer & UI/UX Specialist crafting user interface screens, responsive layouts, and seamless client interactions.</p>
+            </div>
+          </div>
+
+          <!-- 3. GAURA KISHORE KATHIRESAN (HEAD OF PR & INSTITUTIONAL AFFAIRS) -->
+          <div class="snap-center shrink-0 w-full rounded-3xl overflow-hidden relative shadow-xl border border-slate-200 flex flex-col justify-end bg-slate-900 min-h-[380px] sm:min-h-[420px]">
+            <img src="gaura.jpg" alt="Gaura Kishore Kathiresan" class="absolute inset-0 w-full h-full object-cover object-top opacity-90" onerror="this.src='https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&q=80&w=800'">
+            <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-transparent"></div>
+            
+            <div class="absolute top-4 left-4 z-20 flex items-center space-x-2 bg-white/90 backdrop-blur-md px-3 py-1.5 rounded-2xl shadow-md border border-white/40">
+              <img src="market-logo.png" alt="APM Logo" class="w-5 h-5 object-contain" onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=400'">
+              <span class="text-[10px] font-black text-slate-900 uppercase tracking-wider">APM Executive</span>
+            </div>
+
+            <div class="relative z-10 p-5 text-left text-white">
+              <h4 class="text-xl font-black text-white leading-tight mb-0.5">Gaura Kishore Kathiresan</h4>
+              <p class="text-xs font-bold text-blue-400 mb-1">Diploma in Physiotherapy • AIMST University</p>
+              <span class="inline-block px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-300 text-[10px] font-black border border-blue-400/30 uppercase tracking-wider mb-2">HEAD OF PR & PARTNERSHIPS</span>
+              <p class="text-xs text-slate-300 leading-relaxed">Responsible for campus-wide promotion and ethically liaising with AIMST University leadership for official platform endorsement.</p>
+            </div>
+          </div>
+
+          <!-- 4. SUDARSHAN PARTHIPAN (CHIEF PRODUCT OFFICER) -->
+          <div class="snap-center shrink-0 w-full rounded-3xl overflow-hidden relative shadow-xl border border-slate-200 flex flex-col justify-end bg-slate-900 min-h-[380px] sm:min-h-[420px]">
+            <img src="sudarshan.jpg" alt="Sudarshan Parthipan" class="absolute inset-0 w-full h-full object-cover object-top opacity-90" onerror="this.src='https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=800'">
+            <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-transparent"></div>
+            
+            <div class="absolute top-4 left-4 z-20 flex items-center space-x-2 bg-white/90 backdrop-blur-md px-3 py-1.5 rounded-2xl shadow-md border border-white/40">
+              <img src="market-logo.png" alt="APM Logo" class="w-5 h-5 object-contain" onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=400'">
+              <span class="text-[10px] font-black text-slate-900 uppercase tracking-wider">APM Executive</span>
+            </div>
+
+            <div class="relative z-10 p-5 text-left text-white">
+              <h4 class="text-xl font-black text-white leading-tight mb-0.5">Sudarshan Parthipan</h4>
+              <p class="text-xs font-bold text-purple-400 mb-1">Diploma in Biotechnology • AIMST University</p>
+              <span class="inline-block px-2.5 py-0.5 rounded-full bg-purple-500/20 text-purple-300 text-[10px] font-black border border-purple-400/30 uppercase tracking-wider mb-2">CHIEF PRODUCT OFFICER</span>
+              <p class="text-xs text-slate-300 leading-relaxed">Responsible for discovering student pain points, gathering daily campus feedback, and reporting platform needs to leadership.</p>
+            </div>
+          </div>
+
         </div>
 
-        <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 flex flex-col sm:flex-row items-center sm:items-start space-y-3 sm:space-y-0 sm:space-x-4">
-          <img src="founder2.jpg" alt="Taarisini" class="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl object-cover border-2 border-emerald-500/30 shrink-0 shadow-md" onerror="this.src='https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&q=80&w=400'">
-          <div class="flex-1 min-w-0 text-center sm:text-left">
-            <h4 class="font-extrabold text-sm sm:text-base text-slate-900 truncate">Taarisini Selvakumar</h4>
-            <p class="text-xs font-bold text-emerald-700 mb-1">Bachelor of Computer Science</p>
-            <p class="text-xs text-slate-600 leading-relaxed">System Governance, UI/UX Lead & Co-Developer of APM Campus Commerce.</p>
-          </div>
-        </div>
+        <!-- Carousel Navigation Controls -->
+        <button onclick="scrollTeamCarousel(-1)" class="absolute left-2 top-1/2 -translate-y-1/2 z-30 w-9 h-9 rounded-full bg-white/80 hover:bg-white text-slate-800 shadow-md flex items-center justify-center transition-all">
+          <i class="fa-solid fa-chevron-left text-xs"></i>
+        </button>
+        <button onclick="scrollTeamCarousel(1)" class="absolute right-2 top-1/2 -translate-y-1/2 z-30 w-9 h-9 rounded-full bg-white/80 hover:bg-white text-slate-800 shadow-md flex items-center justify-center transition-all">
+          <i class="fa-solid fa-chevron-right text-xs"></i>
+        </button>
       </div>
+
+      <!-- Carousel Pagination Indicator Dots -->
+      <div class="flex items-center justify-center space-x-2 mt-4">
+        <span class="team-dot w-2.5 h-2.5 rounded-full bg-emerald-600 transition-all cursor-pointer" onclick="scrollToSlide(0)"></span>
+        <span class="team-dot w-2.5 h-2.5 rounded-full bg-slate-300 transition-all cursor-pointer" onclick="scrollToSlide(1)"></span>
+        <span class="team-dot w-2.5 h-2.5 rounded-full bg-slate-300 transition-all cursor-pointer" onclick="scrollToSlide(2)"></span>
+        <span class="team-dot w-2.5 h-2.5 rounded-full bg-slate-300 transition-all cursor-pointer" onclick="scrollToSlide(3)"></span>
+      </div>
+
     </div>
   </div>
 
-  <!-- SCRIPT MODULES -->
+  <!-- Script Modules -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { initializeFirestore, memoryLocalCache, collection, getDocs, addDoc, deleteDoc, doc, updateDoc, setDoc, getDoc, query, increment } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { initializeFirestore, memoryLocalCache, collection, getDocs, addDoc, deleteDoc, doc, updateDoc, setDoc, query, increment } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
     import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
     const firebaseConfig = {
@@ -814,17 +882,29 @@
     window.auth = auth;
 
     const AIMST_COURSES = [
-      { id: 'general', name: 'General / Storybooks / Novels', nick: 'General' },
+      { id: 'general', name: 'General / Storybooks / Novels / Open Source', nick: 'General' },
       { id: 'mbbs', name: 'Bachelor of Medicine and Bachelor of Surgery', nick: 'MBBS' },
       { id: 'bds', name: 'Bachelor of Dental Surgery', nick: 'BDS' },
+      { id: 'bdt', name: 'Bachelor of Dental Technology (Honours)', nick: 'BDT' },
       { id: 'bpharm', name: 'Bachelor of Pharmacy with Honours', nick: 'B.Pharm' },
+      { id: 'bipharma', name: 'Bachelor of Science in Industrial Pharmacy and Cosmetics with Honours', nick: 'Industrial Pharmacy' },
       { id: 'physio', name: 'Bachelor in Physiotherapy (Honours)', nick: 'Physiotherapy' },
       { id: 'nursing', name: 'Bachelor of Science (Honours) Nursing Science', nick: 'Nursing' },
       { id: 'biomed', name: 'Bachelor of Science (Honours) Biomedical Science', nick: 'Biomedical' },
+      { id: 'dip_nursing', name: 'Diploma in Nursing', nick: 'Dip. Nursing' },
+      { id: 'dip_medical', name: 'Diploma in Medical and Health Science (Medical Assistant)', nick: 'Dip. Medical Assistant' },
+      { id: 'biotech', name: 'Bachelor of Science (Honours) Biotechnology', nick: 'Biotech' },
+      { id: 'bioinf', name: 'Bachelor of Science (Honours) Bioinformatics', nick: 'Bioinformatics' },
       { id: 'cs', name: 'Bachelor of Computer Science (Honours)', nick: 'Computer Science (CS)' },
       { id: 'se', name: 'Bachelor in Software Engineering (Honours)', nick: 'Software Engineering (SE)' },
+      { id: 'multimedia', name: 'Bachelor In Multimedia Technology (Honours)', nick: 'Multimedia Tech' },
+      { id: 'data_analytics', name: 'Bachelor in Information Systems (Data Analytics) (Honours)', nick: 'Data Analytics' },
+      { id: 'ece', name: 'Bachelor of Engineering (Hons) in Electronic & Computer Engineering', nick: 'Electronic Eng' },
+      { id: 'dip_it', name: 'Diploma in Information Technology', nick: 'Dip. IT' },
       { id: 'bba', name: 'Bachelor of Business Administration (Hons)', nick: 'BBA' },
       { id: 'accounting', name: 'Bachelor of Accountancy (Honours)', nick: 'Accountancy' },
+      { id: 'finance', name: 'Bachelor (Honours) in Finance and Management', nick: 'Finance' },
+      { id: 'marketing', name: 'Bachelor (Honours) in Business and Marketing', nick: 'Marketing' },
       { id: 'found_biz', name: 'Foundation in Business', nick: 'Foundation in Business' },
       { id: 'found_sci', name: 'Foundation in Science', nick: 'Foundation in Science' },
       { id: 'found_arts', name: 'Foundation in Arts', nick: 'Foundation in Arts' }
@@ -833,22 +913,54 @@
     let allListings = [];
     let allClubs = JSON.parse(localStorage.getItem('aimst_clubs')) || [];
     let allSellers = JSON.parse(localStorage.getItem('aimst_sellers')) || [];
-    let wishlistIds = JSON.parse(localStorage.getItem('aimst_wishlist')) || [];
+    let wishlist = JSON.parse(localStorage.getItem('aimst_wishlist')) || [];
     let soldCount = parseInt(localStorage.getItem('aimst_sold_count')) || 0;
 
     let currentCategory = 'all';
-    let feedMode = 'marketplace'; // 'marketplace' or 'wanted'
     let selectedCourses = new Set();
     let currentUser = null;
     let currentUserEmail = null;
     let isFounderUser = false;
     let countdownInterval = null;
     let expandedDescIds = new Set();
-    let activeChatListingId = null;
+    let activeBoostItemId = null;
+
+    /* CAROUSEL NAVIGATION LOGIC */
+    window.scrollTeamCarousel = function(direction) {
+      const carousel = document.getElementById('teamCarousel');
+      if (!carousel) return;
+      const cardWidth = carousel.firstElementChild ? carousel.firstElementChild.clientWidth + 16 : 300;
+      carousel.scrollBy({ left: direction * cardWidth, behavior: 'smooth' });
+    };
+
+    window.scrollToSlide = function(index) {
+      const carousel = document.getElementById('teamCarousel');
+      if (!carousel) return;
+      const cardWidth = carousel.firstElementChild ? carousel.firstElementChild.clientWidth + 16 : 300;
+      carousel.scrollTo({ left: index * cardWidth, behavior: 'smooth' });
+    };
+
+    document.getElementById('teamCarousel')?.addEventListener('scroll', () => {
+      const carousel = document.getElementById('teamCarousel');
+      const dots = document.querySelectorAll('.team-dot');
+      if (!carousel || !dots.length) return;
+      const cardWidth = carousel.firstElementChild ? carousel.firstElementChild.clientWidth + 16 : 300;
+      const activeIdx = Math.round(carousel.scrollLeft / cardWidth);
+
+      dots.forEach((dot, idx) => {
+        if (idx === activeIdx) {
+          dot.className = "team-dot w-2.5 h-2.5 rounded-full bg-emerald-600 transition-all cursor-pointer";
+        } else {
+          dot.className = "team-dot w-2.5 h-2.5 rounded-full bg-slate-300 transition-all cursor-pointer";
+        }
+      });
+    });
 
     window.forceRefreshApp = function() {
       if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.getRegistrations().then(regs => regs.forEach(r => r.unregister()));
+        navigator.serviceWorker.getRegistrations().then(registrations => {
+          for (let r of registrations) r.unregister();
+        });
       }
       sessionStorage.clear();
       window.location.href = window.location.pathname + '?v=' + Date.now();
@@ -905,44 +1017,151 @@
     }
 
     window.scrollToClubs = function() {
-      document.getElementById('clubsSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      const el = document.getElementById('clubsSection');
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
     };
 
     function syncLocalStorage() {
       localStorage.setItem('aimst_clubs', JSON.stringify(allClubs));
       localStorage.setItem('aimst_sellers', JSON.stringify(allSellers));
-      localStorage.setItem('aimst_wishlist', JSON.stringify(wishlistIds));
+      localStorage.setItem('aimst_wishlist', JSON.stringify(wishlist));
       localStorage.setItem('aimst_sold_count', soldCount.toString());
       updateMetrics();
     }
 
     function updateMetrics() {
-      const activeBuyerListings = allListings.filter(item => !item.isDisabled && item.postType !== 'wanted');
+      const activeBuyerListings = allListings.filter(item => !item.isDisabled);
       document.getElementById('statActiveCount').innerText = activeBuyerListings.length;
       document.getElementById('statSoldsCount').innerText = soldCount;
-      document.getElementById('wishlistCountBadge').innerText = wishlistIds.length;
+      document.getElementById('wishlistCountBadge').innerText = wishlist.length;
+      document.getElementById('listingCount').innerText = `Showing ${activeBuyerListings.length} item(s)`;
     }
 
-    // SWITCH FEED MODE (MARKETPLACE VS WANTED REQUEST BOARD)
-    window.switchFeedMode = function(mode) {
-      feedMode = mode;
-      const mBtn = document.getElementById('feedTabMarketplace');
-      const wBtn = document.getElementById('feedTabWanted');
-      const catContainer = document.getElementById('categorySectionContainer');
-      const heading = document.getElementById('feedTitleHeading');
-
-      if (mode === 'marketplace') {
-        mBtn.className = "flex-1 py-2 rounded-xl text-xs font-black bg-white text-slate-900 shadow-sm transition-all flex items-center justify-center space-x-1.5";
-        wBtn.className = "flex-1 py-2 rounded-xl text-xs font-black text-slate-600 hover:text-slate-900 transition-all flex items-center justify-center space-x-1.5";
-        catContainer.style.display = 'block';
-        heading.innerText = "Featured Campus Listings";
-      } else {
-        wBtn.className = "flex-1 py-2 rounded-xl text-xs font-black bg-white text-slate-900 shadow-sm transition-all flex items-center justify-center space-x-1.5";
-        mBtn.className = "flex-1 py-2 rounded-xl text-xs font-black text-slate-600 hover:text-slate-900 transition-all flex items-center justify-center space-x-1.5";
-        catContainer.style.display = 'none';
-        heading.innerText = "Wanted / Student Request Board";
-      }
+    window.toggleWishlist = function(itemId) {
+      const idx = wishlist.indexOf(itemId);
+      if (idx > -1) wishlist.splice(idx, 1);
+      else wishlist.push(itemId);
+      syncLocalStorage();
       renderListings();
+      if (!document.getElementById('wishlistModal').classList.contains('hidden')) renderWishlist();
+    };
+
+    window.openWishlistModal = function() {
+      renderWishlist();
+      document.getElementById('wishlistModal').classList.remove('hidden');
+    };
+
+    window.closeWishlistModal = function() { document.getElementById('wishlistModal').classList.add('hidden'); };
+
+    function renderWishlist() {
+      const container = document.getElementById('wishlistContainer');
+      const savedItems = allListings.filter(item => wishlist.includes(item.id));
+
+      if (savedItems.length === 0) {
+        container.innerHTML = `
+          <div class="py-12 text-center text-slate-400">
+            <i class="fa-solid fa-heart-crack text-4xl mb-2 text-rose-300"></i>
+            <p class="text-xs font-bold text-slate-600">Your wishlist is empty!</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = savedItems.map(item => {
+        const rawContact = item.contact || '';
+        const contactHref = rawContact.startsWith('http') ? rawContact : `https://wa.me/${rawContact.replace(/[^0-9]/g, '')}?text=Hi%20${encodeURIComponent(item.seller || 'Seller')},%20I%20am%20interested%20in%20your%20wishlisted%20item:%20${encodeURIComponent(item.title || 'Item')}`;
+        const isRental = item.category === 'rentals';
+        const priceLabel = isRental ? `RM ${Number(item.price).toFixed(2)} / day` : `RM ${Number(item.price).toFixed(2)}`;
+
+        return `
+          <div class="grab-card rounded-2xl p-3 border border-slate-200 flex items-center justify-between space-x-3">
+            <div class="flex items-center space-x-3 min-w-0">
+              <img src="${item.image || 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=800'}" alt="${item.title}" class="w-14 h-14 rounded-xl object-cover border border-slate-200 shrink-0">
+              <div class="min-w-0">
+                <h4 class="font-bold text-xs text-slate-900 truncate mb-0.5">${item.title}</h4>
+                <p class="text-[10px] text-emerald-700 font-extrabold mb-0.5">${priceLabel}</p>
+                <p class="text-[9px] text-slate-500">Seller: ${item.seller}</p>
+              </div>
+            </div>
+            <div class="flex items-center space-x-1.5 shrink-0">
+              <button onclick="handleChatClick('${item.id}', '${contactHref}')" class="px-3 py-1.5 rounded-xl bg-emerald-600 text-white font-bold text-[10px] shadow-sm flex items-center space-x-1">
+                <i class="fa-brands fa-whatsapp text-xs"></i>
+                <span>Chat</span>
+              </button>
+              <button onclick="toggleWishlist('${item.id}')" class="px-2 py-1.5 rounded-xl bg-slate-100 text-rose-500 hover:bg-rose-50 text-xs">
+                <i class="fa-solid fa-trash-can"></i>
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    window.openBoostModal = function(itemId) {
+      activeBoostItemId = itemId;
+      document.getElementById('boostDaysSelect').value = "1";
+      updateBoostCostDisplay();
+      document.getElementById('boostModal').classList.remove('hidden');
+    };
+
+    window.closeBoostModal = function() {
+      document.getElementById('boostModal').classList.add('hidden');
+      activeBoostItemId = null;
+    };
+
+    window.updateBoostCostDisplay = function() {
+      const days = parseInt(document.getElementById('boostDaysSelect').value) || 1;
+      document.getElementById('boostTotalDisplay').innerText = `RM ${(days * 1.00).toFixed(2)}`;
+    };
+
+    window.submitBoostRequest = async function() {
+      if (!activeBoostItemId) return;
+      const days = parseInt(document.getElementById('boostDaysSelect').value) || 1;
+      const targetItem = allListings.find(i => i.id === activeBoostItemId);
+      if (!targetItem) return;
+
+      targetItem.boostStatus = 'pending';
+      targetItem.boostRequestedDays = days;
+      try {
+        await updateDoc(doc(db, "listings", activeBoostItemId), { boostStatus: 'pending', boostRequestedDays: days });
+      } catch(e){}
+
+      const waMsg = `Hi Founder Keven, I have paid RM ${(days * 1.00).toFixed(2)} for ${days} Day(s) Ad Boost for my item: "${targetItem.title}". Here is my receipt.`;
+      closeBoostModal();
+      window.open(`https://wa.me/60126384757?text=${encodeURIComponent(waMsg)}`, '_blank');
+      renderMyListings();
+      alert("Boost request submitted! Awaiting Founder approval.");
+    };
+
+    window.approveBoost = async function(itemId) {
+      const item = allListings.find(i => i.id === itemId);
+      if (!item) return;
+      const days = item.boostRequestedDays || 1;
+      const boostExpiry = new Date(Date.now() + (days * 24 * 60 * 60 * 1000)).toISOString();
+
+      item.isBoosted = true;
+      item.boostStatus = 'approved';
+      item.boostExpiryDate = boostExpiry;
+
+      try {
+        await updateDoc(doc(db, "listings", itemId), { isBoosted: true, boostStatus: 'approved', boostExpiryDate: boostExpiry });
+      } catch(e){}
+
+      syncLocalStorage();
+      renderListings();
+      renderSellerManagerTable();
+      alert(`Approved Ad Boost for "${item.title}"!`);
+    };
+
+    window.rejectBoost = async function(itemId) {
+      const item = allListings.find(i => i.id === itemId);
+      if (!item) return;
+      item.isBoosted = false;
+      item.boostStatus = 'rejected';
+      try { await updateDoc(doc(db, "listings", itemId), { isBoosted: false, boostStatus: 'rejected' }); } catch(e){}
+      syncLocalStorage();
+      renderListings();
+      renderSellerManagerTable();
     };
 
     window.switchAuthTab = function(tab) {
@@ -962,7 +1181,7 @@
     window.handleRegister = async function() {
       let rawUser = document.getElementById('regUser').value.trim();
       const pass = document.getElementById('regPass').value.trim();
-      if (!rawUser || !pass) { alert("Please fill in username and password."); return; }
+      if (!rawUser || !pass) { alert("Please fill in both fields."); return; }
       if (!rawUser.includes('@')) rawUser = `${rawUser}@apm.com`;
       const cleanUsername = rawUser.split('@')[0];
 
@@ -973,7 +1192,7 @@
         allSellers.push(newSellerDoc);
         syncLocalStorage();
         await signOut(auth);
-        alert("Registration submitted! Send Student ID proof to Founder Keven on WhatsApp for approval.");
+        alert("Step 1 Complete! Send your Student ID proof to Founder Keven on WhatsApp.");
         switchAuthTab('login');
       } catch (err) { alert(`Registration Error: ${err.message}`); }
     };
@@ -1003,13 +1222,14 @@
         if (isFounderUser) document.getElementById('sellerManagerNavBtn').style.display = 'flex';
       } else {
         currentUser = null; currentUserEmail = null; isFounderUser = false;
-        document.getElementById('authBtnText').innerText = "Seller Login";
+        document.getElementById('authBtnText').innerText = "APM Seller Login";
         document.getElementById('floatingAddBtn').style.display = 'none';
         document.getElementById('addClubBtn').style.display = 'none';
         document.getElementById('myListingsNavBtn').style.display = 'none';
         document.getElementById('sellerManagerNavBtn').style.display = 'none';
       }
-      renderListings(); renderClubs();
+      renderListings();
+      renderClubs();
       if (isFounderUser) renderSellerManagerTable();
     });
 
@@ -1026,7 +1246,9 @@
     function populateCourseDropdowns() {
       const selectEl = document.getElementById('itemCourseSelect');
       if (!selectEl) return;
-      selectEl.innerHTML = AIMST_COURSES.map(c => `<option value="${c.id}">${c.name} (${c.nick})</option>`).join('');
+      selectEl.innerHTML = AIMST_COURSES.map(c => `
+        <option value="${c.id}">${c.name} (${c.nick})</option>
+      `).join('');
     }
 
     window.renderCourseFilterPills = function() {
@@ -1048,152 +1270,125 @@
     window.toggleCourseFilter = function(courseId) {
       if (selectedCourses.has(courseId)) selectedCourses.delete(courseId);
       else selectedCourses.add(courseId);
-      renderCourseFilterPills(); renderListings();
+      renderCourseFilterPills();
+      renderListings();
     };
 
     window.clearCourseFilters = function() {
-      selectedCourses.clear(); renderCourseFilterPills(); renderListings();
+      selectedCourses.clear();
+      renderCourseFilterPills();
+      renderListings();
+    };
+
+    window.toggleCourseFilterPanel = function() {
+      const panel = document.getElementById('courseFilterSection');
+      if (panel.classList.contains('hidden')) {
+        panel.classList.remove('hidden');
+      } else {
+        panel.classList.add('hidden');
+      }
     };
 
     window.onCategoryChange = function() {
       const cat = document.getElementById('categorySelect').value;
-      document.getElementById('courseSelectContainer').style.display = (cat === 'academic') ? 'block' : 'none';
-    };
+      const courseContainer = document.getElementById('courseSelectContainer');
+      const priceLabel = document.getElementById('priceLabel');
 
-    window.onPostTypeChange = function() {
-      const postType = document.getElementById('itemPostTypeSelect').value;
-      const titleEl = document.getElementById('addModalTitle');
-      if (titleEl) titleEl.innerText = (postType === 'wanted') ? 'Post Wanted Item Request' : 'Create Campus Listing';
+      if (cat === 'academic') courseContainer.style.display = 'block';
+      else courseContainer.style.display = 'none';
+
+      if (cat === 'rentals') priceLabel.innerText = 'Rental Rate (MYR / day)';
+      else priceLabel.innerText = 'Price (MYR)';
     };
 
     async function loadListings() {
       try {
         const q = query(collection(db, "listings"));
-        const snap = await getDocs(q);
-        const items = [];
-        snap.forEach(d => items.push({ id: d.id, clicksCount: 0, messages: [], ...d.data() }));
-        allListings = items;
-      } catch (e) { allListings = []; }
-      syncLocalStorage(); renderListings();
+        const querySnapshot = await getDocs(q);
+        const firebaseItems = [];
+        querySnapshot.forEach((docSnap) => {
+          firebaseItems.push({ id: docSnap.id, clicksCount: 0, ...docSnap.data() });
+        });
+        allListings = firebaseItems;
+      } catch (error) { allListings = []; }
+      syncLocalStorage();
+      renderListings();
     }
 
     async function loadClubs() {
       try {
-        const snap = await getDocs(collection(db, "clubs"));
-        const clubs = [];
-        snap.forEach(d => clubs.push({ id: d.id, ...d.data() }));
-        if (clubs.length > 0) allClubs = clubs;
-      } catch (e) {}
-      syncLocalStorage(); renderClubs();
+        const q = query(collection(db, "clubs"));
+        const querySnapshot = await getDocs(q);
+        const firebaseClubs = [];
+        querySnapshot.forEach((docSnap) => { firebaseClubs.push({ id: docSnap.id, ...docSnap.data() }); });
+        if (firebaseClubs.length > 0) allClubs = firebaseClubs;
+      } catch (err) {}
+      syncLocalStorage();
+      renderClubs();
     }
 
     async function loadSellers() {
       try {
-        const snap = await getDocs(collection(db, "verified_sellers"));
-        const sellers = [];
-        snap.forEach(d => sellers.push({ id: d.id, ...d.data() }));
-        if (sellers.length > 0) allSellers = sellers;
-      } catch (e) {}
+        const q = query(collection(db, "verified_sellers"));
+        const querySnapshot = await getDocs(q);
+        const firebaseSellers = [];
+        querySnapshot.forEach((docSnap) => { firebaseSellers.push({ id: docSnap.id, ...docSnap.data() }); });
+        if (firebaseSellers.length > 0) allSellers = firebaseSellers;
+      } catch (err) {}
     }
 
-    window.toggleWishlist = function(id) {
-      if (wishlistIds.includes(id)) {
-        wishlistIds = wishlistIds.filter(i => i !== id);
-      } else {
-        wishlistIds.push(id);
-      }
-      syncLocalStorage();
+    window.toggleDescription = function(itemId) {
+      if (expandedDescIds.has(itemId)) expandedDescIds.delete(itemId);
+      else expandedDescIds.add(itemId);
       renderListings();
     };
 
-    window.openWishlistModal = function() {
-      const container = document.getElementById('wishlistContainer');
-      const savedItems = allListings.filter(item => wishlistIds.includes(item.id));
+    window.handleChatClick = async function(id, contactUrl) {
+      const targetItem = allListings.find(item => item.id === id);
+      if (targetItem) {
+        targetItem.clicksCount = (targetItem.clicksCount || 0) + 1;
+        try { await updateDoc(doc(db, "listings", id), { clicksCount: increment(1) }); } catch(e) {}
+      }
+      window.open(contactUrl, '_blank');
+    };
 
-      if (savedItems.length === 0) {
-        container.innerHTML = `<div class="col-span-full py-8 text-center text-slate-400 text-xs">Your wishlist is currently empty. Click the heart icon on any product to save it!</div>`;
+    window.setCategory = function(cat, btn) {
+      currentCategory = cat;
+      document.querySelectorAll('.category-btn').forEach(b => {
+        b.className = "category-btn grab-card p-2.5 rounded-2xl flex flex-col items-center justify-center text-center transition-all group";
+      });
+      if (btn) btn.className = "category-btn grab-card p-2.5 rounded-2xl flex flex-col items-center justify-center text-center transition-all group bg-emerald-50 border-emerald-300 shadow-sm";
+
+      const courseFilterSection = document.getElementById('courseFilterSection');
+      if (cat === 'academic') {
+        courseFilterSection.classList.remove('hidden');
+        renderCourseFilterPills();
       } else {
-        container.innerHTML = savedItems.map(item => `
-          <div class="grab-card rounded-2xl p-3 flex space-x-3 items-center">
-            <img src="${item.image || 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=800'}" class="w-16 h-16 rounded-xl object-cover shrink-0">
-            <div class="min-w-0 flex-1">
-              <h4 class="font-bold text-xs text-slate-900 truncate">${item.title}</h4>
-              <p class="text-[10px] text-emerald-700 font-extrabold mb-1">RM ${(Number(item.price)||0).toFixed(2)}</p>
-              <button onclick="openChatModal('${item.id}')" class="px-3 py-1 bg-emerald-600 text-white rounded-xl text-[10px] font-bold">Open Chat</button>
-            </div>
-          </div>
-        `).join('');
-      }
-      document.getElementById('wishlistModal').classList.remove('hidden');
-    };
-    window.closeWishlistModal = function() { document.getElementById('wishlistModal').classList.add('hidden'); };
-
-    // IN-APP CHAT FUNCTIONS
-    window.openChatModal = function(id) {
-      activeChatListingId = id;
-      const item = allListings.find(i => i.id === id);
-      if (!item) return;
-
-      document.getElementById('chatItemTitle').innerText = item.title;
-      document.getElementById('chatSellerName').innerText = `Verified Seller: ${item.seller || 'AIMST Member'}`;
-      renderChatMessages(item);
-      document.getElementById('chatModal').classList.remove('hidden');
-    };
-
-    window.closeChatModal = function() {
-      document.getElementById('chatModal').classList.add('hidden');
-      activeChatListingId = null;
-    };
-
-    function renderChatMessages(item) {
-      const container = document.getElementById('chatMessagesContainer');
-      const msgs = item.messages || [];
-
-      if (msgs.length === 0) {
-        container.innerHTML = `<div class="text-center py-6 text-slate-400 text-[11px]">No messages yet. Send a message to start negotiating with the seller!</div>`;
-        return;
+        courseFilterSection.classList.add('hidden');
       }
 
-      container.innerHTML = msgs.map(m => `
-        <div class="flex flex-col ${m.sender === (currentUser || 'Guest') ? 'items-end' : 'items-start'}">
-          <span class="text-[9px] text-slate-400 mb-0.5">${m.sender}</span>
-          <div class="px-3 py-2 rounded-2xl text-xs max-w-[80%] ${m.sender === (currentUser || 'Guest') ? 'bg-emerald-600 text-white rounded-br-none' : 'bg-white text-slate-900 border border-slate-200 rounded-bl-none'}">
-            ${m.text}
-          </div>
-        </div>
-      `).join('');
-      container.scrollTop = container.scrollHeight;
-    }
-
-    window.handleSendChatMessage = async function(e) {
-      e.preventDefault();
-      const inputEl = document.getElementById('chatInputMsg');
-      const text = sanitizeInput(inputEl.value);
-      if (!text || !activeChatListingId) return;
-
-      const item = allListings.find(i => i.id === activeChatListingId);
-      if (!item) return;
-
-      if (!item.messages) item.messages = [];
-      item.messages.push({ sender: currentUser || 'Student', text, time: new Date().toISOString() });
-
-      try {
-        await updateDoc(doc(db, "listings", activeChatListingId), { messages: item.messages });
-      } catch (e) {}
-
-      inputEl.value = '';
-      renderChatMessages(item);
+      renderListings();
     };
+
+    window.filterListings = function() { renderListings(); };
 
     window.renderListings = function() {
       const grid = document.getElementById('listingsGrid');
+      const sponsoredSec = document.getElementById('sponsoredSection');
+      const sponsoredGrid = document.getElementById('sponsoredGrid');
       const searchTxt = document.getElementById('searchInput').value.toLowerCase();
-      const courseFilterSection = document.getElementById('courseFilterSection');
+      const now = new Date();
 
-      if (feedMode === 'wanted') {
-        courseFilterSection.style.display = 'none';
+      const boostedItems = allListings.filter(item => {
+        if (!item.isBoosted || !item.boostExpiryDate) return false;
+        return new Date(item.boostExpiryDate) > now && !item.isDisabled;
+      });
+
+      if (boostedItems.length > 0) {
+        sponsoredSec.classList.remove('hidden');
+        sponsoredGrid.innerHTML = boostedItems.map(item => createCardHTML(item, true)).join('');
       } else {
-        courseFilterSection.style.display = (currentCategory === 'academic' || currentCategory === 'all') ? 'block' : 'none';
+        sponsoredSec.classList.add('hidden');
       }
       
       const filtered = allListings.filter(item => {
@@ -1201,16 +1396,13 @@
         const isOwner = currentUser && (currentUser.toLowerCase() === itemSeller || currentUser.includes(itemSeller) || itemSeller.includes(currentUser));
         if (item.isDisabled && !isOwner && !isFounderUser) return false;
 
-        const matchesFeed = (feedMode === 'wanted') ? (item.postType === 'wanted') : (item.postType !== 'wanted');
-        if (!matchesFeed) return false;
-
-        const matchesCategory = (feedMode === 'wanted') ? true : (currentCategory === 'all' || item.category === currentCategory);
+        const matchesCategory = currentCategory === 'all' || item.category === currentCategory;
         let matchesCourse = true;
-        if (feedMode !== 'wanted' && currentCategory === 'academic' && selectedCourses.size > 0) {
+        if (currentCategory === 'academic' && selectedCourses.size > 0) {
           matchesCourse = selectedCourses.has(item.courseId);
         }
 
-        const matchesSearch = (item.title || '').toLowerCase().includes(searchTxt) || (item.desc || '').toLowerCase().includes(searchTxt);
+        const matchesSearch = (item.title || '').toLowerCase().includes(searchTxt) || (item.desc || '').toLowerCase().includes(searchTxt) || (item.courseNick || '').toLowerCase().includes(searchTxt);
         return matchesCategory && matchesCourse && matchesSearch;
       });
 
@@ -1218,173 +1410,236 @@
         grid.innerHTML = `
           <div class="col-span-full py-16 text-center grab-card rounded-3xl p-8 border border-slate-200">
             <i class="fa-solid fa-box-open text-4xl mb-3 text-emerald-500"></i>
-            <h4 class="text-base font-black text-slate-900 mb-1">No items found</h4>
-            <p class="text-xs text-slate-500 max-w-sm mx-auto mb-4 leading-relaxed">
-              No listings available matching your current filter. Post a listing or request board item now!
-            </p>
+            <h4 class="text-base font-black text-slate-900 mb-1">No products available</h4>
+            <p class="text-xs text-slate-500 max-w-sm mx-auto mb-4">No items matching your criteria right now.</p>
           </div>
         `;
         return;
       }
 
-      grid.innerHTML = filtered.map(item => {
-        const safePrice = Number(item.price) || 0;
-        const isSaved = wishlistIds.includes(item.id);
-        const itemSeller = item.seller || 'AIMST Member';
-        const isOwner = currentUser && (currentUser.toLowerCase() === itemSeller.toLowerCase() || currentUser.includes(itemSeller) || itemSeller.includes(currentUser));
+      grid.innerHTML = filtered.map(item => createCardHTML(item, false)).join('');
+    };
 
-        return `
-          <div class="grab-card rounded-2xl overflow-hidden transition-all group flex flex-col justify-between relative text-left">
-            <div>
-              <div class="relative w-full aspect-square overflow-hidden bg-slate-100">
-                <img src="${item.image || 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=800'}" alt="${item.title}" class="w-full h-full object-cover group-hover:scale-105 transition-all duration-300">
-                
-                <span class="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-lg bg-white/90 backdrop-blur-md text-[9px] font-extrabold uppercase tracking-wider text-slate-800 shadow-sm border border-slate-200">
-                  ${item.postType === 'wanted' ? 'Wanted Request' : (item.category || 'general')}
+    function createCardHTML(item) {
+      const rawContact = item.contact || '';
+      const contactHref = rawContact.startsWith('http') ? rawContact : `https://wa.me/${rawContact.replace(/[^0-9]/g, '')}?text=Hi%20${encodeURIComponent(item.seller || 'Seller')},%20I%20am%20interested%20in%20your%20listing:%20${encodeURIComponent(item.title || 'Item')}`;
+      const safePrice = Number(item.price) || 0;
+      const itemSeller = item.seller || 'AIMST Member';
+      const isOwner = currentUser && (currentUser.toLowerCase() === itemSeller.toLowerCase() || currentUser.includes(itemSeller));
+      const isExpanded = expandedDescIds.has(item.id);
+      const fullDesc = item.desc || 'No details provided.';
+      const shouldTruncate = fullDesc.length > 55;
+      const isWishlisted = wishlist.includes(item.id);
+      const isRental = item.category === 'rentals';
+      const priceUnit = isRental ? '/ day' : '';
+
+      const courseBadge = item.courseNick ? `
+        <span class="absolute top-8 left-2.5 px-2 py-0.5 rounded-lg bg-emerald-50 text-emerald-800 text-[8px] font-black uppercase tracking-wider shadow-sm border border-emerald-200">
+          ${item.courseNick}
+        </span>
+      ` : '';
+
+      return `
+        <div class="grab-card rounded-2xl overflow-hidden transition-all group flex flex-col justify-between relative text-left ${item.isBoosted ? 'boosted-card' : ''}">
+          <div>
+            <div class="relative w-full aspect-square overflow-hidden bg-slate-100">
+              <img src="${item.image || 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=800'}" alt="${item.title}" class="w-full h-full object-cover group-hover:scale-105 transition-all duration-300">
+              
+              <span class="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-lg bg-white/95 backdrop-blur-md text-[9px] font-extrabold uppercase tracking-wider text-slate-800 shadow-sm border border-slate-200">
+                ${item.category === 'rentals' ? 'Blazer Rental' : (item.category || 'general')}
+              </span>
+
+              ${courseBadge}
+
+              <button onclick="toggleWishlist('${item.id}')" title="Save to Wishlist" class="absolute top-2.5 right-2.5 z-20 w-7 h-7 rounded-full bg-white/95 backdrop-blur-md shadow-md flex items-center justify-center transition-all hover:scale-110">
+                <i class="fa-solid fa-heart ${isWishlisted ? 'text-rose-500' : 'text-slate-300'} text-xs"></i>
+              </button>
+
+              ${item.isBoosted ? `
+                <span class="absolute bottom-2 left-2 bg-amber-500 text-slate-950 font-black text-[8px] py-0.5 px-2 rounded-md uppercase tracking-widest shadow-md flex items-center space-x-1">
+                  <i class="fa-solid fa-bolt"></i>
+                  <span>SPONSORED AD</span>
                 </span>
+              ` : ''}
 
-                <!-- WISHLIST HEART BUTTON -->
-                <button onclick="toggleWishlist('${item.id}')" class="absolute top-2.5 right-2.5 w-7 h-7 rounded-full bg-white/90 backdrop-blur-md flex items-center justify-center shadow-sm text-xs ${isSaved ? 'text-rose-500' : 'text-slate-400 hover:text-slate-700'}">
-                  <i class="fa-solid fa-heart"></i>
+              ${(isFounderUser || isOwner) ? `
+                <button onclick="terminateListing('${item.id}')" class="absolute top-11 right-2.5 px-2 py-0.5 rounded-lg bg-rose-600 text-white font-bold text-[9px] shadow-md hover:bg-rose-700 z-10 transition-all">
+                  ${isFounderUser ? 'TERMINATE' : 'Delete'}
                 </button>
-              </div>
-
-              <div class="p-2.5 sm:p-3">
-                <h4 class="font-bold text-xs sm:text-sm text-slate-900 mb-1 line-clamp-2 leading-snug">${item.title}</h4>
-                <p class="text-[10px] text-slate-500 mb-2 line-clamp-2 leading-relaxed">${item.desc}</p>
-
-                <!-- TRUST BADGE & MEETUP SPOT -->
-                <div class="space-y-1 mb-2">
-                  <div class="inline-flex items-center space-x-1 px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-800 text-[8px] font-bold border border-emerald-200">
-                    <i class="fa-solid fa-circle-check text-emerald-600"></i>
-                    <span>Verified AIMST Student</span>
-                  </div>
-                  <div class="flex items-center space-x-1 text-[9px] text-slate-500">
-                    <i class="fa-solid fa-location-dot text-emerald-600"></i>
-                    <span class="truncate">Meetup: ${item.meetupSpot || 'AIMST Cafeteria'}</span>
-                  </div>
-                </div>
-
-                <div class="flex items-baseline justify-between mb-1">
-                  <div class="flex items-baseline space-x-1">
-                    <span class="text-[10px] text-emerald-600 font-bold">${item.postType === 'wanted' ? 'Budget' : 'RM'}</span>
-                    <span class="text-base sm:text-lg font-black text-emerald-700 leading-none">${safePrice.toFixed(2)}</span>
-                  </div>
-                </div>
-              </div>
+              ` : ''}
             </div>
 
-            <div class="p-2.5 sm:p-3 pt-0 mt-auto">
-              <div class="pt-2 border-t border-slate-100 flex items-center justify-between gap-1 text-[10px]">
-                <span class="text-slate-600 truncate max-w-[50%] font-semibold">${itemSeller}</span>
-                <button onclick="openChatModal('${item.id}')" class="px-2.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold transition-all flex items-center space-x-1 text-[10px] shadow-sm">
-                  <i class="fa-solid fa-comments text-xs"></i>
-                  <span>In-App Chat</span>
+            <div class="p-2.5 sm:p-3">
+              <h4 class="font-bold text-xs sm:text-sm text-slate-900 mb-1 line-clamp-2 leading-snug">${item.title || 'Item Title'}</h4>
+              <div class="text-[10px] text-slate-500 mb-2 leading-relaxed">
+                ${isExpanded || !shouldTruncate ? fullDesc : fullDesc.substring(0, 55) + '...'}
+                ${shouldTruncate ? `
+                  <button onclick="toggleDescription('${item.id}')" class="text-emerald-700 font-bold hover:underline ml-1 focus:outline-none">
+                    ${isExpanded ? 'Show Less' : 'Show More'}
+                  </button>
+                ` : ''}
+              </div>
+
+              <div class="flex items-baseline justify-between mb-1">
+                <div class="flex items-baseline space-x-1">
+                  <span class="text-[10px] text-emerald-600 font-bold">RM</span>
+                  <span class="text-base sm:text-lg font-black text-emerald-700 leading-none">${safePrice.toFixed(2)}</span>
+                  ${priceUnit ? `<span class="text-[9px] text-slate-500 font-bold">${priceUnit}</span>` : ''}
+                </div>
+                <span class="text-[9px] text-slate-400 flex items-center space-x-1">
+                  <i class="fa-solid fa-location-dot text-emerald-500 text-[8px]"></i>
+                  <span>AIMST</span>
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-2.5 sm:p-3 pt-0 mt-auto">
+            <div class="pt-2 border-t border-slate-100 flex items-center justify-between gap-1 text-[10px]">
+              <span class="text-slate-600 truncate max-w-[50%] font-semibold">${itemSeller}</span>
+              <div class="flex items-center space-x-1 shrink-0">
+                ${(isOwner || isFounderUser) ? `
+                  <button onclick="markItemSold('${item.id}')" class="px-2 py-1 rounded-lg bg-slate-100 text-slate-700 hover:bg-emerald-600 hover:text-white font-bold text-[9px] transition-all border border-slate-200">Sold</button>
+                ` : ''}
+                <button onclick="handleChatClick('${item.id}', '${contactHref}')" class="px-2 py-1 rounded-xl bg-emerald-50 hover:bg-emerald-600 hover:text-white text-emerald-700 font-bold transition-all border border-emerald-200 flex items-center space-x-1 text-[10px] shadow-sm">
+                  <i class="fa-brands fa-whatsapp text-xs"></i>
+                  <span>Chat</span>
                 </button>
               </div>
             </div>
+          </div>
+        </div>
+      `;
+    }
+
+    window.renderClubs = function() {
+      const grid = document.getElementById('clubsGrid');
+      grid.innerHTML = allClubs.map(club => {
+        const contactHref = (club.contact || '').startsWith('http') ? club.contact : `https://wa.me/${(club.contact || '').replace(/[^0-9]/g, '')}`;
+        return `
+          <div class="grab-card rounded-2xl p-3.5 transition-all flex flex-col justify-between relative">
+            <div>
+              <div class="flex items-center justify-between mb-2.5">
+                <div class="flex items-center space-x-2.5">
+                  ${club.logo ? `<img src="${club.logo}" alt="${club.name}" class="w-10 h-10 rounded-2xl object-cover border border-slate-200 shrink-0 shadow-sm">` : `<div class="w-10 h-10 rounded-2xl bg-teal-50 border border-teal-200 text-teal-600 flex items-center justify-center font-bold shrink-0"><i class="fa-solid fa-users text-base"></i></div>`}
+                  <div class="min-w-0">
+                    <h4 class="font-bold text-xs sm:text-sm text-slate-900 leading-tight truncate">${club.name}</h4>
+                    <span class="text-[9px] text-teal-600 uppercase tracking-wider font-bold">${club.category}</span>
+                  </div>
+                </div>
+              </div>
+              <p class="text-[11px] text-slate-600 leading-relaxed mb-3 line-clamp-2">${club.desc}</p>
+            </div>
+            <a href="${contactHref}" target="_blank" class="w-full py-2 rounded-xl bg-teal-50 hover:bg-teal-600 hover:text-white text-teal-700 font-bold border border-teal-200 text-xs transition-all flex items-center justify-center space-x-1.5 shadow-sm">
+              <i class="fa-brands fa-whatsapp text-xs"></i>
+              <span>Join via WhatsApp</span>
+            </a>
           </div>
         `;
       }).join('');
     };
 
-    window.renderClubs = function() {
-      const grid = document.getElementById('clubsGrid');
-      grid.innerHTML = allClubs.map(club => `
-        <div class="grab-card rounded-2xl p-3.5 transition-all flex flex-col justify-between">
-          <div>
-            <div class="flex items-center space-x-2.5 mb-2.5">
-              <div class="w-10 h-10 rounded-2xl bg-teal-50 border border-teal-200 text-teal-600 flex items-center justify-center font-bold shrink-0 shadow-sm">
-                <i class="fa-solid fa-users text-base"></i>
-              </div>
-              <div class="min-w-0">
-                <h4 class="font-bold text-xs sm:text-sm text-slate-900 leading-tight truncate">${club.name}</h4>
-                <span class="text-[9px] text-teal-600 uppercase tracking-wider font-bold">${club.category}</span>
-              </div>
-            </div>
-            <p class="text-[11px] text-slate-600 leading-relaxed mb-3 line-clamp-2">${club.desc}</p>
-          </div>
-          <a href="${club.contact}" target="_blank" class="w-full py-2 rounded-xl bg-teal-50 hover:bg-teal-600 hover:text-white text-teal-700 font-bold border border-teal-200 text-xs transition-all flex items-center justify-center space-x-1.5 shadow-sm">
-            <i class="fa-brands fa-whatsapp text-xs"></i>
-            <span>Join WhatsApp Group</span>
-          </a>
-        </div>
-      `).join('');
-    };
-
     window.openMyListingsModal = function() {
-      const container = document.getElementById('myListingsContainer');
-      const myListings = allListings.filter(item => currentUser && (currentUser.toLowerCase() === (item.seller || '').toLowerCase()));
-
-      if (myListings.length === 0) {
-        container.innerHTML = `<div class="col-span-full py-8 text-center text-slate-400 text-xs">You have not posted any listings yet.</div>`;
-      } else {
-        container.innerHTML = myListings.map(item => `
-          <div class="grab-card rounded-2xl p-3 border border-slate-200 flex flex-col justify-between">
-            <div class="flex space-x-3 mb-2">
-              <img src="${item.image}" class="w-16 h-16 rounded-xl object-cover shrink-0">
-              <div class="min-w-0 flex-1">
-                <h4 class="font-bold text-xs text-slate-900 truncate">${item.title}</h4>
-                <p class="text-[10px] text-emerald-700 font-extrabold mb-1">RM ${(Number(item.price)||0).toFixed(2)}</p>
-                <div class="text-[9px] text-teal-700 font-bold">Boost Listing (RM2) for Top Placement</div>
-              </div>
-            </div>
-            <button onclick="terminateListing('${item.id}')" class="w-full py-1.5 rounded-xl bg-rose-50 hover:bg-rose-600 text-rose-600 hover:text-white font-bold text-[10px] border border-rose-200 transition-all">Delete Product</button>
-          </div>
-        `).join('');
-      }
+      if (!currentUser) return;
+      renderMyListings();
       document.getElementById('myListingsModal').classList.remove('hidden');
     };
     window.closeMyListingsModal = function() { document.getElementById('myListingsModal').classList.add('hidden'); };
 
+    window.renderMyListings = function() {
+      const container = document.getElementById('myListingsContainer');
+      const myListings = allListings.filter(item => {
+        const itemSeller = (item.seller || '').toLowerCase();
+        return currentUser && (currentUser.toLowerCase() === itemSeller || currentUser.includes(itemSeller));
+      });
+
+      if (myListings.length === 0) {
+        container.innerHTML = `<div class="col-span-full py-10 text-center text-slate-400"><p class="text-xs font-bold text-slate-600">No listings posted yet.</p></div>`;
+        return;
+      }
+
+      container.innerHTML = myListings.map(item => `
+        <div class="grab-card rounded-2xl p-3 border border-slate-200 flex flex-col justify-between">
+          <div class="flex space-x-3 mb-2">
+            <img src="${item.image || 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=800'}" alt="${item.title}" class="w-16 h-16 rounded-xl object-cover shrink-0">
+            <div class="min-w-0 flex-1">
+              <h4 class="font-bold text-xs text-slate-900 truncate mb-0.5">${item.title}</h4>
+              <p class="text-[10px] text-emerald-700 font-extrabold mb-1">RM ${(Number(item.price)||0).toFixed(2)}</p>
+            </div>
+          </div>
+          <button onclick="terminateListing('${item.id}')" class="w-full py-1.5 rounded-xl bg-rose-50 hover:bg-rose-600 text-rose-600 hover:text-white font-bold text-[10px] border border-rose-200 transition-all">Delete Product</button>
+        </div>
+      `).join('');
+    };
+
     window.renderSellerManagerTable = function() {
       const pendingContainer = document.getElementById('pendingSellersContainer');
+      const pendingBoostsContainer = document.getElementById('pendingBoostsContainer');
       const tbody = document.getElementById('sellersTableBody');
-      const pending = allSellers.filter(s => !s.isVerified);
-      const verified = allSellers.filter(s => s.isVerified);
 
-      document.getElementById('pendingCountBadge').innerText = `${pending.length} Pending`;
-      pendingContainer.innerHTML = pending.length === 0 ? `<p class="text-[11px] text-amber-800 italic">No pending requests.</p>` : pending.map(s => `
+      const pendingBoosts = allListings.filter(i => i.boostStatus === 'pending');
+      document.getElementById('pendingBoostsCountBadge').innerText = `${pendingBoosts.length} Pending`;
+      pendingBoostsContainer.innerHTML = pendingBoosts.length === 0 ? `<p class="text-[11px] text-amber-800 italic">No pending boosts.</p>` : pendingBoosts.map(i => `
         <div class="bg-white p-2.5 rounded-xl border border-amber-300 flex items-center justify-between text-xs">
-          <div><span class="font-extrabold text-slate-900">${s.username}</span><p class="text-[10px] text-slate-500">${s.email}</p></div>
-          <button onclick="approveSeller('${s.id}')" class="px-2.5 py-1 rounded-lg bg-emerald-600 text-white font-bold text-[10px]">Approve</button>
+          <span class="font-extrabold text-slate-900">${i.title} (${i.boostRequestedDays || 1} day)</span>
+          <div class="space-x-1">
+            <button onclick="approveBoost('${i.id}')" class="px-2.5 py-1 rounded-lg bg-amber-500 text-white font-bold text-[10px]">Approve</button>
+            <button onclick="rejectBoost('${i.id}')" class="px-2.5 py-1 rounded-lg bg-rose-600 text-white font-bold text-[10px]">Reject</button>
+          </div>
         </div>
       `).join('');
 
-      tbody.innerHTML = verified.map(seller => `
-        <tr class="hover:bg-slate-50">
-          <td class="p-3"><div class="font-bold text-slate-900">${seller.username}</div><div class="text-[10px] text-slate-500">${seller.email}</div></td>
-          <td class="p-3 text-center"><span class="px-2 py-1 rounded-lg text-[9px] font-black uppercase bg-amber-100 text-amber-900">${seller.tier.toUpperCase()}</span></td>
-          <td class="p-3 text-right"><button onclick="rejectSeller('${seller.id}')" class="px-2.5 py-1.5 rounded-xl bg-rose-600 text-white font-bold text-[10px]">Revoke</button></td>
+      const pending = allSellers.filter(s => !s.isVerified);
+      document.getElementById('pendingCountBadge').innerText = `${pending.length} Pending`;
+      pendingContainer.innerHTML = pending.length === 0 ? `<p class="text-[11px] text-amber-800 italic">No pending sellers.</p>` : pending.map(s => `
+        <div class="bg-white p-2.5 rounded-xl border border-amber-300 flex items-center justify-between text-xs">
+          <span class="font-extrabold text-slate-900">${s.username}</span>
+          <button onclick="approveSeller('${s.id}')" class="px-2.5 py-1 rounded-lg bg-emerald-600 text-white font-bold text-[10px]">Verify</button>
+        </div>
+      `).join('');
+
+      tbody.innerHTML = allSellers.filter(s => s.isVerified).map(seller => `
+        <tr class="hover:bg-slate-50 transition-all">
+          <td class="p-3"><div class="font-bold text-slate-900">${seller.username}</div></td>
+          <td class="p-3 text-center"><span class="px-2 py-1 rounded-lg text-[9px] font-black uppercase ${seller.tier === 'pro' ? 'bg-amber-100 text-amber-900' : 'bg-slate-100 text-slate-700'}">${seller.tier}</span></td>
+          <td class="p-3 text-right"><button onclick="rejectSeller('${seller.id}')" class="px-2 py-1 rounded-xl bg-rose-600 text-white text-[10px] font-bold">Revoke</button></td>
         </tr>
       `).join('');
     };
 
     window.approveSeller = async function(id) {
       const s = allSellers.find(x => x.id === id);
-      if (s) { s.isVerified = true; syncLocalStorage(); renderSellerManagerTable(); alert(`Approved ${s.username}!`); }
+      if (s) { s.isVerified = true; syncLocalStorage(); renderSellerManagerTable(); alert("Verified!"); }
     };
     window.rejectSeller = async function(id) {
-      allSellers = allSellers.filter(x => x.id !== id); syncLocalStorage(); renderSellerManagerTable();
+      allSellers = allSellers.filter(x => x.id !== id);
+      syncLocalStorage();
+      renderSellerManagerTable();
     };
 
     window.terminateListing = async function(id) {
-      if (!confirm("Delete this listing permanently?")) return;
+      if (!confirm("Delete listing?")) return;
       try {
         await deleteDoc(doc(db, "listings", id));
-        allListings = allListings.filter(i => i.id !== id);
-        renderListings(); renderMyListings(); updateMetrics();
-      } catch (e) { alert("Error deleting listing."); }
+        allListings = allListings.filter(item => item.id !== id);
+        renderListings();
+        renderMyListings();
+        updateMetrics();
+      } catch (e) { alert("Error: " + e.message); }
     };
 
-    window.setCategory = function(cat, btn) {
-      currentCategory = cat;
-      document.querySelectorAll('.category-btn').forEach(b => b.className = "category-btn grab-card p-2.5 rounded-2xl flex flex-col items-center justify-center text-center transition-all group");
-      if (btn) btn.className = "category-btn grab-card p-2.5 rounded-2xl flex flex-col items-center justify-center text-center transition-all group bg-emerald-50 border-emerald-300 shadow-sm";
-      renderListings();
+    window.markItemSold = async function(id) {
+      if (!confirm("Mark as sold?")) return;
+      try {
+        await deleteDoc(doc(db, "listings", id));
+        allListings = allListings.filter(item => item.id !== id);
+        soldCount += 1;
+        syncLocalStorage();
+        renderListings();
+        renderMyListings();
+        updateMetrics();
+      } catch (e) { alert("Error: " + e.message); }
     };
-
-    window.filterListings = function() { renderListings(); };
 
     window.handleLogin = async function() {
       const email = document.getElementById('loginUser').value.trim();
@@ -1393,68 +1648,76 @@
       try {
         await signInWithEmailAndPassword(auth, formatted, pass);
         closeAuthModal();
-      } catch (e) { document.getElementById('loginError').innerText = "Invalid login."; document.getElementById('loginError').classList.remove('hidden'); }
+      } catch (err) {
+        document.getElementById('loginError').innerText = "Invalid credentials.";
+        document.getElementById('loginError').classList.remove('hidden');
+      }
     };
 
     window.openAuthModal = function() { document.getElementById('authModal').classList.remove('hidden'); };
     window.closeAuthModal = function() { document.getElementById('authModal').classList.add('hidden'); };
+
     window.openUserProfileModal = function() {
+      if (!currentUser) return;
       document.getElementById('profileUsername').innerText = currentUser;
       document.getElementById('profileEmail').innerText = currentUserEmail || `${currentUser}@apm.com`;
       document.getElementById('userProfileModal').classList.remove('hidden');
     };
     window.closeUserProfileModal = function() { document.getElementById('userProfileModal').classList.add('hidden'); };
-    window.openUpgradeFromProfile = function() { closeUserProfileModal(); document.getElementById('upgradeModal').classList.remove('hidden'); };
-    window.closeUpgradeModal = function() { document.getElementById('upgradeModal').classList.add('hidden'); };
-    window.openMyListingsFromProfile = function() { closeUserProfileModal(); openMyListingsModal(); };
-    window.performLogout = function() { signOut(auth).then(() => closeUserProfileModal()); };
 
+    window.openUpgradeFromProfile = function() { closeUserProfileModal(); openUpgradeModal(); };
+    window.performLogout = function() { signOut(auth).then(() => { closeUserProfileModal(); }); };
     window.openFoundersModal = function() { document.getElementById('foundersModal').classList.remove('hidden'); };
     window.closeFoundersModal = function() { document.getElementById('foundersModal').classList.add('hidden'); };
     window.openSellerManagerModal = function() { renderSellerManagerTable(); document.getElementById('sellerManagerModal').classList.remove('hidden'); };
     window.closeSellerManagerModal = function() { document.getElementById('sellerManagerModal').classList.add('hidden'); };
+    window.openUpgradeModal = function() { document.getElementById('upgradeModal').classList.remove('hidden'); };
+    window.closeUpgradeModal = function() { document.getElementById('upgradeModal').classList.add('hidden'); };
 
     window.openAddListingModal = function() {
-      if (!currentUser) { alert("Please login first!"); openAuthModal(); return; }
+      if (!currentUser) { openAuthModal(); return; }
+      document.getElementById('categorySelect').value = 'academic';
+      onCategoryChange();
       document.getElementById('addListingModal').classList.remove('hidden');
     };
     window.closeAddListingModal = function() { document.getElementById('addListingModal').classList.add('hidden'); };
-    window.openAddClubModal = function() { if (!currentUser) { alert("Please login first!"); openAuthModal(); return; } document.getElementById('addClubModal').classList.remove('hidden'); };
+
+    window.openAddClubModal = function() {
+      if (!currentUser) { openAuthModal(); return; }
+      document.getElementById('addClubModal').classList.remove('hidden');
+    };
     window.closeAddClubModal = function() { document.getElementById('addClubModal').classList.add('hidden'); };
 
     window.handlePostListing = async function(e) {
       e.preventDefault();
-      const postType = document.getElementById('itemPostTypeSelect').value;
-      const category = document.getElementById('categorySelect').value;
       const title = sanitizeInput(document.getElementById('itemTitle').value);
       const price = parseFloat(document.getElementById('itemPrice').value) || 0;
-      const meetupSpot = document.getElementById('itemMeetupSpot').value;
       const contact = sanitizeInput(document.getElementById('itemContact').value);
       const desc = sanitizeInput(document.getElementById('itemDesc').value);
-      const fileInput = document.getElementById('itemImageFile');
+      const category = document.getElementById('categorySelect').value;
+      let courseId = 'general', courseName = 'General', courseNick = 'General';
 
-      if (!fileInput.files || fileInput.files.length === 0) { alert("Please select a photo."); return; }
+      if (category === 'academic') {
+        courseId = document.getElementById('itemCourseSelect').value;
+        const matched = AIMST_COURSES.find(c => c.id === courseId);
+        if (matched) { courseName = matched.name; courseNick = matched.nick; }
+      }
+
+      const fileInput = document.getElementById('itemImageFile');
+      if (!fileInput.files[0]) { alert("Select photo"); return; }
 
       try {
-        const compressedBase64 = await compressImage(fileInput.files[0], 800, 0.7);
-        const newItem = {
-          postType, category, title, price, meetupSpot, contact, desc,
-          image: compressedBase64,
-          seller: currentUser || 'AIMST Member',
-          isDisabled: false,
-          clicksCount: 0,
-          messages: [],
-          date: new Date().toISOString().split('T')[0]
-        };
-
-        const docRef = await addDoc(collection(db, "listings"), newItem);
-        newItem.id = docRef.id;
+        const compressed = await compressImage(fileInput.files[0], 800, 0.7);
+        const newItem = { title, category, courseId, courseName, courseNick, price, contact, image: compressed, desc, seller: currentUser, isDisabled: false, isBoosted: false };
+        const ref = await addDoc(collection(db, "listings"), newItem);
+        newItem.id = ref.id;
         allListings.unshift(newItem);
-        renderListings(); updateMetrics();
+        renderListings();
+        updateMetrics();
         closeAddListingModal();
         document.getElementById('listingForm').reset();
-        alert("Published successfully to campus network!");
-      } catch (err) { alert("Failed to publish: " + err.message); }
+        alert("Published successfully!");
+      } catch (err) { alert("Error: " + err.message); }
     };
 
     window.handlePostClub = async function(e) {
@@ -1463,28 +1726,29 @@
       const category = sanitizeInput(document.getElementById('clubCategory').value);
       const contact = sanitizeInput(document.getElementById('clubContact').value);
       const desc = sanitizeInput(document.getElementById('clubDesc').value);
-      const logoInput = document.getElementById('clubLogoFile');
+      const fileInput = document.getElementById('clubLogoFile');
 
-      let logoUrl = "";
-      if (logoInput.files && logoInput.files[0]) {
-        logoUrl = await compressImage(logoInput.files[0], 400, 0.7);
-      }
-
-      const newClub = { name, category, contact, desc, logo: logoUrl };
-      const docRef = await addDoc(collection(db, "clubs"), newClub);
-      newClub.id = docRef.id;
-      allClubs.unshift(newClub);
-      syncLocalStorage(); renderClubs();
-      closeAddClubModal();
-      alert("Club published successfully!");
+      try {
+        let logo = "";
+        if (fileInput.files[0]) logo = await compressImage(fileInput.files[0], 400, 0.7);
+        const newClub = { name, category, contact, desc, logo, createdBy: currentUser };
+        const ref = await addDoc(collection(db, "clubs"), newClub);
+        newClub.id = ref.id;
+        allClubs.unshift(newClub);
+        syncLocalStorage();
+        renderClubs();
+        closeAddClubModal();
+        document.getElementById('clubForm').reset();
+        alert("Club published!");
+      } catch (err) { alert("Error: " + err.message); }
     };
 
     document.getElementById('itemImageFile')?.addEventListener('change', function(e) {
       const file = e.target.files[0];
       if (file) {
         const reader = new FileReader();
-        reader.onload = function(event) {
-          document.getElementById('imagePreview').src = event.target.result;
+        reader.onload = ev => {
+          document.getElementById('imagePreview').src = ev.target.result;
           document.getElementById('imagePreviewContainer').classList.remove('hidden');
         };
         reader.readAsDataURL(file);
