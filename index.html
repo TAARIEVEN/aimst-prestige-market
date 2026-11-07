@@ -1801,12 +1801,17 @@
 
     window.approveSeller = async function(id) {
       const s = allSellers.find(x => x.id === id);
-      if (s) { s.isVerified = true; syncLocalStorage(); renderSellerManagerTable(); alert("Verified!"); }
-    };
-    window.rejectSeller = async function(id) {
-      allSellers = allSellers.filter(x => x.id !== id);
-      syncLocalStorage();
-      renderSellerManagerTable();
+      if (s) {
+        s.isVerified = true;
+        try {
+          await updateDoc(doc(db, "verified_sellers", id), { isVerified: true });
+        } catch (e) {
+          console.error("Error updating verification in Firestore:", e);
+        }
+        syncLocalStorage();
+        renderSellerManagerTable();
+        alert("Seller successfully verified!");
+      }
     };
 
     window.terminateListing = async function(id) {
