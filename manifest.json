@@ -1,0 +1,15 @@
+{
+  "name": "AIMST Prestige Market",
+  "short_name": "APM",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#081b29",
+  "theme_color": "#0d9488",
+  "icons": [
+    {
+      "src": "market-logo.png",
+      "sizes": "192x192 512x512",
+      "type": "image/png"
+    }
+  ]
+}
