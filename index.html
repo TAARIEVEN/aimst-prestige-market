@@ -612,7 +612,7 @@
           <i class="fa-solid fa-clock text-amber-600"></i>
           <span>Pro Subscription Time Remaining</span>
         </p>
-        <div id="proCountdownTimer" class="text-base font-black text-amber-700 tracking-wider">719h 59m 59s</div>
+        <div id="proCountdownTimer" class="text-base font-black text-amber-700 tracking-wider">00h 00m 00s</div>
       </div>
 
       <div class="bg-slate-50 p-3.5 rounded-2xl border border-slate-200 mb-4 text-left space-y-1.5">
@@ -715,7 +715,7 @@
           <thead>
             <tr class="bg-slate-100 border-b border-slate-200 text-[10px] uppercase font-black tracking-wider text-slate-600">
               <th class="p-3 w-5/12">Seller Username / Email</th>
-              <th class="p-3 w-3/12 text-center">Status / Tier</th>
+              <th class="p-3 w-3/12 text-center">Status / Tier & Countdown</th>
               <th class="p-3 w-4/12 text-right">Actions</th>
             </tr>
           </thead>
@@ -1040,6 +1040,7 @@
     let expandedDescIds = new Set();
     let activeBoostItemId = null;
     let carouselAutoTimer = null;
+    let profileCountdownInterval = null;
 
     function getWishlistKey() {
       return currentUserEmail ? `aimst_wishlist_${currentUserEmail}` : 'aimst_wishlist_guest';
@@ -1678,7 +1679,6 @@
         sponsoredSec.classList.add('hidden');
       }
       
-      // FIXED: Exclude sponsored items from the main product grid so they don't appear twice!
       const filtered = allListings.filter(item => {
         if (boostedIds.has(item.id)) return false;
 
@@ -1923,6 +1923,7 @@
       const pendingProContainer = document.getElementById('pendingProContainer');
       const pendingContainer = document.getElementById('pendingSellersContainer');
       const tbody = document.getElementById('sellersTableBody');
+      const now = new Date();
 
       // 1. Pending Boosts
       const pendingBoosts = allListings.filter(i => i.boostStatus === 'pending' && (i.title.toLowerCase().includes(searchPendingBoosts) || (i.seller||'').toLowerCase().includes(searchPendingBoosts)));
@@ -1972,14 +1973,35 @@
         </div>
       `).join('');
 
-      // 4. Verified Sellers Table
-      tbody.innerHTML = allSellers.filter(s => s.isVerified && (s.username.toLowerCase().includes(searchVerified) || s.email.toLowerCase().includes(searchVerified))).map(seller => `
-        <tr class="hover:bg-slate-50 transition-all">
-          <td class="p-3"><div class="font-bold text-slate-900">${seller.username}</div><div class="text-[10px] text-slate-400">${seller.email}</div></td>
-          <td class="p-3 text-center"><span class="px-2 py-1 rounded-lg text-[9px] font-black uppercase ${seller.tier === 'pro' ? 'bg-amber-100 text-amber-900' : 'bg-slate-100 text-slate-700'}">${seller.tier}</span></td>
-          <td class="p-3 text-right"><button onclick="rejectSeller('${seller.id}')" class="px-2 py-1 rounded-xl bg-rose-600 text-white text-[10px] font-bold">Revoke</button></td>
-        </tr>
-      `).join('');
+      // 4. Verified Sellers Table with Live Pro Countdowns for Founder
+      tbody.innerHTML = allSellers.filter(s => s.isVerified && (s.username.toLowerCase().includes(searchVerified) || s.email.toLowerCase().includes(searchVerified))).map(seller => {
+        let tierDisplay = `<span class="px-2 py-1 rounded-lg text-[9px] font-black uppercase bg-slate-100 text-slate-700">FREE</span>`;
+        if (seller.tier === 'pro') {
+          if (seller.proExpiryDate) {
+            const exp = new Date(seller.proExpiryDate);
+            if (exp > now) {
+              const diffMs = exp - now;
+              const days = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+              const hrs = Math.floor((diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+              const mins = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+              tierDisplay = `<div class="flex flex-col items-center"><span class="px-2 py-0.5 rounded-lg text-[9px] font-black uppercase bg-amber-100 text-amber-900 mb-0.5">PRO</span><span class="text-[9px] font-bold text-amber-700">${days > 0 ? days + 'd ' : ''}${hrs}h ${mins}m left</span></div>`;
+            } else {
+              seller.tier = 'free';
+              tierDisplay = `<span class="px-2 py-1 rounded-lg text-[9px] font-black uppercase bg-slate-100 text-slate-700">EXPIRED / FREE</span>`;
+            }
+          } else {
+            tierDisplay = `<span class="px-2 py-1 rounded-lg text-[9px] font-black uppercase bg-amber-100 text-amber-900">PRO (Active)</span>`;
+          }
+        }
+
+        return `
+          <tr class="hover:bg-slate-50 transition-all">
+            <td class="p-3"><div class="font-bold text-slate-900">${seller.username}</div><div class="text-[10px] text-slate-400">${seller.email}</div></td>
+            <td class="p-3 text-center">${tierDisplay}</td>
+            <td class="p-3 text-right"><button onclick="rejectSeller('${seller.id}')" class="px-2 py-1 rounded-xl bg-rose-600 text-white text-[10px] font-bold">Revoke</button></td>
+          </tr>
+        `;
+      }).join('');
     };
 
     window.approveSeller = async function(id) {
@@ -2049,19 +2071,51 @@
       document.getElementById('profileUsername').innerText = currentUser;
       document.getElementById('profileEmail').innerText = currentUserEmail || `${currentUser}@apm.com`;
       
-      // FIXED: Check real-time tier from allSellers array so pro badge & UI reflect correctly
       const sellerProfile = allSellers.find(s => s.email.toLowerCase() === currentUserEmail);
-      const isPro = sellerProfile && sellerProfile.tier === 'pro';
+      
+      // Automatic Expiry Check
+      if (sellerProfile && sellerProfile.tier === 'pro' && sellerProfile.proExpiryDate) {
+        if (new Date() > new Date(sellerProfile.proExpiryDate)) {
+          sellerProfile.tier = 'free';
+          syncLocalStorage();
+        }
+      }
 
+      const isPro = sellerProfile && sellerProfile.tier === 'pro';
       const tierBadge = document.getElementById('profileTierBadge');
       const upgradeBtn = document.getElementById('profileUpgradeBtn');
       const proCountdown = document.getElementById('proCountdownContainer');
+      const timerDisplay = document.getElementById('proCountdownTimer');
+
+      if (profileCountdownInterval) clearInterval(profileCountdownInterval);
 
       if (isPro) {
         tierBadge.innerText = "APM PRO TIER SELLER (UNLOCKED)";
         tierBadge.className = "inline-block px-3 py-1 rounded-full bg-amber-100 text-amber-900 font-extrabold text-xs border border-amber-300 mb-2 uppercase tracking-wider";
         if (upgradeBtn) upgradeBtn.classList.add('hidden');
         if (proCountdown) proCountdown.classList.remove('hidden');
+
+        function updateTimer() {
+          const now = new Date();
+          const expiry = new Date(sellerProfile.proExpiryDate);
+          const diffMs = expiry - now;
+
+          if (diffMs <= 0) {
+            sellerProfile.tier = 'free';
+            syncLocalStorage();
+            clearInterval(profileCountdownInterval);
+            openUserProfileModal(); // Refresh modal view
+            return;
+          }
+
+          const hours = Math.floor(diffMs / (1000 * 60 * 60));
+          const mins = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+          const secs = Math.floor((diffMs % (1000 * 60)) / 1000);
+          timerDisplay.innerText = `${hours}h ${mins}m ${secs}s`;
+        }
+
+        updateTimer();
+        profileCountdownInterval = setInterval(updateTimer, 1000);
       } else {
         tierBadge.innerText = "VERIFIED SELLER (FREE TIER)";
         tierBadge.className = "inline-block px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 font-extrabold text-xs border border-emerald-300 mb-2 uppercase tracking-wider";
@@ -2071,7 +2125,11 @@
 
       document.getElementById('userProfileModal').classList.remove('hidden');
     };
-    window.closeUserProfileModal = function() { document.getElementById('userProfileModal').classList.add('hidden'); };
+
+    window.closeUserProfileModal = function() {
+      if (profileCountdownInterval) clearInterval(profileCountdownInterval);
+      document.getElementById('userProfileModal').classList.add('hidden');
+    };
 
     window.openUpgradeFromProfile = function() { closeUserProfileModal(); openUpgradeModal(); };
     window.performLogout = function() { signOut(auth).then(() => { closeUserProfileModal(); }); };
@@ -2085,7 +2143,6 @@
     window.openAddListingModal = function() {
       if (!currentUser) { openAuthModal(); return; }
       
-      // Check Pro vs Free Tier limit
       const sellerProfile = allSellers.find(s => s.email.toLowerCase() === currentUserEmail);
       const isPro = sellerProfile && sellerProfile.tier === 'pro';
       const maxAllowed = isPro ? 7 : 3;
@@ -2175,6 +2232,7 @@
         const reader = new FileReader();
         reader.onload = ev => {
           document.getElementById('imagePreview').src = ev.target.result;
+          document.getElementById('imagePreviewContainer').classList.add('block');
           document.getElementById('imagePreviewContainer').classList.remove('hidden');
         };
         reader.readAsDataURL(file);
