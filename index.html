@@ -11,7 +11,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="AIMST Market">
   <link rel="apple-touch-icon" href="market-logo.png">
-  <meta name="theme-color" content="#059669">
+  <meta name="theme-color" content="#059669" id="metaThemeColor">
 
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -50,7 +50,7 @@
     }
   </style>
 </head>
-<body class="min-h-screen font-sans selection:bg-amber-400 selection:text-slate-950 pb-24">
+<body id="appBodyTag" class="min-h-screen font-sans selection:bg-amber-400 selection:text-slate-950 pb-24">
 
   <!-- WELCOME POPUP MODAL -->
   <div id="welcomeModal" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4 transition-all duration-300">
@@ -71,7 +71,7 @@
         <h3 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight leading-none mb-2">
           WELCOME TO APM!
         </h3>
-        <div class="inline-block px-4 py-1.5 rounded-full bg-emerald-50 text-emerald-700 font-bold text-xs sm:text-sm border border-emerald-200">
+        <div id="welcomeBadgeDiv" class="inline-block px-4 py-1.5 rounded-full bg-emerald-50 text-emerald-700 font-bold text-xs sm:text-sm border border-emerald-200">
           Your campus shopping, made easy.
         </div>
       </div>
@@ -80,7 +80,7 @@
         Discover great finds, study materials, belongings rentals, and campus announcements directly from verified students. Install our PWA app on your phone or laptop!
       </p>
 
-      <button onclick="window.closeWelcomeModal()" class="relative z-10 w-full py-3.5 px-6 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold text-sm shadow-xl shadow-emerald-600/20 flex items-center justify-center space-x-3 transition-all hover:scale-[1.02]">
+      <button id="welcomeStartBtn" onclick="window.closeWelcomeModal()" class="relative z-10 w-full py-3.5 px-6 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold text-sm shadow-xl shadow-emerald-600/20 flex items-center justify-center space-x-3 transition-all hover:scale-[1.02]">
         <i class="fa-solid fa-cart-shopping text-base"></i>
         <span class="tracking-wider uppercase">START SHOPPING</span>
         <i class="fa-solid fa-arrow-right text-xs"></i>
@@ -108,9 +108,9 @@
   </div>
 
   <!-- INSTALL PWA PROMPT BANNER -->
-  <div id="installBanner" class="bg-gradient-to-r from-emerald-900 via-teal-900 to-slate-900 text-white py-2 px-3 text-center text-xs font-medium flex flex-wrap items-center justify-center gap-2 sm:gap-4 border-b border-emerald-700 shadow-md">
+  <div id="installBanner" class="bg-gradient-to-r from-emerald-900 via-teal-900 to-slate-900 text-white py-2 px-3 text-center text-xs font-medium flex flex-wrap items-center justify-center gap-2 sm:gap-4 border-b border-emerald-700 shadow-md transition-all">
     <div class="flex items-center space-x-1.5">
-      <i class="fa-solid fa-mobile-screen-button text-emerald-400"></i>
+      <i id="installBannerIcon" class="fa-solid fa-mobile-screen-button text-emerald-400"></i>
       <span>Install APM App on Android, iPhone & Laptop:</span>
     </div>
     
@@ -135,7 +135,7 @@
           <h1 class="font-black tracking-wider text-[11px] sm:text-base text-slate-900 leading-tight truncate">
             AIMST PRESTIGE MARKET
           </h1>
-          <p class="text-[7px] sm:text-[8px] uppercase tracking-widest text-emerald-600 font-bold leading-none mt-0.5 truncate">
+          <p id="navSubTitle" class="text-[7px] sm:text-[8px] uppercase tracking-widest text-emerald-600 font-bold leading-none mt-0.5 truncate">
             We Listen, We Create, You Enjoy!
           </p>
         </div>
@@ -143,7 +143,7 @@
 
       <div class="flex items-center space-x-1 sm:space-x-2 shrink-0">
         <button onclick="openFoundersModal()" class="px-2 py-1.5 sm:px-3 sm:py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 border border-slate-300 text-[10px] sm:text-xs font-bold text-slate-700 transition-all flex items-center space-x-1">
-          <i class="fa-solid fa-shield-halved text-emerald-600"></i>
+          <i id="navShieldIcon" class="fa-solid fa-shield-halved text-emerald-600"></i>
           <span class="hidden sm:inline">Founders</span>
         </button>
 
@@ -174,17 +174,17 @@
   </header>
 
   <!-- Live Sync Banner -->
-  <div class="bg-emerald-50 border-b border-emerald-200 py-1.5 px-3 text-center text-[10px] sm:text-[11px] font-medium text-emerald-900 flex flex-wrap items-center justify-center gap-2 sm:gap-6">
+  <div id="liveSyncBanner" class="bg-emerald-50 border-b border-emerald-200 py-1.5 px-3 text-center text-[10px] sm:text-[11px] font-medium text-emerald-900 flex flex-wrap items-center justify-center gap-2 sm:gap-6 transition-all">
     <div class="flex items-center space-x-1.5">
-      <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+      <span id="liveDotSpan" class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
       <span>Network: <strong class="text-emerald-950">Active</strong></span>
     </div>
-    <div class="flex items-center space-x-1 border-l border-emerald-300 pl-2">
-      <i class="fa-solid fa-store text-emerald-600 text-[9px]"></i>
+    <div class="flex items-center space-x-1 border-l border-emerald-300 pl-2" id="syncBorder1">
+      <i id="syncStoreIcon" class="fa-solid fa-store text-emerald-600 text-[9px]"></i>
       <span>Active Listings: <strong id="statActiveCount" class="text-emerald-950">0</strong></span>
     </div>
-    <div class="flex items-center space-x-1 border-l border-emerald-300 pl-2">
-      <i class="fa-solid fa-circle-check text-emerald-600 text-[9px]"></i>
+    <div class="flex items-center space-x-1 border-l border-emerald-300 pl-2" id="syncBorder2">
+      <i id="syncCheckIcon" class="fa-solid fa-circle-check text-emerald-600 text-[9px]"></i>
       <span>Already Sold: <strong id="statSoldsCount" class="text-emerald-950">0</strong></span>
     </div>
   </div>
@@ -201,7 +201,7 @@
     <div class="grid grid-cols-4 sm:grid-cols-4 lg:grid-cols-8 gap-2 sm:gap-3.5 mb-4">
       
       <button onclick="setCategory('academic', this)" class="category-btn grab-card p-2.5 rounded-2xl flex flex-col items-center justify-center text-center transition-all group active">
-        <div class="w-11 h-11 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-lg mb-1.5 group-hover:scale-110 transition-all shadow-sm">
+        <div id="catIcon1" class="w-11 h-11 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-lg mb-1.5 group-hover:scale-110 transition-all shadow-sm">
           <i class="fa-solid fa-book-medical"></i>
         </div>
         <span class="text-[10px] sm:text-xs font-bold text-slate-800 leading-tight">Academic Notes</span>
@@ -262,11 +262,11 @@
     <div id="courseFilterSection" class="bg-white p-3.5 rounded-2xl border-2 border-emerald-500/40 mb-4 shadow-lg hidden transition-all">
       <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 mb-2">
         <div class="flex items-center space-x-2">
-          <i class="fa-solid fa-book-medical text-emerald-600 text-sm"></i>
+          <i id="courseFilterIcon" class="fa-solid fa-book-medical text-emerald-600 text-sm"></i>
           <span class="text-xs font-black uppercase tracking-wider text-slate-900">Academic Notes Programme Filter (Select 1 or more):</span>
         </div>
         <div class="flex items-center space-x-3">
-          <button onclick="clearCourseFilters()" class="text-[10px] font-bold text-emerald-700 hover:underline">
+          <button id="resetCourseFiltersBtn" onclick="clearCourseFilters()" class="text-[10px] font-bold text-emerald-700 hover:underline">
             Reset Filters
           </button>
           <button onclick="toggleCourseFilterPanel()" class="px-2 py-1 rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200 text-xs font-bold">
@@ -349,7 +349,7 @@
   <!-- FLOATING BUTTONS BAR -->
   <div class="fixed bottom-6 left-4 right-4 sm:left-6 sm:right-auto z-40 flex items-center justify-between sm:justify-start sm:space-x-3 pointer-events-none">
     <div id="floatingAddBtn" class="pointer-events-auto hidden">
-      <button onclick="openAddListingModal()" class="flex items-center space-x-2 px-4 py-3 sm:px-5 sm:py-3.5 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold shadow-2xl shadow-emerald-600/40 ring-2 ring-white hover:scale-105 transition-all text-xs sm:text-sm">
+      <button id="floatingPostBtn" onclick="openAddListingModal()" class="flex items-center space-x-2 px-4 py-3 sm:px-5 sm:py-3.5 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold shadow-2xl shadow-emerald-600/40 ring-2 ring-white hover:scale-105 transition-all text-xs sm:text-sm">
         <i class="fa-solid fa-plus text-sm sm:text-base"></i>
         <span>Post Listing / Event</span>
       </button>
@@ -751,7 +751,7 @@
         </div>
 
         <div id="courseSelectContainer">
-          <label class="block text-[11px] font-bold text-emerald-800 uppercase tracking-wider mb-1">Select AIMST Programme / Course *</label>
+          <label id="courseSelectLabel" class="block text-[11px] font-bold text-emerald-800 uppercase tracking-wider mb-1">Select AIMST Programme / Course *</label>
           <select id="itemCourseSelect" class="w-full bg-emerald-50 border border-emerald-300 rounded-xl px-3.5 py-2.5 text-xs text-emerald-950 font-bold focus:outline-none focus:border-emerald-500"></select>
         </div>
 
@@ -876,18 +876,15 @@
           
           <!-- 1. KEVENTHIRAN DEVANDREN (FOUNDER & CEO) -->
           <div class="snap-center shrink-0 w-full rounded-3xl overflow-hidden relative shadow-lg border border-slate-200 bg-white p-5 sm:p-6 flex flex-col items-center text-center h-full max-h-[460px] overflow-y-auto">
-            <!-- APM Watermark Logo Badge -->
             <div class="absolute top-3 left-3 z-20 flex items-center space-x-1.5 bg-slate-50 px-2.5 py-1 rounded-xl shadow-sm border border-slate-200">
               <img src="market-logo.png" alt="APM Logo" class="w-4 h-4 object-contain" onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=400'">
               <span class="text-[9px] font-black text-slate-900 uppercase tracking-wider">APM Executive</span>
             </div>
 
-            <!-- Large Circular Profile Image -->
             <div class="w-28 h-28 sm:w-32 sm:h-32 rounded-full overflow-hidden border-4 border-emerald-500/30 shadow-md mb-3 mt-4 shrink-0 bg-slate-100">
               <img src="founder1.jpg" alt="Keventhiran Devandren" class="w-full h-full object-cover object-[center_20%]" onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=800'">
             </div>
 
-            <!-- Details Below Image -->
             <h4 class="text-base sm:text-lg font-black text-slate-900 leading-tight mb-0.5">Keventhiran Devandren</h4>
             <p class="text-[11px] font-bold text-emerald-700 mb-1">Bachelor of Computer Science (Hons) • AIMST University</p>
             <div class="mb-2">
@@ -1048,6 +1045,68 @@
 
     function getWishlist() {
       return JSON.parse(localStorage.getItem(getWishlistKey())) || [];
+    }
+
+    /* APPLY THEME DYNAMICALLY (GREEN FOR NORMAL, PURPLE FOR PRO) */
+    function applyUserTheme(isPro) {
+      const banner = document.getElementById('installBanner');
+      const subTitle = document.getElementById('navSubTitle');
+      const shieldIcon = document.getElementById('navShieldIcon');
+      const liveBanner = document.getElementById('liveSyncBanner');
+      const liveDot = document.getElementById('liveDotSpan');
+      const syncBorder1 = document.getElementById('syncBorder1');
+      const syncBorder2 = document.getElementById('syncBorder2');
+      const storeIcon = document.getElementById('syncStoreIcon');
+      const checkIcon = document.getElementById('syncCheckIcon');
+      const courseFilterSec = document.getElementById('courseFilterSection');
+      const courseFilterIcon = document.getElementById('courseFilterIcon');
+      const resetFilterBtn = document.getElementById('resetCourseFiltersBtn');
+      const courseSelectLabel = document.getElementById('courseSelectLabel');
+      const courseSelectEl = document.getElementById('itemCourseSelect');
+      const floatingPostBtn = document.getElementById('floatingPostBtn');
+      const metaThemeColor = document.getElementById('metaThemeColor');
+      const welcomeBadgeDiv = document.getElementById('welcomeBadgeDiv');
+      const welcomeStartBtn = document.getElementById('welcomeStartBtn');
+
+      if (isPro) {
+        if (metaThemeColor) metaThemeColor.content = "#581c87";
+        if (banner) banner.className = "bg-gradient-to-r from-purple-950 via-indigo-950 to-slate-900 text-white py-2 px-3 text-center text-xs font-medium flex flex-wrap items-center justify-center gap-2 sm:gap-4 border-b border-purple-700 shadow-md transition-all";
+        if (subTitle) { subTitle.className = "text-[7px] sm:text-[8px] uppercase tracking-widest text-purple-600 font-bold leading-none mt-0.5 truncate"; }
+        if (shieldIcon) shieldIcon.className = "fa-solid fa-shield-halved text-purple-600";
+        if (liveBanner) liveBanner.className = "bg-purple-50 border-b border-purple-200 py-1.5 px-3 text-center text-[10px] sm:text-[11px] font-medium text-purple-900 flex flex-wrap items-center justify-center gap-2 sm:gap-6 transition-all";
+        if (liveDot) liveDot.className = "w-2 h-2 rounded-full bg-purple-600 animate-pulse";
+        if (syncBorder1) syncBorder1.className = "flex items-center space-x-1 border-l border-purple-300 pl-2";
+        if (syncBorder2) syncBorder2.className = "flex items-center space-x-1 border-l border-purple-300 pl-2";
+        if (storeIcon) storeIcon.className = "fa-solid fa-store text-purple-600 text-[9px]";
+        if (checkIcon) checkIcon.className = "fa-solid fa-circle-check text-purple-600 text-[9px]";
+        if (courseFilterSec) courseFilterSec.className = "bg-white p-3.5 rounded-2xl border-2 border-purple-500/40 mb-4 shadow-lg hidden transition-all";
+        if (courseFilterIcon) courseFilterIcon.className = "fa-solid fa-book-medical text-purple-600 text-sm";
+        if (resetFilterBtn) resetFilterBtn.className = "text-[10px] font-bold text-purple-700 hover:underline";
+        if (courseSelectLabel) courseSelectLabel.className = "block text-[11px] font-bold text-purple-800 uppercase tracking-wider mb-1";
+        if (courseSelectEl) courseSelectEl.className = "w-full bg-purple-50 border border-purple-300 rounded-xl px-3.5 py-2.5 text-xs text-purple-950 font-bold focus:outline-none focus:border-purple-500";
+        if (floatingPostBtn) floatingPostBtn.className = "flex items-center space-x-2 px-4 py-3 sm:px-5 sm:py-3.5 rounded-2xl bg-purple-700 hover:bg-purple-800 text-white font-bold shadow-2xl shadow-purple-700/40 ring-2 ring-white hover:scale-105 transition-all text-xs sm:text-sm";
+        if (welcomeBadgeDiv) welcomeBadgeDiv.className = "inline-block px-4 py-1.5 rounded-full bg-purple-50 text-purple-700 font-bold text-xs sm:text-sm border border-purple-200";
+        if (welcomeStartBtn) welcomeStartBtn.className = "relative z-10 w-full py-3.5 px-6 rounded-2xl bg-gradient-to-r from-purple-700 to-indigo-700 hover:from-purple-800 hover:to-indigo-800 text-white font-bold text-sm shadow-xl shadow-purple-700/20 flex items-center justify-center space-x-3 transition-all hover:scale-[1.02]";
+      } else {
+        if (metaThemeColor) metaThemeColor.content = "#059669";
+        if (banner) banner.className = "bg-gradient-to-r from-emerald-900 via-teal-900 to-slate-900 text-white py-2 px-3 text-center text-xs font-medium flex flex-wrap items-center justify-center gap-2 sm:gap-4 border-b border-emerald-700 shadow-md transition-all";
+        if (subTitle) { subTitle.className = "text-[7px] sm:text-[8px] uppercase tracking-widest text-emerald-600 font-bold leading-none mt-0.5 truncate"; }
+        if (shieldIcon) shieldIcon.className = "fa-solid fa-shield-halved text-emerald-600";
+        if (liveBanner) liveBanner.className = "bg-emerald-50 border-b border-emerald-200 py-1.5 px-3 text-center text-[10px] sm:text-[11px] font-medium text-emerald-900 flex flex-wrap items-center justify-center gap-2 sm:gap-6 transition-all";
+        if (liveDot) liveDot.className = "w-2 h-2 rounded-full bg-emerald-500 animate-pulse";
+        if (syncBorder1) syncBorder1.className = "flex items-center space-x-1 border-l border-emerald-300 pl-2";
+        if (syncBorder2) syncBorder2.className = "flex items-center space-x-1 border-l border-emerald-300 pl-2";
+        if (storeIcon) storeIcon.className = "fa-solid fa-store text-emerald-600 text-[9px]";
+        if (checkIcon) checkIcon.className = "fa-solid fa-circle-check text-emerald-600 text-[9px]";
+        if (courseFilterSec) courseFilterSec.className = "bg-white p-3.5 rounded-2xl border-2 border-emerald-500/40 mb-4 shadow-lg hidden transition-all";
+        if (courseFilterIcon) courseFilterIcon.className = "fa-solid fa-book-medical text-emerald-600 text-sm";
+        if (resetFilterBtn) resetFilterBtn.className = "text-[10px] font-bold text-emerald-700 hover:underline";
+        if (courseSelectLabel) courseSelectLabel.className = "block text-[11px] font-bold text-emerald-800 uppercase tracking-wider mb-1";
+        if (courseSelectEl) courseSelectEl.className = "w-full bg-emerald-50 border border-emerald-300 rounded-xl px-3.5 py-2.5 text-xs text-emerald-950 font-bold focus:outline-none focus:border-emerald-500";
+        if (floatingPostBtn) floatingPostBtn.className = "flex items-center space-x-2 px-4 py-3 sm:px-5 sm:py-3.5 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold shadow-2xl shadow-emerald-600/40 ring-2 ring-white hover:scale-105 transition-all text-xs sm:text-sm";
+        if (welcomeBadgeDiv) welcomeBadgeDiv.className = "inline-block px-4 py-1.5 rounded-full bg-emerald-50 text-emerald-700 font-bold text-xs sm:text-sm border border-emerald-200";
+        if (welcomeStartBtn) welcomeStartBtn.className = "relative z-10 w-full py-3.5 px-6 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold text-sm shadow-xl shadow-emerald-600/20 flex items-center justify-center space-x-3 transition-all hover:scale-[1.02]";
+      }
     }
 
     /* CAROUSEL NAVIGATION LOGIC */
@@ -1409,6 +1468,9 @@
           return;
         }
 
+        const isPro = sellerProfile && sellerProfile.tier === 'pro';
+        applyUserTheme(isPro);
+
         document.getElementById('authBtnText').innerText = `${currentUser} (${isFounderUser ? 'Founder' : 'Verified'})`;
         document.getElementById('floatingAddBtn').style.display = 'block';
         document.getElementById('addClubBtn').style.display = 'flex';
@@ -1416,6 +1478,7 @@
         if (isFounderUser) document.getElementById('sellerManagerNavBtn').style.display = 'flex';
       } else {
         currentUser = null; currentUserEmail = null; isFounderUser = false;
+        applyUserTheme(false);
         document.getElementById('authBtnText').innerText = "APM Seller Login";
         document.getElementById('floatingAddBtn').style.display = 'none';
         document.getElementById('addClubBtn').style.display = 'none';
@@ -2082,10 +2145,23 @@
       }
 
       const isPro = sellerProfile && sellerProfile.tier === 'pro';
+      applyUserTheme(isPro);
+
       const tierBadge = document.getElementById('profileTierBadge');
       const upgradeBtn = document.getElementById('profileUpgradeBtn');
       const proCountdown = document.getElementById('proCountdownContainer');
       const timerDisplay = document.getElementById('proCountdownTimer');
+      const profileListingCount = document.getElementById('profileListingCount');
+
+      // FIXED: Active listing usage count calculation for Pro vs Free
+      const myListings = allListings.filter(item => {
+        const itemSeller = (item.seller || '').toLowerCase();
+        return currentUser && (currentUser.toLowerCase() === itemSeller || currentUser.includes(itemSeller));
+      });
+      const maxAllowed = isPro ? 7 : 3;
+      if (profileListingCount) {
+        profileListingCount.innerText = `${myListings.length} / ${maxAllowed} Used`;
+      }
 
       if (profileCountdownInterval) clearInterval(profileCountdownInterval);
 
@@ -2103,6 +2179,7 @@
           if (diffMs <= 0) {
             sellerProfile.tier = 'free';
             syncLocalStorage();
+            applyUserTheme(false);
             clearInterval(profileCountdownInterval);
             openUserProfileModal(); // Refresh modal view
             return;
@@ -2132,7 +2209,7 @@
     };
 
     window.openUpgradeFromProfile = function() { closeUserProfileModal(); openUpgradeModal(); };
-    window.performLogout = function() { signOut(auth).then(() => { closeUserProfileModal(); }); };
+    window.performLogout = function() { signOut(auth).then(() => { applyUserTheme(false); closeUserProfileModal(); }); };
     window.openFoundersModal = function() { document.getElementById('foundersModal').classList.remove('hidden'); };
     window.closeFoundersModal = function() { document.getElementById('foundersModal').classList.add('hidden'); };
     window.openSellerManagerModal = function() { renderSellerManagerTable(); document.getElementById('sellerManagerModal').classList.remove('hidden'); };
