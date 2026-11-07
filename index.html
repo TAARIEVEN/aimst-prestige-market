@@ -649,7 +649,8 @@
         <p class="text-xs text-slate-500 mt-0.5">Strictly Managed by Founders: Keventhiran & Taarisini</p>
       </div>
 
-      <div class="bg-gradient-to-r from-amber-50 to-orange-50 p-4 rounded-2xl border border-amber-300 mb-5">
+      <!-- 1. PENDING AD BOOST APPROVALS -->
+      <div class="bg-gradient-to-r from-amber-50 to-orange-50 p-4 rounded-2xl border border-amber-300 mb-4">
         <h4 class="font-bold text-xs text-amber-900 mb-2 flex items-center justify-between">
           <span class="flex items-center space-x-1.5">
             <i class="fa-solid fa-rocket text-amber-600"></i>
@@ -657,10 +658,31 @@
           </span>
           <span id="pendingBoostsCountBadge" class="px-2 py-0.5 rounded-full bg-amber-200 text-amber-900 text-[10px] font-black">0 Pending</span>
         </h4>
+        <div class="relative mb-2.5">
+          <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-[11px]"></i>
+          <input type="text" id="searchPendingBoostsInput" oninput="renderSellerManagerTable()" placeholder="Search pending ad boosts..." class="w-full bg-white border border-amber-200 rounded-xl py-1.5 pl-8 pr-3 text-xs text-slate-900 focus:outline-none focus:border-amber-500">
+        </div>
         <div id="pendingBoostsContainer" class="space-y-2"></div>
       </div>
 
-      <div class="bg-amber-50 p-4 rounded-2xl border border-amber-200 mb-5">
+      <!-- 2. PENDING PRO TIER UPGRADES -->
+      <div class="bg-gradient-to-r from-purple-50 to-indigo-50 p-4 rounded-2xl border border-purple-300 mb-4">
+        <h4 class="font-bold text-xs text-purple-900 mb-2 flex items-center justify-between">
+          <span class="flex items-center space-x-1.5">
+            <i class="fa-solid fa-crown text-purple-600"></i>
+            <span>Pending Pro Tier Upgrades (RM 5.00 / mo)</span>
+          </span>
+          <span id="pendingProCountBadge" class="px-2 py-0.5 rounded-full bg-purple-200 text-purple-900 text-[10px] font-black">0 Pending</span>
+        </h4>
+        <div class="relative mb-2.5">
+          <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-[11px]"></i>
+          <input type="text" id="searchPendingProInput" oninput="renderSellerManagerTable()" placeholder="Search pending pro upgrades..." class="w-full bg-white border border-purple-200 rounded-xl py-1.5 pl-8 pr-3 text-xs text-slate-900 focus:outline-none focus:border-purple-500">
+        </div>
+        <div id="pendingProContainer" class="space-y-2"></div>
+      </div>
+
+      <!-- 3. PENDING STUDENT VERIFICATIONS -->
+      <div class="bg-amber-50 p-4 rounded-2xl border border-amber-200 mb-4">
         <h4 class="font-bold text-xs text-amber-900 mb-2 flex items-center justify-between">
           <span class="flex items-center space-x-1.5">
             <i class="fa-solid fa-clock text-amber-600"></i>
@@ -668,12 +690,16 @@
           </span>
           <span id="pendingCountBadge" class="px-2 py-0.5 rounded-full bg-amber-200 text-amber-900 text-[10px] font-black">0 Pending</span>
         </h4>
+        <div class="relative mb-2.5">
+          <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-[11px]"></i>
+          <input type="text" id="searchPendingStudentsInput" oninput="renderSellerManagerTable()" placeholder="Search pending students..." class="w-full bg-white border border-amber-200 rounded-xl py-1.5 pl-8 pr-3 text-xs text-slate-900 focus:outline-none focus:border-amber-500">
+        </div>
         <div id="pendingSellersContainer" class="space-y-2"></div>
       </div>
 
       <div class="relative mb-3">
         <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
-        <input type="text" id="sellerSearchInput" oninput="renderSellerManagerTable()" placeholder="Search sellers..." class="w-full bg-slate-50 border border-slate-300 rounded-xl py-2 pl-9 pr-3 text-xs text-slate-900 focus:outline-none focus:border-amber-500">
+        <input type="text" id="sellerSearchInput" oninput="renderSellerManagerTable()" placeholder="Search verified sellers..." class="w-full bg-slate-50 border border-slate-300 rounded-xl py-2 pl-9 pr-3 text-xs text-slate-900 focus:outline-none focus:border-amber-500">
       </div>
 
       <div class="overflow-x-auto rounded-2xl border border-slate-200">
@@ -776,10 +802,10 @@
         <p class="text-[10px] font-bold text-slate-500 uppercase tracking-wider mt-2">Scan with Touch 'n Go eWallet (RM5.00)</p>
       </div>
 
-      <a href="https://wa.me/60126384757?text=Hi%20Founder%20Keven,%20I%20have%20paid%20RM5%20for%20the%20APM%20Pro%20Tier%20upgrade.%20Here%20is%20my%20payment%20receipt%20screenshot." target="_blank" class="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md transition-all flex items-center justify-center space-x-2">
+      <button onclick="requestProUpgrade()" class="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md transition-all flex items-center justify-center space-x-2">
         <i class="fa-brands fa-whatsapp text-base"></i>
         <span>Send Payment Receipt to Founder Keven</span>
-      </a>
+      </button>
     </div>
   </div>
 
@@ -996,7 +1022,6 @@
     let allListings = [];
     let allClubs = JSON.parse(localStorage.getItem('aimst_clubs')) || [];
     let allSellers = JSON.parse(localStorage.getItem('aimst_sellers')) || [];
-    let wishlist = JSON.parse(localStorage.getItem('aimst_wishlist')) || [];
     let soldCount = parseInt(localStorage.getItem('aimst_sold_count')) || 0;
 
     let currentCategory = 'all';
@@ -1006,6 +1031,14 @@
     let isFounderUser = false;
     let expandedDescIds = new Set();
     let activeBoostItemId = null;
+
+    function getWishlistKey() {
+      return currentUserEmail ? `aimst_wishlist_${currentUserEmail}` : 'aimst_wishlist_guest';
+    }
+
+    function getWishlist() {
+      return JSON.parse(localStorage.getItem(getWishlistKey())) || [];
+    }
 
     /* CAROUSEL NAVIGATION LOGIC */
     window.scrollTeamCarousel = function(direction) {
@@ -1106,7 +1139,6 @@
     function syncLocalStorage() {
       localStorage.setItem('aimst_clubs', JSON.stringify(allClubs));
       localStorage.setItem('aimst_sellers', JSON.stringify(allSellers));
-      localStorage.setItem('aimst_wishlist', JSON.stringify(wishlist));
       localStorage.setItem('aimst_sold_count', soldCount.toString());
       updateMetrics();
     }
@@ -1115,15 +1147,17 @@
       const activeBuyerListings = allListings.filter(item => !item.isDisabled);
       document.getElementById('statActiveCount').innerText = activeBuyerListings.length;
       document.getElementById('statSoldsCount').innerText = soldCount;
-      document.getElementById('wishlistCountBadge').innerText = wishlist.length;
+      document.getElementById('wishlistCountBadge').innerText = getWishlist().length;
       document.getElementById('listingCount').innerText = `Showing ${activeBuyerListings.length} item(s)`;
     }
 
     window.toggleWishlist = function(itemId) {
+      const wishlist = getWishlist();
       const idx = wishlist.indexOf(itemId);
       if (idx > -1) wishlist.splice(idx, 1);
       else wishlist.push(itemId);
-      syncLocalStorage();
+      localStorage.setItem(getWishlistKey(), JSON.stringify(wishlist));
+      updateMetrics();
       renderListings();
       if (!document.getElementById('wishlistModal').classList.contains('hidden')) renderWishlist();
     };
@@ -1137,6 +1171,7 @@
 
     function renderWishlist() {
       const container = document.getElementById('wishlistContainer');
+      const wishlist = getWishlist();
       const savedItems = allListings.filter(item => wishlist.includes(item.id));
 
       if (savedItems.length === 0) {
@@ -1268,6 +1303,49 @@
       renderSellerManagerTable();
     };
 
+    window.requestProUpgrade = async function() {
+      if (!currentUserEmail) { alert("Please login first."); return; }
+      const seller = allSellers.find(s => s.email.toLowerCase() === currentUserEmail);
+      if (seller) {
+        seller.proUpgradeStatus = 'pending';
+        try {
+          await updateDoc(doc(db, "verified_sellers", seller.id), { proUpgradeStatus: 'pending' });
+        } catch(e){}
+      }
+      syncLocalStorage();
+      const waMsg = `Hi Founder Keven, I have paid RM5 for the APM Pro Tier upgrade. Here is my payment receipt screenshot. Seller Account: ${currentUserEmail}`;
+      closeUpgradeModal();
+      window.open(`https://wa.me/60126384757?text=${encodeURIComponent(waMsg)}`, '_blank');
+      alert("Pro tier upgrade request sent to Founder! Awaiting verification.");
+    };
+
+    window.approveProUpgrade = async function(sellerId) {
+      const seller = allSellers.find(s => s.id === sellerId);
+      if (seller) {
+        seller.tier = 'pro';
+        seller.proUpgradeStatus = 'approved';
+        seller.proExpiryDate = new Date(Date.now() + (30 * 24 * 60 * 60 * 1000)).toISOString();
+        try {
+          await updateDoc(doc(db, "verified_sellers", sellerId), { tier: 'pro', proUpgradeStatus: 'approved', proExpiryDate: seller.proExpiryDate });
+        } catch(e){}
+        syncLocalStorage();
+        renderSellerManagerTable();
+        alert(`Approved Pro Tier for ${seller.username}!`);
+      }
+    };
+
+    window.rejectProUpgrade = async function(sellerId) {
+      const seller = allSellers.find(s => s.id === sellerId);
+      if (seller) {
+        seller.proUpgradeStatus = 'rejected';
+        try {
+          await updateDoc(doc(db, "verified_sellers", sellerId), { proUpgradeStatus: 'rejected' });
+        } catch(e){}
+        syncLocalStorage();
+        renderSellerManagerTable();
+      }
+    };
+
     window.switchAuthTab = function(tab) {
       if (tab === 'login') {
         document.getElementById('loginFormContainer').classList.remove('hidden');
@@ -1313,7 +1391,6 @@
         isFounderUser = founderEmails.includes(currentUserEmail);
         currentUser = user.email.split('@')[0];
 
-        // Refresh sellers from Firestore to ensure latest verification status
         await loadSellers();
         const sellerProfile = allSellers.find(s => s.email.toLowerCase() === currentUserEmail);
         if (sellerProfile && !sellerProfile.isVerified && !isFounderUser) {
@@ -1587,7 +1664,6 @@
         return matchesCategory && matchesCourse && matchesSearch;
       });
 
-      // Sort so that active boosted items appear at the very top of their category feed
       filtered.sort((a, b) => {
         const aBoosted = a.isBoosted && new Date(a.boostExpiryDate) > now ? 1 : 0;
         const bBoosted = b.isBoosted && new Date(b.boostExpiryDate) > now ? 1 : 0;
@@ -1617,6 +1693,7 @@
       const isExpanded = expandedDescIds.has(item.id);
       const fullDesc = item.desc || 'No details provided.';
       const shouldTruncate = fullDesc.length > 55;
+      const wishlist = getWishlist();
       const isWishlisted = wishlist.includes(item.id);
       const isRental = item.category === 'rentals';
       const priceUnit = isRental ? '/ day' : '';
@@ -1746,66 +1823,106 @@
         return;
       }
 
-      container.innerHTML = myListings.map(item => `
-        <div class="grab-card rounded-2xl p-3 border border-slate-200 flex flex-col justify-between">
-          <div class="flex space-x-3 mb-2.5">
-            <img src="${item.image || 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=800'}" alt="${item.title}" class="w-16 h-16 rounded-xl object-cover shrink-0">
-            <div class="min-w-0 flex-1">
-              <h4 class="font-bold text-xs text-slate-900 truncate mb-0.5">${item.title}</h4>
-              <p class="text-[10px] text-emerald-700 font-extrabold mb-1">RM ${(Number(item.price)||0).toFixed(2)}</p>
-              ${item.isBoosted ? '<span class="text-[9px] font-bold text-amber-600 bg-amber-50 px-2 py-0.5 rounded-md border border-amber-200 inline-block">Boosted Active</span>' : ''}
-              ${item.boostStatus === 'pending' ? '<span class="text-[9px] font-bold text-amber-700 bg-amber-100 px-2 py-0.5 rounded-md inline-block">Boost Pending Approval</span>' : ''}
+      const now = new Date();
+      container.innerHTML = myListings.map(item => {
+        let boostStatusHTML = '';
+        if (item.isBoosted && item.boostExpiryDate && new Date(item.boostExpiryDate) > now) {
+          const diffMs = new Date(item.boostExpiryDate) - now;
+          const diffHrs = Math.floor(diffMs / (1000 * 60 * 60));
+          const diffMins = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+          boostStatusHTML = `<span class="text-[9px] font-black text-amber-900 bg-amber-100 px-2 py-0.5 rounded-md border border-amber-300 inline-block">🚀 Boosted: ${diffHrs}h ${diffMins}m remaining</span>`;
+        } else if (item.boostStatus === 'pending') {
+          boostStatusHTML = '<span class="text-[9px] font-bold text-amber-700 bg-amber-100 px-2 py-0.5 rounded-md inline-block">⏳ Boost Pending Approval</span>';
+        }
+
+        return `
+          <div class="grab-card rounded-2xl p-3 border border-slate-200 flex flex-col justify-between">
+            <div class="flex space-x-3 mb-2.5">
+              <img src="${item.image || 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=800'}" alt="${item.title}" class="w-16 h-16 rounded-xl object-cover shrink-0">
+              <div class="min-w-0 flex-1">
+                <h4 class="font-bold text-xs text-slate-900 truncate mb-0.5">${item.title}</h4>
+                <p class="text-[10px] text-emerald-700 font-extrabold mb-1">RM ${(Number(item.price)||0).toFixed(2)}</p>
+                ${boostStatusHTML}
+              </div>
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+              <button onclick="openBoostBenefitsModal('${item.id}')" class="py-1.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-[10px] shadow-sm transition-all flex items-center justify-center space-x-1">
+                <i class="fa-solid fa-rocket text-[10px]"></i>
+                <span>Boost Product</span>
+              </button>
+              <button onclick="terminateListing('${item.id}')" class="py-1.5 rounded-xl bg-rose-50 hover:bg-rose-600 text-rose-600 hover:text-white font-bold text-[10px] border border-rose-200 transition-all">Delete</button>
             </div>
           </div>
-          <div class="grid grid-cols-2 gap-2">
-            <button onclick="openBoostBenefitsModal('${item.id}')" class="py-1.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-[10px] shadow-sm transition-all flex items-center justify-center space-x-1">
-              <i class="fa-solid fa-rocket text-[10px]"></i>
-              <span>Boost Product</span>
-            </button>
-            <button onclick="terminateListing('${item.id}')" class="py-1.5 rounded-xl bg-rose-50 hover:bg-rose-600 text-rose-600 hover:text-white font-bold text-[10px] border border-rose-200 transition-all">Delete</button>
-          </div>
-        </div>
-      `).join('');
+        `;
+      }).join('');
     };
 
     window.renderSellerManagerTable = async function() {
       await loadSellers();
       await loadListings();
 
-      const pendingContainer = document.getElementById('pendingSellersContainer');
+      const searchPendingBoosts = (document.getElementById('searchPendingBoostsInput')?.value || '').toLowerCase();
+      const searchPendingPro = (document.getElementById('searchPendingProInput')?.value || '').toLowerCase();
+      const searchPendingStudents = (document.getElementById('searchPendingStudentsInput')?.value || '').toLowerCase();
+      const searchVerified = (document.getElementById('sellerSearchInput')?.value || '').toLowerCase();
+
       const pendingBoostsContainer = document.getElementById('pendingBoostsContainer');
+      const pendingProContainer = document.getElementById('pendingProContainer');
+      const pendingContainer = document.getElementById('pendingSellersContainer');
       const tbody = document.getElementById('sellersTableBody');
 
-      const pendingBoosts = allListings.filter(i => i.boostStatus === 'pending');
+      // 1. Pending Boosts
+      const pendingBoosts = allListings.filter(i => i.boostStatus === 'pending' && (i.title.toLowerCase().includes(searchPendingBoosts) || (i.seller||'').toLowerCase().includes(searchPendingBoosts)));
       document.getElementById('pendingBoostsCountBadge').innerText = `${pendingBoosts.length} Pending`;
-      pendingBoostsContainer.innerHTML = pendingBoosts.length === 0 ? `<p class="text-[11px] text-amber-800 italic">No pending boosts.</p>` : pendingBoosts.map(i => `
+      pendingBoostsContainer.innerHTML = pendingBoosts.length === 0 ? `<p class="text-[11px] text-amber-800 italic">No matching pending ad boosts.</p>` : pendingBoosts.map(i => `
         <div class="bg-white p-2.5 rounded-xl border border-amber-300 flex items-center justify-between text-xs">
           <div>
             <span class="font-extrabold text-slate-900 block">${i.title}</span>
             <span class="text-[10px] text-slate-500">Seller: ${i.seller} | Requested: ${i.boostRequestedDays || 1} Day(s) (RM ${(i.boostRequestedDays || 1)}.00)</span>
           </div>
           <div class="space-x-1 shrink-0">
-            <button onclick="approveBoost('${i.id}')" class="px-2.5 py-1 rounded-lg bg-amber-500 text-white font-bold text-[10px]">Approve</button>
+            <button onclick="approveBoost('${i.id}')" class="px-2.5 py-1 rounded-lg bg-emerald-600 text-white font-bold text-[10px]">Accept</button>
             <button onclick="rejectBoost('${i.id}')" class="px-2.5 py-1 rounded-lg bg-rose-600 text-white font-bold text-[10px]">Reject</button>
           </div>
         </div>
       `).join('');
 
-      const pending = allSellers.filter(s => !s.isVerified);
-      document.getElementById('pendingCountBadge').innerText = `${pending.length} Pending`;
-      pendingContainer.innerHTML = pending.length === 0 ? `<p class="text-[11px] text-amber-800 italic">No pending student verifications.</p>` : pending.map(s => `
+      // 2. Pending Pro Upgrades
+      const pendingProSellers = allSellers.filter(s => s.proUpgradeStatus === 'pending' && (s.username.toLowerCase().includes(searchPendingPro) || s.email.toLowerCase().includes(searchPendingPro)));
+      document.getElementById('pendingProCountBadge').innerText = `${pendingProSellers.length} Pending`;
+      pendingProContainer.innerHTML = pendingProSellers.length === 0 ? `<p class="text-[11px] text-purple-800 italic">No matching pending pro tier upgrades.</p>` : pendingProSellers.map(s => `
+        <div class="bg-white p-2.5 rounded-xl border border-purple-300 flex items-center justify-between text-xs">
+          <div>
+            <span class="font-extrabold text-slate-900 block">${s.username}</span>
+            <span class="text-[10px] text-slate-500">${s.email} | Requested Pro Tier (RM5.00)</span>
+          </div>
+          <div class="space-x-1 shrink-0">
+            <button onclick="approveProUpgrade('${s.id}')" class="px-2.5 py-1 rounded-lg bg-emerald-600 text-white font-bold text-[10px]">Accept</button>
+            <button onclick="rejectProUpgrade('${s.id}')" class="px-2.5 py-1 rounded-lg bg-rose-600 text-white font-bold text-[10px]">Reject</button>
+          </div>
+        </div>
+      `).join('');
+
+      // 3. Pending Students
+      const pendingStudents = allSellers.filter(s => !s.isVerified && (s.username.toLowerCase().includes(searchPendingStudents) || s.email.toLowerCase().includes(searchPendingStudents)));
+      document.getElementById('pendingCountBadge').innerText = `${pendingStudents.length} Pending`;
+      pendingContainer.innerHTML = pendingStudents.length === 0 ? `<p class="text-[11px] text-amber-800 italic">No matching pending student verifications.</p>` : pendingStudents.map(s => `
         <div class="bg-white p-2.5 rounded-xl border border-amber-300 flex items-center justify-between text-xs">
           <div>
             <span class="font-extrabold text-slate-900 block">${s.username}</span>
             <span class="text-[10px] text-slate-500">${s.email}</span>
           </div>
-          <button onclick="approveSeller('${s.id}')" class="px-2.5 py-1 rounded-lg bg-emerald-600 text-white font-bold text-[10px]">Verify</button>
+          <div class="space-x-1 shrink-0">
+            <button onclick="approveSeller('${s.id}')" class="px-2.5 py-1 rounded-lg bg-emerald-600 text-white font-bold text-[10px]">Accept</button>
+            <button onclick="rejectSeller('${s.id}')" class="px-2.5 py-1 rounded-lg bg-rose-600 text-white font-bold text-[10px]">Reject</button>
+          </div>
         </div>
       `).join('');
 
-      tbody.innerHTML = allSellers.filter(s => s.isVerified).map(seller => `
+      // 4. Verified Sellers Table
+      tbody.innerHTML = allSellers.filter(s => s.isVerified && (s.username.toLowerCase().includes(searchVerified) || s.email.toLowerCase().includes(searchVerified))).map(seller => `
         <tr class="hover:bg-slate-50 transition-all">
-          <td class="p-3"><div class="font-bold text-slate-900">${seller.username}</div></td>
+          <td class="p-3"><div class="font-bold text-slate-900">${seller.username}</div><div class="text-[10px] text-slate-400">${seller.email}</div></td>
           <td class="p-3 text-center"><span class="px-2 py-1 rounded-lg text-[9px] font-black uppercase ${seller.tier === 'pro' ? 'bg-amber-100 text-amber-900' : 'bg-slate-100 text-slate-700'}">${seller.tier}</span></td>
           <td class="p-3 text-right"><button onclick="rejectSeller('${seller.id}')" class="px-2 py-1 rounded-xl bg-rose-600 text-white text-[10px] font-bold">Revoke</button></td>
         </tr>
@@ -1818,9 +1935,7 @@
         s.isVerified = true; 
         try {
           await updateDoc(doc(db, "verified_sellers", id), { isVerified: true });
-        } catch(e) {
-          console.error("Error updating seller verification in Firestore:", e);
-        }
+        } catch(e) {}
         syncLocalStorage(); 
         renderSellerManagerTable(); 
         alert(`Successfully verified ${s.username}!`); 
