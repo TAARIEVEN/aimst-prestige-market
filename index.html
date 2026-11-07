@@ -4,8 +4,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AIMST Prestige Market | We Listen, We Create, You Enjoy!</title>
-  <link rel="manifest" href="/manifest.json">
+  
+  <!-- PWA Manifest & Meta Tags for Cross-Platform Installation (Android, iOS, Laptops) -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="AIMST Market">
   <link rel="apple-touch-icon" href="market-logo.png">
+  <meta name="theme-color" content="#059669">
+
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- FontAwesome -->
@@ -28,7 +35,7 @@
     }
   </style>
 </head>
-<body class="min-h-screen font-sans selection:bg-amber-400 selection:text-slate-950 pb-20">
+<body class="min-h-screen font-sans selection:bg-amber-400 selection:text-slate-950 pb-24">
 
   <!-- WELCOME POPUP MODAL -->
   <div id="welcomeModal" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4 transition-all duration-300">
@@ -55,7 +62,7 @@
       </div>
 
       <p class="relative z-10 text-xs sm:text-sm text-slate-600 leading-relaxed mb-6 px-2">
-        Discover great finds, study materials, and campus services directly from verified students.
+        Discover great finds, study materials, and campus services directly from verified students. Install our PWA app on your phone or laptop for instant access!
       </p>
 
       <button onclick="window.closeWelcomeModal()" class="relative z-10 w-full py-3.5 px-6 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold text-sm shadow-xl shadow-emerald-600/20 flex items-center justify-center space-x-3 transition-all hover:scale-[1.02]">
@@ -65,6 +72,25 @@
       </button>
 
     </div>
+  </div>
+
+  <!-- INSTALL PWA PROMPT BANNER (FOR ANDROID, LAPTOP & IPHONE) -->
+  <div id="installBanner" class="bg-gradient-to-r from-emerald-900 via-teal-900 to-slate-900 text-white py-2 px-3 text-center text-xs font-medium flex flex-wrap items-center justify-center gap-2 sm:gap-4 border-b border-emerald-700 shadow-md">
+    <div class="flex items-center space-x-1.5">
+      <i class="fa-solid fa-mobile-screen-button text-emerald-400"></i>
+      <span>Install APM App on Android, iPhone & Laptop:</span>
+    </div>
+    
+    <button id="installAppBtn" class="px-3 py-1 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-[11px] shadow-sm transition-all flex items-center space-x-1">
+      <i class="fa-solid fa-download text-[10px]"></i>
+      <span>Install App Now</span>
+    </button>
+
+    <!-- iOS Specific Instruction Trigger -->
+    <button onclick="openIOSInstallModal()" class="px-3 py-1 rounded-xl bg-white/10 hover:bg-white/20 text-emerald-200 font-bold text-[11px] transition-all flex items-center space-x-1">
+      <i class="fa-brands fa-apple text-[10px]"></i>
+      <span>iPhone / iPad Guide</span>
+    </button>
   </div>
 
   <!-- Header / Navbar -->
@@ -133,7 +159,7 @@
       <p class="text-slate-500 text-[11px] sm:text-xs">Tap any category to filter campus items instantly.</p>
     </div>
 
-    <div class="grid grid-cols-4 sm:grid-cols-4 lg:grid-cols-8 gap-2 sm:gap-3.5 mb-5">
+    <div class="grid grid-cols-4 sm:grid-cols-4 lg:grid-cols-8 gap-2 sm:gap-3.5 mb-4">
       
       <button onclick="setCategory('academic', this)" class="category-btn grab-card p-2.5 rounded-2xl flex flex-col items-center justify-center text-center transition-all group active">
         <div class="w-11 h-11 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-lg mb-1.5 group-hover:scale-110 transition-all shadow-sm">
@@ -193,7 +219,31 @@
 
     </div>
 
-    <!-- Search Bar -->
+    <!-- DEDICATED AIMST COURSE MULTI-SELECT FILTER BAR (ONLY VISIBLE WHEN ACADEMIC SELECTED OR SEARCHED) -->
+    <div id="courseFilterSection" class="bg-white p-3.5 rounded-2xl border border-slate-200 mb-4 shadow-sm">
+      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 mb-2">
+        <div class="flex items-center space-x-2">
+          <i class="fa-solid fa-filter text-emerald-600 text-xs"></i>
+          <span class="text-xs font-black uppercase tracking-wider text-slate-800">Filter AIMST Programmes (Select 1 or more):</span>
+        </div>
+        <button onclick="clearCourseFilters()" class="text-[10px] font-bold text-emerald-700 hover:underline">
+          Reset Course Filters (Show All)
+        </button>
+      </div>
+
+      <!-- Searchbar for filtering course pills quickly -->
+      <div class="relative mb-2.5">
+        <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-[11px]"></i>
+        <input type="text" id="courseSearchInput" oninput="renderCourseFilterPills()" placeholder="Quick search courses (e.g., MBBS, Computer Science, Foundation in Arts)..." class="w-full bg-slate-50 border border-slate-200 rounded-xl py-1.5 pl-8 pr-3 text-xs text-slate-900 focus:outline-none focus:border-emerald-500">
+      </div>
+
+      <!-- Course Filter Pills Container -->
+      <div id="coursePillsContainer" class="flex flex-wrap gap-1.5 max-h-36 overflow-y-auto p-1">
+        <!-- Dynamically rendered via JS -->
+      </div>
+    </div>
+
+    <!-- General Search Bar -->
     <div class="max-w-xl mx-auto relative mb-3">
       <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
       <input type="text" id="searchInput" oninput="filterListings()" placeholder="Search notes, printing services, stethoscope, car rental..." class="w-full bg-white border border-slate-300 rounded-2xl py-2.5 pl-10 pr-4 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-emerald-500 shadow-sm transition-all">
@@ -242,6 +292,39 @@
       <i class="fa-solid fa-plus text-sm sm:text-base"></i>
       <span>Post Listing</span>
     </button>
+  </div>
+
+  <!-- IOS INSTALL INSTRUCTIONS MODAL -->
+  <div id="iosInstallModal" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm hidden flex items-center justify-center p-3">
+    <div class="bg-white rounded-3xl max-w-sm w-full p-6 relative shadow-2xl text-center border border-slate-200">
+      <button onclick="closeIOSInstallModal()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-700">
+        <i class="fa-solid fa-xmark text-lg"></i>
+      </button>
+
+      <div class="w-14 h-14 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center mx-auto mb-3 text-2xl shadow-sm border border-emerald-300">
+        <i class="fa-brands fa-apple"></i>
+      </div>
+
+      <h3 class="text-lg font-black text-slate-900 mb-1">Install on iPhone / iPad</h3>
+      <p class="text-xs text-slate-600 leading-relaxed mb-4">
+        Safari browser on iOS does not support direct automated app installation prompts. Follow these 2 quick steps:
+      </p>
+
+      <div class="bg-slate-50 p-3.5 rounded-2xl border border-slate-200 mb-4 text-left space-y-2 text-xs font-medium text-slate-700">
+        <div class="flex items-center space-x-2">
+          <span class="w-5 h-5 rounded-full bg-emerald-600 text-white font-bold flex items-center justify-center text-[10px]">1</span>
+          <span>Tap the <strong class="text-slate-900">Share</strong> button <i class="fa-solid fa-arrow-up-from-bracket text-emerald-600"></i> at the bottom of Safari.</span>
+        </div>
+        <div class="flex items-center space-x-2">
+          <span class="w-5 h-5 rounded-full bg-emerald-600 text-white font-bold flex items-center justify-center text-[10px]">2</span>
+          <span>Scroll down and tap <strong class="text-slate-900">"Add to Home Screen"</strong> <i class="fa-solid fa-square-plus text-emerald-600"></i>.</span>
+        </div>
+      </div>
+
+      <button onclick="closeIOSInstallModal()" class="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md transition-all">
+        Got It!
+      </button>
+    </div>
   </div>
 
   <!-- SELLER'S OWN LISTINGS MODAL WITH CHAT CLICK TRACKER -->
@@ -445,7 +528,7 @@
     </div>
   </div>
 
-  <!-- ADD LISTING MODAL -->
+  <!-- ADD LISTING MODAL WITH MANDATORY COURSE COLUMN -->
   <div id="addListingModal" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm hidden flex items-center justify-center p-3">
     <div class="bg-white rounded-3xl max-w-md w-full p-6 relative shadow-2xl max-h-[90vh] overflow-y-auto border border-slate-200">
       <button onclick="closeAddListingModal()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-700">
@@ -460,8 +543,8 @@
       <form id="listingForm" onsubmit="handlePostListing(event)" class="space-y-3.5">
         <div>
           <label class="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1">Category Type</label>
-          <select id="categorySelect" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-emerald-500">
-            <option value="academic">Academic & Medical Notes</option>
+          <select id="categorySelect" onchange="onCategoryChange()" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-emerald-500">
+            <option value="academic">Academic Notes & Materials</option>
             <option value="vehicles">Belonging Rentals (Car/Bike)</option>
             <option value="tech">Tech & Gadgets</option>
             <option value="hostel">Hostel Essentials</option>
@@ -470,9 +553,18 @@
           </select>
         </div>
 
+        <!-- MANDATORY COURSE COLUMN (ONLY VISIBLE IF ACADEMIC NOTES SELECTED) -->
+        <div id="courseSelectContainer">
+          <label class="block text-[11px] font-bold text-emerald-800 uppercase tracking-wider mb-1">Select AIMST Programme / Course *</label>
+          <select id="itemCourseSelect" class="w-full bg-emerald-50 border border-emerald-300 rounded-xl px-3.5 py-2.5 text-xs text-emerald-950 font-bold focus:outline-none focus:border-emerald-500">
+            <!-- Dynamically populated -->
+          </select>
+          <p class="text-[9px] text-slate-500 mt-1">Select exact degree/diploma or choose "General / Storybooks / Novels" for open-source books.</p>
+        </div>
+
         <div>
           <label class="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1">Title</label>
-          <input type="text" id="itemTitle" required placeholder="e.g., Year 2 MBBS Notes, Perodua Myvi Rental" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-emerald-500">
+          <input type="text" id="itemTitle" required placeholder="e.g., Year 2 MBBS Pharmacology Notes, Perodua Myvi Rental" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-emerald-500">
         </div>
 
         <div>
@@ -670,17 +762,78 @@
     window.db = db;
     window.auth = auth;
 
+    // AIMST University Courses Master List with Nicknames (Including Foundation in Arts!)
+    const AIMST_COURSES = [
+      { id: 'general', name: 'General / Storybooks / Novels / Open Source', nick: 'General' },
+      { id: 'mbbs', name: 'Bachelor of Medicine and Bachelor of Surgery', nick: 'MBBS' },
+      { id: 'bds', name: 'Bachelor of Dental Surgery', nick: 'BDS' },
+      { id: 'bdt', name: 'Bachelor of Dental Technology (Honours)', nick: 'BDT' },
+      { id: 'bpharm', name: 'Bachelor of Pharmacy with Honours', nick: 'B.Pharm' },
+      { id: 'bipharma', name: 'Bachelor of Science in Industrial Pharmacy and Cosmetics with Honours', nick: 'Industrial Pharmacy' },
+      { id: 'physio', name: 'Bachelor in Physiotherapy (Honours)', nick: 'Physiotherapy' },
+      { id: 'nursing', name: 'Bachelor of Science (Honours) Nursing Science', nick: 'Nursing' },
+      { id: 'biomed', name: 'Bachelor of Science (Honours) Biomedical Science', nick: 'Biomedical' },
+      { id: 'dip_nursing', name: 'Diploma in Nursing', nick: 'Dip. Nursing' },
+      { id: 'dip_medical', name: 'Diploma in Medical and Health Science (Medical Assistant)', nick: 'Dip. Medical Assistant' },
+      { id: 'biotech', name: 'Bachelor of Science (Honours) Biotechnology', nick: 'Biotech' },
+      { id: 'bioinf', name: 'Bachelor of Science (Honours) Bioinformatics', nick: 'Bioinformatics' },
+      { id: 'cs', name: 'Bachelor of Computer Science (Honours)', nick: 'Computer Science (CS)' },
+      { id: 'se', name: 'Bachelor in Software Engineering (Honours)', nick: 'Software Engineering (SE)' },
+      { id: 'multimedia', name: 'Bachelor In Multimedia Technology (Honours)', nick: 'Multimedia Tech' },
+      { id: 'data_analytics', name: 'Bachelor in Information Systems (Data Analytics) (Honours)', nick: 'Data Analytics' },
+      { id: 'ece', name: 'Bachelor of Engineering (Hons) in Electronic & Computer Engineering', nick: 'Electronic Eng' },
+      { id: 'dip_it', name: 'Diploma in Information Technology', nick: 'Dip. IT' },
+      { id: 'bba', name: 'Bachelor of Business Administration (Hons)', nick: 'BBA' },
+      { id: 'accounting', name: 'Bachelor of Accountancy (Honours)', nick: 'Accountancy' },
+      { id: 'finance', name: 'Bachelor (Honours) in Finance and Management', nick: 'Finance' },
+      { id: 'marketing', name: 'Bachelor (Honours) in Business and Marketing', nick: 'Marketing' },
+      { id: 'found_biz', name: 'Foundation in Business', nick: 'Foundation in Business' },
+      { id: 'found_sci', name: 'Foundation in Science', nick: 'Foundation in Science' },
+      { id: 'found_arts', name: 'Foundation in Arts', nick: 'Foundation in Arts' }
+    ];
+
     let allListings = [];
     let allClubs = JSON.parse(localStorage.getItem('aimst_clubs')) || [];
     let allSellers = JSON.parse(localStorage.getItem('aimst_sellers')) || [];
     let soldCount = parseInt(localStorage.getItem('aimst_sold_count')) || 0;
 
     let currentCategory = 'all';
+    let selectedCourses = new Set(); // multi-select filter set
     let currentUser = null;
     let currentUserEmail = null;
     let isFounderUser = false;
     let countdownInterval = null;
     let expandedDescIds = new Set();
+    let deferredInstallPrompt = null;
+
+    // PWA Install Event Handler for Android & Laptops (Chrome/Edge/Brave)
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredInstallPrompt = e;
+      const banner = document.getElementById('installBanner');
+      if (banner) banner.style.display = 'flex';
+    });
+
+    document.getElementById('installAppBtn')?.addEventListener('click', async () => {
+      if (deferredInstallPrompt) {
+        deferredInstallPrompt.prompt();
+        const { outcome } = await deferredInstallPrompt.userChoice;
+        if (outcome === 'accepted') {
+          deferredInstallPrompt = null;
+          const banner = document.getElementById('installBanner');
+          if (banner) banner.style.display = 'none';
+        }
+      } else {
+        alert("App is either already installed or your browser doesn't support direct installation prompt. You can also use your browser's menu (⋮ or ⚙️) and select 'Install App' or 'Add to Home Screen'.");
+      }
+    });
+
+    window.openIOSInstallModal = function() {
+      document.getElementById('iosInstallModal').classList.remove('hidden');
+    };
+    window.closeIOSInstallModal = function() {
+      document.getElementById('iosInstallModal').classList.add('hidden');
+    };
 
     function sanitizeInput(str) {
       if (!str) return '';
@@ -892,11 +1045,64 @@
     async function loadData() {
       checkWelcomeModal();
       checkSubscriptionExpiries();
+      populateCourseDropdowns();
+      renderCourseFilterPills();
       await loadListings();
       await loadClubs();
       await loadSellers();
       updateMetrics();
     }
+
+    function populateCourseDropdowns() {
+      const selectEl = document.getElementById('itemCourseSelect');
+      if (!selectEl) return;
+      selectEl.innerHTML = AIMST_COURSES.map(c => `
+        <option value="${c.id}">${c.name} (${c.nick})</option>
+      `).join('');
+    }
+
+    window.renderCourseFilterPills = function() {
+      const container = document.getElementById('coursePillsContainer');
+      const searchTxt = (document.getElementById('courseSearchInput')?.value || '').toLowerCase();
+      
+      const filtered = AIMST_COURSES.filter(c => c.name.toLowerCase().includes(searchTxt) || c.nick.toLowerCase().includes(searchTxt));
+
+      container.innerHTML = filtered.map(c => {
+        const isSelected = selectedCourses.has(c.id);
+        return `
+          <button onclick="toggleCourseFilter('${c.id}')" class="px-2.5 py-1.5 rounded-xl text-[11px] font-bold transition-all border flex items-center space-x-1.5 ${isSelected ? 'bg-emerald-600 text-white border-emerald-700 shadow-sm' : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'}">
+            <span>${c.nick}</span>
+            ${isSelected ? '<i class="fa-solid fa-check text-[10px]"></i>' : ''}
+          </button>
+        `;
+      }).join('');
+    };
+
+    window.toggleCourseFilter = function(courseId) {
+      if (selectedCourses.has(courseId)) {
+        selectedCourses.delete(courseId);
+      } else {
+        selectedCourses.add(courseId);
+      }
+      renderCourseFilterPills();
+      renderListings();
+    };
+
+    window.clearCourseFilters = function() {
+      selectedCourses.clear();
+      renderCourseFilterPills();
+      renderListings();
+    };
+
+    window.onCategoryChange = function() {
+      const cat = document.getElementById('categorySelect').value;
+      const courseContainer = document.getElementById('courseSelectContainer');
+      if (cat === 'academic') {
+        courseContainer.style.display = 'block';
+      } else {
+        courseContainer.style.display = 'none';
+      }
+    };
 
     async function loadListings() {
       try {
@@ -972,6 +1178,13 @@
     window.renderListings = function() {
       const grid = document.getElementById('listingsGrid');
       const searchTxt = document.getElementById('searchInput').value.toLowerCase();
+      const courseFilterSection = document.getElementById('courseFilterSection');
+
+      if (currentCategory === 'academic' || currentCategory === 'all') {
+        courseFilterSection.style.display = 'block';
+      } else {
+        courseFilterSection.style.display = 'none';
+      }
       
       const filtered = allListings.filter(item => {
         const itemSeller = (item.seller || '').toLowerCase();
@@ -980,15 +1193,28 @@
         if (item.isDisabled && !isOwner && !isFounderUser) return false;
 
         const matchesCategory = currentCategory === 'all' || item.category === currentCategory;
-        const matchesSearch = (item.title || '').toLowerCase().includes(searchTxt) || (item.desc || '').toLowerCase().includes(searchTxt);
-        return matchesCategory && matchesSearch;
+        
+        let matchesCourse = true;
+        if (currentCategory === 'academic' && selectedCourses.size > 0) {
+          matchesCourse = selectedCourses.has(item.courseId);
+        }
+
+        const matchesSearch = (item.title || '').toLowerCase().includes(searchTxt) || (item.desc || '').toLowerCase().includes(searchTxt) || (item.courseNick || '').toLowerCase().includes(searchTxt);
+        return matchesCategory && matchesCourse && matchesSearch;
       });
 
       if (filtered.length === 0) {
         grid.innerHTML = `
-          <div class="col-span-full py-12 text-center text-slate-400">
-            <i class="fa-solid fa-box-open text-4xl mb-2 text-slate-300"></i>
-            <p class="text-xs font-bold text-slate-600">No active listings found matching your criteria.</p>
+          <div class="col-span-full py-16 text-center grab-card rounded-3xl p-8 border border-slate-200">
+            <i class="fa-solid fa-box-open text-4xl mb-3 text-emerald-500"></i>
+            <h4 class="text-base font-black text-slate-900 mb-1">No products available that you want</h4>
+            <p class="text-xs text-slate-500 max-w-sm mx-auto mb-4 leading-relaxed">
+              There are currently no items matching your filter or search criteria. If you want to become an APM seller, just get verified and get earned!
+            </p>
+            <button onclick="handleAuthClick()" class="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md transition-all inline-flex items-center space-x-2">
+              <i class="fa-solid fa-user-shield text-xs"></i>
+              <span>Become an APM Seller</span>
+            </button>
           </div>
         `;
         return;
@@ -1006,6 +1232,12 @@
         const fullDesc = item.desc || 'No details provided.';
         const shouldTruncate = fullDesc.length > 55;
 
+        const courseBadge = item.courseNick ? `
+          <span class="absolute top-8 left-2.5 px-2 py-0.5 rounded-lg bg-emerald-50 text-emerald-800 text-[8px] font-black uppercase tracking-wider shadow-sm border border-emerald-200">
+            ${item.courseNick}
+          </span>
+        ` : '';
+
         return `
           <div class="grab-card rounded-2xl overflow-hidden transition-all group flex flex-col justify-between relative text-left ${item.isDisabled ? 'opacity-60 ring-2 ring-rose-500' : ''}">
             <div>
@@ -1015,6 +1247,8 @@
                 <span class="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-lg bg-white/90 backdrop-blur-md text-[9px] font-extrabold uppercase tracking-wider text-slate-800 shadow-sm border border-slate-200">
                   ${item.category || 'general'}
                 </span>
+
+                ${courseBadge}
 
                 ${item.isDisabled ? `
                   <span class="absolute bottom-2 left-2 right-2 bg-rose-600 text-white font-extrabold text-[9px] py-1 px-2 rounded-lg text-center uppercase tracking-wider shadow-md">
@@ -1529,6 +1763,9 @@
         }
       }
 
+      document.getElementById('categorySelect').value = 'academic';
+      onCategoryChange();
+
       document.getElementById('addListingModal').classList.remove('hidden');
     };
 
@@ -1580,6 +1817,19 @@
       if (submitBtn.disabled) return;
 
       const category = document.getElementById('categorySelect').value;
+      let courseId = 'general';
+      let courseName = 'General / Storybooks';
+      let courseNick = 'General';
+
+      if (category === 'academic') {
+        courseId = document.getElementById('itemCourseSelect').value;
+        const matchedCourse = AIMST_COURSES.find(c => c.id === courseId);
+        if (matchedCourse) {
+          courseName = matchedCourse.name;
+          courseNick = matchedCourse.nick;
+        }
+      }
+
       const title = sanitizeInput(document.getElementById('itemTitle').value);
       const price = parseFloat(document.getElementById('itemPrice').value) || 0;
       const contact = sanitizeInput(document.getElementById('itemContact').value);
@@ -1606,6 +1856,9 @@
         const newItem = {
           title,
           category,
+          courseId,
+          courseName,
+          courseNick,
           price,
           contact,
           image: compressedBase64,
