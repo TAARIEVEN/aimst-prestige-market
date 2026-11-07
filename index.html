@@ -295,13 +295,21 @@
   <!-- Main Content Feed -->
   <main class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 pb-10">
     
-    <!-- TOP SPONSORED ADVERTISEMENTS SECTION -->
+    <!-- TOP SPONSORED ADVERTISEMENTS AUTO-SWIPE CAROUSEL BANNER SECTION -->
     <div id="sponsoredSection" class="mb-6 hidden">
-      <div class="flex items-center space-x-2 mb-2.5">
-        <i class="fa-solid fa-rectangle-ad text-amber-500 text-sm animate-bounce"></i>
-        <h3 class="text-xs sm:text-sm font-black uppercase tracking-wider text-amber-900">Featured Campus Advertisements & Boosted Events</h3>
+      <div class="flex items-center justify-between mb-2">
+        <div class="flex items-center space-x-2">
+          <i class="fa-solid fa-bolt text-amber-500 text-sm animate-bounce"></i>
+          <h3 class="text-xs sm:text-sm font-black uppercase tracking-wider text-amber-900">Featured Sponsored Campus Ads</h3>
+        </div>
+        <span class="text-[10px] font-bold text-amber-700 bg-amber-100 px-2 py-0.5 rounded-full border border-amber-200">Auto Swiping By Remaining Time</span>
       </div>
-      <div id="sponsoredGrid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2.5 sm:gap-4"></div>
+      
+      <div class="relative group">
+        <div id="sponsoredCarousel" class="flex overflow-x-auto snap-x snap-mandatory space-x-3 no-scrollbar scroll-smooth py-1">
+          <!-- Dynamically injected auto-swiping sponsored cards -->
+        </div>
+      </div>
     </div>
 
     <div class="flex items-center justify-between mb-3">
@@ -399,11 +407,11 @@
         </div>
         <div class="flex items-start space-x-2">
           <i class="fa-solid fa-circle-check text-amber-600 mt-0.5"></i>
-          <span><strong>Top Category Ranking:</strong> Your product stays pinned right at the top of its category feed.</span>
+          <span><strong>Top Banner Carousel:</strong> Your product stays pinned right in the top carousel ordered by countdown time.</span>
         </div>
         <div class="flex items-start space-x-2">
           <i class="fa-solid fa-circle-check text-amber-600 mt-0.5"></i>
-          <span><strong>Daily Random Pop-Up Ad:</strong> Your item automatically pops up as a spotlight ad ("Buy Now & Chat") once a day to all browsing students!</span>
+          <span><strong>Daily Random Pop-Up Ad:</strong> Your item pops up automatically once a day to all buyers and visitors, cycling every 5 minutes!</span>
         </div>
       </div>
 
@@ -1031,6 +1039,7 @@
     let isFounderUser = false;
     let expandedDescIds = new Set();
     let activeBoostItemId = null;
+    let carouselAutoTimer = null;
 
     function getWishlistKey() {
       return currentUserEmail ? `aimst_wishlist_${currentUserEmail}` : 'aimst_wishlist_guest';
@@ -1425,27 +1434,34 @@
       await loadListings();
       await loadClubs();
       updateMetrics();
-      checkDailyBoostPopup();
+      
+      // Start pop-up sequence every 5 minutes for buyers & logged-in users
+      startDailyBoostPopupSequence();
+      setInterval(startDailyBoostPopupSequence, 5 * 60 * 1000);
     }
 
-    function checkDailyBoostPopup() {
-      const lastShownDate = localStorage.getItem('apm_last_boost_popup_date');
-      const todayStr = new Date().toDateString();
-      if (lastShownDate === todayStr) return;
-
+    /* DAILY BOOST POPUP SEQUENCE LOGIC */
+    function startDailyBoostPopupSequence() {
       const now = new Date();
+      const todayStr = new Date().toDateString();
+
+      // Find active boosted ads sorted by highest remaining countdown
       const activeBoosted = allListings.filter(item => {
         if (!item.isBoosted || !item.boostExpiryDate) return false;
         return new Date(item.boostExpiryDate) > now && !item.isDisabled;
-      });
+      }).sort((a, b) => new Date(b.boostExpiryDate) - new Date(a.boostExpiryDate));
 
       if (activeBoosted.length === 0) return;
 
-      const randomIndex = Math.floor(Math.random() * activeBoosted.length);
-      const selectedAd = activeBoosted[randomIndex];
+      // Pick the first ad that hasn't popped up today for this user
+      const unshownAd = activeBoosted.find(ad => {
+        return !localStorage.getItem(`apm_boost_shown_${ad.id}_${todayStr}`);
+      });
 
-      showRandomBoostPopup(selectedAd);
-      localStorage.setItem('apm_last_boost_popup_date', todayStr);
+      if (unshownAd) {
+        showRandomBoostPopup(unshownAd);
+        localStorage.setItem(`apm_boost_shown_${unshownAd.id}_${todayStr}`, 'true');
+      }
     }
 
     function showRandomBoostPopup(item) {
@@ -1633,22 +1649,40 @@
     window.renderListings = function() {
       const grid = document.getElementById('listingsGrid');
       const sponsoredSec = document.getElementById('sponsoredSection');
-      const sponsoredGrid = document.getElementById('sponsoredGrid');
+      const carouselContainer = document.getElementById('sponsoredCarousel');
       const searchTxt = document.getElementById('searchInput').value.toLowerCase();
       const now = new Date();
 
+      if (carouselAutoTimer) clearInterval(carouselAutoTimer);
+
+      // Sort Boosted Ads strictly by highest remaining countdown
       const boostedItems = allListings.filter(item => {
         if (!item.isBoosted || !item.boostExpiryDate) return false;
         return new Date(item.boostExpiryDate) > now && !item.isDisabled;
-      });
+      }).sort((a, b) => new Date(b.boostExpiryDate) - new Date(a.boostExpiryDate));
 
       if (boostedItems.length > 0) {
         sponsoredSec.classList.remove('hidden');
-        sponsoredGrid.innerHTML = boostedItems.map(item => createCardHTML(item, true)).join('');
+        carouselContainer.innerHTML = boostedItems.map(item => createSponsoredCardHTML(item, now)).join('');
+
+        // Auto-swipe banner if there are 2 or more active boosted ads
+        if (boostedItems.length > 1) {
+          carouselAutoTimer = setInterval(() => {
+            if (!carouselContainer) return;
+            const maxScroll = carouselContainer.scrollWidth - carouselContainer.clientWidth;
+            const cardWidth = carouselContainer.firstElementChild ? carouselContainer.firstElementChild.clientWidth + 12 : 280;
+            if (carouselContainer.scrollLeft >= maxScroll - 5) {
+              carouselContainer.scrollTo({ left: 0, behavior: 'smooth' });
+            } else {
+              carouselContainer.scrollBy({ left: cardWidth, behavior: 'smooth' });
+            }
+          }, 5000);
+        }
       } else {
         sponsoredSec.classList.add('hidden');
       }
       
+      // Render standard feed (unboosted or general items)
       const filtered = allListings.filter(item => {
         const itemSeller = (item.seller || '').toLowerCase();
         const isOwner = currentUser && (currentUser.toLowerCase() === itemSeller || currentUser.includes(itemSeller) || itemSeller.includes(currentUser));
@@ -1664,12 +1698,6 @@
         return matchesCategory && matchesCourse && matchesSearch;
       });
 
-      filtered.sort((a, b) => {
-        const aBoosted = a.isBoosted && new Date(a.boostExpiryDate) > now ? 1 : 0;
-        const bBoosted = b.isBoosted && new Date(b.boostExpiryDate) > now ? 1 : 0;
-        return bBoosted - aBoosted;
-      });
-
       if (filtered.length === 0) {
         grid.innerHTML = `
           <div class="col-span-full py-16 text-center grab-card rounded-3xl p-8 border border-slate-200">
@@ -1681,8 +1709,42 @@
         return;
       }
 
-      grid.innerHTML = filtered.map(item => createCardHTML(item, false)).join('');
+      grid.innerHTML = filtered.map(item => createCardHTML(item)).join('');
     };
+
+    function createSponsoredCardHTML(item, now) {
+      const rawContact = item.contact || '';
+      const contactHref = rawContact.startsWith('http') ? rawContact : `https://wa.me/${rawContact.replace(/[^0-9]/g, '')}?text=Hi%20${encodeURIComponent(item.seller || 'Seller')},%20I%20saw%20your%20sponsored%20ad%20on%20APM:%20${encodeURIComponent(item.title || 'Item')}`;
+      const safePrice = Number(item.price) || 0;
+      
+      const diffMs = new Date(item.boostExpiryDate) - now;
+      const diffHrs = Math.floor(diffMs / (1000 * 60 * 60));
+      const diffMins = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+
+      return `
+        <div class="snap-start shrink-0 w-64 sm:w-72 boosted-card rounded-2xl overflow-hidden p-3 flex flex-col justify-between relative shadow-lg">
+          <div>
+            <div class="relative w-full h-36 rounded-xl overflow-hidden bg-slate-100 mb-2">
+              <img src="${item.image || 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=800'}" alt="${item.title}" class="w-full h-full object-cover">
+              <span class="absolute top-2 left-2 bg-amber-500 text-slate-950 font-black text-[8px] py-0.5 px-2 rounded-md uppercase tracking-wider shadow-md">
+                <i class="fa-solid fa-bolt"></i> SPONSORED
+              </span>
+              <span class="absolute bottom-2 right-2 bg-slate-900/90 text-amber-400 font-bold text-[9px] py-0.5 px-2 rounded-md shadow-md backdrop-blur-sm">
+                <i class="fa-solid fa-clock"></i> ${diffHrs}h ${diffMins}m
+              </span>
+            </div>
+
+            <h4 class="font-black text-xs text-slate-900 truncate mb-0.5">${item.title}</h4>
+            <p class="text-[10px] text-emerald-700 font-extrabold mb-2">RM ${safePrice.toFixed(2)}</p>
+          </div>
+
+          <a href="${contactHref}" target="_blank" onclick="handleChatClick('${item.id}', '${contactHref}')" class="w-full py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs shadow-md transition-all flex items-center justify-center space-x-1.5">
+            <i class="fa-brands fa-whatsapp text-sm"></i>
+            <span>BUY NOW & CHAT</span>
+          </a>
+        </div>
+      `;
+    }
 
     function createCardHTML(item) {
       const rawContact = item.contact || '';
