@@ -77,7 +77,7 @@
       </div>
 
       <p class="relative z-10 text-xs sm:text-sm text-slate-600 leading-relaxed mb-6 px-2">
-        Discover great finds, study materials, blazer rentals, and campus announcements directly from verified students. Install our PWA app on your phone or laptop!
+        Discover great finds, study materials, belongings rentals, and campus announcements directly from verified students. Install our PWA app on your phone or laptop!
       </p>
 
       <button onclick="window.closeWelcomeModal()" class="relative z-10 w-full py-3.5 px-6 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold text-sm shadow-xl shadow-emerald-600/20 flex items-center justify-center space-x-3 transition-all hover:scale-[1.02]">
@@ -86,6 +86,24 @@
         <i class="fa-solid fa-arrow-right text-xs"></i>
       </button>
 
+    </div>
+  </div>
+
+  <!-- DAILY RANDOM BOOSTED AD POPUP MODAL -->
+  <div id="randomBoostPopupModal" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm hidden flex items-center justify-center p-3">
+    <div class="bg-white rounded-3xl max-w-sm w-full p-5 relative shadow-2xl text-center border-2 border-amber-400 overflow-hidden">
+      <button onclick="closeRandomBoostPopup()" class="absolute top-4 right-4 w-7 h-7 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center font-bold text-xs transition-all z-20">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <div class="absolute top-2 left-2 bg-amber-500 text-slate-950 font-black text-[9px] py-0.5 px-2 rounded-md uppercase tracking-wider shadow-sm flex items-center space-x-1 z-10">
+        <i class="fa-solid fa-bolt"></i>
+        <span>FEATURED SPONSORED AD</span>
+      </div>
+
+      <div id="randomBoostPopupContent" class="mt-4">
+        <!-- Injected via JS -->
+      </div>
     </div>
   </div>
 
@@ -193,7 +211,7 @@
         <div class="w-11 h-11 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-lg mb-1.5 group-hover:scale-110 transition-all shadow-sm">
           <i class="fa-solid fa-user-tie"></i>
         </div>
-        <span class="text-[10px] sm:text-xs font-bold text-slate-800 leading-tight">Blazers & Essentials</span>
+        <span class="text-[10px] sm:text-xs font-bold text-slate-800 leading-tight">Belongings Rentals</span>
       </button>
 
       <button onclick="setCategory('tech', this)" class="category-btn grab-card p-2.5 rounded-2xl flex flex-col items-center justify-center text-center transition-all group">
@@ -270,7 +288,7 @@
     <!-- General Search Bar -->
     <div class="max-w-xl mx-auto relative mb-3">
       <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
-      <input type="text" id="searchInput" oninput="filterListings()" placeholder="Search notes, blazer rental, printing services, stethoscope..." class="w-full bg-white border border-slate-300 rounded-2xl py-2.5 pl-10 pr-4 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-emerald-500 shadow-sm transition-all">
+      <input type="text" id="searchInput" oninput="filterListings()" placeholder="Search notes, calculator rental, printing services, stethoscope..." class="w-full bg-white border border-slate-300 rounded-2xl py-2.5 pl-10 pr-4 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-emerald-500 shadow-sm transition-all">
     </div>
   </section>
 
@@ -358,10 +376,10 @@
     </div>
   </div>
 
-  <!-- ADVERTISEMENT BOOST MODAL (TNG QR) -->
-  <div id="boostModal" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm hidden flex items-center justify-center p-3">
+  <!-- BOOST BENEFITS MODAL -->
+  <div id="boostBenefitsModal" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm hidden flex items-center justify-center p-3">
     <div class="bg-white rounded-3xl max-w-sm w-full p-6 relative shadow-2xl text-center border border-slate-200">
-      <button onclick="closeBoostModal()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-700">
+      <button onclick="closeBoostBenefitsModal()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-700">
         <i class="fa-solid fa-xmark text-lg"></i>
       </button>
 
@@ -369,14 +387,52 @@
         <i class="fa-solid fa-rocket"></i>
       </div>
 
-      <h3 class="text-lg font-black text-slate-900 mb-1">Boost Item / Event Ad</h3>
-      <p class="text-xs text-slate-600 leading-relaxed mb-3">
-        Get top placement on the homepage feed for <strong class="text-amber-800">RM 1.00 per day</strong>!
+      <h3 class="text-lg font-black text-slate-900 mb-1">Boost Your Product Ad</h3>
+      <p class="text-xs text-slate-600 leading-relaxed mb-4">
+        Unlock maximum campus visibility with APM Ad Boosting! Here are the exclusive benefits:
+      </p>
+
+      <div class="bg-amber-50/60 p-3.5 rounded-2xl border border-amber-200 mb-5 text-left space-y-2.5 text-xs text-slate-700">
+        <div class="flex items-start space-x-2">
+          <i class="fa-solid fa-circle-check text-amber-600 mt-0.5"></i>
+          <span><strong>Orange Glowing Border:</strong> Your product card stands out with an orange border until your boost period ends.</span>
+        </div>
+        <div class="flex items-start space-x-2">
+          <i class="fa-solid fa-circle-check text-amber-600 mt-0.5"></i>
+          <span><strong>Top Category Ranking:</strong> Your product stays pinned right at the top of its category feed.</span>
+        </div>
+        <div class="flex items-start space-x-2">
+          <i class="fa-solid fa-circle-check text-amber-600 mt-0.5"></i>
+          <span><strong>Daily Random Pop-Up Ad:</strong> Your item automatically pops up as a spotlight ad ("Buy Now & Chat") once a day to all browsing students!</span>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-2">
+        <button onclick="closeBoostBenefitsModal()" class="py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition-all">Cancel</button>
+        <button onclick="proceedToBoostDays()" class="py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs shadow-md transition-all">Proceed Boosting</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SELECT BOOST DAYS MODAL -->
+  <div id="boostDaysModal" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm hidden flex items-center justify-center p-3">
+    <div class="bg-white rounded-3xl max-w-sm w-full p-6 relative shadow-2xl text-center border border-slate-200">
+      <button onclick="closeBoostDaysModal()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-700">
+        <i class="fa-solid fa-xmark text-lg"></i>
+      </button>
+
+      <div class="w-12 h-12 rounded-2xl bg-amber-100 text-amber-700 flex items-center justify-center mx-auto mb-3 text-xl shadow-sm border border-amber-300">
+        <i class="fa-solid fa-calendar-days"></i>
+      </div>
+
+      <h3 class="text-lg font-black text-slate-900 mb-1">Select Boost Duration</h3>
+      <p class="text-xs text-slate-600 leading-relaxed mb-4">
+        Rate: <strong class="text-amber-800">RM 1.00 per day</strong>
       </p>
 
       <div class="mb-4 text-left">
-        <label class="block text-[10px] font-bold text-slate-700 uppercase tracking-wider mb-1">Select Duration (Days)</label>
-        <select id="boostDaysSelect" onchange="updateBoostCostDisplay()" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs font-bold text-slate-900 focus:outline-none focus:border-amber-500">
+        <label class="block text-[10px] font-bold text-slate-700 uppercase tracking-wider mb-1">Duration (Days)</label>
+        <select id="boostDaysSelect" onchange="updateBoostCostDisplay()" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs font-bold text-slate-900 focus:outline-none focus:border-amber-500">
           <option value="1">1 Day (RM 1.00)</option>
           <option value="2">2 Days (RM 2.00)</option>
           <option value="3">3 Days (RM 3.00)</option>
@@ -387,16 +443,39 @@
         </select>
       </div>
 
-      <div class="bg-slate-50 p-3 rounded-2xl border border-slate-200 mb-4 inline-block w-full">
-        <img src="tng.png" alt="Touch 'n Go QR Code" class="w-40 h-40 object-contain mx-auto rounded-xl shadow-sm" onerror="this.src='https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=400'">
-        <p class="text-[11px] font-extrabold text-amber-900 uppercase tracking-wider mt-2">
-          Total to Pay: <span id="boostTotalDisplay" class="text-amber-600 text-sm font-black">RM 1.00</span>
+      <div class="bg-slate-50 p-3 rounded-2xl border border-slate-200 mb-4 text-center">
+        <p class="text-[11px] font-extrabold text-slate-700 uppercase tracking-wider">
+          Total Price: <span id="boostTotalDisplay" class="text-amber-600 text-base font-black">RM 1.00</span>
         </p>
       </div>
 
-      <button id="boostSubmitBtn" onclick="submitBoostRequest()" class="w-full py-3 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs shadow-md transition-all flex items-center justify-center space-x-2">
+      <button onclick="proceedToPaymentQR()" class="w-full py-3 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs shadow-md transition-all">Proceed to Payment</button>
+    </div>
+  </div>
+
+  <!-- TNG PAYMENT QR MODAL -->
+  <div id="boostModal" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm hidden flex items-center justify-center p-3">
+    <div class="bg-white rounded-3xl max-w-sm w-full p-6 relative shadow-2xl text-center border border-slate-200">
+      <button onclick="closeBoostModal()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-700">
+        <i class="fa-solid fa-xmark text-lg"></i>
+      </button>
+
+      <div class="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center mx-auto mb-3 text-xl shadow-sm border border-emerald-300">
+        <i class="fa-solid fa-qrcode"></i>
+      </div>
+
+      <h3 class="text-lg font-black text-slate-900 mb-1">Scan & Pay via Touch 'n Go</h3>
+      <p class="text-xs text-slate-600 leading-relaxed mb-3">
+        Scan the QR code to pay <strong id="tngPayAmountDisplay" class="text-emerald-700">RM 1.00</strong>.
+      </p>
+
+      <div class="bg-slate-50 p-3 rounded-2xl border border-slate-200 mb-4 inline-block w-full">
+        <img src="tng.png" alt="Touch 'n Go QR Code" class="w-40 h-40 object-contain mx-auto rounded-xl shadow-sm" onerror="this.src='https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=400'">
+      </div>
+
+      <button id="boostSubmitBtn" onclick="submitBoostRequest()" class="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md transition-all flex items-center justify-center space-x-2">
         <i class="fa-brands fa-whatsapp text-base"></i>
-        <span>Send Boost Receipt to Founder</span>
+        <span>Send Payment Receipt to Founder</span>
       </button>
     </div>
   </div>
@@ -629,7 +708,7 @@
           <label class="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1">Category Type</label>
           <select id="categorySelect" onchange="onCategoryChange()" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-emerald-500">
             <option value="academic">Academic Notes & Materials</option>
-            <option value="rentals">Blazers & Essentials Rentals (Per Day)</option>
+            <option value="rentals">Belongings Rentals (Per Day)</option>
             <option value="tech">Tech & Gadgets</option>
             <option value="hostel">Hostel Essentials</option>
             <option value="services">Campus Services (Printing/Repair)</option>
@@ -644,7 +723,7 @@
 
         <div>
           <label class="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1">Title</label>
-          <input type="text" id="itemTitle" required placeholder="e.g., Formal Navy Blazer Size M, Deepavali Night Event Ticket" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-emerald-500">
+          <input type="text" id="itemTitle" required placeholder="e.g., DBMS Semester 3 Lecture Notes & Past Year Papers" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-emerald-500">
         </div>
 
         <div>
@@ -742,9 +821,9 @@
     </div>
   </div>
 
-  <!-- FOUNDERS & LEADERSHIP CAROUSEL MODAL (FEATURED PORTRAIT DESIGN LIKE 2ND IMAGE) -->
+  <!-- FOUNDERS & LEADERSHIP CAROUSEL MODAL (LARGE CIRCULAR PORTRAIT DESIGN) -->
   <div id="foundersModal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md hidden flex items-center justify-center p-3 sm:p-6">
-    <div class="bg-white rounded-3xl max-w-sm sm:max-w-md w-full p-5 sm:p-7 text-center relative shadow-2xl border border-slate-200 overflow-hidden">
+    <div class="bg-white rounded-3xl max-w-sm sm:max-w-md w-full p-5 sm:p-7 text-center relative shadow-2xl border border-slate-200 overflow-hidden max-h-[92vh] flex flex-col">
       
       <!-- Close Button -->
       <button onclick="closeFoundersModal()" class="absolute top-4 right-4 z-30 w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center font-bold text-base transition-all shadow-sm">
@@ -752,103 +831,107 @@
       </button>
       
       <!-- Top Header Tag -->
-      <div class="mb-4 text-center">
+      <div class="mb-3 shrink-0">
         <p class="text-[10px] font-black uppercase tracking-widest text-emerald-600 mb-0.5">WHO MADE IT</p>
         <h3 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">MEET THE TEAM</h3>
       </div>
 
       <!-- CAROUSEL WRAPPER -->
-      <div class="relative">
-        <div id="teamCarousel" class="flex overflow-x-auto snap-x snap-mandatory no-scrollbar scroll-smooth space-x-4 py-2 px-1">
+      <div class="relative flex-1 overflow-hidden">
+        <div id="teamCarousel" class="flex overflow-x-auto snap-x snap-mandatory no-scrollbar scroll-smooth space-x-4 py-2 px-1 h-full items-center">
           
           <!-- 1. KEVENTHIRAN DEVANDREN (FOUNDER & CEO) -->
-          <div class="snap-center shrink-0 w-full rounded-3xl overflow-hidden relative shadow-xl border border-slate-200 flex flex-col justify-end bg-slate-900 min-h-[380px] sm:min-h-[420px]">
-            <img src="founder1.jpg" alt="Keventhiran Devandren" class="absolute inset-0 w-full h-full object-cover object-top opacity-90" onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=800'">
-            <!-- Gradient Overlay -->
-            <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-transparent"></div>
-            
-            <!-- Watermark APM Logo Badge -->
-            <div class="absolute top-4 left-4 z-20 flex items-center space-x-2 bg-white/90 backdrop-blur-md px-3 py-1.5 rounded-2xl shadow-md border border-white/40">
-              <img src="market-logo.png" alt="APM Logo" class="w-5 h-5 object-contain" onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=400'">
-              <span class="text-[10px] font-black text-slate-900 uppercase tracking-wider">APM Executive</span>
+          <div class="snap-center shrink-0 w-full rounded-3xl overflow-hidden relative shadow-lg border border-slate-200 bg-white p-5 sm:p-6 flex flex-col items-center text-center h-full max-h-[460px] overflow-y-auto">
+            <!-- APM Watermark Logo Badge -->
+            <div class="absolute top-3 left-3 z-20 flex items-center space-x-1.5 bg-slate-50 px-2.5 py-1 rounded-xl shadow-sm border border-slate-200">
+              <img src="market-logo.png" alt="APM Logo" class="w-4 h-4 object-contain" onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=400'">
+              <span class="text-[9px] font-black text-slate-900 uppercase tracking-wider">APM Executive</span>
             </div>
 
-            <!-- Content Card -->
-            <div class="relative z-10 p-5 text-left text-white">
-              <h4 class="text-xl font-black text-white leading-tight mb-0.5">Keventhiran Devandren</h4>
-              <p class="text-xs font-bold text-emerald-400 mb-1">Bachelor of Computer Science (Hons) • AIMST University</p>
-              <span class="inline-block px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-[10px] font-black border border-emerald-400/30 uppercase tracking-wider mb-2">FOUNDER & CEO</span>
-              <p class="text-xs text-slate-300 leading-relaxed">Lead Backend Architect & Firebase Database Developer managing core system security, database structures, and platform infrastructure.</p>
+            <!-- Large Circular Profile Image -->
+            <div class="w-28 h-28 sm:w-32 sm:h-32 rounded-full overflow-hidden border-4 border-emerald-500/30 shadow-md mb-3 mt-4 shrink-0 bg-slate-100">
+              <img src="founder1.jpg" alt="Keventhiran Devandren" class="w-full h-full object-cover object-[center_20%]" onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=800'">
             </div>
+
+            <!-- Details Below Image -->
+            <h4 class="text-base sm:text-lg font-black text-slate-900 leading-tight mb-0.5">Keventhiran Devandren</h4>
+            <p class="text-[11px] font-bold text-emerald-700 mb-1">Bachelor of Computer Science (Hons) • AIMST University</p>
+            <div class="mb-2">
+              <span class="inline-block px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 text-[9px] font-black border border-emerald-200 uppercase tracking-wider">FOUNDER & CHIEF EXECUTIVE OFFICER (CEO)</span>
+            </div>
+            <p class="text-xs text-slate-600 leading-relaxed">Lead Backend Architect & Firebase Database Developer managing core system security, database structures, and platform infrastructure.</p>
           </div>
 
           <!-- 2. TAARISINI SELVAKUMAR (CO-FOUNDER & CTO) -->
-          <div class="snap-center shrink-0 w-full rounded-3xl overflow-hidden relative shadow-xl border border-slate-200 flex flex-col justify-end bg-slate-900 min-h-[380px] sm:min-h-[420px]">
-            <img src="founder2.jpg" alt="Taarisini Selvakumar" class="absolute inset-0 w-full h-full object-cover object-top opacity-90" onerror="this.src='https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&q=80&w=800'">
-            <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-transparent"></div>
-            
-            <div class="absolute top-4 left-4 z-20 flex items-center space-x-2 bg-white/90 backdrop-blur-md px-3 py-1.5 rounded-2xl shadow-md border border-white/40">
-              <img src="market-logo.png" alt="APM Logo" class="w-5 h-5 object-contain" onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=400'">
-              <span class="text-[10px] font-black text-slate-900 uppercase tracking-wider">APM Executive</span>
+          <div class="snap-center shrink-0 w-full rounded-3xl overflow-hidden relative shadow-lg border border-slate-200 bg-white p-5 sm:p-6 flex flex-col items-center text-center h-full max-h-[460px] overflow-y-auto">
+            <div class="absolute top-3 left-3 z-20 flex items-center space-x-1.5 bg-slate-50 px-2.5 py-1 rounded-xl shadow-sm border border-slate-200">
+              <img src="market-logo.png" alt="APM Logo" class="w-4 h-4 object-contain" onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=400'">
+              <span class="text-[9px] font-black text-slate-900 uppercase tracking-wider">APM Executive</span>
             </div>
 
-            <div class="relative z-10 p-5 text-left text-white">
-              <h4 class="text-xl font-black text-white leading-tight mb-0.5">Taarisini Selvakumar</h4>
-              <p class="text-xs font-bold text-emerald-400 mb-1">Bachelor of Computer Science (Hons) • AIMST University</p>
-              <span class="inline-block px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-[10px] font-black border border-emerald-400/30 uppercase tracking-wider mb-2">CO-FOUNDER & CTO</span>
-              <p class="text-xs text-slate-300 leading-relaxed">Lead Frontend Developer & UI/UX Specialist crafting user interface screens, responsive layouts, and seamless client interactions.</p>
+            <div class="w-28 h-28 sm:w-32 sm:h-32 rounded-full overflow-hidden border-4 border-emerald-500/30 shadow-md mb-3 mt-4 shrink-0 bg-slate-100">
+              <img src="founder2.jpg" alt="Taarisini Selvakumar" class="w-full h-full object-cover object-[center_20%]" onerror="this.src='https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&q=80&w=800'">
             </div>
+
+            <h4 class="text-base sm:text-lg font-black text-slate-900 leading-tight mb-0.5">Taarisini Selvakumar</h4>
+            <p class="text-[11px] font-bold text-emerald-700 mb-1">Bachelor of Computer Science (Hons) • AIMST University</p>
+            <div class="mb-2">
+              <span class="inline-block px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 text-[9px] font-black border border-emerald-200 uppercase tracking-wider">CO-FOUNDER & CHIEF TECHNOLOGY OFFICER (CTO)</span>
+            </div>
+            <p class="text-xs text-slate-600 leading-relaxed">Lead Frontend Developer & UI/UX Specialist crafting user interface screens, responsive layouts, and seamless client interactions.</p>
           </div>
 
           <!-- 3. GAURA KISHORE KATHIRESAN (HEAD OF PR & INSTITUTIONAL AFFAIRS) -->
-          <div class="snap-center shrink-0 w-full rounded-3xl overflow-hidden relative shadow-xl border border-slate-200 flex flex-col justify-end bg-slate-900 min-h-[380px] sm:min-h-[420px]">
-            <img src="gaura.jpg" alt="Gaura Kishore Kathiresan" class="absolute inset-0 w-full h-full object-cover object-top opacity-90" onerror="this.src='https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&q=80&w=800'">
-            <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-transparent"></div>
-            
-            <div class="absolute top-4 left-4 z-20 flex items-center space-x-2 bg-white/90 backdrop-blur-md px-3 py-1.5 rounded-2xl shadow-md border border-white/40">
-              <img src="market-logo.png" alt="APM Logo" class="w-5 h-5 object-contain" onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=400'">
-              <span class="text-[10px] font-black text-slate-900 uppercase tracking-wider">APM Executive</span>
+          <div class="snap-center shrink-0 w-full rounded-3xl overflow-hidden relative shadow-lg border border-slate-200 bg-white p-5 sm:p-6 flex flex-col items-center text-center h-full max-h-[460px] overflow-y-auto">
+            <div class="absolute top-3 left-3 z-20 flex items-center space-x-1.5 bg-slate-50 px-2.5 py-1 rounded-xl shadow-sm border border-slate-200">
+              <img src="market-logo.png" alt="APM Logo" class="w-4 h-4 object-contain" onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=400'">
+              <span class="text-[9px] font-black text-slate-900 uppercase tracking-wider">APM Executive</span>
             </div>
 
-            <div class="relative z-10 p-5 text-left text-white">
-              <h4 class="text-xl font-black text-white leading-tight mb-0.5">Gaura Kishore Kathiresan</h4>
-              <p class="text-xs font-bold text-blue-400 mb-1">Diploma in Physiotherapy • AIMST University</p>
-              <span class="inline-block px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-300 text-[10px] font-black border border-blue-400/30 uppercase tracking-wider mb-2">HEAD OF PR & PARTNERSHIPS</span>
-              <p class="text-xs text-slate-300 leading-relaxed">Responsible for campus-wide promotion and ethically liaising with AIMST University leadership for official platform endorsement.</p>
+            <div class="w-28 h-28 sm:w-32 sm:h-32 rounded-full overflow-hidden border-4 border-blue-500/30 shadow-md mb-3 mt-4 shrink-0 bg-slate-100">
+              <img src="gaura.jpg" alt="Gaura Kishore Kathiresan" class="w-full h-full object-cover object-[center_20%]" onerror="this.src='https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&q=80&w=800'">
             </div>
+
+            <h4 class="text-base sm:text-lg font-black text-slate-900 leading-tight mb-0.5">Gaura Kishore Kathiresan</h4>
+            <p class="text-[11px] font-bold text-blue-700 mb-1">Diploma in Physiotherapy • AIMST University</p>
+            <div class="mb-2">
+              <span class="inline-block px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-800 text-[9px] font-black border border-blue-200 uppercase tracking-wider">HEAD OF PR & INSTITUTIONAL AFFAIRS</span>
+            </div>
+            <p class="text-xs text-slate-600 leading-relaxed">Responsible for campus-wide promotion and ethically liaising with AIMST University leadership for official platform endorsement.</p>
           </div>
 
           <!-- 4. SUDARSHAN PARTHIPAN (CHIEF PRODUCT OFFICER) -->
-          <div class="snap-center shrink-0 w-full rounded-3xl overflow-hidden relative shadow-xl border border-slate-200 flex flex-col justify-end bg-slate-900 min-h-[380px] sm:min-h-[420px]">
-            <img src="sudarshan.jpg" alt="Sudarshan Parthipan" class="absolute inset-0 w-full h-full object-cover object-top opacity-90" onerror="this.src='https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=800'">
-            <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-transparent"></div>
-            
-            <div class="absolute top-4 left-4 z-20 flex items-center space-x-2 bg-white/90 backdrop-blur-md px-3 py-1.5 rounded-2xl shadow-md border border-white/40">
-              <img src="market-logo.png" alt="APM Logo" class="w-5 h-5 object-contain" onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=400'">
-              <span class="text-[10px] font-black text-slate-900 uppercase tracking-wider">APM Executive</span>
+          <div class="snap-center shrink-0 w-full rounded-3xl overflow-hidden relative shadow-lg border border-slate-200 bg-white p-5 sm:p-6 flex flex-col items-center text-center h-full max-h-[460px] overflow-y-auto">
+            <div class="absolute top-3 left-3 z-20 flex items-center space-x-1.5 bg-slate-50 px-2.5 py-1 rounded-xl shadow-sm border border-slate-200">
+              <img src="market-logo.png" alt="APM Logo" class="w-4 h-4 object-contain" onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=400'">
+              <span class="text-[9px] font-black text-slate-900 uppercase tracking-wider">APM Executive</span>
             </div>
 
-            <div class="relative z-10 p-5 text-left text-white">
-              <h4 class="text-xl font-black text-white leading-tight mb-0.5">Sudarshan Parthipan</h4>
-              <p class="text-xs font-bold text-purple-400 mb-1">Diploma in Biotechnology • AIMST University</p>
-              <span class="inline-block px-2.5 py-0.5 rounded-full bg-purple-500/20 text-purple-300 text-[10px] font-black border border-purple-400/30 uppercase tracking-wider mb-2">CHIEF PRODUCT OFFICER</span>
-              <p class="text-xs text-slate-300 leading-relaxed">Responsible for discovering student pain points, gathering daily campus feedback, and reporting platform needs to leadership.</p>
+            <div class="w-28 h-28 sm:w-32 sm:h-32 rounded-full overflow-hidden border-4 border-purple-500/30 shadow-md mb-3 mt-4 shrink-0 bg-slate-100">
+              <img src="sudarshan.jpg" alt="Sudarshan Parthipan" class="w-full h-full object-cover object-[center_20%]" onerror="this.src='https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=800'">
             </div>
+
+            <h4 class="text-base sm:text-lg font-black text-slate-900 leading-tight mb-0.5">Sudarshan Parthipan</h4>
+            <p class="text-[11px] font-bold text-purple-700 mb-1">Diploma in Biotechnology • AIMST University</p>
+            <div class="mb-2">
+              <span class="inline-block px-2.5 py-0.5 rounded-full bg-purple-50 text-purple-800 text-[9px] font-black border border-purple-200 uppercase tracking-wider">CHIEF PRODUCT OFFICER & HEAD OF RESEARCH</span>
+            </div>
+            <p class="text-xs text-slate-600 leading-relaxed">Responsible for discovering student pain points, gathering daily campus feedback, and reporting platform needs to leadership.</p>
           </div>
 
         </div>
 
         <!-- Carousel Navigation Controls -->
-        <button onclick="scrollTeamCarousel(-1)" class="absolute left-2 top-1/2 -translate-y-1/2 z-30 w-9 h-9 rounded-full bg-white/80 hover:bg-white text-slate-800 shadow-md flex items-center justify-center transition-all">
+        <button onclick="scrollTeamCarousel(-1)" class="absolute left-1 top-1/2 -translate-y-1/2 z-30 w-9 h-9 rounded-full bg-white hover:bg-slate-100 text-slate-800 shadow-md flex items-center justify-center transition-all border border-slate-200">
           <i class="fa-solid fa-chevron-left text-xs"></i>
         </button>
-        <button onclick="scrollTeamCarousel(1)" class="absolute right-2 top-1/2 -translate-y-1/2 z-30 w-9 h-9 rounded-full bg-white/80 hover:bg-white text-slate-800 shadow-md flex items-center justify-center transition-all">
+        <button onclick="scrollTeamCarousel(1)" class="absolute right-1 top-1/2 -translate-y-1/2 z-30 w-9 h-9 rounded-full bg-white hover:bg-slate-100 text-slate-800 shadow-md flex items-center justify-center transition-all border border-slate-200">
           <i class="fa-solid fa-chevron-right text-xs"></i>
         </button>
       </div>
 
       <!-- Carousel Pagination Indicator Dots -->
-      <div class="flex items-center justify-center space-x-2 mt-4">
+      <div class="flex items-center justify-center space-x-2 mt-4 shrink-0">
         <span class="team-dot w-2.5 h-2.5 rounded-full bg-emerald-600 transition-all cursor-pointer" onclick="scrollToSlide(0)"></span>
         <span class="team-dot w-2.5 h-2.5 rounded-full bg-slate-300 transition-all cursor-pointer" onclick="scrollToSlide(1)"></span>
         <span class="team-dot w-2.5 h-2.5 rounded-full bg-slate-300 transition-all cursor-pointer" onclick="scrollToSlide(2)"></span>
@@ -921,7 +1004,6 @@
     let currentUser = null;
     let currentUserEmail = null;
     let isFounderUser = false;
-    let countdownInterval = null;
     let expandedDescIds = new Set();
     let activeBoostItemId = null;
 
@@ -1097,21 +1179,43 @@
       }).join('');
     }
 
-    window.openBoostModal = function(itemId) {
+    /* BOOSTING WORKFLOW MODALS */
+    window.openBoostBenefitsModal = function(itemId) {
       activeBoostItemId = itemId;
+      closeMyListingsModal();
+      document.getElementById('boostBenefitsModal').classList.remove('hidden');
+    };
+
+    window.closeBoostBenefitsModal = function() {
+      document.getElementById('boostBenefitsModal').classList.add('hidden');
+    };
+
+    window.proceedToBoostDays = function() {
+      closeBoostBenefitsModal();
       document.getElementById('boostDaysSelect').value = "1";
       updateBoostCostDisplay();
+      document.getElementById('boostDaysModal').classList.remove('hidden');
+    };
+
+    window.closeBoostDaysModal = function() {
+      document.getElementById('boostDaysModal').classList.add('hidden');
+    };
+
+    window.updateBoostCostDisplay = function() {
+      const days = parseInt(document.getElementById('boostDaysSelect').value) || 1;
+      document.getElementById('boostTotalDisplay').innerText = `RM ${(days * 1.00).toFixed(2)}`;
+    };
+
+    window.proceedToPaymentQR = function() {
+      const days = parseInt(document.getElementById('boostDaysSelect').value) || 1;
+      document.getElementById('tngPayAmountDisplay').innerText = `RM ${(days * 1.00).toFixed(2)}`;
+      closeBoostDaysModal();
       document.getElementById('boostModal').classList.remove('hidden');
     };
 
     window.closeBoostModal = function() {
       document.getElementById('boostModal').classList.add('hidden');
       activeBoostItemId = null;
-    };
-
-    window.updateBoostCostDisplay = function() {
-      const days = parseInt(document.getElementById('boostDaysSelect').value) || 1;
-      document.getElementById('boostTotalDisplay').innerText = `RM ${(days * 1.00).toFixed(2)}`;
     };
 
     window.submitBoostRequest = async function() {
@@ -1126,11 +1230,10 @@
         await updateDoc(doc(db, "listings", activeBoostItemId), { boostStatus: 'pending', boostRequestedDays: days });
       } catch(e){}
 
-      const waMsg = `Hi Founder Keven, I have paid RM ${(days * 1.00).toFixed(2)} for ${days} Day(s) Ad Boost for my item: "${targetItem.title}". Here is my receipt.`;
+      const waMsg = `Hi Founder Keven, I have paid for my boosting. Product Name: "${targetItem.title}", Total Days: ${days} Day(s), Total Amount: RM ${(days * 1.00).toFixed(2)}. Here is my payment receipt screenshot.`;
       closeBoostModal();
       window.open(`https://wa.me/60126384757?text=${encodeURIComponent(waMsg)}`, '_blank');
-      renderMyListings();
-      alert("Boost request submitted! Awaiting Founder approval.");
+      alert("Boost request & receipt notice submitted! Awaiting Founder verification.");
     };
 
     window.approveBoost = async function(itemId) {
@@ -1150,7 +1253,7 @@
       syncLocalStorage();
       renderListings();
       renderSellerManagerTable();
-      alert(`Approved Ad Boost for "${item.title}"!`);
+      alert(`Approved Ad Boost for "${item.title}" (${days} days)!`);
     };
 
     window.rejectBoost = async function(itemId) {
@@ -1241,7 +1344,53 @@
       await loadClubs();
       await loadSellers();
       updateMetrics();
+      checkDailyBoostPopup();
     }
+
+    function checkDailyBoostPopup() {
+      const lastShownDate = localStorage.getItem('apm_last_boost_popup_date');
+      const todayStr = new Date().toDateString();
+      if (lastShownDate === todayStr) return;
+
+      const now = new Date();
+      const activeBoosted = allListings.filter(item => {
+        if (!item.isBoosted || !item.boostExpiryDate) return false;
+        return new Date(item.boostExpiryDate) > now && !item.isDisabled;
+      });
+
+      if (activeBoosted.length === 0) return;
+
+      const randomIndex = Math.floor(Math.random() * activeBoosted.length);
+      const selectedAd = activeBoosted[randomIndex];
+
+      showRandomBoostPopup(selectedAd);
+      localStorage.setItem('apm_last_boost_popup_date', todayStr);
+    }
+
+    function showRandomBoostPopup(item) {
+      const container = document.getElementById('randomBoostPopupContent');
+      const rawContact = item.contact || '';
+      const contactHref = rawContact.startsWith('http') ? rawContact : `https://wa.me/${rawContact.replace(/[^0-9]/g, '')}?text=Hi%20${encodeURIComponent(item.seller || 'Seller')},%20I%20saw%20your%20boosted%20ad%20on%20APM%20and%20want%20to%20buy:%20${encodeURIComponent(item.title || 'Item')}`;
+      const safePrice = Number(item.price) || 0;
+
+      container.innerHTML = `
+        <div class="relative w-full aspect-square rounded-2xl overflow-hidden mb-3 bg-slate-100 border border-slate-200">
+          <img src="${item.image || 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=800'}" alt="${item.title}" class="w-full h-full object-cover">
+        </div>
+        <h4 class="font-black text-base text-slate-900 mb-1 line-clamp-1">${item.title}</h4>
+        <p class="text-xs text-emerald-700 font-extrabold mb-3">RM ${safePrice.toFixed(2)}</p>
+        <a href="${contactHref}" target="_blank" onclick="closeRandomBoostPopup()" class="w-full py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xs shadow-lg shadow-emerald-600/30 flex items-center justify-center space-x-2 transition-all">
+          <i class="fa-brands fa-whatsapp text-base"></i>
+          <span>BUY NOW !! CLICK TO CHAT</span>
+        </a>
+      `;
+
+      document.getElementById('randomBoostPopupModal').classList.remove('hidden');
+    }
+
+    window.closeRandomBoostPopup = function() {
+      document.getElementById('randomBoostPopupModal').classList.add('hidden');
+    };
 
     function populateCourseDropdowns() {
       const selectEl = document.getElementById('itemCourseSelect');
@@ -1293,9 +1442,34 @@
       const cat = document.getElementById('categorySelect').value;
       const courseContainer = document.getElementById('courseSelectContainer');
       const priceLabel = document.getElementById('priceLabel');
+      const titleInput = document.getElementById('itemTitle');
+      const descInput = document.getElementById('itemDesc');
 
-      if (cat === 'academic') courseContainer.style.display = 'block';
-      else courseContainer.style.display = 'none';
+      if (cat === 'academic') {
+        courseContainer.style.display = 'block';
+        titleInput.placeholder = 'e.g., DBMS Semester 3 Lecture Notes & Past Year Papers';
+        descInput.placeholder = 'e.g., Complete chapter notes, handwritten summaries, and past year exam solutions...';
+      } else if (cat === 'rentals') {
+        courseContainer.style.display = 'none';
+        titleInput.placeholder = 'e.g., Scientific Calculator Casio fx-570EX or Formal Navy Blazer Size M';
+        descInput.placeholder = 'Provide rental rate per day, deposit terms, and pickup location...';
+      } else if (cat === 'tech') {
+        courseContainer.style.display = 'none';
+        titleInput.placeholder = 'e.g., Logitech Wireless Mouse or MSI Laptop Cooling Pad';
+        descInput.placeholder = 'Specify brand, model, condition, and warranty status...';
+      } else if (cat === 'hostel') {
+        courseContainer.style.display = 'none';
+        titleInput.placeholder = 'e.g., Extension Cord 4-Way Socket or Study Desk Lamp';
+        descInput.placeholder = 'Specify item condition and hostel block pickup details...';
+      } else if (cat === 'services') {
+        courseContainer.style.display = 'none';
+        titleInput.placeholder = 'e.g., Assignment Printing & Ring Binding Service';
+        descInput.placeholder = 'Specify service pricing per page, color/bw options, and turnaround time...';
+      } else if (cat === 'events') {
+        courseContainer.style.display = 'none';
+        titleInput.placeholder = 'e.g., AIMST Deepavali Cultural Night 2026 Ticket';
+        descInput.placeholder = 'Specify event date, time, venue, ticket price, and contact person...';
+      }
 
       if (cat === 'rentals') priceLabel.innerText = 'Rental Rate (MYR / day)';
       else priceLabel.innerText = 'Price (MYR)';
@@ -1406,6 +1580,13 @@
         return matchesCategory && matchesCourse && matchesSearch;
       });
 
+      // Sort so that active boosted items appear at the very top of their category feed
+      filtered.sort((a, b) => {
+        const aBoosted = a.isBoosted && new Date(a.boostExpiryDate) > now ? 1 : 0;
+        const bBoosted = b.isBoosted && new Date(b.boostExpiryDate) > now ? 1 : 0;
+        return bBoosted - aBoosted;
+      });
+
       if (filtered.length === 0) {
         grid.innerHTML = `
           <div class="col-span-full py-16 text-center grab-card rounded-3xl p-8 border border-slate-200">
@@ -1446,7 +1627,7 @@
               <img src="${item.image || 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=800'}" alt="${item.title}" class="w-full h-full object-cover group-hover:scale-105 transition-all duration-300">
               
               <span class="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-lg bg-white/95 backdrop-blur-md text-[9px] font-extrabold uppercase tracking-wider text-slate-800 shadow-sm border border-slate-200">
-                ${item.category === 'rentals' ? 'Blazer Rental' : (item.category || 'general')}
+                ${item.category === 'rentals' ? 'Belongings Rental' : (item.category || 'general')}
               </span>
 
               ${courseBadge}
@@ -1560,14 +1741,22 @@
 
       container.innerHTML = myListings.map(item => `
         <div class="grab-card rounded-2xl p-3 border border-slate-200 flex flex-col justify-between">
-          <div class="flex space-x-3 mb-2">
+          <div class="flex space-x-3 mb-2.5">
             <img src="${item.image || 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=800'}" alt="${item.title}" class="w-16 h-16 rounded-xl object-cover shrink-0">
             <div class="min-w-0 flex-1">
               <h4 class="font-bold text-xs text-slate-900 truncate mb-0.5">${item.title}</h4>
               <p class="text-[10px] text-emerald-700 font-extrabold mb-1">RM ${(Number(item.price)||0).toFixed(2)}</p>
+              ${item.isBoosted ? '<span class="text-[9px] font-bold text-amber-600 bg-amber-50 px-2 py-0.5 rounded-md border border-amber-200 inline-block">Boosted Active</span>' : ''}
+              ${item.boostStatus === 'pending' ? '<span class="text-[9px] font-bold text-amber-700 bg-amber-100 px-2 py-0.5 rounded-md inline-block">Boost Pending Approval</span>' : ''}
             </div>
           </div>
-          <button onclick="terminateListing('${item.id}')" class="w-full py-1.5 rounded-xl bg-rose-50 hover:bg-rose-600 text-rose-600 hover:text-white font-bold text-[10px] border border-rose-200 transition-all">Delete Product</button>
+          <div class="grid grid-cols-2 gap-2">
+            <button onclick="openBoostBenefitsModal('${item.id}')" class="py-1.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-[10px] shadow-sm transition-all flex items-center justify-center space-x-1">
+              <i class="fa-solid fa-rocket text-[10px]"></i>
+              <span>Boost Product</span>
+            </button>
+            <button onclick="terminateListing('${item.id}')" class="py-1.5 rounded-xl bg-rose-50 hover:bg-rose-600 text-rose-600 hover:text-white font-bold text-[10px] border border-rose-200 transition-all">Delete</button>
+          </div>
         </div>
       `).join('');
     };
@@ -1581,8 +1770,11 @@
       document.getElementById('pendingBoostsCountBadge').innerText = `${pendingBoosts.length} Pending`;
       pendingBoostsContainer.innerHTML = pendingBoosts.length === 0 ? `<p class="text-[11px] text-amber-800 italic">No pending boosts.</p>` : pendingBoosts.map(i => `
         <div class="bg-white p-2.5 rounded-xl border border-amber-300 flex items-center justify-between text-xs">
-          <span class="font-extrabold text-slate-900">${i.title} (${i.boostRequestedDays || 1} day)</span>
-          <div class="space-x-1">
+          <div>
+            <span class="font-extrabold text-slate-900 block">${i.title}</span>
+            <span class="text-[10px] text-slate-500">Seller: ${i.seller} | Requested: ${i.boostRequestedDays || 1} Day(s) (RM ${(i.boostRequestedDays || 1)}.00)</span>
+          </div>
+          <div class="space-x-1 shrink-0">
             <button onclick="approveBoost('${i.id}')" class="px-2.5 py-1 rounded-lg bg-amber-500 text-white font-bold text-[10px]">Approve</button>
             <button onclick="rejectBoost('${i.id}')" class="px-2.5 py-1 rounded-lg bg-rose-600 text-white font-bold text-[10px]">Reject</button>
           </div>
