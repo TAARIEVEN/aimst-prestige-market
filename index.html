@@ -219,7 +219,7 @@
 
     </div>
 
-    <!-- DEDICATED AIMST COURSE MULTI-SELECT FILTER BAR (ONLY VISIBLE WHEN ACADEMIC SELECTED OR SEARCHED) -->
+    <!-- DEDICATED AIMST COURSE MULTI-SELECT FILTER BAR -->
     <div id="courseFilterSection" class="bg-white p-3.5 rounded-2xl border border-slate-200 mb-4 shadow-sm">
       <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 mb-2">
         <div class="flex items-center space-x-2">
@@ -286,12 +286,25 @@
     </div>
   </section>
 
-  <!-- Floating Add Listing Button (STRICTLY ON LEFT SIDE) -->
-  <div id="floatingAddBtn" class="fixed bottom-6 left-4 sm:left-6 z-40 hidden">
-    <button onclick="openAddListingModal()" class="flex items-center space-x-2 px-4 py-3 sm:px-5 sm:py-3.5 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold shadow-2xl shadow-emerald-600/40 ring-2 ring-white hover:scale-105 transition-all text-xs sm:text-sm">
-      <i class="fa-solid fa-plus text-sm sm:text-base"></i>
-      <span>Post Listing</span>
-    </button>
+  <!-- FLOATING BUTTONS BAR (LEFT: POST LISTING | RIGHT: IPHONE PWA REFRESH) -->
+  <div class="fixed bottom-6 left-4 right-4 sm:left-6 sm:right-auto z-40 flex items-center justify-between sm:justify-start sm:space-x-3 pointer-events-none">
+    
+    <!-- Post Listing Button (Left) -->
+    <div id="floatingAddBtn" class="pointer-events-auto hidden">
+      <button onclick="openAddListingModal()" class="flex items-center space-x-2 px-4 py-3 sm:px-5 sm:py-3.5 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold shadow-2xl shadow-emerald-600/40 ring-2 ring-white hover:scale-105 transition-all text-xs sm:text-sm">
+        <i class="fa-solid fa-plus text-sm sm:text-base"></i>
+        <span>Post Listing</span>
+      </button>
+    </div>
+
+    <!-- iPhone PWA Force Refresh Button (Right on mobile, next to post on desktop) -->
+    <div class="pointer-events-auto">
+      <button onclick="forceRefreshApp()" title="Force Refresh App" class="flex items-center space-x-1.5 px-3.5 py-3 sm:px-4 sm:py-3.5 rounded-2xl bg-slate-900 hover:bg-slate-800 text-white font-bold shadow-2xl shadow-slate-900/40 ring-2 ring-white hover:scale-105 transition-all text-xs">
+        <i class="fa-solid fa-rotate-right text-emerald-400"></i>
+        <span class="inline">Refresh App</span>
+      </button>
+    </div>
+
   </div>
 
   <!-- IOS INSTALL INSTRUCTIONS MODAL -->
@@ -798,7 +811,7 @@
     let soldCount = parseInt(localStorage.getItem('aimst_sold_count')) || 0;
 
     let currentCategory = 'all';
-    let selectedCourses = new Set(); // multi-select filter set
+    let selectedCourses = new Set();
     let currentUser = null;
     let currentUserEmail = null;
     let isFounderUser = false;
@@ -806,7 +819,21 @@
     let expandedDescIds = new Set();
     let deferredInstallPrompt = null;
 
-    // PWA Install Event Handler for Android & Laptops (Chrome/Edge/Brave)
+    // Force Refresh / Cache Bust function for iPhone PWA app users
+    window.forceRefreshApp = function() {
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.getRegistrations().then(registrations => {
+          for (let registration of registrations) {
+            registration.unregister();
+          }
+        });
+      }
+      // Clear session storage cache check and reload with timestamp buster
+      sessionStorage.clear();
+      window.location.href = window.location.pathname + '?v=' + Date.now();
+    };
+
+    // PWA Install Event Handler for Android & Laptops
     window.addEventListener('beforeinstallprompt', (e) => {
       e.preventDefault();
       deferredInstallPrompt = e;
