@@ -1435,17 +1435,14 @@
       await loadClubs();
       updateMetrics();
       
-      // Start pop-up sequence every 5 minutes for buyers & logged-in users
       startDailyBoostPopupSequence();
       setInterval(startDailyBoostPopupSequence, 5 * 60 * 1000);
     }
 
-    /* DAILY BOOST POPUP SEQUENCE LOGIC */
     function startDailyBoostPopupSequence() {
       const now = new Date();
       const todayStr = new Date().toDateString();
 
-      // Find active boosted ads sorted by highest remaining countdown
       const activeBoosted = allListings.filter(item => {
         if (!item.isBoosted || !item.boostExpiryDate) return false;
         return new Date(item.boostExpiryDate) > now && !item.isDisabled;
@@ -1453,7 +1450,6 @@
 
       if (activeBoosted.length === 0) return;
 
-      // Pick the first ad that hasn't popped up today for this user
       const unshownAd = activeBoosted.find(ad => {
         return !localStorage.getItem(`apm_boost_shown_${ad.id}_${todayStr}`);
       });
@@ -1655,17 +1651,17 @@
 
       if (carouselAutoTimer) clearInterval(carouselAutoTimer);
 
-      // Sort Boosted Ads strictly by highest remaining countdown
       const boostedItems = allListings.filter(item => {
         if (!item.isBoosted || !item.boostExpiryDate) return false;
         return new Date(item.boostExpiryDate) > now && !item.isDisabled;
       }).sort((a, b) => new Date(b.boostExpiryDate) - new Date(a.boostExpiryDate));
 
+      const boostedIds = new Set(boostedItems.map(i => i.id));
+
       if (boostedItems.length > 0) {
         sponsoredSec.classList.remove('hidden');
         carouselContainer.innerHTML = boostedItems.map(item => createSponsoredCardHTML(item, now)).join('');
 
-        // Auto-swipe banner if there are 2 or more active boosted ads
         if (boostedItems.length > 1) {
           carouselAutoTimer = setInterval(() => {
             if (!carouselContainer) return;
@@ -1682,8 +1678,10 @@
         sponsoredSec.classList.add('hidden');
       }
       
-      // Render standard feed (unboosted or general items)
+      // FIXED: Exclude sponsored items from the main product grid so they don't appear twice!
       const filtered = allListings.filter(item => {
+        if (boostedIds.has(item.id)) return false;
+
         const itemSeller = (item.seller || '').toLowerCase();
         const isOwner = currentUser && (currentUser.toLowerCase() === itemSeller || currentUser.includes(itemSeller) || itemSeller.includes(currentUser));
         if (item.isDisabled && !isOwner && !isFounderUser) return false;
@@ -1767,7 +1765,7 @@
       ` : '';
 
       return `
-        <div class="grab-card rounded-2xl overflow-hidden transition-all group flex flex-col justify-between relative text-left ${item.isBoosted ? 'boosted-card' : ''}">
+        <div class="grab-card rounded-2xl overflow-hidden transition-all group flex flex-col justify-between relative text-left">
           <div>
             <div class="relative w-full aspect-square overflow-hidden bg-slate-100">
               <img src="${item.image || 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=800'}" alt="${item.title}" class="w-full h-full object-cover group-hover:scale-105 transition-all duration-300">
@@ -1781,13 +1779,6 @@
               <button onclick="toggleWishlist('${item.id}')" title="Save to Wishlist" class="absolute top-2.5 right-2.5 z-20 w-7 h-7 rounded-full bg-white/95 backdrop-blur-md shadow-md flex items-center justify-center transition-all hover:scale-110">
                 <i class="fa-solid fa-heart ${isWishlisted ? 'text-rose-500' : 'text-slate-300'} text-xs"></i>
               </button>
-
-              ${item.isBoosted ? `
-                <span class="absolute bottom-2 left-2 bg-amber-500 text-slate-950 font-black text-[8px] py-0.5 px-2 rounded-md uppercase tracking-widest shadow-md flex items-center space-x-1">
-                  <i class="fa-solid fa-bolt"></i>
-                  <span>SPONSORED AD</span>
-                </span>
-              ` : ''}
 
               ${(isFounderUser || isOwner) ? `
                 <button onclick="terminateListing('${item.id}')" class="absolute top-11 right-2.5 px-2 py-0.5 rounded-lg bg-rose-600 text-white font-bold text-[9px] shadow-md hover:bg-rose-700 z-10 transition-all">
@@ -1828,7 +1819,7 @@
                 ${(isOwner || isFounderUser) ? `
                   <button onclick="markItemSold('${item.id}')" class="px-2 py-1 rounded-lg bg-slate-100 text-slate-700 hover:bg-emerald-600 hover:text-white font-bold text-[9px] transition-all border border-slate-200">Sold</button>
                 ` : ''}
-                <button onclick="handleChatClick('${item.id}', '${contactHref}')" class="px-2 py-1 rounded-xl bg-emerald-50 hover:bg-emerald-600 hover:text-white text-emerald-700 font-bold transition-all border border-emerald-200 flex items-center space-x-1 text-[10px] shadow-sm">
+                <button onclick="handleChatClick('${item.id}', '${contactHref}')" class="px-2 py-1 rounded-xl bg-emerald-50 hover:bg-emerald-600 hover:text-white text-emerald-700 font-bold transition-all border border-slate-200 flex items-center space-x-1 text-[10px] shadow-sm">
                   <i class="fa-brands fa-whatsapp text-xs"></i>
                   <span>Chat</span>
                 </button>
@@ -2057,6 +2048,27 @@
       if (!currentUser) return;
       document.getElementById('profileUsername').innerText = currentUser;
       document.getElementById('profileEmail').innerText = currentUserEmail || `${currentUser}@apm.com`;
+      
+      // FIXED: Check real-time tier from allSellers array so pro badge & UI reflect correctly
+      const sellerProfile = allSellers.find(s => s.email.toLowerCase() === currentUserEmail);
+      const isPro = sellerProfile && sellerProfile.tier === 'pro';
+
+      const tierBadge = document.getElementById('profileTierBadge');
+      const upgradeBtn = document.getElementById('profileUpgradeBtn');
+      const proCountdown = document.getElementById('proCountdownContainer');
+
+      if (isPro) {
+        tierBadge.innerText = "APM PRO TIER SELLER (UNLOCKED)";
+        tierBadge.className = "inline-block px-3 py-1 rounded-full bg-amber-100 text-amber-900 font-extrabold text-xs border border-amber-300 mb-2 uppercase tracking-wider";
+        if (upgradeBtn) upgradeBtn.classList.add('hidden');
+        if (proCountdown) proCountdown.classList.remove('hidden');
+      } else {
+        tierBadge.innerText = "VERIFIED SELLER (FREE TIER)";
+        tierBadge.className = "inline-block px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 font-extrabold text-xs border border-emerald-300 mb-2 uppercase tracking-wider";
+        if (upgradeBtn) upgradeBtn.classList.remove('hidden');
+        if (proCountdown) proCountdown.classList.add('hidden');
+      }
+
       document.getElementById('userProfileModal').classList.remove('hidden');
     };
     window.closeUserProfileModal = function() { document.getElementById('userProfileModal').classList.add('hidden'); };
@@ -2072,6 +2084,24 @@
 
     window.openAddListingModal = function() {
       if (!currentUser) { openAuthModal(); return; }
+      
+      // Check Pro vs Free Tier limit
+      const sellerProfile = allSellers.find(s => s.email.toLowerCase() === currentUserEmail);
+      const isPro = sellerProfile && sellerProfile.tier === 'pro';
+      const maxAllowed = isPro ? 7 : 3;
+
+      const myListings = allListings.filter(item => {
+        const itemSeller = (item.seller || '').toLowerCase();
+        return currentUser && (currentUser.toLowerCase() === itemSeller || currentUser.includes(itemSeller));
+      });
+
+      if (myListings.length >= maxAllowed) {
+        alert(`Listing Limit Reached! Your current tier (${isPro ? 'Pro' : 'Free'}) allows up to ${maxAllowed} active listings. ${!isPro ? 'Upgrade to Pro Tier to post up to 7 listings!' : ''}`);
+        if (!isPro) openUpgradeModal();
+        return;
+      }
+
+      document.getElementById('sellerTierIndicator').innerText = `Your Tier: ${isPro ? 'Pro Tier (Up to 7 Listings)' : 'Free Tier (Up to 3 Listings)'}`;
       document.getElementById('categorySelect').value = 'academic';
       onCategoryChange();
       document.getElementById('addListingModal').classList.remove('hidden');
