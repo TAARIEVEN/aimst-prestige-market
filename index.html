@@ -1340,9 +1340,9 @@
       checkWelcomeModal();
       populateCourseDropdowns();
       renderCourseFilterPills();
+      await loadSellers(); // Make sure sellers are loaded before listings & auth check
       await loadListings();
       await loadClubs();
-      await loadSellers();
       updateMetrics();
       checkDailyBoostPopup();
     }
@@ -1801,17 +1801,27 @@
 
     window.approveSeller = async function(id) {
       const s = allSellers.find(x => x.id === id);
-      if (s) {
-        s.isVerified = true;
+      if (s) { 
+        s.isVerified = true; 
         try {
           await updateDoc(doc(db, "verified_sellers", id), { isVerified: true });
-        } catch (e) {
-          console.error("Error updating verification in Firestore:", e);
+        } catch(e) {
+          console.error("Error updating seller verification in Firestore:", e);
         }
-        syncLocalStorage();
-        renderSellerManagerTable();
-        alert("Seller successfully verified!");
+        syncLocalStorage(); 
+        renderSellerManagerTable(); 
+        alert(`Successfully verified ${s.username}!`); 
       }
+    };
+
+    window.rejectSeller = async function(id) {
+      const s = allSellers.find(x => x.id === id);
+      allSellers = allSellers.filter(x => x.id !== id);
+      try {
+        await deleteDoc(doc(db, "verified_sellers", id));
+      } catch(e){}
+      syncLocalStorage();
+      renderSellerManagerTable();
     };
 
     window.terminateListing = async function(id) {
