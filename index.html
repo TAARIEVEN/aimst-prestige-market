@@ -1536,32 +1536,21 @@
       const fileInput = document.getElementById('itemImageFile');
       if (!fileInput.files[0]) { alert("Please select a product photo!"); return; }
 
-      // Timeout safety guard so it NEVER hangs forever
-      let isCompleted = false;
-      const timeoutId = setTimeout(() => {
-        if (!isCompleted) {
-          if (submitBtn) {
-            submitBtn.disabled = false;
-            submitBtn.innerText = "Publish Listing";
-          }
-          alert("⚠️ Connection Timeout: Image upload took too long. Please check your internet connection or Firebase Storage rules.");
-        }
-      }, 20000); // 20 seconds timeout
-
       try {
         if (submitBtn) {
           submitBtn.disabled = true;
-          submitBtn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> <span>Optimizing & Publishing...</span>`;
+          submitBtn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> <span>Processing Image & Publishing...</span>`;
         }
 
         const file = fileInput.files[0];
-        const fileName = `${Date.now()}_${file.name.replace(/[^a-zA-Z0-9.]/g, "_")}`;
-        const storageRef = ref(storage, `listings/${fileName}`);
         
-        console.log("Starting image upload to Firebase Storage...");
-        const uploadSnapshot = await uploadBytes(storageRef, file);
-        console.log("Image uploaded successfully. Getting download URL...");
-        const imageUrl = await getDownloadURL(uploadSnapshot.ref);
+        // Convert image file to Base64 string so it works 100% free without Firebase Storage / Blaze plan
+        const base64Image = await new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result);
+          reader.onerror = error => reject(error);
+          reader.readAsDataURL(file);
+        });
 
         const newItem = { 
           title, 
@@ -1571,7 +1560,7 @@
           courseNick, 
           price, 
           contact, 
-          image: imageUrl, 
+          image: base64Image, 
           desc, 
           seller: currentUser, 
           isDisabled: false, 
@@ -1583,9 +1572,6 @@
         const docRef = await addDoc(collection(db, "listings"), newItem);
         newItem.id = docRef.id;
         allListings.unshift(newItem);
-        
-        isCompleted = true;
-        clearTimeout(timeoutId);
 
         if (submitBtn) {
           submitBtn.disabled = false;
@@ -1605,8 +1591,6 @@
 
         alert("Published listing successfully!");
       } catch (err) {
-        isCompleted = true;
-        clearTimeout(timeoutId);
         if (submitBtn) {
           submitBtn.disabled = false;
           submitBtn.innerText = "Publish Listing";
