@@ -1517,7 +1517,7 @@
     window.openAddClubModal = function() { if (!currentUser) { openAuthModal(); return; } document.getElementById('addClubModal').classList.remove('hidden'); };
     window.closeAddClubModal = function() { document.getElementById('addClubModal').classList.add('hidden'); };
 
- window.handlePostListing = async function(e) {
+window.handlePostListing = async function(e) {
       if (e) e.preventDefault();
       const submitBtn = document.getElementById('publishListingSubmitBtn');
       const title = sanitizeInput(document.getElementById('itemTitle').value);
@@ -1543,8 +1543,6 @@
         }
 
         const file = fileInput.files[0];
-        
-        // Convert image file to Base64 string so it works 100% free without Firebase Storage / Blaze plan
         const base64Image = await new Promise((resolve, reject) => {
           const reader = new FileReader();
           reader.onload = () => resolve(reader.result);
@@ -1568,7 +1566,6 @@
           createdAt: new Date().toISOString()
         };
 
-        console.log("Saving listing document to Firestore...");
         const docRef = await addDoc(collection(db, "listings"), newItem);
         newItem.id = docRef.id;
         allListings.unshift(newItem);
@@ -1600,7 +1597,7 @@
       }
     };
 
-    window.handlePostClub = async function(e) {
+   window.handlePostClub = async function(e) {
       if (e) e.preventDefault();
       const submitBtn = document.getElementById('saveClubSubmitBtn');
       const name = sanitizeInput(document.getElementById('clubName').value);
@@ -1618,10 +1615,12 @@
         let logo = "";
         if (fileInput.files[0]) {
           const file = fileInput.files[0];
-          const fileName = `${Date.now()}_${file.name.replace(/[^a-zA-Z0-9.]/g, "_")}`;
-          const storageRef = ref(storage, `clubs/${fileName}`);
-          const uploadSnapshot = await uploadBytes(storageRef, file);
-          logo = await getDownloadURL(uploadSnapshot.ref);
+          logo = await new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = error => reject(error);
+            reader.readAsDataURL(file);
+          });
         }
 
         const newClub = { name, category, contact, desc, logo, createdBy: currentUser };
@@ -1634,7 +1633,7 @@
         document.getElementById('clubForm').reset();
         alert("Club saved successfully!");
       } catch (err) {
-        alert("Upload Error: " + err.message);
+        alert("Save Error: " + err.message);
       } finally {
         if (submitBtn) {
           submitBtn.disabled = false;
