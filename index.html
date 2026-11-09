@@ -40,11 +40,6 @@
       box-shadow: 0 8px 20px -4px rgba(245, 158, 11, 0.25) !important;
     }
 
-    .smooth-carousel {
-      scroll-behavior: smooth;
-      -webkit-overflow-scrolling: touch;
-    }
-
     .no-scrollbar::-webkit-scrollbar {
       display: none;
     }
@@ -264,8 +259,8 @@
         </div>
       </div>
 
-      <!-- SPONSORED / BOOSTED ADS CAROUSEL -->
-      <div id="sponsoredSection" class="mb-8 hidden">
+      <!-- SPONSORED / BOOSTED ADS CONTINUOUS SLIDER CAROUSEL -->
+      <div id="sponsoredSection" class="mb-8 hidden overflow-hidden">
         <div class="flex items-center justify-between mb-3">
           <div class="flex items-center space-x-2">
             <span class="w-6 h-6 rounded-lg bg-amber-500 text-slate-950 flex items-center justify-center font-black text-xs shadow-sm">
@@ -276,7 +271,7 @@
           <span class="text-[10px] text-amber-600 font-bold bg-amber-50 px-2.5 py-0.5 rounded-full border border-amber-200">🚀 Promoted</span>
         </div>
         
-        <div id="sponsoredCarousel" class="flex space-x-3 overflow-x-auto no-scrollbar smooth-carousel pb-2 pt-1 snap-x"></div>
+        <div id="sponsoredCarousel" class="flex space-x-3 overflow-x-hidden no-scrollbar py-2 pt-1 cursor-grab"></div>
       </div>
 
       <!-- MAIN LISTINGS GRID HEADER -->
@@ -883,7 +878,7 @@
     let selectedCourses = new Set();
     let expandedDescIds = new Set();
     let activeBoostItemId = null;
-    let carouselAutoTimer = null;
+    let carouselAnimId = null;
     let profileCountdownInterval = null;
     let expiredBoostQueue = [];
 
@@ -1568,7 +1563,6 @@
         await loadSellers();
         const sellerProfile = allSellers.find(s => (s.email || '').toLowerCase() === currentUserEmail);
         
-        // If not founder and not verified, sign out and block login
         if (sellerProfile && !sellerProfile.isVerified && !isFounderUser) {
           await signOut(auth);
           alert("Your account is pending founder verification. Please check back soon!");
@@ -1891,7 +1885,7 @@
       const searchTxt = document.getElementById('searchInput').value.toLowerCase();
       const now = new Date();
 
-      if (carouselAutoTimer) clearInterval(carouselAutoTimer);
+      if (carouselAnimId) cancelAnimationFrame(carouselAnimId);
 
       const boostedItems = allListings.filter(item => {
         if (!item.isBoosted || !item.boostExpiryDate) return false;
@@ -1902,20 +1896,28 @@
 
       if (boostedItems.length > 0) {
         sponsoredSec.classList.remove('hidden');
-        carouselContainer.innerHTML = boostedItems.map(item => createSponsoredCardHTML(item, now)).join('');
+        // Duplicate items seamlessly for infinite conveyor loop animation
+        const repeatedItems = [...boostedItems, ...boostedItems, ...boostedItems];
+        carouselContainer.innerHTML = repeatedItems.map(item => createSponsoredCardHTML(item, now)).join('');
 
-        if (boostedItems.length > 1) {
-          carouselAutoTimer = setInterval(() => {
-            if (!carouselContainer) return;
-            const maxScroll = carouselContainer.scrollWidth - carouselContainer.clientWidth;
-            const cardWidth = carouselContainer.firstElementChild ? carouselContainer.firstElementChild.clientWidth + 12 : 280;
-            if (carouselContainer.scrollLeft >= maxScroll - 5) {
-              carouselContainer.scrollTo({ left: 0, behavior: 'smooth' });
-            } else {
-              carouselContainer.scrollBy({ left: cardWidth, behavior: 'smooth' });
-            }
-          }, 7000);
+        // Smooth Electric-Gate Continuous Ticker Animation
+        let scrollSpeed = 0.6; // pixels per frame
+        function startTicker() {
+          if (!carouselContainer) return;
+          carouselContainer.scrollLeft += scrollSpeed;
+          // Loop seamlessly back when half scrolled
+          const singleSetWidth = carouselContainer.scrollWidth / 3;
+          if (carouselContainer.scrollLeft >= singleSetWidth) {
+            carouselContainer.scrollLeft -= singleSetWidth;
+          }
+          carouselAnimId = requestAnimationFrame(startTicker);
         }
+
+        // Pause on mouse hover/touch
+        carouselContainer.onmouseenter = () => cancelAnimationFrame(carouselAnimId);
+        carouselContainer.onmouseleave = () => startTicker();
+
+        startTicker();
       } else {
         sponsoredSec.classList.add('hidden');
       }
@@ -1961,7 +1963,7 @@
       const diffMins = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
 
       return `
-        <div class="snap-start shrink-0 w-64 sm:w-72 boosted-card rounded-2xl overflow-hidden p-3 flex flex-col justify-between relative shadow-lg">
+        <div class="shrink-0 w-64 sm:w-72 boosted-card rounded-2xl overflow-hidden p-3 flex flex-col justify-between relative shadow-lg">
           <div>
             <div class="relative w-full h-36 rounded-xl overflow-hidden bg-slate-100 mb-2">
               <img src="${item.image || 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=800'}" alt="${item.title}" class="w-full h-full object-cover">
@@ -2331,7 +2333,6 @@
             const ctx = canvas.getContext('2d');
             ctx.drawImage(img, 0, 0, width, height);
             
-            // Compresses image to JPEG format at 70% quality (~50KB-100KB)
             resolve(canvas.toDataURL('image/jpeg', 0.7));
           };
           img.onerror = (err) => reject(err);
@@ -2342,7 +2343,7 @@
       });
     }
 
-    // --- OPTIMIZED LISTING SUBMISSION WITH COMPRESSION ---
+    // --- OPTIMIZED LISTING SUBMISSION (Instant Modal Dismissal & Published State) ---
     window.handlePostListing = async function(e) {
       if (e) e.preventDefault();
       const submitBtn = document.getElementById('publishListingSubmitBtn');
@@ -2369,8 +2370,6 @@
         }
 
         const file = fileInput.files[0];
-        
-        // Automatically compress image so it never exceeds Firestore's 1MB limit
         const imageUrl = await compressImage(file);
 
         const newItem = { title, category, courseId, courseName, courseNick, price, contact, image: imageUrl, desc, seller: currentUser, isDisabled: false, isBoosted: false };
@@ -2378,20 +2377,33 @@
         newItem.id = docRef.id;
         allListings.unshift(newItem);
         
+        // INSTANTLY RESET BUTTON TO PUBLISHED / READY STATE BEFORE CLOSING
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = `<i class="fa-solid fa-check"></i> <span>Published Successfully!</span>`;
+        }
+
         renderListings();
         renderMyProductsTab();
         updateMetrics();
-        closeAddListingModal();
-        document.getElementById('listingForm').reset();
-        document.getElementById('imagePreviewContainer').classList.add('hidden');
+
+        // INSTANT MODAL DISMISSAL
+        setTimeout(() => {
+          closeAddListingModal();
+          document.getElementById('listingForm').reset();
+          document.getElementById('imagePreviewContainer').classList.add('hidden');
+          if (submitBtn) {
+            submitBtn.innerText = "Publish Listing";
+          }
+        }, 400);
+
         alert("Published listing successfully!");
       } catch (err) {
-        alert("Upload Error: " + err.message);
-      } finally {
         if (submitBtn) {
           submitBtn.disabled = false;
           submitBtn.innerText = "Publish Listing";
         }
+        alert("Upload Error: " + err.message);
       }
     };
 
