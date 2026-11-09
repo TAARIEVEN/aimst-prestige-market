@@ -49,22 +49,23 @@
       scrollbar-width: none;
     }
 
-    .nav-tab-btn {
+    .nav-bottom-btn {
       transition: all 0.2s ease-in-out;
     }
-    .nav-tab-btn.active-tab {
-      background-color: #ecfdf5;
-      color: #047857;
-      border-color: #a7f3d0;
+    .nav-bottom-btn.active-tab {
+      color: #059669;
     }
-    .nav-tab-btn.disabled-tab {
+    .nav-bottom-btn.active-pro-tab {
+      color: #7c3aed;
+    }
+    .nav-bottom-btn.disabled-tab {
       opacity: 0.4;
       cursor: not-allowed;
       filter: grayscale(80%);
     }
   </style>
 </head>
-<body id="appBodyTag" class="min-h-screen font-sans selection:bg-amber-400 selection:text-slate-950 pb-24">
+<body id="appBodyTag" class="min-h-screen font-sans selection:bg-amber-400 selection:text-slate-950 pb-32">
 
   <!-- WELCOME POPUP MODAL -->
   <div id="welcomeModal" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4 transition-all duration-300">
@@ -141,7 +142,7 @@
 
   <!-- Header / Navbar -->
   <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm">
-    <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-2 min-h-[4.2rem] flex flex-row items-center justify-between gap-1.5 sm:gap-4">
+    <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-2 min-h-[4.2rem] flex flex-row items-center justify-between gap-2">
       
       <div class="flex items-center space-x-2 cursor-pointer shrink min-w-0" onclick="switchMainTab('home')">
         <img src="market-logo.png" alt="AIMST Prestige Market Logo" class="w-8 h-8 sm:w-10 sm:h-10 rounded-xl object-contain shadow-md border border-emerald-500/30 shrink-0" onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=400'">
@@ -155,42 +156,9 @@
         </div>
       </div>
 
-      <!-- NAVBAR TABS NAVIGATION HUB -->
-      <div class="flex items-center space-x-1 sm:space-x-1.5 overflow-x-auto no-scrollbar py-1">
-        
-        <!-- 1. Home Tab -->
-        <button id="navTabHome" onclick="switchMainTab('home')" class="nav-tab-btn active-tab px-2 py-1.5 sm:px-3 sm:py-1.5 rounded-xl border border-slate-200 text-[10px] sm:text-xs font-bold transition-all flex items-center space-x-1 shrink-0">
-          <i class="fa-solid fa-house"></i>
-          <span>Home</span>
-        </button>
-
-        <!-- 2. My Product Tab (Login required to access contents) -->
-        <button id="navTabMyProducts" onclick="switchMainTab('myproducts')" class="nav-tab-btn px-2 py-1.5 sm:px-3 sm:py-1.5 rounded-xl border border-slate-200 text-[10px] sm:text-xs font-bold text-slate-600 hover:text-slate-900 transition-all flex items-center space-x-1 shrink-0">
-          <i class="fa-solid fa-boxes-stacked"></i>
-          <span>My Product</span>
-        </button>
-
-        <!-- 3. My Favourity Tab (Login required to access contents) -->
-        <button id="navTabWishlist" onclick="switchMainTab('wishlist')" class="nav-tab-btn px-2 py-1.5 sm:px-3 sm:py-1.5 rounded-xl border border-slate-200 text-[10px] sm:text-xs font-bold text-slate-600 hover:text-slate-900 transition-all flex items-center space-x-1 shrink-0">
-          <i class="fa-solid fa-heart text-rose-500"></i>
-          <span class="hidden sm:inline">My Favourity</span>
-          <span id="wishlistCountBadge" class="px-1.5 py-0.2 rounded-full bg-rose-500 text-white font-black text-[9px]">0</span>
-        </button>
-
-        <!-- 4. Me / Profile Tab (Login required to access contents) -->
-        <button id="navTabMe" onclick="switchMainTab('me')" class="nav-tab-btn px-2 py-1.5 sm:px-3 sm:py-1.5 rounded-xl border border-slate-200 text-[10px] sm:text-xs font-bold text-slate-600 hover:text-slate-900 transition-all flex items-center space-x-1 shrink-0">
-          <i class="fa-solid fa-user"></i>
-          <span>Me</span>
-        </button>
-
-        <!-- 5. About APM Tab (Publicly accessible) -->
-        <button id="navTabAbout" onclick="switchMainTab('about')" class="nav-tab-btn px-2 py-1.5 sm:px-3 sm:py-1.5 rounded-xl border border-slate-200 text-[10px] sm:text-xs font-bold text-slate-600 hover:text-slate-900 transition-all flex items-center space-x-1 shrink-0">
-          <i class="fa-solid fa-shield-halved text-emerald-600"></i>
-          <span>About APM</span>
-        </button>
-
+      <div class="flex items-center space-x-2 shrink-0">
         <!-- Founders Portal (Founders only) -->
-        <button onclick="openSellerManagerModal()" id="sellerManagerNavBtn" class="hidden px-2 py-1.5 sm:px-3 sm:py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 border border-amber-300 text-[10px] sm:text-xs font-bold text-amber-800 transition-all flex items-center space-x-1 shrink-0">
+        <button onclick="openSellerManagerModal()" id="sellerManagerNavBtn" class="hidden px-2.5 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 border border-amber-300 text-[10px] sm:text-xs font-bold text-amber-800 transition-all flex items-center space-x-1">
           <i class="fa-solid fa-users-gear text-amber-600"></i>
           <span class="hidden sm:inline">Founders Portal</span>
         </button>
@@ -220,6 +188,46 @@
       <span>Already Sold: <strong id="statSoldsCount" class="text-emerald-950">0</strong></span>
     </div>
   </div>
+
+  <!-- SHOPEE-STYLE FIXED BOTTOM NAVIGATION BAR -->
+  <nav class="fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200 shadow-lg py-1.5 px-2 sm:px-4">
+    <div class="max-w-md mx-auto flex items-center justify-around">
+      
+      <!-- 1. Home Tab -->
+      <button id="navBottomHome" onclick="switchMainTab('home')" class="nav-bottom-btn active-tab flex flex-col items-center justify-center py-1 px-3 text-slate-500 hover:text-emerald-600 transition-all">
+        <i class="fa-solid fa-house text-lg mb-0.5"></i>
+        <span class="text-[10px] font-bold leading-none">Home</span>
+      </button>
+
+      <!-- 2. My Product Tab -->
+      <button id="navBottomMyProducts" onclick="switchMainTab('myproducts')" class="nav-bottom-btn flex flex-col items-center justify-center py-1 px-3 text-slate-500 hover:text-emerald-600 transition-all relative">
+        <i class="fa-solid fa-boxes-stacked text-lg mb-0.5"></i>
+        <span class="text-[10px] font-bold leading-none">My Product</span>
+      </button>
+
+      <!-- 3. Favourite Tab -->
+      <button id="navBottomWishlist" onclick="switchMainTab('wishlist')" class="nav-bottom-btn flex flex-col items-center justify-center py-1 px-3 text-slate-500 hover:text-emerald-600 transition-all relative">
+        <div class="relative">
+          <i class="fa-solid fa-heart text-lg mb-0.5 text-rose-500"></i>
+          <span id="wishlistCountBadge" class="absolute -top-1 -right-2 px-1.5 py-0.2 rounded-full bg-rose-500 text-white font-black text-[9px]">0</span>
+        </div>
+        <span class="text-[10px] font-bold leading-none mt-0.5">Favourite</span>
+      </button>
+
+      <!-- 4. Me Tab -->
+      <button id="navBottomMe" onclick="switchMainTab('me')" class="nav-bottom-btn flex flex-col items-center justify-center py-1 px-3 text-slate-500 hover:text-emerald-600 transition-all relative">
+        <i class="fa-solid fa-user text-lg mb-0.5"></i>
+        <span class="text-[10px] font-bold leading-none">Me</span>
+      </button>
+
+      <!-- 5. About APM Tab -->
+      <button id="navBottomAbout" onclick="switchMainTab('about')" class="nav-bottom-btn flex flex-col items-center justify-center py-1 px-3 text-slate-500 hover:text-emerald-600 transition-all relative">
+        <img src="market-logo.png" alt="APM" class="w-5 h-5 rounded-md object-contain mb-0.5 border border-emerald-500/30 shadow-sm" onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=400'">
+        <span class="text-[10px] font-bold leading-none">About APM</span>
+      </button>
+
+    </div>
+  </nav>
 
   <!-- TAB VIEW 1: HOME PAGE VIEW -->
   <div id="viewHome" class="tab-view-page">
@@ -407,13 +415,13 @@
     </div>
   </div>
 
-  <!-- TAB VIEW 3: MY FAVOURITY (WISHLIST) PAGE VIEW -->
+  <!-- TAB VIEW 3: FAVOURITY (WISHLIST) PAGE VIEW -->
   <div id="viewWishlist" class="tab-view-page max-w-4xl mx-auto px-3 sm:px-6 lg:px-8 py-6 hidden">
     <div class="bg-white rounded-3xl p-5 sm:p-8 border border-slate-200 shadow-sm">
       <div class="mb-6 pb-4 border-b border-slate-100">
         <h2 class="text-xl sm:text-2xl font-black text-slate-900 flex items-center space-x-2">
           <i class="fa-solid fa-heart text-rose-500"></i>
-          <span>My Favourity Saved Items</span>
+          <span>Favourite Saved Items</span>
         </h2>
         <p class="text-xs text-slate-500 mt-1">Items you saved to view or buy later.</p>
       </div>
@@ -527,8 +535,8 @@
     </div>
   </div>
 
-  <!-- FLOATING BUTTONS BAR -->
-  <div class="fixed bottom-6 left-4 right-4 sm:left-6 sm:right-auto z-40 flex items-center justify-between sm:justify-start sm:space-x-3 pointer-events-none">
+  <!-- FLOATING BUTTONS BAR (Positioned safely above bottom nav) -->
+  <div class="fixed bottom-20 left-4 right-4 sm:left-6 sm:right-auto z-40 flex items-center justify-between sm:justify-start sm:space-x-3 pointer-events-none">
     <div id="floatingAddBtn" class="pointer-events-auto hidden">
       <button id="floatingPostBtn" onclick="openAddListingModal()" class="flex items-center space-x-2 px-4 py-3 sm:px-5 sm:py-3.5 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold shadow-2xl shadow-emerald-600/40 ring-2 ring-white hover:scale-105 transition-all text-xs sm:text-sm">
         <i class="fa-solid fa-plus text-sm sm:text-base"></i>
@@ -1040,23 +1048,8 @@
     let allSellers = JSON.parse(localStorage.getItem('aimst_sellers')) || [];
     let soldCount = parseInt(localStorage.getItem('aimst_sold_count')) || 0;
 
-    // CONTRIBUTORS DEFAULT DATA
-    let allContributors = JSON.parse(localStorage.getItem('aimst_contributors')) || [
-      {
-        id: 'contrib-1',
-        name: 'Sudarshan Parthipan',
-        program: 'Diploma in Biotechnology',
-        desc: 'Suggested segregating study materials into general to specific categories like MBBS, dentistry, and so on.',
-        photo: ''
-      },
-      {
-        id: 'contrib-2',
-        name: 'Gaura Kishore Kathiresan',
-        program: 'Diploma in Physiotherapy',
-        desc: 'Helped secure the institutional track to meet authorities and obtain official approvals related to APM.',
-        photo: ''
-      }
-    ];
+    // CONTRIBUTORS NOW SYNCED WITH FIREBASE (NO HARDCODED DUMMY CONTRIBUTORS)
+    let allContributors = [];
 
     let currentCategory = 'all';
     let selectedCourses = new Set();
@@ -1078,7 +1071,7 @@
 
     /* MAIN TAB NAVIGATION CONTROL & LOGIN RESTRICTION ENFORCEMENT */
     window.switchMainTab = function(tabName) {
-      // APM Guest Protection: Restrict My Products, My Favourity (Wishlist), and Me tabs if not logged in
+      // APM Guest Protection: Restrict My Products, Favourite, and Me tabs if not logged in
       if (!currentUser && (tabName === 'myproducts' || tabName === 'wishlist' || tabName === 'me')) {
         alert("🔒 Verification Required!\n\nTo access this tab, please log in as a Verified APM Seller/Buyer. APM Guests can view Home and About APM, and directly contact sellers to buy items!");
         openAuthModal();
@@ -1088,51 +1081,58 @@
       // Hide all view sections
       document.querySelectorAll('.tab-view-page').forEach(el => el.classList.add('hidden'));
 
-      // Remove active-tab class from buttons
-      document.querySelectorAll('.nav-tab-btn').forEach(btn => btn.classList.remove('active-tab'));
+      // Remove active classes from bottom nav buttons
+      const sellerProfile = allSellers.find(s => s.email.toLowerCase() === currentUserEmail);
+      const isPro = sellerProfile && sellerProfile.tier === 'pro';
+      const activeClass = isPro ? 'active-pro-tab' : 'active-tab';
 
-      // Show selected tab view
+      document.querySelectorAll('.nav-bottom-btn').forEach(btn => {
+        btn.classList.remove('active-tab');
+        btn.classList.remove('active-pro-tab');
+      });
+
+      // Show selected tab view & highlight bottom nav icon
       if (tabName === 'home') {
         document.getElementById('viewHome').classList.remove('hidden');
-        document.getElementById('navTabHome').classList.add('active-tab');
+        document.getElementById('navBottomHome').classList.add(activeClass);
       } else if (tabName === 'myproducts') {
         document.getElementById('viewMyProducts').classList.remove('hidden');
-        document.getElementById('navTabMyProducts').classList.add('active-tab');
+        document.getElementById('navBottomMyProducts').classList.add(activeClass);
         renderMyProductsTab();
       } else if (tabName === 'wishlist') {
         document.getElementById('viewWishlist').classList.remove('hidden');
-        document.getElementById('navTabWishlist').classList.add('active-tab');
+        document.getElementById('navBottomWishlist').classList.add(activeClass);
         renderWishlistTab();
       } else if (tabName === 'me') {
         document.getElementById('viewMe').classList.remove('hidden');
-        document.getElementById('navTabMe').classList.add('active-tab');
+        document.getElementById('navBottomMe').classList.add(activeClass);
         renderMeTabDetails();
       } else if (tabName === 'about') {
         document.getElementById('viewAbout').classList.remove('hidden');
-        document.getElementById('navTabAbout').classList.add('active-tab');
-        renderAboutContributors();
+        document.getElementById('navBottomAbout').classList.add(activeClass);
+        loadContributors();
       }
     };
 
     function updateNavTabVisuals() {
       const isLogged = !!currentUser;
-      const tabMyProducts = document.getElementById('navTabMyProducts');
-      const tabWishlist = document.getElementById('navTabWishlist');
-      const tabMe = document.getElementById('navTabMe');
+      const tabMyProducts = document.getElementById('navBottomMyProducts');
+      const tabWishlist = document.getElementById('navBottomWishlist');
+      const tabMe = document.getElementById('navBottomMe');
 
       if (!isLogged) {
         tabMyProducts?.classList.add('disabled-tab');
         tabWishlist?.classList.add('disabled-tab');
         tabMe?.classList.add('disabled-tab');
         if (tabMyProducts) tabMyProducts.title = "Login required to access My Product";
-        if (tabWishlist) tabWishlist.title = "Login required to access Wishlist";
+        if (tabWishlist) tabWishlist.title = "Login required to access Favourite";
         if (tabMe) tabMe.title = "Login required to access Me/Profile";
       } else {
         tabMyProducts?.classList.remove('disabled-tab');
         tabWishlist?.classList.remove('disabled-tab');
         tabMe?.classList.remove('disabled-tab');
         if (tabMyProducts) tabMyProducts.title = "View your products";
-        if (tabWishlist) tabWishlist.title = "View saved wishlist";
+        if (tabWishlist) tabWishlist.title = "View saved favourite";
         if (tabMe) tabMe.title = "View account details";
       }
     }
@@ -1193,7 +1193,7 @@
       }).join('');
     }
 
-    /* RENDER WISHLIST INSIDE TAB VIEW */
+    /* RENDER FAVOURITE (WISHLIST) INSIDE TAB VIEW */
     function renderWishlistTab() {
       const container = document.getElementById('wishlistTabContainer');
       const wishlist = getWishlist();
@@ -1203,7 +1203,7 @@
         container.innerHTML = `
           <div class="py-12 text-center text-slate-400">
             <i class="fa-solid fa-heart-crack text-4xl mb-2 text-rose-300"></i>
-            <p class="text-xs font-bold text-slate-600">Your wishlist is empty!</p>
+            <p class="text-xs font-bold text-slate-600">Your favourite items list is empty!</p>
             <p class="text-[11px] text-slate-400 mt-1">Click the heart icon on any product to save it here.</p>
           </div>
         `;
@@ -1212,7 +1212,7 @@
 
       container.innerHTML = savedItems.map(item => {
         const rawContact = item.contact || '';
-        const contactHref = rawContact.startsWith('http') ? rawContact : `https://wa.me/${rawContact.replace(/[^0-9]/g, '')}?text=Hi%20${encodeURIComponent(item.seller || 'Seller')},%20I%20am%20interested%20in%20your%20wishlisted%20item:%20${encodeURIComponent(item.title || 'Item')}`;
+        const contactHref = rawContact.startsWith('http') ? rawContact : `https://wa.me/${rawContact.replace(/[^0-9]/g, '')}?text=Hi%20${encodeURIComponent(item.seller || 'Seller')},%20I%20am%20interested%20in%20your%20favourite%20item:%20${encodeURIComponent(item.title || 'Item')}`;
         const isRental = item.category === 'rentals';
         const priceLabel = isRental ? `RM ${Number(item.price).toFixed(2)} / day` : `RM ${Number(item.price).toFixed(2)}`;
 
@@ -1302,14 +1302,40 @@
       }
     }
 
+    /* FIREBASE CONTRIBUTORS SYNC */
+    async function loadContributors() {
+      try {
+        const q = query(collection(db, "contributors"));
+        const querySnapshot = await getDocs(q);
+        const firebaseContribs = [];
+        querySnapshot.forEach((docSnap) => {
+          firebaseContribs.push({ id: docSnap.id, ...docSnap.data() });
+        });
+        allContributors = firebaseContribs;
+      } catch (err) {
+        allContributors = [];
+      }
+      renderAboutContributors();
+    }
+
     function renderAboutContributors() {
       const container = document.getElementById('aboutContributorsList');
       const addBtn = document.getElementById('addAboutContribBtn');
       if (isFounderUser) addBtn.classList.remove('hidden');
       else addBtn.classList.add('hidden');
 
+      if (allContributors.length === 0) {
+        container.innerHTML = `
+          <div class="col-span-full py-8 text-center text-slate-400">
+            <p class="text-xs font-bold text-slate-600">No contributors added yet.</p>
+            <p class="text-[10px] text-slate-400 mt-0.5">Founders can add contributors to the Wall of Fame.</p>
+          </div>
+        `;
+        return;
+      }
+
       container.innerHTML = allContributors.map(c => {
-        const initials = c.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+        const initials = (c.name || 'C').split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
         return `
           <div class="grab-card rounded-2xl p-3.5 border border-slate-200 flex flex-col justify-between">
             <div class="flex items-start space-x-3 mb-2">
@@ -1408,20 +1434,30 @@
         photo = await compressImage(fileInput.files[0], 300, 0.7);
       }
 
-      const newContrib = { id: 'contrib-' + Date.now(), name, program, desc, photo };
-      allContributors.push(newContrib);
-      localStorage.setItem('aimst_contributors', JSON.stringify(allContributors));
-      closeAddContributorModal();
-      document.getElementById('contributorForm').reset();
-      renderAboutContributors();
-      alert("Contributor added successfully to Wall of Fame!");
+      const newContrib = { name, program, desc, photo, createdBy: currentUser };
+      try {
+        const ref = await addDoc(collection(db, "contributors"), newContrib);
+        newContrib.id = ref.id;
+        allContributors.push(newContrib);
+        closeAddContributorModal();
+        document.getElementById('contributorForm').reset();
+        renderAboutContributors();
+        alert("Contributor added successfully to Firebase and Wall of Fame!");
+      } catch (err) {
+        alert("Error storing contributor to Firebase: " + err.message);
+      }
     };
 
-    window.deleteContributor = function(id) {
-      if (!confirm("Are you sure you want to remove this contributor?")) return;
-      allContributors = allContributors.filter(c => c.id !== id);
-      localStorage.setItem('aimst_contributors', JSON.stringify(allContributors));
-      renderAboutContributors();
+    window.deleteContributor = async function(id) {
+      if (!confirm("Are you sure you want to remove this contributor from Firebase?")) return;
+      try {
+        await deleteDoc(doc(db, "contributors", id));
+        allContributors = allContributors.filter(c => c.id !== id);
+        renderAboutContributors();
+        alert("Contributor removed successfully!");
+      } catch (e) {
+        alert("Error removing contributor: " + e.message);
+      }
     };
 
     window.forceRefreshApp = function() {
@@ -1506,7 +1542,7 @@
 
     window.toggleWishlist = function(itemId) {
       if (!currentUser) {
-        alert("🔒 Login Required!\n\nGuest buyers can directly contact sellers on WhatsApp, but saving items to Wishlist requires registering and logging in as a Verified APM Buyer/Seller.");
+        alert("🔒 Login Required!\n\nGuest buyers can directly contact sellers on WhatsApp, but saving items to Favourite requires registering and logging in as a Verified APM Buyer/Seller.");
         openAuthModal();
         return;
       }
@@ -1722,7 +1758,7 @@
       updateNavTabVisuals();
       renderListings();
       renderClubs();
-      renderAboutContributors();
+      loadContributors();
       if (isFounderUser) renderSellerManagerTable();
     });
 
@@ -1733,8 +1769,8 @@
       await loadSellers();
       await loadListings();
       await loadClubs();
+      await loadContributors();
       updateMetrics();
-      renderAboutContributors();
       updateNavTabVisuals();
       
       startDailyBoostPopupSequence();
@@ -2077,7 +2113,7 @@
 
               ${courseBadge}
 
-              <button onclick="toggleWishlist('${item.id}')" title="Save to Wishlist" class="absolute top-2.5 right-2.5 z-20 w-7 h-7 rounded-full bg-white/95 backdrop-blur-md shadow-md flex items-center justify-center transition-all hover:scale-110">
+              <button onclick="toggleWishlist('${item.id}')" title="Save to Favourite" class="absolute top-2.5 right-2.5 z-20 w-7 h-7 rounded-full bg-white/95 backdrop-blur-md shadow-md flex items-center justify-center transition-all hover:scale-110">
                 <i class="fa-solid fa-heart ${isWishlisted ? 'text-rose-500' : 'text-slate-300'} text-xs"></i>
               </button>
 
