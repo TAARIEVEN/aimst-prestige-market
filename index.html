@@ -1048,8 +1048,8 @@
     let allSellers = JSON.parse(localStorage.getItem('aimst_sellers')) || [];
     let soldCount = parseInt(localStorage.getItem('aimst_sold_count')) || 0;
 
-    // CONTRIBUTORS NOW SYNCED WITH FIREBASE (NO HARDCODED DUMMY CONTRIBUTORS)
-    let allContributors = [];
+    // CONTRIBUTORS STORED IN LOCALSTORAGE FOR RELIABLE INSTANT SAVING
+    let allContributors = JSON.parse(localStorage.getItem('aimst_contributors')) || [];
 
     let currentCategory = 'all';
     let selectedCourses = new Set();
@@ -1071,17 +1071,14 @@
 
     /* MAIN TAB NAVIGATION CONTROL & LOGIN RESTRICTION ENFORCEMENT */
     window.switchMainTab = function(tabName) {
-      // APM Guest Protection: Restrict My Products, Favourite, and Me tabs if not logged in
       if (!currentUser && (tabName === 'myproducts' || tabName === 'wishlist' || tabName === 'me')) {
         alert("🔒 Verification Required!\n\nTo access this tab, please log in as a Verified APM Seller/Buyer. APM Guests can view Home and About APM, and directly contact sellers to buy items!");
         openAuthModal();
         return;
       }
 
-      // Hide all view sections
       document.querySelectorAll('.tab-view-page').forEach(el => el.classList.add('hidden'));
 
-      // Remove active classes from bottom nav buttons
       const sellerProfile = allSellers.find(s => s.email.toLowerCase() === currentUserEmail);
       const isPro = sellerProfile && sellerProfile.tier === 'pro';
       const activeClass = isPro ? 'active-pro-tab' : 'active-tab';
@@ -1091,7 +1088,6 @@
         btn.classList.remove('active-pro-tab');
       });
 
-      // Show selected tab view & highlight bottom nav icon
       if (tabName === 'home') {
         document.getElementById('viewHome').classList.remove('hidden');
         document.getElementById('navBottomHome').classList.add(activeClass);
@@ -1110,7 +1106,7 @@
       } else if (tabName === 'about') {
         document.getElementById('viewAbout').classList.remove('hidden');
         document.getElementById('navBottomAbout').classList.add(activeClass);
-        loadContributors();
+        renderAboutContributors();
       }
     };
 
@@ -1302,22 +1298,6 @@
       }
     }
 
-    /* FIREBASE CONTRIBUTORS SYNC */
-    async function loadContributors() {
-      try {
-        const q = query(collection(db, "contributors"));
-        const querySnapshot = await getDocs(q);
-        const firebaseContribs = [];
-        querySnapshot.forEach((docSnap) => {
-          firebaseContribs.push({ id: docSnap.id, ...docSnap.data() });
-        });
-        allContributors = firebaseContribs;
-      } catch (err) {
-        allContributors = [];
-      }
-      renderAboutContributors();
-    }
-
     function renderAboutContributors() {
       const container = document.getElementById('aboutContributorsList');
       const addBtn = document.getElementById('addAboutContribBtn');
@@ -1434,30 +1414,20 @@
         photo = await compressImage(fileInput.files[0], 300, 0.7);
       }
 
-      const newContrib = { name, program, desc, photo, createdBy: currentUser };
-      try {
-        const ref = await addDoc(collection(db, "contributors"), newContrib);
-        newContrib.id = ref.id;
-        allContributors.push(newContrib);
-        closeAddContributorModal();
-        document.getElementById('contributorForm').reset();
-        renderAboutContributors();
-        alert("Contributor added successfully to Firebase and Wall of Fame!");
-      } catch (err) {
-        alert("Error storing contributor to Firebase: " + err.message);
-      }
+      const newContrib = { id: 'contrib-' + Date.now(), name, program, desc, photo };
+      allContributors.push(newContrib);
+      localStorage.setItem('aimst_contributors', JSON.stringify(allContributors));
+      closeAddContributorModal();
+      document.getElementById('contributorForm').reset();
+      renderAboutContributors();
+      alert("Contributor added successfully to Wall of Fame!");
     };
 
-    window.deleteContributor = async function(id) {
-      if (!confirm("Are you sure you want to remove this contributor from Firebase?")) return;
-      try {
-        await deleteDoc(doc(db, "contributors", id));
-        allContributors = allContributors.filter(c => c.id !== id);
-        renderAboutContributors();
-        alert("Contributor removed successfully!");
-      } catch (e) {
-        alert("Error removing contributor: " + e.message);
-      }
+    window.deleteContributor = function(id) {
+      if (!confirm("Are you sure you want to remove this contributor?")) return;
+      allContributors = allContributors.filter(c => c.id !== id);
+      localStorage.setItem('aimst_contributors', JSON.stringify(allContributors));
+      renderAboutContributors();
     };
 
     window.forceRefreshApp = function() {
@@ -1758,7 +1728,7 @@
       updateNavTabVisuals();
       renderListings();
       renderClubs();
-      loadContributors();
+      renderAboutContributors();
       if (isFounderUser) renderSellerManagerTable();
     });
 
@@ -1769,8 +1739,8 @@
       await loadSellers();
       await loadListings();
       await loadClubs();
-      await loadContributors();
       updateMetrics();
+      renderAboutContributors();
       updateNavTabVisuals();
       
       startDailyBoostPopupSequence();
@@ -2471,6 +2441,6 @@
     });
 
     loadData();
-  </script>
+  </script> 
 </body>
 </html>
