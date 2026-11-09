@@ -1535,7 +1535,7 @@
     };
 
     window.handleRegister = async function() {
-      let rawUser = document.getElementById('regUser').value.trim();
+      let rawUser = document.getElementById('regUser').value.trim().toLowerCase();
       const pass = document.getElementById('regPass').value.trim();
       if (!rawUser || !pass) { alert("Please fill in both fields."); return; }
       if (!rawUser.includes('@')) rawUser = `${rawUser}@apm.com`;
@@ -1560,13 +1560,15 @@
 
     onAuthStateChanged(auth, async (user) => {
       if (user) {
-        currentUserEmail = user.email.toLowerCase();
+        currentUserEmail = (user.email || '').toLowerCase();
         const founderEmails = ['keventhiran_e25101420@apm.com', 'taarisini_e25101220@apm.com'];
         isFounderUser = founderEmails.includes(currentUserEmail);
         currentUser = user.email.split('@')[0];
 
         await loadSellers();
-        const sellerProfile = allSellers.find(s => s.email.toLowerCase() === currentUserEmail);
+        const sellerProfile = allSellers.find(s => (s.email || '').toLowerCase() === currentUserEmail);
+        
+        // If not founder and not verified, sign out and block login
         if (sellerProfile && !sellerProfile.isVerified && !isFounderUser) {
           await signOut(auth);
           alert("Your account is pending founder verification. Please check back soon!");
@@ -1836,7 +1838,10 @@
         const q = query(collection(db, "verified_sellers"));
         const querySnapshot = await getDocs(q);
         const firebaseSellers = [];
-        querySnapshot.forEach((docSnap) => { firebaseSellers.push({ id: docSnap.id, ...docSnap.data() }); });
+        querySnapshot.forEach((docSnap) => { 
+          const data = docSnap.data();
+          firebaseSellers.push({ id: docSnap.id, ...data, email: (data.email || '').toLowerCase() }); 
+        });
         if (firebaseSellers.length > 0) {
           allSellers = firebaseSellers;
           syncLocalStorage();
@@ -2185,7 +2190,13 @@
       const s = allSellers.find(x => x.id === id);
       if (s) { 
         s.isVerified = true; 
-        try { await updateDoc(doc(db, "verified_sellers", id), { isVerified: true }); } catch(e) {}
+        try { 
+          await updateDoc(doc(db, "verified_sellers", id), { isVerified: true }); 
+        } catch(e) {
+          try {
+            await setDoc(doc(db, "verified_sellers", id), s);
+          } catch(err) {}
+        }
         syncLocalStorage(); 
         renderSellerManagerTable(); 
         alert(`Successfully verified ${s.username}!`); 
@@ -2224,7 +2235,7 @@
     };
 
     window.handleLogin = async function() {
-      const email = document.getElementById('loginUser').value.trim();
+      const email = document.getElementById('loginUser').value.trim().toLowerCase();
       const pass = document.getElementById('loginPass').value.trim();
       const formatted = email.includes('@') ? email : `${email}@apm.com`;
       try {
@@ -2258,7 +2269,7 @@
         return; 
       }
       
-      const sellerProfile = allSellers.find(s => s.email.toLowerCase() === currentUserEmail);
+      const sellerProfile = allSellers.find(s => (s.email || '').toLowerCase() === currentUserEmail);
       const isPro = sellerProfile && sellerProfile.tier === 'pro';
       const maxAllowed = isPro ? 7 : 3;
 
