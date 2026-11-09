@@ -170,7 +170,7 @@
         </div>
       </div>
 
-      <!-- RIGHT SIDE HEADER BUTTONS (LOGIN / ACCOUNT + ADMIN HUB) -->
+      <!-- RIGHT SIDE HEADER BUTTONS -->
       <div class="flex items-center space-x-2">
         <button id="sellerManagerNavBtn" onclick="openSellerManagerModal()" class="hidden px-3 py-2 rounded-xl bg-amber-100 hover:bg-amber-200 text-amber-900 font-black text-xs items-center space-x-1 border border-amber-300 shadow-sm">
           <i class="fa-solid fa-shield-halved"></i>
@@ -1374,7 +1374,7 @@
         wishlist.splice(idx, 1);
       } else {
         wishlist.push(itemId);
-        playWishlistBellSound(); // Play bell chime on save!
+        playWishlistBellSound();
       }
       localStorage.setItem(getWishlistKey(), JSON.stringify(wishlist));
       updateMetrics();
@@ -1421,7 +1421,6 @@
         await updateDoc(doc(db, "listings", activeBoostItemId), { boostStatus: 'pending', boostRequestedDays: days });
       } catch(e){}
 
-      // Push real-time founder payment alert record
       try {
         await addDoc(collection(db, "payment_alerts"), {
           type: "Ad Boost",
@@ -1479,7 +1478,6 @@
         try { await updateDoc(doc(db, "verified_sellers", seller.id), { proUpgradeStatus: 'pending' }); } catch(e){}
       }
       
-      // Push payment alert trigger for founder
       try {
         await addDoc(collection(db, "payment_alerts"), {
           type: "Pro Upgrade",
@@ -1582,10 +1580,8 @@
         document.getElementById('addClubBtn').style.display = 'flex';
         if (isFounderUser) document.getElementById('sellerManagerNavBtn').style.display = 'flex';
 
-        // Check for Expired Boosts for logged-in Seller
         checkExpiredBoostsForSeller();
 
-        // Check Founder Alerts
         if (isFounderUser) {
           checkFounderPaymentAlerts();
         }
@@ -1603,7 +1599,6 @@
       if (isFounderUser) renderSellerManagerTable();
     });
 
-    // Check Expired Boosts Popup Trigger
     function checkExpiredBoostsForSeller() {
       if (!currentUser) return;
       const now = new Date();
@@ -1644,7 +1639,6 @@
       }
     };
 
-    // Check Real-Time Payment Alerts for Founder
     async function checkFounderPaymentAlerts() {
       try {
         const q = query(collection(db, "payment_alerts"));
@@ -2296,6 +2290,48 @@
     };
     window.closeAddClubModal = function() { document.getElementById('addClubModal').classList.add('hidden'); };
 
+    // --- AUTOMATIC IMAGE COMPRESSOR HELPER (Prevents Firestore 1MB Limit Crash) ---
+    async function compressImage(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          const img = new Image();
+          img.onload = () => {
+            const canvas = document.createElement('canvas');
+            const MAX_WIDTH = 800;
+            const MAX_HEIGHT = 800;
+            let width = img.width;
+            let height = img.height;
+
+            if (width > height) {
+              if (width > MAX_WIDTH) {
+                height *= MAX_WIDTH / width;
+                width = MAX_WIDTH;
+              }
+            } else {
+              if (height > MAX_HEIGHT) {
+                width *= MAX_HEIGHT / height;
+                height = MAX_HEIGHT;
+              }
+            }
+
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, width, height);
+            
+            // Compresses image to JPEG format at 70% quality (~50KB-100KB)
+            resolve(canvas.toDataURL('image/jpeg', 0.7));
+          };
+          img.onerror = (err) => reject(err);
+          img.src = event.target.result;
+        };
+        reader.onerror = (err) => reject(err);
+        reader.readAsDataURL(file);
+      });
+    }
+
+    // --- OPTIMIZED LISTING SUBMISSION WITH COMPRESSION ---
     window.handlePostListing = async function(e) {
       if (e) e.preventDefault();
       const submitBtn = document.getElementById('publishListingSubmitBtn');
@@ -2318,18 +2354,13 @@
       try {
         if (submitBtn) {
           submitBtn.disabled = true;
-          submitBtn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> <span>Publishing...</span>`;
+          submitBtn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> <span>Optimizing & Publishing...</span>`;
         }
 
         const file = fileInput.files[0];
         
-        // Instant Base64 FileReader conversion (No Firebase Storage bucket hanging)
-        const imageUrl = await new Promise((resolve, reject) => {
-          const reader = new FileReader();
-          reader.onload = () => resolve(reader.result);
-          reader.onerror = error => reject(error);
-          reader.readAsDataURL(file);
-        });
+        // Automatically compress image so it never exceeds Firestore's 1MB limit
+        const imageUrl = await compressImage(file);
 
         const newItem = { title, category, courseId, courseName, courseNick, price, contact, image: imageUrl, desc, seller: currentUser, isDisabled: false, isBoosted: false };
         const docRef = await addDoc(collection(db, "listings"), newItem);
@@ -2344,7 +2375,7 @@
         document.getElementById('imagePreviewContainer').classList.add('hidden');
         alert("Published listing successfully!");
       } catch (err) {
-        alert("Error: " + err.message);
+        alert("Upload Error: " + err.message);
       } finally {
         if (submitBtn) {
           submitBtn.disabled = false;
@@ -2353,52 +2384,7 @@
       }
     };
 
-    // --- ROBUST BASE64 IMAGE CLUB SUBMISSION ---
-    window.handlePostClub = async function(e) {
-      if (e) e.preventDefault();
-      const submitBtn = document.getElementById('saveClubSubmitBtn');
-      const name = sanitizeInput(document.getElementById('clubName').value);
-      const category = sanitizeInput(document.getElementById('clubCategory').value);
-      const contact = sanitizeInput(document.getElementById('clubContact').value);
-      const desc = sanitizeInput(document.getElementById('clubDesc').value);
-      const fileInput = document.getElementById('clubLogoFile');
-
-      try {
-        if (submitBtn) {
-          submitBtn.disabled = true;
-          submitBtn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> <span>Saving...</span>`;
-        }
-
-        let logo = "";
-        if (fileInput.files[0]) {
-          logo = await new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.onload = () => resolve(reader.result);
-            reader.onerror = error => reject(error);
-            reader.readAsDataURL(fileInput.files[0]);
-          });
-        }
-
-        const newClub = { name, category, contact, desc, logo, createdBy: currentUser };
-        const docRef = await addDoc(collection(db, "clubs"), newClub);
-        newClub.id = docRef.id;
-        allClubs.unshift(newClub);
-        syncLocalStorage();
-        renderClubs();
-        closeAddClubModal();
-        document.getElementById('clubForm').reset();
-        alert("Club saved successfully!");
-      } catch (err) {
-        alert("Error: " + err.message);
-      } finally {
-        if (submitBtn) {
-          submitBtn.disabled = false;
-          submitBtn.innerText = "Save Club";
-        }
-      }
-    };
-
-    // Direct uploadBytes club submission preventing 0% freeze
+    // --- OPTIMIZED CLUB SUBMISSION WITH COMPRESSION ---
     window.handlePostClub = async function(e) {
       if (e) e.preventDefault();
       const submitBtn = document.getElementById('saveClubSubmitBtn');
@@ -2416,16 +2402,12 @@
 
         let logo = "";
         if (fileInput.files[0]) {
-          const file = fileInput.files[0];
-          const fileName = `${Date.now()}_${file.name.replace(/[^a-zA-Z0-9.]/g, "_")}`;
-          const storageRef = ref(storage, `clubs/${fileName}`);
-          const uploadSnapshot = await uploadBytes(storageRef, file);
-          logo = await getDownloadURL(uploadSnapshot.ref);
+          logo = await compressImage(fileInput.files[0]);
         }
 
         const newClub = { name, category, contact, desc, logo, createdBy: currentUser };
-        const ref = await addDoc(collection(db, "clubs"), newClub);
-        newClub.id = ref.id;
+        const docRef = await addDoc(collection(db, "clubs"), newClub);
+        newClub.id = docRef.id;
         allClubs.unshift(newClub);
         syncLocalStorage();
         renderClubs();
