@@ -1570,27 +1570,25 @@ window.handlePostListing = async function(e) {
         newItem.id = docRef.id;
         allListings.unshift(newItem);
 
+        // Reset button state immediately before closing modal and alerting
         if (submitBtn) {
           submitBtn.disabled = false;
-          submitBtn.innerHTML = `<i class="fa-solid fa-check"></i> <span>Published Successfully!</span>`;
+          submitBtn.innerHTML = `<span>Publish Listing</span>`;
         }
 
         renderListings();
         renderMyProductsTab();
         updateMetrics();
 
-        setTimeout(() => {
-          closeAddListingModal();
-          document.getElementById('listingForm').reset();
-          document.getElementById('imagePreviewContainer').classList.add('hidden');
-          if (submitBtn) { submitBtn.innerText = "Publish Listing"; }
-        }, 400);
+        closeAddListingModal();
+        document.getElementById('listingForm').reset();
+        document.getElementById('imagePreviewContainer').classList.add('hidden');
 
         alert("Published listing successfully!");
       } catch (err) {
         if (submitBtn) {
           submitBtn.disabled = false;
-          submitBtn.innerText = "Publish Listing";
+          submitBtn.innerHTML = `<span>Publish Listing</span>`;
         }
         console.error("Publish listing error:", err);
         alert("Upload Error: " + err.message);
