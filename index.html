@@ -1119,7 +1119,7 @@
       } catch (err) {
         allContributors = [
           { id: 'c1', name: 'Sudarshan Parthipan', program: 'Diploma in Biotechnology, Aimst University', desc: 'Suggested segregating study materials into general to specific categories to improve student search efficiency.' },
-          { id: 'c2', name: 'Gaura Kishore Kathiresan', program: 'Diploma in Physiotherapy, Aimst University', desc: 'Assisted with promotional outreach and student engagement for campus projects.' }
+          { id: 'c2', name: 'Gaura Kishore Kathiresan', program: 'Diploma in Physiotherapy, Aimst University', desc: 'Assisted with promotional outreach and management approval from AIMST University.' }
         ];
       }
       renderAboutContributors();
@@ -1269,7 +1269,6 @@
       return temp.innerHTML.trim();
     }
 
-    // Helper function for uploading files directly to Firebase Storage
     async function uploadImageToStorage(file, folderPath) {
       const fileName = `${Date.now()}_${file.name.replace(/[^a-zA-Z0-9.]/g, "_")}`;
       const storageRef = ref(storage, `${folderPath}/${fileName}`);
@@ -2169,7 +2168,7 @@
         closeAddListingModal();
         document.getElementById('listingForm').reset();
         alert("Published successfully with Firebase Storage!");
-      } catch (err) { alert("Error: " + err.message); }
+      } catch (err) { alert("Firebase Write Error: " + err.message); }
     };
 
     window.handlePostClub = async function(e) {
@@ -2192,7 +2191,7 @@
         closeAddClubModal();
         document.getElementById('clubForm').reset();
         alert("Club published!");
-      } catch (err) { alert("Error: " + err.message); }
+      } catch (err) { alert("Firebase Write Error: " + err.message); }
     };
 
     document.getElementById('itemImageFile')?.addEventListener('change', function(e) {
@@ -2210,14 +2209,5 @@
 
     loadData();
   </script>
-
-  <script>
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('./sw.js').catch(err => console.log(err));
-    });
-  }
-</script>
-
 </body>
 </html>
