@@ -140,7 +140,7 @@
         <i class="fa-brands fa-apple"></i>
         <span>iPhone Guide</span>
       </button>
-      <button id="installAppBtn" class="px-3 py-1 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-[11px] shadow-sm transition-all flex items-center space-x-1">
+      <button id="installAppBtn" onclick="triggerPWAInstall()" class="px-3 py-1 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-[11px] shadow-sm transition-all flex items-center space-x-1">
         <i class="fa-solid fa-download"></i>
         <span>Install PWA</span>
       </button>
@@ -197,7 +197,7 @@
         <div class="relative z-10 max-w-xl">
           <h2 class="text-xl sm:text-3xl font-black tracking-tight mb-2">We Listen, We Create, You Enjoy!</h2>
           <p class="text-xs sm:text-sm text-slate-300 leading-relaxed mb-5">
-            The premier student-to-student marketplace at Semeling, Kedah. Buy/sell study notes, textbooks, tech gear, hostel essentials, and rent belongings securely.
+            Your one-stop marketplace at AIMST University! 🎓 Buy, sell, and rent study notes, textbooks, gadgets, and hostel essentials easily and securely. Made exclusively for AIMST students and staff. Join the community and start trading today!
           </p>
           <div class="flex flex-wrap items-center gap-3">
             <button onclick="openAddListingModal()" class="px-5 py-2.5 rounded-2xl bg-emerald-500 hover:bg-emerald-600 text-white font-black text-xs shadow-lg shadow-emerald-500/30 transition-all flex items-center space-x-2">
@@ -858,16 +858,33 @@
     let allSellers = JSON.parse(localStorage.getItem('aimst_sellers')) || [];
     let soldCount = parseInt(localStorage.getItem('aimst_sold_count')) || 0;
     let allContributors = [];
+    let deferredPrompt = null;
 
-    let currentCategory = 'all';
-    let selectedCourses = new Set();
-    let currentUser = null;
-    let currentUserEmail = null;
-    let isFounderUser = false;
-    let expandedDescIds = new Set();
-    let activeBoostItemId = null;
-    let carouselAutoTimer = null;
-    let profileCountdownInterval = null;
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      const installBtn = document.getElementById('installAppBtn');
+      if (installBtn) installBtn.style.display = 'flex';
+    });
+
+    window.triggerPWAInstall = async function() {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        if (outcome === 'accepted') {
+          deferredPrompt = null;
+        }
+      } else {
+        alert("PWA installation is already available or already installed on your device browser! You can also check your browser menu (Chrome / Edge) and select 'Install App' or 'Add to Home Screen'.");
+      }
+    };
+
+    window.openIOSInstallModal = function() {
+      document.getElementById('iosInstallModal').classList.remove('hidden');
+    };
+    window.closeIOSInstallModal = function() {
+      document.getElementById('iosInstallModal').classList.add('hidden');
+    };
 
     function getWishlistKey() {
       return currentUserEmail ? `aimst_wishlist_${currentUserEmail}` : 'aimst_wishlist_guest';
@@ -996,7 +1013,7 @@
 
       if (savedItems.length === 0) {
         container.innerHTML = `
-          <div class="py-12 text-center text-slate-400">
+          <div class="py-12 text-center text-slate-400 col-span-full">
             <i class="fa-solid fa-heart-crack text-4xl mb-2 text-rose-300"></i>
             <p class="text-xs font-bold text-slate-600">Your favourite items list is empty!</p>
           </div>
@@ -1102,9 +1119,12 @@
         querySnapshot.forEach((docSnap) => {
           firebaseContribs.push({ id: docSnap.id, ...docSnap.data() });
         });
-        allContributors = firebaseContribs;
+        if (firebaseContribs.length > 0) allContributors = firebaseContribs;
       } catch (err) {
-        allContributors = [];
+        allContributors = [
+          { id: 'c1', name: 'Sudarshan Parthipan', program: 'Diploma in Biotechnology', desc: 'Suggested segregating study materials into general to specific categories.' },
+          { id: 'c2', name: 'Gaura Kishore Kathiresan', program: 'Diploma in Physiotherapy', desc: 'Assisted with promotional outreach for campus projects.' }
+        ];
       }
       renderAboutContributors();
     }
@@ -1119,7 +1139,6 @@
         container.innerHTML = `
           <div class="col-span-full py-8 text-center text-slate-400">
             <p class="text-xs font-bold text-slate-600">No contributors added yet.</p>
-            <p class="text-[10px] text-slate-400 mt-0.5">Founders can add contributors to the Wall of Fame.</p>
           </div>
         `;
         return;
@@ -1776,7 +1795,6 @@
         carouselContainer.innerHTML = boostedItems.map(item => createSponsoredCardHTML(item, now)).join('');
 
         if (boostedItems.length > 1) {
-          // Smoother & slower auto-slide every 7 seconds
           carouselAutoTimer = setInterval(() => {
             if (!carouselContainer) return;
             const maxScroll = carouselContainer.scrollWidth - carouselContainer.clientWidth;
