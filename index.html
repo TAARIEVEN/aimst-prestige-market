@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AIMST Prestige Market | We Listen, We Create, You Enjoy!</title>
   
-  <!-- PWA Manifest & Meta Tags for Cross-Platform Installation -->
   <link rel="manifest" href="manifest.json">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -13,55 +12,19 @@
   <link rel="apple-touch-icon" href="market-logo.png">
   <meta name="theme-color" content="#059669" id="metaThemeColor">
 
-  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- FontAwesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    body {
-      background-color: #f8fafc;
-      color: #0f172a;
-    }
-
-    .grab-card {
-      background: #ffffff;
-      border: 1px solid #e2e8f0;
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-    }
-
-    .grab-card:hover {
-      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
-      border-color: #cbd5e1;
-    }
-
-    .boosted-card {
-      border: 2px solid #f59e0b !important;
-      background: linear-gradient(180deg, #fffbeb 0%, #ffffff 100%) !important;
-      box-shadow: 0 8px 20px -4px rgba(245, 158, 11, 0.25) !important;
-    }
-
-    .no-scrollbar::-webkit-scrollbar {
-      display: none;
-    }
-    .no-scrollbar {
-      -ms-overflow-style: none;
-      scrollbar-width: none;
-    }
-
-    .nav-bottom-btn {
-      transition: all 0.2s ease-in-out;
-    }
-    .nav-bottom-btn.active-tab {
-      color: #059669;
-    }
-    .nav-bottom-btn.active-pro-tab {
-      color: #7c3aed;
-    }
-    .nav-bottom-btn.disabled-tab {
-      opacity: 0.4;
-      cursor: not-allowed;
-      filter: grayscale(80%);
-    }
+    body { background-color: #f8fafc; color: #0f172a; }
+    .grab-card { background: #ffffff; border: 1px solid #e2e8f0; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03); }
+    .grab-card:hover { box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04); border-color: #cbd5e1; }
+    .boosted-card { border: 2px solid #f59e0b !important; background: linear-gradient(180deg, #fffbeb 0%, #ffffff 100%) !important; box-shadow: 0 8px 20px -4px rgba(245, 158, 11, 0.25) !important; }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    .nav-bottom-btn { transition: all 0.2s ease-in-out; }
+    .nav-bottom-btn.active-tab { color: #059669; }
+    .nav-bottom-btn.active-pro-tab { color: #7c3aed; }
+    .nav-bottom-btn.disabled-tab { opacity: 0.4; cursor: not-allowed; filter: grayscale(80%); }
   </style>
 </head>
 <body id="appBodyTag" class="min-h-screen font-sans selection:bg-amber-400 selection:text-slate-950 pb-32">
@@ -69,94 +32,56 @@
   <!-- WELCOME POPUP MODAL -->
   <div id="welcomeModal" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4 transition-all duration-300">
     <div class="bg-white text-slate-900 rounded-3xl max-w-sm w-full p-6 sm:p-8 relative shadow-2xl text-center border-2 border-emerald-500/20 overflow-hidden">
-      
       <button onclick="window.closeWelcomeModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center font-bold text-sm transition-all z-20">
         <i class="fa-solid fa-xmark"></i>
       </button>
-
       <div class="relative z-10 flex flex-col items-center mb-4 pt-2">
         <img src="market-logo.png" alt="APM Logo" class="w-16 h-16 object-contain mb-2 drop-shadow-md" onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=400'">
-        <h2 class="text-lg font-black tracking-wider text-slate-900 uppercase">
-          AIMST PRESTIGE MARKET
-        </h2>
+        <h2 class="text-lg font-black tracking-wider text-slate-900 uppercase">AIMST PRESTIGE MARKET</h2>
       </div>
-
       <div class="relative z-10 mb-4">
-        <h3 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight leading-none mb-2">
-          WELCOME TO APM!
-        </h3>
-        <div id="welcomeBadgeDiv" class="inline-block px-4 py-1.5 rounded-full bg-emerald-50 text-emerald-700 font-bold text-xs sm:text-sm border border-emerald-200">
-          Your campus shopping, made easy.
-        </div>
+        <h3 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight leading-none mb-2">WELCOME TO APM!</h3>
+        <div id="welcomeBadgeDiv" class="inline-block px-4 py-1.5 rounded-full bg-emerald-50 text-emerald-700 font-bold text-xs sm:text-sm border border-emerald-200">Your campus shopping, made easy.</div>
       </div>
-
-      <p class="relative z-10 text-xs sm:text-sm text-slate-600 leading-relaxed mb-6 px-2">
-        Discover great finds, study materials, belongings rentals, and campus announcements directly from verified students. Install our PWA app on your phone or laptop!
-      </p>
-
+      <p class="relative z-10 text-xs sm:text-sm text-slate-600 leading-relaxed mb-6 px-2">Discover great finds, study materials, belongings rentals, and campus announcements directly from verified students.</p>
       <button id="welcomeStartBtn" onclick="window.closeWelcomeModal()" class="relative z-10 w-full py-3.5 px-6 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold text-sm shadow-xl shadow-emerald-600/20 flex items-center justify-center space-x-3 transition-all hover:scale-[1.02]">
         <i class="fa-solid fa-cart-shopping text-base"></i>
         <span class="tracking-wider uppercase">START SHOPPING</span>
         <i class="fa-solid fa-arrow-right text-xs"></i>
       </button>
-
     </div>
   </div>
 
   <!-- DAILY RANDOM BOOSTED AD POPUP MODAL -->
   <div id="randomBoostPopupModal" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm hidden flex items-center justify-center p-3">
     <div class="bg-white rounded-3xl max-w-sm w-full p-5 relative shadow-2xl text-center border-2 border-amber-400 overflow-hidden">
-      <button onclick="closeRandomBoostPopup()" class="absolute top-4 right-4 w-7 h-7 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center font-bold text-xs transition-all z-20">
-        <i class="fa-solid fa-xmark"></i>
-      </button>
-
+      <button onclick="closeRandomBoostPopup()" class="absolute top-4 right-4 w-7 h-7 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center font-bold text-xs transition-all z-20"><i class="fa-solid fa-xmark"></i></button>
       <div class="absolute top-2 left-2 bg-amber-500 text-slate-950 font-black text-[9px] py-0.5 px-2 rounded-md uppercase tracking-wider shadow-sm flex items-center space-x-1 z-10">
-        <i class="fa-solid fa-bolt"></i>
-        <span>FEATURED SPONSORED AD</span>
+        <i class="fa-solid fa-bolt"></i><span>FEATURED SPONSORED AD</span>
       </div>
-
       <div id="randomBoostPopupContent" class="mt-4"></div>
     </div>
   </div>
 
   <!-- INSTALL PWA PROMPT BANNER -->
   <div id="installBanner" class="bg-gradient-to-r from-emerald-900 via-teal-900 to-slate-900 text-white py-2 px-3 text-center text-xs font-medium flex flex-wrap items-center justify-center gap-2 sm:gap-4 border-b border-emerald-700 shadow-md transition-all">
-    <div class="flex items-center space-x-1.5">
-      <i id="installBannerIcon" class="fa-solid fa-mobile-screen-button text-emerald-400"></i>
-      <span>Install APM App on Android, iPhone & Laptop:</span>
-    </div>
+    <div class="flex items-center space-x-1.5"><i id="installBannerIcon" class="fa-solid fa-mobile-screen-button text-emerald-400"></i><span>Install APM App on Android, iPhone & Laptop:</span></div>
     <div class="flex items-center space-x-2">
-      <button onclick="openIOSInstallModal()" class="px-3 py-1 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-[11px] border border-slate-600 shadow-sm transition-all flex items-center space-x-1">
-        <i class="fa-brands fa-apple"></i>
-        <span>iPhone Guide</span>
-      </button>
-      <button id="installAppBtn" onclick="triggerPWAInstall()" class="px-3 py-1 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-[11px] shadow-sm transition-all flex items-center space-x-1">
-        <i class="fa-solid fa-download"></i>
-        <span>Install PWA</span>
-      </button>
+      <button onclick="openIOSInstallModal()" class="px-3 py-1 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-[11px] border border-slate-600 shadow-sm transition-all flex items-center space-x-1"><i class="fa-brands fa-apple"></i><span>iPhone Guide</span></button>
+      <button id="installAppBtn" onclick="triggerPWAInstall()" class="px-3 py-1 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-[11px] shadow-sm transition-all flex items-center space-x-1"><i class="fa-solid fa-download"></i><span>Install PWA</span></button>
     </div>
   </div>
 
   <!-- LIVE SYNC STATUS BANNER -->
   <div id="liveSyncBanner" class="bg-emerald-50 border-b border-emerald-200 py-1.5 px-3 text-center text-[10px] sm:text-[11px] font-medium text-emerald-900 flex flex-wrap items-center justify-center gap-2 sm:gap-6 transition-all">
-    <div class="flex items-center space-x-1.5">
-      <span id="liveDotSpan" class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-      <span class="font-bold">AIMST Firestore Sync Live</span>
-    </div>
-    <div id="syncBorder1" class="flex items-center space-x-1 border-l border-emerald-300 pl-2">
-      <i id="syncStoreIcon" class="fa-solid fa-store text-emerald-600 text-[9px]"></i>
-      <span id="statActiveCount" class="font-black">0</span> Active Listings
-    </div>
-    <div id="syncBorder2" class="flex items-center space-x-1 border-l border-emerald-300 pl-2">
-      <i id="syncCheckIcon" class="fa-solid fa-circle-check text-emerald-600 text-[9px]"></i>
-      <span id="statSoldsCount" class="font-black">0</span> Items Sold
-    </div>
+    <div class="flex items-center space-x-1.5"><span id="liveDotSpan" class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span><span class="font-bold">AIMST Firestore Sync Live</span></div>
+    <div id="syncBorder1" class="flex items-center space-x-1 border-l border-emerald-300 pl-2"><i id="syncStoreIcon" class="fa-solid fa-store text-emerald-600 text-[9px]"></i><span id="statActiveCount" class="font-black">0</span> Active Listings</div>
+    <div id="syncBorder2" class="flex items-center space-x-1 border-l border-emerald-300 pl-2"><i id="syncCheckIcon" class="fa-solid fa-circle-check text-emerald-600 text-[9px]"></i><span id="statSoldsCount" class="font-black">0</span> Items Sold</div>
   </div>
 
   <!-- MAIN HEADER / NAVBAR -->
   <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm">
     <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
-      
       <div class="flex items-center space-x-3 cursor-pointer" onclick="switchMainTab('home')">
         <img src="market-logo.png" alt="Logo" class="w-9 h-9 sm:w-10 sm:h-10 object-contain drop-shadow" onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=400'">
         <div>
@@ -164,20 +89,10 @@
           <p id="navSubTitle" class="text-[7px] sm:text-[8px] uppercase tracking-widest text-emerald-600 font-bold leading-none mt-0.5 truncate">Student Marketplace & Study Hub</p>
         </div>
       </div>
-
-      <!-- RIGHT SIDE HEADER BUTTONS -->
       <div class="flex items-center space-x-2">
-        <button id="sellerManagerNavBtn" onclick="openSellerManagerModal()" class="hidden px-3 py-2 rounded-xl bg-amber-100 hover:bg-amber-200 text-amber-900 font-black text-xs items-center space-x-1 border border-amber-300 shadow-sm">
-          <i class="fa-solid fa-shield-halved"></i>
-          <span class="hidden sm:inline">Admin Hub</span>
-        </button>
-        
-        <button id="headerAuthBtn" onclick="handleAuthClick()" class="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xs flex items-center space-x-1.5 shadow-sm transition-all">
-          <i id="headerAuthIcon" class="fa-solid fa-right-to-bracket"></i>
-          <span id="headerAuthText">Login</span>
-        </button>
+        <button id="sellerManagerNavBtn" onclick="openSellerManagerModal()" class="hidden px-3 py-2 rounded-xl bg-amber-100 hover:bg-amber-200 text-amber-900 font-black text-xs items-center space-x-1 border border-amber-300 shadow-sm"><i class="fa-solid fa-shield-halved"></i><span class="hidden sm:inline">Admin Hub</span></button>
+        <button id="headerAuthBtn" onclick="handleAuthClick()" class="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xs flex items-center space-x-1.5 shadow-sm transition-all"><i id="headerAuthIcon" class="fa-solid fa-right-to-bracket"></i><span id="headerAuthText">Login</span></button>
       </div>
-
     </div>
   </header>
 
@@ -186,70 +101,36 @@
 
     <!-- HOME TAB VIEW PAGE -->
     <div id="viewHome" class="tab-view-page">
-      
-      <!-- HERO BANNER -->
       <div class="rounded-3xl bg-gradient-to-br from-slate-900 via-slate-800 to-emerald-950 text-white p-6 sm:p-10 mb-6 shadow-xl relative overflow-hidden border border-emerald-500/20">
         <div class="absolute right-0 top-0 bottom-0 w-1/3 opacity-10 bg-[radial-gradient(#34d399_1px,transparent_1px)] [background-size:16px_16px] pointer-events-none"></div>
         <div class="relative z-10 max-w-xl">
           <h2 class="text-xl sm:text-3xl font-black tracking-tight mb-2">We Listen, We Create, You Enjoy!</h2>
-          <p class="text-xs sm:text-sm text-slate-300 leading-relaxed mb-5">
-            The premier student-to-student marketplace at Semeling, Kedah. Buy/sell study notes, textbooks, tech gear, hostel essentials, and rent belongings securely.
-          </p>
+          <p class="text-xs sm:text-sm text-slate-300 leading-relaxed mb-5">The premier student-to-student marketplace at Semeling, Kedah. Buy/sell study notes, textbooks, tech gear, hostel essentials, and rent belongings securely.</p>
           <div class="flex flex-wrap items-center gap-3">
-            <button onclick="openAddListingModal()" class="px-5 py-2.5 rounded-2xl bg-emerald-500 hover:bg-emerald-600 text-white font-black text-xs shadow-lg shadow-emerald-500/30 transition-all flex items-center space-x-2">
-              <i class="fa-solid fa-plus"></i>
-              <span>Post Listing Now</span>
-            </button>
-            <button onclick="scrollToClubs()" class="px-4 py-2.5 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs backdrop-blur-md transition-all border border-white/20 flex items-center space-x-1.5">
-              <i class="fa-solid fa-users"></i>
-              <span>Campus Clubs Hub</span>
-            </button>
+            <button onclick="openAddListingModal()" class="px-5 py-2.5 rounded-2xl bg-emerald-500 hover:bg-emerald-600 text-white font-black text-xs shadow-lg shadow-emerald-500/30 transition-all flex items-center space-x-2"><i class="fa-solid fa-plus"></i><span>Post Listing Now</span></button>
+            <button onclick="scrollToClubs()" class="px-4 py-2.5 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs backdrop-blur-md transition-all border border-white/20 flex items-center space-x-1.5"><i class="fa-solid fa-users"></i><span>Campus Clubs Hub</span></button>
           </div>
         </div>
       </div>
 
-      <!-- SEARCH & CATEGORY FILTERS -->
       <div class="space-y-4 mb-6">
         <div class="relative">
           <i class="fa-solid fa-magnifying-glass absolute left-4 top-3.5 text-slate-400"></i>
           <input type="text" id="searchInput" oninput="filterListings()" placeholder="Search items, textbooks, calculators, hostel gear, event tickets..." class="w-full bg-white border border-slate-200 rounded-2xl pl-11 pr-4 py-3 text-xs sm:text-sm font-semibold text-slate-800 focus:outline-none focus:border-emerald-500 shadow-sm">
         </div>
 
-        <!-- CATEGORIES GRID -->
         <div class="grid grid-cols-3 sm:grid-cols-6 gap-2 sm:gap-3">
-          <button onclick="setCategory('all', this)" class="category-btn grab-card p-2.5 rounded-2xl flex flex-col items-center justify-center text-center transition-all group bg-emerald-50 border-emerald-300 shadow-sm">
-            <i class="fa-solid fa-store text-emerald-600 text-base mb-1"></i>
-            <span class="text-[10px] font-bold text-slate-800">All Items</span>
-          </button>
-          <button onclick="setCategory('academic', this)" class="category-btn grab-card p-2.5 rounded-2xl flex flex-col items-center justify-center text-center transition-all group">
-            <i class="fa-solid fa-book-open text-emerald-600 text-base mb-1"></i>
-            <span class="text-[10px] font-bold text-slate-800">Academic</span>
-          </button>
-          <button onclick="setCategory('rentals', this)" class="category-btn grab-card p-2.5 rounded-2xl flex flex-col items-center justify-center text-center transition-all group">
-            <i class="fa-solid fa-hand-holding-hand text-emerald-600 text-base mb-1"></i>
-            <span class="text-[10px] font-bold text-slate-800">Rentals</span>
-          </button>
-          <button onclick="setCategory('tech', this)" class="category-btn grab-card p-2.5 rounded-2xl flex flex-col items-center justify-center text-center transition-all group">
-            <i class="fa-solid fa-laptop text-emerald-600 text-base mb-1"></i>
-            <span class="text-[10px] font-bold text-slate-800">Tech & Gadgets</span>
-          </button>
-          <button onclick="setCategory('hostel', this)" class="category-btn grab-card p-2.5 rounded-2xl flex flex-col items-center justify-center text-center transition-all group">
-            <i class="fa-solid fa-house-chimney text-emerald-600 text-base mb-1"></i>
-            <span class="text-[10px] font-bold text-slate-800">Hostel Gear</span>
-          </button>
-          <button onclick="setCategory('services', this)" class="category-btn grab-card p-2.5 rounded-2xl flex flex-col items-center justify-center text-center transition-all group">
-            <i class="fa-solid fa-print text-emerald-600 text-base mb-1"></i>
-            <span class="text-[10px] font-bold text-slate-800">Services</span>
-          </button>
+          <button onclick="setCategory('all', this)" class="category-btn grab-card p-2.5 rounded-2xl flex flex-col items-center justify-center text-center transition-all group bg-emerald-50 border-emerald-300 shadow-sm"><i class="fa-solid fa-store text-emerald-600 text-base mb-1"></i><span class="text-[10px] font-bold text-slate-800">All Items</span></button>
+          <button onclick="setCategory('academic', this)" class="category-btn grab-card p-2.5 rounded-2xl flex flex-col items-center justify-center text-center transition-all group"><i class="fa-solid fa-book-open text-emerald-600 text-base mb-1"></i><span class="text-[10px] font-bold text-slate-800">Academic</span></button>
+          <button onclick="setCategory('rentals', this)" class="category-btn grab-card p-2.5 rounded-2xl flex flex-col items-center justify-center text-center transition-all group"><i class="fa-solid fa-hand-holding-hand text-emerald-600 text-base mb-1"></i><span class="text-[10px] font-bold text-slate-800">Rentals</span></button>
+          <button onclick="setCategory('tech', this)" class="category-btn grab-card p-2.5 rounded-2xl flex flex-col items-center justify-center text-center transition-all group"><i class="fa-solid fa-laptop text-emerald-600 text-base mb-1"></i><span class="text-[10px] font-bold text-slate-800">Tech & Gadgets</span></button>
+          <button onclick="setCategory('hostel', this)" class="category-btn grab-card p-2.5 rounded-2xl flex flex-col items-center justify-center text-center transition-all group"><i class="fa-solid fa-house-chimney text-emerald-600 text-base mb-1"></i><span class="text-[10px] font-bold text-slate-800">Hostel Gear</span></button>
+          <button onclick="setCategory('services', this)" class="category-btn grab-card p-2.5 rounded-2xl flex flex-col items-center justify-center text-center transition-all group"><i class="fa-solid fa-print text-emerald-600 text-base mb-1"></i><span class="text-[10px] font-bold text-slate-800">Services</span></button>
         </div>
 
-        <!-- ACADEMIC COURSE FILTER SECTION -->
         <div id="courseFilterSection" class="bg-white p-3.5 rounded-2xl border-2 border-emerald-500/40 mb-4 shadow-lg hidden transition-all">
           <div class="flex items-center justify-between mb-2">
-            <div class="flex items-center space-x-2">
-              <i id="courseFilterIcon" class="fa-solid fa-book-medical text-emerald-600 text-sm"></i>
-              <span class="text-xs font-black text-slate-900 uppercase">Filter Academic Notes by AIMST Programme / Course</span>
-            </div>
+            <div class="flex items-center space-x-2"><i id="courseFilterIcon" class="fa-solid fa-book-medical text-emerald-600 text-sm"></i><span class="text-xs font-black text-slate-900 uppercase">Filter Academic Notes by AIMST Programme / Course</span></div>
             <button id="resetCourseFiltersBtn" onclick="clearCourseFilters()" class="text-[10px] font-bold text-emerald-700 hover:underline">Reset Filters</button>
           </div>
           <div class="relative mb-2">
@@ -259,46 +140,30 @@
         </div>
       </div>
 
-      <!-- SPONSORED / BOOSTED ADS CONTINUOUS SLIDER CAROUSEL -->
+      <!-- SPONSORED ADS ELECTRIC-GATE CONTINUOUS SLIDER -->
       <div id="sponsoredSection" class="mb-8 hidden overflow-hidden">
         <div class="flex items-center justify-between mb-3">
-          <div class="flex items-center space-x-2">
-            <span class="w-6 h-6 rounded-lg bg-amber-500 text-slate-950 flex items-center justify-center font-black text-xs shadow-sm">
-              <i class="fa-solid fa-bolt"></i>
-            </span>
-            <h3 class="text-xs sm:text-sm font-black text-slate-900 uppercase tracking-wide">Sponsored Featured Listings</h3>
-          </div>
+          <div class="flex items-center space-x-2"><span class="w-6 h-6 rounded-lg bg-amber-500 text-slate-950 flex items-center justify-center font-black text-xs shadow-sm"><i class="fa-solid fa-bolt"></i></span><h3 class="text-xs sm:text-sm font-black text-slate-900 uppercase tracking-wide">Sponsored Featured Listings</h3></div>
           <span class="text-[10px] text-amber-600 font-bold bg-amber-50 px-2.5 py-0.5 rounded-full border border-amber-200">🚀 Promoted</span>
         </div>
-        
         <div id="sponsoredCarousel" class="flex space-x-3 overflow-x-hidden no-scrollbar py-2 pt-1 cursor-grab"></div>
       </div>
 
-      <!-- MAIN LISTINGS GRID HEADER -->
       <div class="flex items-center justify-between mb-4">
         <h3 id="listingCount" class="text-xs sm:text-sm font-black text-slate-800 uppercase tracking-wide">Showing all available items</h3>
-        <button onclick="toggleCourseFilterPanel()" class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs flex items-center space-x-1.5 transition-all">
-          <i class="fa-solid fa-filter text-emerald-600 text-[10px]"></i>
-          <span>Filter Courses</span>
-        </button>
+        <button onclick="toggleCourseFilterPanel()" class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs flex items-center space-x-1.5 transition-all"><i class="fa-solid fa-filter text-emerald-600 text-[10px]"></i><span>Filter Courses</span></button>
       </div>
 
-      <!-- LISTINGS GRID -->
       <div id="listingsGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 sm:gap-4"></div>
 
-      <!-- CAMPUS CLUBS SECTION -->
       <div id="clubsSection" class="mt-12 pt-8 border-t border-slate-200">
         <div class="flex items-center justify-between mb-4">
           <div>
             <h3 class="text-base sm:text-lg font-black text-slate-900">AIMST Campus Clubs & Societies</h3>
             <p class="text-xs text-slate-500">Connect with student leaders and join official WhatsApp community groups.</p>
           </div>
-          <button id="addClubBtn" onclick="openAddClubModal()" class="hidden px-3.5 py-2 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-bold text-xs shadow-md transition-all flex items-center space-x-1.5">
-            <i class="fa-solid fa-plus"></i>
-            <span>Add Club</span>
-          </button>
+          <button id="addClubBtn" onclick="openAddClubModal()" class="hidden px-3.5 py-2 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-bold text-xs shadow-md transition-all flex items-center space-x-1.5"><i class="fa-solid fa-plus"></i><span>Add Club</span></button>
         </div>
-
         <div id="clubsGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4"></div>
       </div>
     </div>
@@ -310,9 +175,7 @@
           <h3 class="text-base sm:text-lg font-black text-slate-900">My Listed Products & Rentals</h3>
           <p class="text-xs text-slate-500">Manage your active posts, boost visibility, or delete items.</p>
         </div>
-        <button onclick="openAddListingModal()" class="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md">
-          <i class="fa-solid fa-plus mr-1"></i> Add Product
-        </button>
+        <button onclick="openAddListingModal()" class="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md"><i class="fa-solid fa-plus mr-1"></i> Add Product</button>
       </div>
       <div id="myProductsTabContainer" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3"></div>
     </div>
@@ -329,30 +192,20 @@
     <!-- ME / PROFILE TAB VIEW PAGE -->
     <div id="viewMe" class="tab-view-page hidden">
       <div class="max-w-md mx-auto grab-card rounded-3xl p-6 border border-slate-200 text-center">
-        <div class="w-20 h-20 rounded-full bg-emerald-100 text-emerald-800 font-black text-2xl flex items-center justify-center mx-auto mb-3 shadow-inner">
-          <i class="fa-solid fa-user-graduate"></i>
-        </div>
+        <div class="w-20 h-20 rounded-full bg-emerald-100 text-emerald-800 font-black text-2xl flex items-center justify-center mx-auto mb-3 shadow-inner"><i class="fa-solid fa-user-graduate"></i></div>
         <h3 id="meTabUsername" class="text-lg font-black text-slate-900 mb-0.5">Username</h3>
         <p id="meTabEmail" class="text-xs text-slate-500 mb-4">email@apm.com</p>
-        
         <div class="mb-4">
           <span id="meTabTierBadge" class="inline-block px-4 py-1.5 rounded-full bg-emerald-50 text-emerald-800 font-extrabold text-xs border border-emerald-300 mb-3 uppercase tracking-wider">VERIFIED SELLER/BUYER (FREE TIER)</span>
           <p class="text-xs text-slate-600">Active Listings Usage: <span id="meTabListingCount" class="font-bold text-slate-900">0 / 3 Used</span></p>
         </div>
-
         <div id="meTabProCountdownContainer" class="hidden mb-4 bg-purple-50 p-3 rounded-2xl border border-purple-200">
           <p class="text-[11px] font-bold text-purple-900">👑 Pro Tier Countdown Remaining:</p>
           <p id="meTabProCountdownTimer" class="text-sm font-black text-purple-700">--</p>
         </div>
-
         <div class="space-y-2">
-          <button id="meTabUpgradeBtn" onclick="openUpgradeModal()" class="w-full py-3 rounded-2xl bg-amber-500 hover:bg-amber-600 text-white font-black text-xs shadow-md transition-all flex items-center justify-center space-x-2">
-            <i class="fa-solid fa-crown text-sm"></i>
-            <span>Upgrade to Pro Tier (RM5/mo - 7 Listings)</span>
-          </button>
-          <button onclick="performLogout()" class="w-full py-2.5 rounded-2xl bg-rose-50 hover:bg-rose-100 text-rose-600 font-bold text-xs transition-all border border-rose-200">
-            Log Out
-          </button>
+          <button id="meTabUpgradeBtn" onclick="openUpgradeModal()" class="w-full py-3 rounded-2xl bg-amber-500 hover:bg-amber-600 text-white font-black text-xs shadow-md transition-all flex items-center justify-center space-x-2"><i class="fa-solid fa-crown text-sm"></i><span>Upgrade to Pro Tier (RM5/mo - 7 Listings)</span></button>
+          <button onclick="performLogout()" class="w-full py-2.5 rounded-2xl bg-rose-50 hover:bg-rose-100 text-rose-600 font-bold text-xs transition-all border border-rose-200">Log Out</button>
         </div>
       </div>
     </div>
@@ -360,24 +213,17 @@
     <!-- ABOUT APM & FOUNDERS TAB VIEW PAGE -->
     <div id="viewAbout" class="tab-view-page hidden">
       <div class="max-w-4xl mx-auto space-y-6">
-        
-        <!-- FOUNDERS HERO CARD -->
         <div class="grab-card rounded-3xl p-6 sm:p-8 border border-slate-200 text-center relative overflow-hidden">
           <div class="absolute -right-10 -top-10 w-40 h-40 bg-emerald-500/10 rounded-full blur-2xl pointer-events-none"></div>
-          
           <h3 class="text-xs font-black uppercase tracking-widest text-emerald-600 mb-1">Architects of Innovation</h3>
           <h2 class="text-xl sm:text-2xl font-black text-slate-900 mb-6">AIMST Prestige Market Leadership</h2>
-
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            <!-- Keven -->
             <div class="bg-slate-50 rounded-2xl p-5 border border-slate-200 flex flex-col items-center">
               <img src="founder1.jpg" alt="Keventhiran" class="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl object-cover shadow-md mb-3 border-2 border-emerald-500/30" onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=400'">
               <h4 class="font-black text-sm text-slate-900">Keventhiran Devandren</h4>
               <p class="text-[11px] font-bold text-emerald-700 mb-2">Founder & CEO • Computer Science</p>
               <p class="text-[11px] text-slate-600 leading-relaxed text-center">Lead Backend Architect & Database Security Specialist managing APM server infrastructure and core system operations.</p>
             </div>
-
-            <!-- Taarisini -->
             <div class="bg-slate-50 rounded-2xl p-5 border border-slate-200 flex flex-col items-center">
               <img src="founder2.jpg" alt="Taarisini" class="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl object-cover shadow-md mb-3 border-2 border-emerald-500/30" onerror="this.src='https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&q=80&w=400'">
               <h4 class="font-black text-sm text-slate-900">Taarisini Selvakumar</h4>
@@ -387,25 +233,16 @@
           </div>
         </div>
 
-        <!-- CONTRIBUTORS WALL OF FAME -->
         <div class="grab-card rounded-3xl p-6 sm:p-8 border border-slate-200">
           <div class="flex items-center justify-between mb-4">
             <div>
-              <h3 class="text-base font-black text-slate-900 flex items-center space-x-2">
-                <i class="fa-solid fa-award text-amber-500"></i>
-                <span>CONTRIBUTORS WALL OF FAME</span>
-              </h3>
+              <h3 class="text-base font-black text-slate-900 flex items-center space-x-2"><i class="fa-solid fa-award text-amber-500"></i><span>CONTRIBUTORS WALL OF FAME</span></h3>
               <p class="text-xs text-slate-500">Recognizing student ideas, helpers, and contributors who powered APM.</p>
             </div>
-            <button id="addAboutContribBtn" onclick="openAddContributorModal()" class="hidden px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md transition-all flex items-center space-x-1">
-              <i class="fa-solid fa-plus"></i>
-              <span>Add Contributor</span>
-            </button>
+            <button id="addAboutContribBtn" onclick="openAddContributorModal()" class="hidden px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md transition-all flex items-center space-x-1"><i class="fa-solid fa-plus"></i><span>Add Contributor</span></button>
           </div>
-
           <div id="aboutContributorsList" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3"></div>
         </div>
-
       </div>
     </div>
 
@@ -414,41 +251,18 @@
   <!-- SHOPEE STYLE BOTTOM NAVIGATION BAR -->
   <nav class="fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200 shadow-2xl py-2 px-2">
     <div class="max-w-md mx-auto grid grid-cols-5 gap-1 text-center">
-      
-      <button id="navBottomHome" onclick="switchMainTab('home')" class="nav-bottom-btn active-tab flex flex-col items-center justify-center py-1 rounded-xl">
-        <i class="fa-solid fa-store text-base mb-0.5"></i>
-        <span class="text-[9px] font-bold tracking-wide">Home</span>
-      </button>
-
-      <button id="navBottomMyProducts" onclick="switchMainTab('myproducts')" class="nav-bottom-btn disabled-tab flex flex-col items-center justify-center py-1 rounded-xl">
-        <i class="fa-solid fa-box-archive text-base mb-0.5"></i>
-        <span class="text-[9px] font-bold tracking-wide">My Product</span>
-      </button>
-
-      <button id="navBottomWishlist" onclick="switchMainTab('wishlist')" class="nav-bottom-btn disabled-tab flex flex-col items-center justify-center py-1 rounded-xl relative">
-        <i class="fa-solid fa-heart text-base mb-0.5"></i>
-        <span class="text-[9px] font-bold tracking-wide">Favourite</span>
-        <span id="wishlistCountBadge" class="absolute top-0 right-4 px-1 bg-rose-500 text-white text-[8px] font-black rounded-full">0</span>
-      </button>
-
-      <button id="navBottomMe" onclick="switchMainTab('me')" class="nav-bottom-btn disabled-tab flex flex-col items-center justify-center py-1 rounded-xl">
-        <i class="fa-solid fa-user text-base mb-0.5"></i>
-        <span class="text-[9px] font-bold tracking-wide">Me</span>
-      </button>
-
-      <button id="navBottomAbout" onclick="switchMainTab('about')" class="nav-bottom-btn flex flex-col items-center justify-center py-1 rounded-xl">
-        <i class="fa-solid fa-circle-info text-base mb-0.5"></i>
-        <span class="text-[9px] font-bold tracking-wide">About APM</span>
-      </button>
-
+      <button id="navBottomHome" onclick="switchMainTab('home')" class="nav-bottom-btn active-tab flex flex-col items-center justify-center py-1 rounded-xl"><i class="fa-solid fa-store text-base mb-0.5"></i><span class="text-[9px] font-bold tracking-wide">Home</span></button>
+      <button id="navBottomMyProducts" onclick="switchMainTab('myproducts')" class="nav-bottom-btn disabled-tab flex flex-col items-center justify-center py-1 rounded-xl"><i class="fa-solid fa-box-archive text-base mb-0.5"></i><span class="text-[9px] font-bold tracking-wide">My Product</span></button>
+      <button id="navBottomWishlist" onclick="switchMainTab('wishlist')" class="nav-bottom-btn disabled-tab flex flex-col items-center justify-center py-1 rounded-xl relative"><i class="fa-solid fa-heart text-base mb-0.5"></i><span class="text-[9px] font-bold tracking-wide">Favourite</span><span id="wishlistCountBadge" class="absolute top-0 right-4 px-1 bg-rose-500 text-white text-[8px] font-black rounded-full">0</span></button>
+      <button id="navBottomMe" onclick="switchMainTab('me')" class="nav-bottom-btn disabled-tab flex flex-col items-center justify-center py-1 rounded-xl"><i class="fa-solid fa-user text-base mb-0.5"></i><span class="text-[9px] font-bold tracking-wide">Me</span></button>
+      <button id="navBottomAbout" onclick="switchMainTab('about')" class="nav-bottom-btn flex flex-col items-center justify-center py-1 rounded-xl"><i class="fa-solid fa-circle-info text-base mb-0.5"></i><span class="text-[9px] font-bold tracking-wide">About APM</span></button>
     </div>
   </nav>
 
   <!-- FLOATING POST LISTING BUTTON -->
   <div id="floatingPostBtnContainer" class="fixed right-6 bottom-20 z-30">
     <button id="floatingPostBtn" onclick="openAddListingModal()" style="display: none;" class="flex items-center space-x-2 px-4 py-3 sm:px-5 sm:py-3.5 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold shadow-2xl shadow-emerald-600/40 ring-2 ring-white hover:scale-105 transition-all text-xs sm:text-sm">
-      <i class="fa-solid fa-plus text-base"></i>
-      <span>Post Listing</span>
+      <i class="fa-solid fa-plus text-base"></i><span>Post Listing</span>
     </button>
   </div>
 
@@ -460,36 +274,19 @@
         <h3 class="text-lg font-black text-slate-900">APM Verified Access</h3>
         <p class="text-xs text-slate-500">Login or register to list items & manage products.</p>
       </div>
-      
       <div class="flex space-x-1 bg-slate-100 p-1 rounded-2xl mb-4">
         <button id="tabLoginBtn" onclick="switchAuthTab('login')" class="flex-1 py-1.5 rounded-xl text-xs font-extrabold bg-white text-slate-900 shadow-sm transition-all">Login</button>
         <button id="tabRegisterBtn" onclick="switchAuthTab('register')" class="flex-1 py-1.5 rounded-xl text-xs font-extrabold text-slate-500 hover:text-slate-900 transition-all">Register</button>
       </div>
-
-      <!-- Login Container -->
       <div id="loginFormContainer" class="space-y-3">
-        <div>
-          <label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">Student Username / Email</label>
-          <input type="text" id="loginUser" placeholder="e.g. keventhiran_e25101420" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-bold text-slate-800 focus:outline-none focus:border-emerald-500">
-        </div>
-        <div>
-          <label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">Password</label>
-          <input type="password" id="loginPass" placeholder="••••••••" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-bold text-slate-800 focus:outline-none focus:border-emerald-500">
-        </div>
+        <div><label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">Student Username / Email</label><input type="text" id="loginUser" placeholder="e.g. keventhiran_e25101420" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-bold text-slate-800 focus:outline-none focus:border-emerald-500"></div>
+        <div><label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">Password</label><input type="password" id="loginPass" placeholder="••••••••" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-bold text-slate-800 focus:outline-none focus:border-emerald-500"></div>
         <div id="loginError" class="text-[11px] text-rose-500 font-bold hidden"></div>
         <button onclick="handleLogin()" class="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md">Login to APM</button>
       </div>
-
-      <!-- Register Container -->
       <div id="registerFormContainer" class="space-y-3 hidden">
-        <div>
-          <label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">Student Username</label>
-          <input type="text" id="regUser" placeholder="e.g. yourname_studentID" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-bold text-slate-800 focus:outline-none focus:border-emerald-500">
-        </div>
-        <div>
-          <label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">Create Password</label>
-          <input type="password" id="regPass" placeholder="••••••••" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-bold text-slate-800 focus:outline-none focus:border-emerald-500">
-        </div>
+        <div><label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">Student Username</label><input type="text" id="regUser" placeholder="e.g. yourname_studentID" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-bold text-slate-800 focus:outline-none focus:border-emerald-500"></div>
+        <div><label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">Create Password</label><input type="password" id="regPass" placeholder="••••••••" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-bold text-slate-800 focus:outline-none focus:border-emerald-500"></div>
         <p class="text-[10px] text-slate-500 italic">Note: New registrations require Founder approval before listing products.</p>
         <button onclick="handleRegister()" class="w-full py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs shadow-md">Register Account</button>
       </div>
@@ -504,7 +301,6 @@
         <h3 class="text-base font-black text-slate-900">Post New Item or Rental</h3>
         <p id="sellerTierIndicator" class="text-xs text-emerald-700 font-bold">Free Tier: Up to 3 Listings</p>
       </div>
-
       <form id="listingForm" onsubmit="handlePostListing(event)" class="space-y-3 text-left">
         <div>
           <label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">Category</label>
@@ -517,17 +313,14 @@
             <option value="events">Campus Events & Tickets</option>
           </select>
         </div>
-
         <div id="courseSelectContainer">
           <label id="courseSelectLabel" class="block text-[11px] font-bold text-emerald-800 uppercase tracking-wider mb-1">Select AIMST Programme / Course</label>
           <select id="itemCourseSelect" class="w-full bg-emerald-50 border border-emerald-300 rounded-xl px-3.5 py-2.5 text-xs text-emerald-950 font-bold focus:outline-none focus:border-emerald-500"></select>
         </div>
-
         <div>
           <label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">Item Title</label>
           <input type="text" id="itemTitle" required placeholder="e.g., DBMS Semester 3 Lecture Notes" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-bold text-slate-800 focus:outline-none focus:border-emerald-500">
         </div>
-
         <div class="grid grid-cols-2 gap-3">
           <div>
             <label id="priceLabel" class="block text-[11px] font-bold text-slate-700 uppercase mb-1">Price (MYR)</label>
@@ -538,7 +331,6 @@
             <input type="text" id="itemContact" required placeholder="60123456789" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-bold text-slate-800 focus:outline-none focus:border-emerald-500">
           </div>
         </div>
-
         <div>
           <label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">Product Photo</label>
           <input type="file" id="itemImageFile" accept="image/*" required class="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100">
@@ -546,12 +338,10 @@
             <img id="imagePreview" src="" alt="Preview" class="w-20 h-20 rounded-xl object-cover border border-slate-200">
           </div>
         </div>
-
         <div>
           <label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">Detailed Description</label>
           <textarea id="itemDesc" rows="3" required placeholder="Describe condition, pickup location, notes coverage..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-semibold text-slate-800 focus:outline-none focus:border-emerald-500"></textarea>
         </div>
-
         <button type="submit" id="publishListingSubmitBtn" class="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md transition-all flex items-center justify-center space-x-2">
           <span>Publish Listing</span>
         </button>
@@ -565,29 +355,12 @@
       <button onclick="closeAddClubModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
       <h3 class="text-base font-black text-slate-900 mb-4">Add Campus Club / Society</h3>
       <form id="clubForm" onsubmit="handlePostClub(event)" class="space-y-3 text-left">
-        <div>
-          <label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">Club Name</label>
-          <input type="text" id="clubName" required placeholder="e.g. AIMST IT Society" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-bold text-slate-800">
-        </div>
-        <div>
-          <label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">Category / Focus</label>
-          <input type="text" id="clubCategory" required placeholder="e.g. Academic & Technology" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-bold text-slate-800">
-        </div>
-        <div>
-          <label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">WhatsApp Group Link / Number</label>
-          <input type="text" id="clubContact" required placeholder="https://chat.whatsapp.com/..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-bold text-slate-800">
-        </div>
-        <div>
-          <label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">Club Logo Image</label>
-          <input type="file" id="clubLogoFile" accept="image/*" class="w-full text-xs text-slate-500">
-        </div>
-        <div>
-          <label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">Description</label>
-          <textarea id="clubDesc" rows="2" required placeholder="What does this club do?" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-semibold text-slate-800"></textarea>
-        </div>
-        <button type="submit" id="saveClubSubmitBtn" class="w-full py-3 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-bold text-xs shadow-md transition-all flex items-center justify-center space-x-2">
-          <span>Save Club</span>
-        </button>
+        <div><label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">Club Name</label><input type="text" id="clubName" required placeholder="e.g. AIMST IT Society" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-bold text-slate-800"></div>
+        <div><label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">Category / Focus</label><input type="text" id="clubCategory" required placeholder="e.g. Academic & Technology" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-bold text-slate-800"></div>
+        <div><label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">WhatsApp Group Link / Number</label><input type="text" id="clubContact" required placeholder="https://chat.whatsapp.com/..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-bold text-slate-800"></div>
+        <div><label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">Club Logo Image</label><input type="file" id="clubLogoFile" accept="image/*" class="w-full text-xs text-slate-500"></div>
+        <div><label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">Description</label><textarea id="clubDesc" rows="2" required placeholder="What does this club do?" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-semibold text-slate-800"></textarea></div>
+        <button type="submit" id="saveClubSubmitBtn" class="w-full py-3 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-bold text-xs shadow-md transition-all flex items-center justify-center space-x-2"><span>Save Club</span></button>
       </form>
     </div>
   </div>
@@ -598,22 +371,10 @@
       <button onclick="closeAddContributorModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
       <h3 class="text-base font-black text-slate-900 mb-4">Add APM Contributor / Helper</h3>
       <form id="contributorForm" onsubmit="handlePostContributor(event)" class="space-y-3 text-left">
-        <div>
-          <label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">Full Name</label>
-          <input type="text" id="contribName" required placeholder="e.g., Sudarshan Parthipan" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-bold text-slate-800">
-        </div>
-        <div>
-          <label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">Diploma / Programme</label>
-          <input type="text" id="contribProgram" required placeholder="e.g., Diploma in Biotechnology, Aimst University" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-bold text-slate-800">
-        </div>
-        <div>
-          <label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">Upload Photo (Optional)</label>
-          <input type="file" id="contribPhotoFile" accept="image/*" class="w-full text-xs text-slate-500">
-        </div>
-        <div>
-          <label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">Contribution / Idea Shared</label>
-          <textarea id="contribDesc" rows="3" required placeholder="e.g., Suggested segregating study materials into general to specific..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-semibold text-slate-800"></textarea>
-        </div>
+        <div><label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">Full Name</label><input type="text" id="contribName" required placeholder="e.g., Sudarshan Parthipan" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-bold text-slate-800"></div>
+        <div><label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">Diploma / Programme</label><input type="text" id="contribProgram" required placeholder="e.g., Diploma in Biotechnology, Aimst University" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-bold text-slate-800"></div>
+        <div><label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">Upload Photo (Optional)</label><input type="file" id="contribPhotoFile" accept="image/*" class="w-full text-xs text-slate-500"></div>
+        <div><label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">Contribution / Idea Shared</label><textarea id="contribDesc" rows="3" required placeholder="e.g., Suggested segregating study materials into general to specific..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-semibold text-slate-800"></textarea></div>
         <button type="submit" class="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md">Add to Wall of Fame</button>
       </form>
     </div>
@@ -625,55 +386,28 @@
       <button onclick="closeSellerManagerModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
       <h3 class="text-base font-black text-slate-900 mb-1"><i class="fa-solid fa-shield-halved text-amber-500"></i> Founder Admin Hub</h3>
       <p class="text-xs text-slate-500 mb-4">Manage pending student verifications, pro upgrades, and ad boosts.</p>
-      
       <div class="space-y-6 max-h-[70vh] overflow-y-auto pr-2">
         <div class="bg-amber-50 p-4 rounded-2xl border border-amber-200">
-          <div class="flex items-center justify-between mb-2">
-            <h4 class="font-bold text-xs text-amber-900 uppercase">Pending Ad Boost Requests</h4>
-            <span id="pendingBoostsCountBadge" class="px-2 py-0.5 rounded-full bg-amber-200 text-amber-900 text-[10px] font-black">0 Pending</span>
-          </div>
-          <div class="mb-2">
-            <input type="text" id="searchPendingBoostsInput" oninput="renderSellerManagerTable()" placeholder="Search pending boosts..." class="w-full bg-white border border-amber-300 rounded-xl px-3 py-1.5 text-xs">
-          </div>
+          <div class="flex items-center justify-between mb-2"><h4 class="font-bold text-xs text-amber-900 uppercase">Pending Ad Boost Requests</h4><span id="pendingBoostsCountBadge" class="px-2 py-0.5 rounded-full bg-amber-200 text-amber-900 text-[10px] font-black">0 Pending</span></div>
+          <div class="mb-2"><input type="text" id="searchPendingBoostsInput" oninput="renderSellerManagerTable()" placeholder="Search pending boosts..." class="w-full bg-white border border-amber-300 rounded-xl px-3 py-1.5 text-xs"></div>
           <div id="pendingBoostsContainer" class="space-y-2"></div>
         </div>
-
         <div class="bg-purple-50 p-4 rounded-2xl border border-purple-200">
-          <div class="flex items-center justify-between mb-2">
-            <h4 class="font-bold text-xs text-purple-900 uppercase">Pending Pro Tier Upgrades (RM5)</h4>
-            <span id="pendingProCountBadge" class="px-2 py-0.5 rounded-full bg-purple-200 text-purple-900 text-[10px] font-black">0 Pending</span>
-          </div>
-          <div class="mb-2">
-            <input type="text" id="searchPendingProInput" oninput="renderSellerManagerTable()" placeholder="Search pending pro upgrades..." class="w-full bg-white border border-purple-300 rounded-xl px-3 py-1.5 text-xs">
-          </div>
+          <div class="flex items-center justify-between mb-2"><h4 class="font-bold text-xs text-purple-900 uppercase">Pending Pro Tier Upgrades (RM5)</h4><span id="pendingProCountBadge" class="px-2 py-0.5 rounded-full bg-purple-200 text-purple-900 text-[10px] font-black">0 Pending</span></div>
+          <div class="mb-2"><input type="text" id="searchPendingProInput" oninput="renderSellerManagerTable()" placeholder="Search pending pro upgrades..." class="w-full bg-white border border-purple-300 rounded-xl px-3 py-1.5 text-xs"></div>
           <div id="pendingProContainer" class="space-y-2"></div>
         </div>
-
         <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200">
-          <div class="flex items-center justify-between mb-2">
-            <h4 class="font-bold text-xs text-slate-900 uppercase">Pending Student Verifications</h4>
-            <span id="pendingCountBadge" class="px-2 py-0.5 rounded-full bg-slate-200 text-slate-800 text-[10px] font-black">0 Pending</span>
-          </div>
-          <div class="mb-2">
-            <input type="text" id="searchPendingStudentsInput" oninput="renderSellerManagerTable()" placeholder="Search pending students..." class="w-full bg-white border border-slate-300 rounded-xl px-3 py-1.5 text-xs">
-          </div>
+          <div class="flex items-center justify-between mb-2"><h4 class="font-bold text-xs text-slate-900 uppercase">Pending Student Verifications</h4><span id="pendingCountBadge" class="px-2 py-0.5 rounded-full bg-slate-200 text-slate-800 text-[10px] font-black">0 Pending</span></div>
+          <div class="mb-2"><input type="text" id="searchPendingStudentsInput" oninput="renderSellerManagerTable()" placeholder="Search pending students..." class="w-full bg-white border border-slate-300 rounded-xl px-3 py-1.5 text-xs"></div>
           <div id="pendingSellersContainer" class="space-y-2"></div>
         </div>
-
         <div>
           <h4 class="font-bold text-xs text-slate-900 uppercase mb-2">All Verified Users & Sellers</h4>
-          <div class="mb-2">
-            <input type="text" id="sellerSearchInput" oninput="renderSellerManagerTable()" placeholder="Search verified users..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-1.5 text-xs">
-          </div>
+          <div class="mb-2"><input type="text" id="sellerSearchInput" oninput="renderSellerManagerTable()" placeholder="Search verified users..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-1.5 text-xs"></div>
           <div class="overflow-x-auto border border-slate-200 rounded-2xl">
             <table class="w-full text-left text-xs">
-              <thead class="bg-slate-100 text-slate-700">
-                <tr>
-                  <th class="p-3">User</th>
-                  <th class="p-3 text-center">Tier Status</th>
-                  <th class="p-3 text-right">Actions</th>
-                </tr>
-              </thead>
+              <thead class="bg-slate-100 text-slate-700"><tr><th class="p-3">User</th><th class="p-3 text-center">Tier Status</th><th class="p-3 text-right">Actions</th></tr></thead>
               <tbody id="sellersTableBody"></tbody>
             </table>
           </div>
@@ -686,12 +420,9 @@
   <div id="upgradeModal" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm hidden flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl max-w-sm w-full p-6 relative text-center shadow-2xl border-2 border-amber-400">
       <button onclick="closeUpgradeModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
-      <div class="w-14 h-14 rounded-2xl bg-amber-100 text-amber-600 flex items-center justify-center text-2xl mx-auto mb-3 shadow-inner">
-        <i class="fa-solid fa-crown"></i>
-      </div>
+      <div class="w-14 h-14 rounded-2xl bg-amber-100 text-amber-600 flex items-center justify-center text-2xl mx-auto mb-3 shadow-inner"><i class="fa-solid fa-crown"></i></div>
       <h3 class="text-base font-black text-slate-900 mb-1">Upgrade to APM Pro Tier</h3>
       <p class="text-xs text-slate-600 mb-4">Unlock up to <strong>7 active listings</strong>, priority purple theme styling, and extended placement for just <strong>RM 5.00 / month</strong>!</p>
-      
       <div class="bg-slate-50 p-3 rounded-2xl border border-slate-200 mb-4">
         <p class="text-[11px] font-bold text-slate-800 mb-2">Scan TNG eWallet QR to Pay RM 5.00:</p>
         <div class="w-36 h-36 mx-auto bg-white p-2 rounded-xl border border-slate-200 flex items-center justify-center overflow-hidden">
@@ -699,10 +430,7 @@
         </div>
         <p class="text-[10px] text-slate-500 mt-2">DuitNow / TNG Reference: Founder Keven</p>
       </div>
-
-      <button onclick="requestProUpgrade()" class="w-full py-3 rounded-2xl bg-amber-500 hover:bg-amber-600 text-white font-black text-xs shadow-lg shadow-amber-500/30">
-        I Have Paid RM5 — Send Verification to Founder
-      </button>
+      <button onclick="requestProUpgrade()" class="w-full py-3 rounded-2xl bg-amber-500 hover:bg-amber-600 text-white font-black text-xs shadow-lg shadow-amber-500/30">I Have Paid RM5 — Send Verification to Founder</button>
     </div>
   </div>
 
@@ -710,14 +438,10 @@
   <div id="boostBenefitsModal" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm hidden flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl max-w-sm w-full p-6 relative text-center shadow-2xl border-2 border-amber-400">
       <button onclick="closeBoostBenefitsModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
-      <div class="w-14 h-14 rounded-2xl bg-amber-100 text-amber-600 flex items-center justify-center text-2xl mx-auto mb-3">
-        <i class="fa-solid fa-rocket"></i>
-      </div>
+      <div class="w-14 h-14 rounded-2xl bg-amber-100 text-amber-600 flex items-center justify-center text-2xl mx-auto mb-3"><i class="fa-solid fa-rocket"></i></div>
       <h3 class="text-base font-black text-slate-900 mb-1">Boost Your Product Ad</h3>
       <p class="text-xs text-slate-600 mb-4">Pinned to the top carousel with an eye-catching gold badge. Only <strong>RM 1.00 / day</strong>!</p>
-      <button onclick="proceedToBoostDays()" class="w-full py-3 rounded-2xl bg-amber-500 hover:bg-amber-600 text-white font-black text-xs shadow-md">
-        Continue to Boost
-      </button>
+      <button onclick="proceedToBoostDays()" class="w-full py-3 rounded-2xl bg-amber-500 hover:bg-amber-600 text-white font-black text-xs shadow-md">Continue to Boost</button>
     </div>
   </div>
 
@@ -739,9 +463,7 @@
         <span class="text-xs font-bold text-amber-900">Total Cost:</span>
         <span id="boostTotalDisplay" class="text-sm font-black text-amber-700">RM 1.00</span>
       </div>
-      <button onclick="proceedToPaymentQR()" class="w-full py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md">
-        Proceed to Payment QR
-      </button>
+      <button onclick="proceedToPaymentQR()" class="w-full py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md">Proceed to Payment QR</button>
     </div>
   </div>
 
@@ -751,31 +473,23 @@
       <button onclick="closeBoostModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
       <h3 class="text-base font-black text-slate-900 mb-1">Scan to Pay for Ad Boost</h3>
       <p class="text-xs text-slate-600 mb-3">Amount Due: <strong id="tngPayAmountDisplay" class="text-emerald-700">RM 1.00</strong></p>
-      
       <div class="bg-slate-50 p-3 rounded-2xl border border-slate-200 mb-4">
         <div class="w-36 h-36 mx-auto bg-white p-2 rounded-xl border border-slate-200 flex items-center justify-center overflow-hidden">
           <img src="tng.png" alt="TNG QR" class="w-full h-full object-contain" onerror="this.parentElement.innerHTML='<i class=\'fa-solid fa-qrcode text-6xl text-slate-800\'></i>'">
         </div>
         <p class="text-[10px] text-slate-500 mt-2">TNG eWallet / DuitNow QR</p>
       </div>
-
-      <button onclick="submitBoostRequest()" class="w-full py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md">
-        I Have Paid — Submit for Founder Approval
-      </button>
+      <button onclick="submitBoostRequest()" class="w-full py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md">I Have Paid — Submit for Founder Approval</button>
     </div>
   </div>
 
-  <!-- RENEW BOOST EXPIRED MODAL FOR SELLER -->
+  <!-- RENEW BOOST EXPIRED MODAL -->
   <div id="boostExpiredModal" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm hidden flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl max-w-sm w-full p-6 relative text-center shadow-2xl border-2 border-amber-400">
       <button onclick="closeBoostExpiredModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
-      <div class="w-14 h-14 rounded-2xl bg-amber-100 text-amber-600 flex items-center justify-center text-2xl mx-auto mb-3">
-        <i class="fa-solid fa-hourglass-end"></i>
-      </div>
+      <div class="w-14 h-14 rounded-2xl bg-amber-100 text-amber-600 flex items-center justify-center text-2xl mx-auto mb-3"><i class="fa-solid fa-hourglass-end"></i></div>
       <h3 class="text-base font-black text-slate-900 mb-1">Ad Boost Expired</h3>
-      <p id="boostExpiredText" class="text-xs text-slate-600 mb-5 leading-relaxed">
-        Good day <span id="boostExpiredSellerName" class="font-bold text-slate-900">Seller</span>, your boosted product <strong id="boostExpiredItemTitle">Product</strong> has expired. Would you like to renew?
-      </p>
+      <p id="boostExpiredText" class="text-xs text-slate-600 mb-5 leading-relaxed">Good day <span id="boostExpiredSellerName" class="font-bold text-slate-900">Seller</span>, your boosted product <strong id="boostExpiredItemTitle">Product</strong> has expired. Would you like to renew?</p>
       <div class="grid grid-cols-2 gap-3">
         <button onclick="closeBoostExpiredModal()" class="py-2.5 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition-all">Cancel</button>
         <button onclick="renewExpiredBoost()" class="py-2.5 rounded-2xl bg-amber-500 hover:bg-amber-600 text-white font-black text-xs shadow-md transition-all">Renew Again</button>
@@ -787,9 +501,7 @@
   <div id="founderPaymentAlertModal" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm hidden flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl max-w-sm w-full p-6 relative text-center shadow-2xl border-2 border-emerald-500">
       <button onclick="closeFounderAlertModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
-      <div class="w-14 h-14 rounded-2xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-2xl mx-auto mb-3">
-        <i class="fa-solid fa-bell animate-bounce"></i>
-      </div>
+      <div class="w-14 h-14 rounded-2xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-2xl mx-auto mb-3"><i class="fa-solid fa-bell animate-bounce"></i></div>
       <h3 class="text-base font-black text-slate-900 mb-1">New Payment Notification!</h3>
       <p id="founderAlertText" class="text-xs text-slate-600 mb-5 leading-relaxed">A user has submitted a TNG payment proof for verification.</p>
       <button onclick="openAdminHubFromAlert()" class="w-full py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xs shadow-md transition-all">Open Founder Admin Hub</button>
@@ -801,16 +513,12 @@
     <div class="bg-white rounded-3xl max-w-sm w-full p-6 relative text-center shadow-2xl">
       <button onclick="closeIOSInstallModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
       <h3 class="text-base font-black text-slate-900 mb-2">Install on iPhone / iPad</h3>
-      <p class="text-xs text-slate-600 leading-relaxed mb-4">
-        1. Tap the <i class="fa-solid fa-arrow-up-from-bracket text-emerald-600"></i> **Share** button in Safari.<br>
-        2. Scroll down and select <i class="fa-solid fa-square-plus text-emerald-600"></i> **Add to Home Screen**.<br>
-        3. Tap **Add** in the top right corner!
-      </p>
+      <p class="text-xs text-slate-600 leading-relaxed mb-4">1. Tap the <i class="fa-solid fa-arrow-up-from-bracket text-emerald-600"></i> **Share** button in Safari.<br>2. Scroll down and select <i class="fa-solid fa-square-plus text-emerald-600"></i> **Add to Home Screen**.<br>3. Tap **Add** in the top right corner!</p>
       <button onclick="closeIOSInstallModal()" class="w-full py-2.5 rounded-xl bg-slate-900 text-white font-bold text-xs">Got It</button>
     </div>
   </div>
 
-  <!-- SCRIPT MODULES -->
+  <!-- SCRIPT MODULES - PART 1 -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { initializeFirestore, memoryLocalCache, collection, getDocs, addDoc, deleteDoc, doc, updateDoc, setDoc, query, increment } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -832,9 +540,7 @@
     const auth = getAuth(app);
     const storage = getStorage(app);
 
-    window.db = db;
-    window.auth = auth;
-    window.storage = storage;
+    window.db = db; window.auth = auth; window.storage = storage;
 
     const AIMST_COURSES = [
       { id: 'general', name: 'General / Storybooks / Novels / Open Source', nick: 'General' },
@@ -882,27 +588,23 @@
     let profileCountdownInterval = null;
     let expiredBoostQueue = [];
 
-    // Web Audio Synthesizer sound effect for Wishlist chime
     function playWishlistBellSound() {
       try {
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         const osc = audioCtx.createOscillator();
         const gain = audioCtx.createGain();
         osc.type = 'sine';
-        osc.frequency.setValueAtTime(880, audioCtx.currentTime); // A5 note
-        osc.frequency.exponentialRampToValueAtTime(1760, audioCtx.currentTime + 0.15); // A6 note
+        osc.frequency.setValueAtTime(880, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(1760, audioCtx.currentTime + 0.15);
         gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
         gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.4);
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        osc.start();
-        osc.stop(audioCtx.currentTime + 0.4);
+        osc.connect(gain); gain.connect(audioCtx.destination);
+        osc.start(); osc.stop(audioCtx.currentTime + 0.4);
       } catch(e) {}
     }
 
     window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault();
-      deferredPrompt = e;
+      e.preventDefault(); deferredPrompt = e;
       const installBtn = document.getElementById('installAppBtn');
       if (installBtn) installBtn.style.display = 'flex';
     });
@@ -912,39 +614,26 @@
         deferredPrompt.prompt();
         const { outcome } = await deferredPrompt.userChoice;
         if (outcome === 'accepted') { deferredPrompt = null; }
-      } else {
-        alert("PWA installation is already available or already installed on your device browser!");
-      }
+      } else { alert("PWA installation is already available or installed!"); }
     };
 
     window.openIOSInstallModal = function() { document.getElementById('iosInstallModal').classList.remove('hidden'); };
     window.closeIOSInstallModal = function() { document.getElementById('iosInstallModal').classList.add('hidden'); };
 
-    function getWishlistKey() {
-      return currentUserEmail ? `aimst_wishlist_${currentUserEmail}` : 'aimst_wishlist_guest';
-    }
-
-    function getWishlist() {
-      return JSON.parse(localStorage.getItem(getWishlistKey())) || [];
-    }
+    function getWishlistKey() { return currentUserEmail ? `aimst_wishlist_${currentUserEmail}` : 'aimst_wishlist_guest'; }
+    function getWishlist() { return JSON.parse(localStorage.getItem(getWishlistKey())) || []; }
 
     window.switchMainTab = function(tabName) {
       if (!currentUser && (tabName === 'myproducts' || tabName === 'wishlist' || tabName === 'me')) {
         alert("🔒 Verification Required!\n\nTo access this tab, please log in as a Verified APM Seller/Buyer.");
-        openAuthModal();
-        return;
+        openAuthModal(); return;
       }
-
       document.querySelectorAll('.tab-view-page').forEach(el => el.classList.add('hidden'));
-
       const sellerProfile = allSellers.find(s => s.email.toLowerCase() === currentUserEmail);
       const isPro = sellerProfile && sellerProfile.tier === 'pro';
       const activeClass = isPro ? 'active-pro-tab' : 'active-tab';
 
-      document.querySelectorAll('.nav-bottom-btn').forEach(btn => {
-        btn.classList.remove('active-tab');
-        btn.classList.remove('active-pro-tab');
-      });
+      document.querySelectorAll('.nav-bottom-btn').forEach(btn => { btn.classList.remove('active-tab'); btn.classList.remove('active-pro-tab'); });
 
       if (tabName === 'home') {
         document.getElementById('viewHome').classList.remove('hidden');
@@ -974,26 +663,15 @@
       const tabMyProducts = document.getElementById('navBottomMyProducts');
       const tabWishlist = document.getElementById('navBottomWishlist');
       const tabMe = document.getElementById('navBottomMe');
-
       if (!isLogged) {
-        tabMyProducts?.classList.add('disabled-tab');
-        tabWishlist?.classList.add('disabled-tab');
-        tabMe?.classList.add('disabled-tab');
+        tabMyProducts?.classList.add('disabled-tab'); tabWishlist?.classList.add('disabled-tab'); tabMe?.classList.add('disabled-tab');
       } else {
-        tabMyProducts?.classList.remove('disabled-tab');
-        tabWishlist?.classList.remove('disabled-tab');
-        tabMe?.classList.remove('disabled-tab');
+        tabMyProducts?.classList.remove('disabled-tab'); tabWishlist?.classList.remove('disabled-tab'); tabMe?.classList.remove('disabled-tab');
       }
-
       const authBtnText = document.getElementById('headerAuthText');
       const authBtnIcon = document.getElementById('headerAuthIcon');
-      if (isLogged) {
-        authBtnText.innerText = currentUser.substring(0, 8);
-        authBtnIcon.className = "fa-solid fa-user-check";
-      } else {
-        authBtnText.innerText = "Login";
-        authBtnIcon.className = "fa-solid fa-right-to-bracket";
-      }
+      if (isLogged) { authBtnText.innerText = currentUser.substring(0, 8); authBtnIcon.className = "fa-solid fa-user-check"; }
+      else { authBtnText.innerText = "Login"; authBtnIcon.className = "fa-solid fa-right-to-bracket"; }
     }
 
     function renderMyProductsTab() {
@@ -1002,21 +680,10 @@
         const itemSeller = (item.seller || '').toLowerCase();
         return currentUser && (currentUser.toLowerCase() === itemSeller || currentUser.includes(itemSeller));
       });
-
       if (myListings.length === 0) {
-        container.innerHTML = `
-          <div class="col-span-full py-12 text-center grab-card rounded-2xl p-6 border border-slate-200">
-            <i class="fa-solid fa-box-open text-4xl text-slate-300 mb-2"></i>
-            <h4 class="text-sm font-black text-slate-800">No products listed yet</h4>
-            <p class="text-xs text-slate-500 mb-4">You have not listed any items for sale or rental.</p>
-            <button onclick="openAddListingModal()" class="px-4 py-2 rounded-xl bg-emerald-600 text-white font-bold text-xs shadow-md">
-              <i class="fa-solid fa-plus mr-1"></i> Add Your First Product
-            </button>
-          </div>
-        `;
+        container.innerHTML = `<div class="col-span-full py-12 text-center grab-card rounded-2xl p-6 border border-slate-200"><i class="fa-solid fa-box-open text-4xl text-slate-300 mb-2"></i><h4 class="text-sm font-black text-slate-800">No products listed yet</h4><p class="text-xs text-slate-500 mb-4">You have not listed any items for sale or rental.</p><button onclick="openAddListingModal()" class="px-4 py-2 rounded-xl bg-emerald-600 text-white font-bold text-xs shadow-md"><i class="fa-solid fa-plus mr-1"></i> Add Your First Product</button></div>`;
         return;
       }
-
       const now = new Date();
       container.innerHTML = myListings.map(item => {
         let boostStatusHTML = '';
@@ -1030,26 +697,7 @@
         } else if (item.isBoosted && item.boostExpiryDate && new Date(item.boostExpiryDate) <= now) {
           boostStatusHTML = '<span class="text-[9px] font-bold text-rose-700 bg-rose-100 px-2 py-0.5 rounded-md inline-block">⚠️ Boost Expired</span>';
         }
-
-        return `
-          <div class="grab-card rounded-2xl p-3 border border-slate-200 flex flex-col justify-between">
-            <div class="flex space-x-3 mb-2.5">
-              <img src="${item.image || 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=800'}" alt="${item.title}" class="w-16 h-16 rounded-xl object-cover shrink-0">
-              <div class="min-w-0 flex-1">
-                <h4 class="font-bold text-xs text-slate-900 truncate mb-0.5">${item.title}</h4>
-                <p class="text-[10px] text-emerald-700 font-extrabold mb-1">RM ${(Number(item.price)||0).toFixed(2)}</p>
-                ${boostStatusHTML}
-              </div>
-            </div>
-            <div class="grid grid-cols-2 gap-2">
-              <button onclick="openBoostBenefitsModal('${item.id}')" class="py-1.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-[10px] shadow-sm transition-all flex items-center justify-center space-x-1">
-                <i class="fa-solid fa-rocket text-[10px]"></i>
-                <span>Boost Ad</span>
-              </button>
-              <button onclick="terminateListing('${item.id}')" class="py-1.5 rounded-xl bg-rose-50 hover:bg-rose-600 text-rose-600 hover:text-white font-bold text-[10px] border border-rose-200 transition-all">Delete</button>
-            </div>
-          </div>
-        `;
+        return `<div class="grab-card rounded-2xl p-3 border border-slate-200 flex flex-col justify-between"><div class="flex space-x-3 mb-2.5"><img src="${item.image || 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=800'}" alt="${item.title}" class="w-16 h-16 rounded-xl object-cover shrink-0"><div class="min-w-0 flex-1"><h4 class="font-bold text-xs text-slate-900 truncate mb-0.5">${item.title}</h4><p class="text-[10px] text-emerald-700 font-extrabold mb-1">RM ${(Number(item.price)||0).toFixed(2)}</p>${boostStatusHTML}</div></div><div class="grid grid-cols-2 gap-2"><button onclick="openBoostBenefitsModal('${item.id}')" class="py-1.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-[10px] shadow-sm transition-all flex items-center justify-center space-x-1"><i class="fa-solid fa-rocket text-[10px]"></i><span>Boost Ad</span></button><button onclick="terminateListing('${item.id}')" class="py-1.5 rounded-xl bg-rose-50 hover:bg-rose-600 text-rose-600 hover:text-white font-bold text-[10px] border border-rose-200 transition-all">Delete</button></div></div>`;
       }).join('');
     }
 
@@ -1057,43 +705,14 @@
       const container = document.getElementById('wishlistTabContainer');
       const wishlist = getWishlist();
       const savedItems = allListings.filter(item => wishlist.includes(item.id));
-
       if (savedItems.length === 0) {
-        container.innerHTML = `
-          <div class="py-12 text-center text-slate-400 col-span-full">
-            <i class="fa-solid fa-heart-crack text-4xl mb-2 text-rose-300"></i>
-            <p class="text-xs font-bold text-slate-600">Your favourite items list is empty!</p>
-          </div>
-        `;
+        container.innerHTML = `<div class="py-12 text-center text-slate-400 col-span-full"><i class="fa-solid fa-heart-crack text-4xl mb-2 text-rose-300"></i><p class="text-xs font-bold text-slate-600">Your favourite items list is empty!</p></div>`;
         return;
       }
-
       container.innerHTML = savedItems.map(item => {
         const rawContact = item.contact || '';
         const contactHref = rawContact.startsWith('http') ? rawContact : `https://wa.me/${rawContact.replace(/[^0-9]/g, '')}?text=Hi%20${encodeURIComponent(item.seller || 'Seller')},%20I%20am%20interested%20in%20your%20favourite%20item:%20${encodeURIComponent(item.title || 'Item')}`;
-        const priceLabel = `RM ${Number(item.price).toFixed(2)}`;
-
-        return `
-          <div class="grab-card rounded-2xl p-3 border border-slate-200 flex items-center justify-between space-x-3">
-            <div class="flex items-center space-x-3 min-w-0">
-              <img src="${item.image || 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=800'}" alt="${item.title}" class="w-14 h-14 rounded-xl object-cover border border-slate-200 shrink-0">
-              <div class="min-w-0">
-                <h4 class="font-bold text-xs text-slate-900 truncate mb-0.5">${item.title}</h4>
-                <p class="text-[10px] text-emerald-700 font-extrabold mb-0.5">${priceLabel}</p>
-                <p class="text-[9px] text-slate-500">Seller: ${item.seller}</p>
-              </div>
-            </div>
-            <div class="flex items-center space-x-1.5 shrink-0">
-              <button onclick="handleChatClick('${item.id}', '${contactHref}')" class="px-3 py-1.5 rounded-xl bg-emerald-600 text-white font-bold text-[10px] shadow-sm flex items-center space-x-1">
-                <i class="fa-brands fa-whatsapp text-xs"></i>
-                <span>Chat</span>
-              </button>
-              <button onclick="toggleWishlist('${item.id}')" class="px-2 py-1.5 rounded-xl bg-slate-100 text-rose-500 hover:bg-rose-50 text-xs">
-                <i class="fa-solid fa-trash-can"></i>
-              </button>
-            </div>
-          </div>
-        `;
+        return `<div class="grab-card rounded-2xl p-3 border border-slate-200 flex items-center justify-between space-x-3"><div class="flex items-center space-x-3 min-w-0"><img src="${item.image || 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=800'}" alt="${item.title}" class="w-14 h-14 rounded-xl object-cover border border-slate-200 shrink-0"><div class="min-w-0"><h4 class="font-bold text-xs text-slate-900 truncate mb-0.5">${item.title}</h4><p class="text-[10px] text-emerald-700 font-extrabold mb-0.5">RM ${Number(item.price).toFixed(2)}</p><p class="text-[9px] text-slate-500">Seller: ${item.seller}</p></div></div><div class="flex items-center space-x-1.5 shrink-0"><button onclick="handleChatClick('${item.id}', '${contactHref}')" class="px-3 py-1.5 rounded-xl bg-emerald-600 text-white font-bold text-[10px] shadow-sm flex items-center space-x-1"><i class="fa-brands fa-whatsapp text-xs"></i><span>Chat</span></button><button onclick="toggleWishlist('${item.id}')" class="px-2 py-1.5 rounded-xl bg-slate-100 text-rose-500 hover:bg-rose-50 text-xs"><i class="fa-solid fa-trash-can"></i></button></div></div>`;
       }).join('');
     }
 
@@ -1101,25 +720,19 @@
       if (!currentUser) return;
       document.getElementById('meTabUsername').innerText = currentUser;
       document.getElementById('meTabEmail').innerText = currentUserEmail || `${currentUser}@apm.com`;
-      
       const sellerProfile = allSellers.find(s => s.email.toLowerCase() === currentUserEmail);
       const isPro = sellerProfile && sellerProfile.tier === 'pro';
-
       const tierBadge = document.getElementById('meTabTierBadge');
       const upgradeBtn = document.getElementById('meTabUpgradeBtn');
       const proCountdown = document.getElementById('meTabProCountdownContainer');
       const timerDisplay = document.getElementById('meTabProCountdownTimer');
       const profileListingCount = document.getElementById('meTabListingCount');
-
       const myListings = allListings.filter(item => {
         const itemSeller = (item.seller || '').toLowerCase();
         return currentUser && (currentUser.toLowerCase() === itemSeller || currentUser.includes(itemSeller));
       });
       const maxAllowed = isPro ? 7 : 3;
-      if (profileListingCount) {
-        profileListingCount.innerText = `${myListings.length} / ${maxAllowed} Used`;
-      }
-
+      if (profileListingCount) profileListingCount.innerText = `${myListings.length} / ${maxAllowed} Used`;
       if (profileCountdownInterval) clearInterval(profileCountdownInterval);
 
       if (isPro) {
@@ -1132,22 +745,15 @@
           const now = new Date();
           const expiry = new Date(sellerProfile.proExpiryDate);
           const diffMs = expiry - now;
-
           if (diffMs <= 0) {
-            sellerProfile.tier = 'free';
-            syncLocalStorage();
-            applyUserTheme(false);
-            clearInterval(profileCountdownInterval);
-            renderMeTabDetails();
-            return;
+            sellerProfile.tier = 'free'; syncLocalStorage(); applyUserTheme(false);
+            clearInterval(profileCountdownInterval); renderMeTabDetails(); return;
           }
-
           const hours = Math.floor(diffMs / (1000 * 60 * 60));
           const mins = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
           const secs = Math.floor((diffMs % (1000 * 60)) / 1000);
           timerDisplay.innerText = `${hours}h ${mins}m ${secs}s`;
         }
-
         updateTimer();
         profileCountdownInterval = setInterval(updateTimer, 1000);
       } else {
@@ -1163,9 +769,7 @@
         const q = query(collection(db, "contributors"));
         const querySnapshot = await getDocs(q);
         const firebaseContribs = [];
-        querySnapshot.forEach((docSnap) => {
-          firebaseContribs.push({ id: docSnap.id, ...docSnap.data() });
-        });
+        querySnapshot.forEach((docSnap) => { firebaseContribs.push({ id: docSnap.id, ...docSnap.data() }); });
         if (firebaseContribs.length > 0) allContributors = firebaseContribs;
       } catch (err) {
         allContributors = [
@@ -1179,37 +783,11 @@
     function renderAboutContributors() {
       const container = document.getElementById('aboutContributorsList');
       const addBtn = document.getElementById('addAboutContribBtn');
-      if (isFounderUser) addBtn.classList.remove('hidden');
-      else addBtn.classList.add('hidden');
-
-      if (allContributors.length === 0) {
-        container.innerHTML = `
-          <div class="col-span-full py-8 text-center text-slate-400">
-            <p class="text-xs font-bold text-slate-600">No contributors added yet.</p>
-          </div>
-        `;
-        return;
-      }
-
+      if (isFounderUser) addBtn.classList.remove('hidden'); else addBtn.classList.add('hidden');
+      if (allContributors.length === 0) { container.innerHTML = `<div class="col-span-full py-8 text-center text-slate-400"><p class="text-xs font-bold text-slate-600">No contributors added yet.</p></div>`; return; }
       container.innerHTML = allContributors.map(c => {
         const initials = (c.name || 'C').split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
-        return `
-          <div class="grab-card rounded-2xl p-3.5 border border-slate-200 flex flex-col justify-between">
-            <div class="flex items-start space-x-3 mb-2">
-              ${c.photo ? `<img src="${c.photo}" alt="${c.name}" class="w-10 h-10 rounded-xl object-cover shrink-0 border border-slate-200 shadow-sm">` : `<div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-800 font-black flex items-center justify-center text-xs shrink-0 shadow-sm">${initials}</div>`}
-              <div class="min-w-0">
-                <h4 class="font-black text-xs text-slate-900 truncate">${c.name}</h4>
-                <p class="text-[10px] font-bold text-emerald-700">${c.program}</p>
-              </div>
-            </div>
-            <p class="text-[10px] text-slate-600 leading-relaxed bg-slate-50 p-2 rounded-xl border border-slate-100">💡 "${c.desc}"</p>
-            ${isFounderUser ? `
-              <button onclick="deleteContributor('${c.id}')" title="Remove" class="text-rose-500 hover:text-rose-700 text-right text-[10px] font-bold mt-2">
-                <i class="fa-solid fa-trash-can"></i> Remove
-              </button>
-            ` : ''}
-          </div>
-        `;
+        return `<div class="grab-card rounded-2xl p-3.5 border border-slate-200 flex flex-col justify-between"><div class="flex items-start space-x-3 mb-2">${c.photo ? `<img src="${c.photo}" alt="${c.name}" class="w-10 h-10 rounded-xl object-cover shrink-0 border border-slate-200 shadow-sm">` : `<div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-800 font-black flex items-center justify-center text-xs shrink-0 shadow-sm">${initials}</div>`}<div class="min-w-0"><h4 class="font-black text-xs text-slate-900 truncate">${c.name}</h4><p class="text-[10px] font-bold text-emerald-700">${c.program}</p></div></div><p class="text-[10px] text-slate-600 leading-relaxed bg-slate-50 p-2 rounded-xl border border-slate-100">💡 "${c.desc}"</p>${isFounderUser ? `<button onclick="deleteContributor('${c.id}')" title="Remove" class="text-rose-500 hover:text-rose-700 text-right text-[10px] font-bold mt-2"><i class="fa-solid fa-trash-can"></i> Remove</button>` : ''}</div>`;
       }).join('');
     }
 
@@ -1222,7 +800,6 @@
       const program = sanitizeInput(document.getElementById('contribProgram').value);
       const desc = sanitizeInput(document.getElementById('contribDesc').value);
       const fileInput = document.getElementById('contribPhotoFile');
-
       let photo = "";
       if (fileInput.files[0]) {
         const file = fileInput.files[0];
@@ -1231,20 +808,13 @@
         const uploadSnapshot = await uploadBytes(storageRef, file);
         photo = await getDownloadURL(uploadSnapshot.ref);
       }
-
       try {
         const newContrib = { name, program, desc, photo, createdAt: new Date().toISOString() };
         const docRef = await addDoc(collection(db, "contributors"), newContrib);
-        newContrib.id = docRef.id;
-        allContributors.push(newContrib);
-        
-        closeAddContributorModal();
-        document.getElementById('contributorForm').reset();
-        renderAboutContributors();
-        alert("Contributor added to Wall of Fame!");
-      } catch (err) {
-        alert("Firebase Save Error: " + err.message);
-      }
+        newContrib.id = docRef.id; allContributors.push(newContrib);
+        closeAddContributorModal(); document.getElementById('contributorForm').reset();
+        renderAboutContributors(); alert("Contributor added to Wall of Fame!");
+      } catch (err) { alert("Firebase Save Error: " + err.message); }
     };
 
     window.deleteContributor = async function(id) {
@@ -1252,11 +822,8 @@
       try {
         await deleteDoc(doc(db, "contributors", id));
         allContributors = allContributors.filter(c => c.id !== id);
-        renderAboutContributors();
-        alert("Contributor removed.");
-      } catch (err) {
-        alert("Firebase Delete Error: " + err.message);
-      }
+        renderAboutContributors(); alert("Contributor removed.");
+      } catch (err) { alert("Firebase Delete Error: " + err.message); }
     };
 
     function applyUserTheme(isPro) {
@@ -1281,7 +848,7 @@
       if (isPro) {
         if (metaThemeColor) metaThemeColor.content = "#581c87";
         if (banner) banner.className = "bg-gradient-to-r from-purple-950 via-indigo-950 to-slate-900 text-white py-2 px-3 text-center text-xs font-medium flex flex-wrap items-center justify-center gap-2 sm:gap-4 border-b border-purple-700 shadow-md transition-all";
-        if (subTitle) { subTitle.className = "text-[7px] sm:text-[8px] uppercase tracking-widest text-purple-600 font-bold leading-none mt-0.5 truncate"; }
+        if (subTitle) subTitle.className = "text-[7px] sm:text-[8px] uppercase tracking-widest text-purple-600 font-bold leading-none mt-0.5 truncate";
         if (liveBanner) liveBanner.className = "bg-purple-50 border-b border-purple-200 py-1.5 px-3 text-center text-[10px] sm:text-[11px] font-medium text-purple-900 flex flex-wrap items-center justify-center gap-2 sm:gap-6 transition-all";
         if (liveDot) liveDot.className = "w-2 h-2 rounded-full bg-purple-600 animate-pulse";
         if (syncBorder1) syncBorder1.className = "flex items-center space-x-1 border-l border-purple-300 pl-2";
@@ -1299,7 +866,7 @@
       } else {
         if (metaThemeColor) metaThemeColor.content = "#059669";
         if (banner) banner.className = "bg-gradient-to-r from-emerald-900 via-teal-900 to-slate-900 text-white py-2 px-3 text-center text-xs font-medium flex flex-wrap items-center justify-center gap-2 sm:gap-4 border-b border-emerald-700 shadow-md transition-all";
-        if (subTitle) { subTitle.className = "text-[7px] sm:text-[8px] uppercase tracking-widest text-emerald-600 font-bold leading-none mt-0.5 truncate"; }
+        if (subTitle) subTitle.className = "text-[7px] sm:text-[8px] uppercase tracking-widest text-emerald-600 font-bold leading-none mt-0.5 truncate";
         if (liveBanner) liveBanner.className = "bg-emerald-50 border-b border-emerald-200 py-1.5 px-3 text-center text-[10px] sm:text-[11px] font-medium text-emerald-900 flex flex-wrap items-center justify-center gap-2 sm:gap-6 transition-all";
         if (liveDot) liveDot.className = "w-2 h-2 rounded-full bg-emerald-500 animate-pulse";
         if (syncBorder1) syncBorder1.className = "flex items-center space-x-1 border-l border-emerald-300 pl-2";
@@ -1360,33 +927,20 @@
     window.toggleWishlist = function(itemId) {
       if (!currentUser) {
         alert("🔒 Login Required!\n\nGuest buyers can directly contact sellers on WhatsApp, but saving items to Favourite requires registering and logging in as a Verified APM Buyer/Seller.");
-        openAuthModal();
-        return;
+        openAuthModal(); return;
       }
       const wishlist = getWishlist();
       const idx = wishlist.indexOf(itemId);
-      if (idx > -1) {
-        wishlist.splice(idx, 1);
-      } else {
-        wishlist.push(itemId);
-        playWishlistBellSound();
-      }
+      if (idx > -1) { wishlist.splice(idx, 1); } else { wishlist.push(itemId); playWishlistBellSound(); }
       localStorage.setItem(getWishlistKey(), JSON.stringify(wishlist));
-      updateMetrics();
-      renderListings();
-      renderWishlistTab();
+      updateMetrics(); renderListings(); renderWishlistTab();
     };
 
-    window.openBoostBenefitsModal = function(itemId) {
-      activeBoostItemId = itemId;
-      document.getElementById('boostBenefitsModal').classList.remove('hidden');
-    };
+    window.openBoostBenefitsModal = function(itemId) { activeBoostItemId = itemId; document.getElementById('boostBenefitsModal').classList.remove('hidden'); };
     window.closeBoostBenefitsModal = function() { document.getElementById('boostBenefitsModal').classList.add('hidden'); };
     window.proceedToBoostDays = function() {
-      closeBoostBenefitsModal();
-      document.getElementById('boostDaysSelect').value = "1";
-      updateBoostCostDisplay();
-      document.getElementById('boostDaysModal').classList.remove('hidden');
+      closeBoostBenefitsModal(); document.getElementById('boostDaysSelect').value = "1";
+      updateBoostCostDisplay(); document.getElementById('boostDaysModal').classList.remove('hidden');
     };
     window.closeBoostDaysModal = function() { document.getElementById('boostDaysModal').classList.add('hidden'); };
     window.updateBoostCostDisplay = function() {
@@ -1396,37 +950,22 @@
     window.proceedToPaymentQR = function() {
       const days = parseInt(document.getElementById('boostDaysSelect').value) || 1;
       document.getElementById('tngPayAmountDisplay').innerText = `RM ${(days * 1.00).toFixed(2)}`;
-      closeBoostDaysModal();
-      document.getElementById('boostModal').classList.remove('hidden');
+      closeBoostDaysModal(); document.getElementById('boostModal').classList.remove('hidden');
     };
-    window.closeBoostModal = function() {
-      document.getElementById('boostModal').classList.add('hidden');
-      activeBoostItemId = null;
-    };
+    window.closeBoostModal = function() { document.getElementById('boostModal').classList.add('hidden'); activeBoostItemId = null; };
 
     window.submitBoostRequest = async function() {
       if (!activeBoostItemId) return;
       const days = parseInt(document.getElementById('boostDaysSelect').value) || 1;
       const targetItem = allListings.find(i => i.id === activeBoostItemId);
       if (!targetItem) return;
-
-      targetItem.boostStatus = 'pending';
-      targetItem.boostRequestedDays = days;
-      try {
-        await updateDoc(doc(db, "listings", activeBoostItemId), { boostStatus: 'pending', boostRequestedDays: days });
-      } catch(e){}
-
+      targetItem.boostStatus = 'pending'; targetItem.boostRequestedDays = days;
+      try { await updateDoc(doc(db, "listings", activeBoostItemId), { boostStatus: 'pending', boostRequestedDays: days }); } catch(e){}
       try {
         await addDoc(collection(db, "payment_alerts"), {
-          type: "Ad Boost",
-          seller: currentUser,
-          email: currentUserEmail,
-          title: targetItem.title,
-          amount: (days * 1.00).toFixed(2),
-          createdAt: new Date().toISOString()
+          type: "Ad Boost", seller: currentUser, email: currentUserEmail, title: targetItem.title, amount: (days * 1.00).toFixed(2), createdAt: new Date().toISOString()
         });
       } catch(e){}
-
       const waMsg = `Hi Founder Keven, I have paid for my ad boost. Product Name: "${targetItem.title}", Total Days: ${days} Day(s), Total Amount: RM ${(days * 1.00).toFixed(2)}. Here is my payment receipt screenshot.`;
       closeBoostModal();
       window.open(`https://wa.me/60126384757?text=${encodeURIComponent(waMsg)}`, '_blank');
@@ -1439,30 +978,18 @@
       if (!item) return;
       const days = item.boostRequestedDays || 1;
       const boostExpiry = new Date(Date.now() + (days * 24 * 60 * 60 * 1000)).toISOString();
-
-      item.isBoosted = true;
-      item.boostStatus = 'approved';
-      item.boostExpiryDate = boostExpiry;
-
-      try {
-        await updateDoc(doc(db, "listings", itemId), { isBoosted: true, boostStatus: 'approved', boostExpiryDate: boostExpiry });
-      } catch(e){}
-
-      syncLocalStorage();
-      renderListings();
-      renderSellerManagerTable();
+      item.isBoosted = true; item.boostStatus = 'approved'; item.boostExpiryDate = boostExpiry;
+      try { await updateDoc(doc(db, "listings", itemId), { isBoosted: true, boostStatus: 'approved', boostExpiryDate: boostExpiry }); } catch(e){}
+      syncLocalStorage(); renderListings(); renderSellerManagerTable();
       alert(`Approved Ad Boost for "${item.title}" (${days} days)!`);
     };
 
     window.rejectBoost = async function(itemId) {
       const item = allListings.find(i => i.id === itemId);
       if (!item) return;
-      item.isBoosted = false;
-      item.boostStatus = 'rejected';
+      item.isBoosted = false; item.boostStatus = 'rejected';
       try { await updateDoc(doc(db, "listings", itemId), { isBoosted: false, boostStatus: 'rejected' }); } catch(e){}
-      syncLocalStorage();
-      renderListings();
-      renderSellerManagerTable();
+      syncLocalStorage(); renderListings(); renderSellerManagerTable();
     };
 
     window.requestProUpgrade = async function() {
@@ -1472,17 +999,11 @@
         seller.proUpgradeStatus = 'pending';
         try { await updateDoc(doc(db, "verified_sellers", seller.id), { proUpgradeStatus: 'pending' }); } catch(e){}
       }
-      
       try {
         await addDoc(collection(db, "payment_alerts"), {
-          type: "Pro Upgrade",
-          seller: currentUser,
-          email: currentUserEmail,
-          amount: "5.00",
-          createdAt: new Date().toISOString()
+          type: "Pro Upgrade", seller: currentUser, email: currentUserEmail, amount: "5.00", createdAt: new Date().toISOString()
         });
       } catch(e){}
-
       syncLocalStorage();
       const waMsg = `Hi Founder Keven, I have paid RM5 for the APM Pro Tier upgrade. Here is my payment receipt screenshot. Seller Account: ${currentUserEmail}`;
       closeUpgradeModal();
@@ -1493,14 +1014,10 @@
     window.approveProUpgrade = async function(sellerId) {
       const seller = allSellers.find(s => s.id === sellerId);
       if (seller) {
-        seller.tier = 'pro';
-        seller.proUpgradeStatus = 'approved';
+        seller.tier = 'pro'; seller.proUpgradeStatus = 'approved';
         seller.proExpiryDate = new Date(Date.now() + (30 * 24 * 60 * 60 * 1000)).toISOString();
-        try {
-          await updateDoc(doc(db, "verified_sellers", sellerId), { tier: 'pro', proUpgradeStatus: 'approved', proExpiryDate: seller.proExpiryDate });
-        } catch(e){}
-        syncLocalStorage();
-        renderSellerManagerTable();
+        try { await updateDoc(doc(db, "verified_sellers", sellerId), { tier: 'pro', proUpgradeStatus: 'approved', proExpiryDate: seller.proExpiryDate }); } catch(e){}
+        syncLocalStorage(); renderSellerManagerTable();
         alert(`Approved Pro Tier for ${seller.username}!`);
       }
     };
@@ -1510,8 +1027,7 @@
       if (seller) {
         seller.proUpgradeStatus = 'rejected';
         try { await updateDoc(doc(db, "verified_sellers", sellerId), { proUpgradeStatus: 'rejected' }); } catch(e){}
-        syncLocalStorage();
-        renderSellerManagerTable();
+        syncLocalStorage(); renderSellerManagerTable();
       }
     };
 
@@ -1535,23 +1051,17 @@
       if (!rawUser || !pass) { alert("Please fill in both fields."); return; }
       if (!rawUser.includes('@')) rawUser = `${rawUser}@apm.com`;
       const cleanUsername = rawUser.split('@')[0];
-
       try {
         await createUserWithEmailAndPassword(auth, rawUser, pass);
         const newSellerDoc = { id: 'seller-' + Date.now(), username: cleanUsername, email: rawUser.toLowerCase(), isVerified: false, tier: 'free' };
         try { await setDoc(doc(db, "verified_sellers", newSellerDoc.id), newSellerDoc); } catch(e){}
-        allSellers.push(newSellerDoc);
-        syncLocalStorage();
-        await signOut(auth);
+        allSellers.push(newSellerDoc); syncLocalStorage(); await signOut(auth);
         alert("Step 1 Complete! Send your Student ID proof to Founder Keven on WhatsApp.");
         switchAuthTab('login');
       } catch (err) { alert(`Registration Error: ${err.message}`); }
     };
 
-    window.handleAuthClick = function() {
-      if (currentUser) switchMainTab('me');
-      else openAuthModal();
-    };
+    window.handleAuthClick = function() { if (currentUser) switchMainTab('me'); else openAuthModal(); };
 
     onAuthStateChanged(auth, async (user) => {
       if (user) {
@@ -1562,13 +1072,11 @@
 
         await loadSellers();
         const sellerProfile = allSellers.find(s => (s.email || '').toLowerCase() === currentUserEmail);
-        
         if (sellerProfile && !sellerProfile.isVerified && !isFounderUser) {
           await signOut(auth);
           alert("Your account is pending founder verification. Please check back soon!");
           return;
         }
-
         const isPro = sellerProfile && sellerProfile.tier === 'pro';
         applyUserTheme(isPro);
 
@@ -1577,10 +1085,7 @@
         if (isFounderUser) document.getElementById('sellerManagerNavBtn').style.display = 'flex';
 
         checkExpiredBoostsForSeller();
-
-        if (isFounderUser) {
-          checkFounderPaymentAlerts();
-        }
+        if (isFounderUser) checkFounderPaymentAlerts();
       } else {
         currentUser = null; currentUserEmail = null; isFounderUser = false;
         applyUserTheme(false);
@@ -1588,10 +1093,7 @@
         document.getElementById('addClubBtn').style.display = 'none';
         document.getElementById('sellerManagerNavBtn').style.display = 'none';
       }
-      updateNavTabVisuals();
-      renderListings();
-      renderClubs();
-      loadContributors();
+      updateNavTabVisuals(); renderListings(); renderClubs(); loadContributors();
       if (isFounderUser) renderSellerManagerTable();
     });
 
@@ -1603,15 +1105,11 @@
         const isOwner = currentUser && (currentUser.toLowerCase() === itemSeller || currentUser.includes(itemSeller));
         if (!isOwner) return false;
         if (!item.isBoosted || !item.boostExpiryDate) return false;
-        
         const expiry = new Date(item.boostExpiryDate);
         const hasNotified = localStorage.getItem(`apm_expired_notified_${item.id}`);
         return expiry <= now && !hasNotified;
       });
-
-      if (expiredBoostQueue.length > 0) {
-        showExpiredBoostModal(expiredBoostQueue[0]);
-      }
+      if (expiredBoostQueue.length > 0) showExpiredBoostModal(expiredBoostQueue[0]);
     }
 
     function showExpiredBoostModal(item) {
@@ -1621,18 +1119,12 @@
     }
 
     window.closeBoostExpiredModal = function() {
-      if (expiredBoostQueue.length > 0) {
-        localStorage.setItem(`apm_expired_notified_${expiredBoostQueue[0].id}`, 'true');
-      }
+      if (expiredBoostQueue.length > 0) localStorage.setItem(`apm_expired_notified_${expiredBoostQueue[0].id}`, 'true');
       document.getElementById('boostExpiredModal').classList.add('hidden');
     };
 
     window.renewExpiredBoost = function() {
-      if (expiredBoostQueue.length > 0) {
-        const item = expiredBoostQueue[0];
-        closeBoostExpiredModal();
-        openBoostBenefitsModal(item.id);
-      }
+      if (expiredBoostQueue.length > 0) { const item = expiredBoostQueue[0]; closeBoostExpiredModal(); openBoostBenefitsModal(item.id); }
     };
 
     async function checkFounderPaymentAlerts() {
@@ -1642,11 +1134,8 @@
         const unreadAlerts = [];
         snapshot.forEach(d => {
           const alertData = d.data();
-          if (!localStorage.getItem(`apm_alert_seen_${d.id}`)) {
-            unreadAlerts.push({ id: d.id, ...alertData });
-          }
+          if (!localStorage.getItem(`apm_alert_seen_${d.id}`)) unreadAlerts.push({ id: d.id, ...alertData });
         });
-
         if (unreadAlerts.length > 0) {
           const firstAlert = unreadAlerts[0];
           document.getElementById('founderAlertText').innerText = `Good day Founder! Seller ${firstAlert.seller} (${firstAlert.email}) has submitted payment proof for ${firstAlert.type} (RM ${firstAlert.amount}).`;
@@ -1657,41 +1146,25 @@
     }
 
     window.closeFounderAlertModal = function() { document.getElementById('founderPaymentAlertModal').classList.add('hidden'); };
-    window.openAdminHubFromAlert = function() {
-      closeFounderAlertModal();
-      openSellerManagerModal();
-    };
+    window.openAdminHubFromAlert = function() { closeFounderAlertModal(); openSellerManagerModal(); };
 
     async function loadData() {
-      checkWelcomeModal();
-      populateCourseDropdowns();
-      renderCourseFilterPills();
-      await loadSellers();
-      await loadListings();
-      await loadClubs();
-      await loadContributors();
-      updateMetrics();
-      updateNavTabVisuals();
-      
+      checkWelcomeModal(); populateCourseDropdowns(); renderCourseFilterPills();
+      await loadSellers(); await loadListings(); await loadClubs(); await loadContributors();
+      updateMetrics(); updateNavTabVisuals();
       startDailyBoostPopupSequence();
       setInterval(startDailyBoostPopupSequence, 5 * 60 * 1000);
     }
 
     function startDailyBoostPopupSequence() {
-      const now = new Date();
-      const todayStr = new Date().toDateString();
-
+      const now = new Date(); const todayStr = new Date().toDateString();
       const activeBoosted = allListings.filter(item => {
         if (!item.isBoosted || !item.boostExpiryDate) return false;
         return new Date(item.boostExpiryDate) > now && !item.isDisabled;
       }).sort((a, b) => new Date(b.boostExpiryDate) - new Date(a.boostExpiryDate));
 
       if (activeBoosted.length === 0) return;
-
-      const unshownAd = activeBoosted.find(ad => {
-        return !localStorage.getItem(`apm_boost_shown_${ad.id}_${todayStr}`);
-      });
-
+      const unshownAd = activeBoosted.find(ad => !localStorage.getItem(`apm_boost_shown_${ad.id}_${todayStr}`));
       if (unshownAd) {
         showRandomBoostPopup(unshownAd);
         localStorage.setItem(`apm_boost_shown_${unshownAd.id}_${todayStr}`, 'true');
@@ -1703,19 +1176,7 @@
       const rawContact = item.contact || '';
       const contactHref = rawContact.startsWith('http') ? rawContact : `https://wa.me/${rawContact.replace(/[^0-9]/g, '')}?text=Hi%20${encodeURIComponent(item.seller || 'Seller')},%20I%20saw%20your%20boosted%20ad%20on%20APM%20and%20want%20to%20buy:%20${encodeURIComponent(item.title || 'Item')}`;
       const safePrice = Number(item.price) || 0;
-
-      container.innerHTML = `
-        <div class="relative w-full aspect-square rounded-2xl overflow-hidden mb-3 bg-slate-100 border border-slate-200">
-          <img src="${item.image || 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=800'}" alt="${item.title}" class="w-full h-full object-cover">
-        </div>
-        <h4 class="font-black text-base text-slate-900 mb-1 line-clamp-1">${item.title}</h4>
-        <p class="text-xs text-emerald-700 font-extrabold mb-3">RM ${safePrice.toFixed(2)}</p>
-        <a href="${contactHref}" target="_blank" onclick="closeRandomBoostPopup()" class="w-full py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xs shadow-lg shadow-emerald-600/30 flex items-center justify-center space-x-2 transition-all">
-          <i class="fa-brands fa-whatsapp text-base"></i>
-          <span>BUY NOW !! CLICK TO CHAT</span>
-        </a>
-      `;
-
+      container.innerHTML = `<div class="relative w-full aspect-square rounded-2xl overflow-hidden mb-3 bg-slate-100 border border-slate-200"><img src="${item.image || 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=800'}" alt="${item.title}" class="w-full h-full object-cover"></div><h4 class="font-black text-base text-slate-900 mb-1 line-clamp-1">${item.title}</h4><p class="text-xs text-emerald-700 font-extrabold mb-3">RM ${safePrice.toFixed(2)}</p><a href="${contactHref}" target="_blank" onclick="closeRandomBoostPopup()" class="w-full py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xs shadow-lg shadow-emerald-600/30 flex items-center justify-center space-x-2 transition-all"><i class="fa-brands fa-whatsapp text-base"></i><span>BUY NOW !! CLICK TO CHAT</span></a>`;
       document.getElementById('randomBoostPopupModal').classList.remove('hidden');
     }
 
@@ -1724,44 +1185,28 @@
     function populateCourseDropdowns() {
       const selectEl = document.getElementById('itemCourseSelect');
       if (!selectEl) return;
-      selectEl.innerHTML = AIMST_COURSES.map(c => `
-        <option value="${c.id}">${c.name} (${c.nick})</option>
-      `).join('');
+      selectEl.innerHTML = AIMST_COURSES.map(c => `<option value="${c.id}">${c.name} (${c.nick})</option>`).join('');
     }
 
     window.renderCourseFilterPills = function() {
       const container = document.getElementById('coursePillsContainer');
       const searchTxt = (document.getElementById('courseSearchInput')?.value || '').toLowerCase();
       const filtered = AIMST_COURSES.filter(c => c.name.toLowerCase().includes(searchTxt) || c.nick.toLowerCase().includes(searchTxt));
-
       container.innerHTML = filtered.map(c => {
         const isSelected = selectedCourses.has(c.id);
-        return `
-          <button onclick="toggleCourseFilter('${c.id}')" class="px-2.5 py-1.5 rounded-xl text-[11px] font-bold transition-all border flex items-center space-x-1.5 ${isSelected ? 'bg-emerald-600 text-white border-emerald-700 shadow-sm' : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'}">
-            <span>${c.nick}</span>
-            ${isSelected ? '<i class="fa-solid fa-check text-[10px]"></i>' : ''}
-          </button>
-        `;
+        return `<button onclick="toggleCourseFilter('${c.id}')" class="px-2.5 py-1.5 rounded-xl text-[11px] font-bold transition-all border flex items-center space-x-1.5 ${isSelected ? 'bg-emerald-600 text-white border-emerald-700 shadow-sm' : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'}"><span>${c.nick}</span>${isSelected ? '<i class="fa-solid fa-check text-[10px]"></i>' : ''}</button>`;
       }).join('');
     };
 
     window.toggleCourseFilter = function(courseId) {
-      if (selectedCourses.has(courseId)) selectedCourses.delete(courseId);
-      else selectedCourses.add(courseId);
-      renderCourseFilterPills();
-      renderListings();
+      if (selectedCourses.has(courseId)) selectedCourses.delete(courseId); else selectedCourses.add(courseId);
+      renderCourseFilterPills(); renderListings();
     };
 
-    window.clearCourseFilters = function() {
-      selectedCourses.clear();
-      renderCourseFilterPills();
-      renderListings();
-    };
-
+    window.clearCourseFilters = function() { selectedCourses.clear(); renderCourseFilterPills(); renderListings(); };
     window.toggleCourseFilterPanel = function() {
       const panel = document.getElementById('courseFilterSection');
-      if (panel.classList.contains('hidden')) panel.classList.remove('hidden');
-      else panel.classList.add('hidden');
+      if (panel.classList.contains('hidden')) panel.classList.remove('hidden'); else panel.classList.add('hidden');
     };
 
     window.onCategoryChange = function() {
@@ -1770,7 +1215,6 @@
       const priceLabel = document.getElementById('priceLabel');
       const titleInput = document.getElementById('itemTitle');
       const descInput = document.getElementById('itemDesc');
-
       if (cat === 'academic') {
         courseContainer.style.display = 'block';
         titleInput.placeholder = 'e.g., DBMS Semester 3 Lecture Notes & Past Year Papers';
@@ -1796,9 +1240,7 @@
         titleInput.placeholder = 'e.g., AIMST Deepavali Cultural Night 2026 Ticket';
         descInput.placeholder = 'Specify event date, time, venue, ticket price, and contact person...';
       }
-
-      if (cat === 'rentals') priceLabel.innerText = 'Rental Rate (MYR / day)';
-      else priceLabel.innerText = 'Price (MYR)';
+      if (cat === 'rentals') priceLabel.innerText = 'Rental Rate (MYR / day)'; else priceLabel.innerText = 'Price (MYR)';
     };
 
     async function loadListings() {
@@ -1806,13 +1248,10 @@
         const q = query(collection(db, "listings"));
         const querySnapshot = await getDocs(q);
         const firebaseItems = [];
-        querySnapshot.forEach((docSnap) => {
-          firebaseItems.push({ id: docSnap.id, clicksCount: 0, ...docSnap.data() });
-        });
+        querySnapshot.forEach((docSnap) => { firebaseItems.push({ id: docSnap.id, clicksCount: 0, ...docSnap.data() }); });
         allListings = firebaseItems;
       } catch (error) { allListings = []; }
-      syncLocalStorage();
-      renderListings();
+      syncLocalStorage(); renderListings();
     }
 
     async function loadClubs() {
@@ -1823,8 +1262,7 @@
         querySnapshot.forEach((docSnap) => { firebaseClubs.push({ id: docSnap.id, ...docSnap.data() }); });
         if (firebaseClubs.length > 0) allClubs = firebaseClubs;
       } catch (err) {}
-      syncLocalStorage();
-      renderClubs();
+      syncLocalStorage(); renderClubs();
     }
 
     async function loadSellers() {
@@ -1836,16 +1274,12 @@
           const data = docSnap.data();
           firebaseSellers.push({ id: docSnap.id, ...data, email: (data.email || '').toLowerCase() }); 
         });
-        if (firebaseSellers.length > 0) {
-          allSellers = firebaseSellers;
-          syncLocalStorage();
-        }
+        if (firebaseSellers.length > 0) { allSellers = firebaseSellers; syncLocalStorage(); }
       } catch (err) {}
     }
 
     window.toggleDescription = function(itemId) {
-      if (expandedDescIds.has(itemId)) expandedDescIds.delete(itemId);
-      else expandedDescIds.add(itemId);
+      if (expandedDescIds.has(itemId)) expandedDescIds.delete(itemId); else expandedDescIds.add(itemId);
       renderListings();
     };
 
@@ -1864,15 +1298,8 @@
         b.className = "category-btn grab-card p-2.5 rounded-2xl flex flex-col items-center justify-center text-center transition-all group";
       });
       if (btn) btn.className = "category-btn grab-card p-2.5 rounded-2xl flex flex-col items-center justify-center text-center transition-all group bg-emerald-50 border-emerald-300 shadow-sm";
-
       const courseFilterSection = document.getElementById('courseFilterSection');
-      if (cat === 'academic') {
-        courseFilterSection.classList.remove('hidden');
-        renderCourseFilterPills();
-      } else {
-        courseFilterSection.classList.add('hidden');
-      }
-
+      if (cat === 'academic') { courseFilterSection.classList.remove('hidden'); renderCourseFilterPills(); } else { courseFilterSection.classList.add('hidden'); }
       renderListings();
     };
 
@@ -1892,39 +1319,28 @@
         return new Date(item.boostExpiryDate) > now && !item.isDisabled;
       }).sort((a, b) => new Date(b.boostExpiryDate) - new Date(a.boostExpiryDate));
 
-      const boostedIds = new Set(boostedItems.map(i => i.id));
-
       if (boostedItems.length > 0) {
         sponsoredSec.classList.remove('hidden');
-        // Duplicate items seamlessly for infinite conveyor loop animation
         const repeatedItems = [...boostedItems, ...boostedItems, ...boostedItems];
         carouselContainer.innerHTML = repeatedItems.map(item => createSponsoredCardHTML(item, now)).join('');
 
-        // Smooth Electric-Gate Continuous Ticker Animation
-        let scrollSpeed = 0.6; // pixels per frame
+        let scrollSpeed = 0.6;
         function startTicker() {
           if (!carouselContainer) return;
           carouselContainer.scrollLeft += scrollSpeed;
-          // Loop seamlessly back when half scrolled
           const singleSetWidth = carouselContainer.scrollWidth / 3;
-          if (carouselContainer.scrollLeft >= singleSetWidth) {
-            carouselContainer.scrollLeft -= singleSetWidth;
-          }
+          if (carouselContainer.scrollLeft >= singleSetWidth) { carouselContainer.scrollLeft -= singleSetWidth; }
           carouselAnimId = requestAnimationFrame(startTicker);
         }
-
-        // Pause on mouse hover/touch
         carouselContainer.onmouseenter = () => cancelAnimationFrame(carouselAnimId);
         carouselContainer.onmouseleave = () => startTicker();
-
         startTicker();
       } else {
         sponsoredSec.classList.add('hidden');
       }
       
+      // FIXED: Boosted items are NO LONGER excluded from search or category filters! They appear in BOTH carousel and search/category results.
       const filtered = allListings.filter(item => {
-        if (boostedIds.has(item.id)) return false;
-
         const itemSeller = (item.seller || '').toLowerCase();
         const isOwner = currentUser && (currentUser.toLowerCase() === itemSeller || currentUser.includes(itemSeller) || itemSeller.includes(currentUser));
         if (item.isDisabled && !isOwner && !isFounderUser) return false;
@@ -1935,18 +1351,12 @@
           matchesCourse = selectedCourses.has(item.courseId);
         }
 
-        const matchesSearch = (item.title || '').toLowerCase().includes(searchTxt) || (item.desc || '').toLowerCase().includes(searchTxt) || (item.courseNick || '').toLowerCase().includes(searchTxt);
+        const matchesSearch = (item.title || '').toLowerCase().includes(searchTxt) || (item.desc || '').toLowerCase().includes(searchTxt) || (item.courseNick || '').toLowerCase().includes(searchTxt) || (item.category || '').toLowerCase().includes(searchTxt);
         return matchesCategory && matchesCourse && matchesSearch;
       });
 
       if (filtered.length === 0) {
-        grid.innerHTML = `
-          <div class="col-span-full py-16 text-center grab-card rounded-3xl p-8 border border-slate-200">
-            <i class="fa-solid fa-box-open text-4xl mb-3 text-emerald-500"></i>
-            <h4 class="text-base font-black text-slate-900 mb-1">No products available</h4>
-            <p class="text-xs text-slate-500 max-w-sm mx-auto mb-4">No items matching your criteria right now.</p>
-          </div>
-        `;
+        grid.innerHTML = `<div class="col-span-full py-16 text-center grab-card rounded-3xl p-8 border border-slate-200"><i class="fa-solid fa-box-open text-4xl mb-3 text-emerald-500"></i><h4 class="text-base font-black text-slate-900 mb-1">No products available</h4><p class="text-xs text-slate-500 max-w-sm mx-auto mb-4">No items matching your criteria right now.</p></div>`;
         return;
       }
 
@@ -1957,32 +1367,11 @@
       const rawContact = item.contact || '';
       const contactHref = rawContact.startsWith('http') ? rawContact : `https://wa.me/${rawContact.replace(/[^0-9]/g, '')}?text=Hi%20${encodeURIComponent(item.seller || 'Seller')},%20I%20saw%20your%20sponsored%20ad%20on%20APM:%20${encodeURIComponent(item.title || 'Item')}`;
       const safePrice = Number(item.price) || 0;
-      
       const diffMs = new Date(item.boostExpiryDate) - now;
       const diffHrs = Math.floor(diffMs / (1000 * 60 * 60));
       const diffMins = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
 
-      return `
-        <div class="shrink-0 w-64 sm:w-72 boosted-card rounded-2xl overflow-hidden p-3 flex flex-col justify-between relative shadow-lg">
-          <div>
-            <div class="relative w-full h-36 rounded-xl overflow-hidden bg-slate-100 mb-2">
-              <img src="${item.image || 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=800'}" alt="${item.title}" class="w-full h-full object-cover">
-              <span class="absolute top-2 left-2 bg-amber-500 text-slate-950 font-black text-[8px] py-0.5 px-2 rounded-md uppercase tracking-wider shadow-md">
-                <i class="fa-solid fa-bolt"></i> SPONSORED
-              </span>
-              <span class="absolute bottom-2 right-2 bg-slate-900/90 text-amber-400 font-bold text-[9px] py-0.5 px-2 rounded-md shadow-md backdrop-blur-sm">
-                <i class="fa-solid fa-clock"></i> ${diffHrs}h ${diffMins}m
-              </span>
-            </div>
-            <h4 class="font-black text-xs text-slate-900 truncate mb-0.5">${item.title}</h4>
-            <p class="text-[10px] text-emerald-700 font-extrabold mb-2">RM ${safePrice.toFixed(2)}</p>
-          </div>
-          <a href="${contactHref}" target="_blank" onclick="handleChatClick('${item.id}', '${contactHref}')" class="w-full py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs shadow-md transition-all flex items-center justify-center space-x-1.5">
-            <i class="fa-brands fa-whatsapp text-sm"></i>
-            <span>BUY NOW & CHAT</span>
-          </a>
-        </div>
-      `;
+      return `<div class="shrink-0 w-64 sm:w-72 boosted-card rounded-2xl overflow-hidden p-3 flex flex-col justify-between relative shadow-lg"><div><div class="relative w-full h-36 rounded-xl overflow-hidden bg-slate-100 mb-2"><img src="${item.image || 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=800'}" alt="${item.title}" class="w-full h-full object-cover"><span class="absolute top-2 left-2 bg-amber-500 text-slate-950 font-black text-[8px] py-0.5 px-2 rounded-md uppercase tracking-wider shadow-md"><i class="fa-solid fa-bolt"></i> SPONSORED</span><span class="absolute bottom-2 right-2 bg-slate-900/90 text-amber-400 font-bold text-[9px] py-0.5 px-2 rounded-md shadow-md backdrop-blur-sm"><i class="fa-solid fa-clock"></i> ${diffHrs}h ${diffMins}m</span></div><h4 class="font-black text-xs text-slate-900 truncate mb-0.5">${item.title}</h4><p class="text-[10px] text-emerald-700 font-extrabold mb-2">RM ${safePrice.toFixed(2)}</p></div><a href="${contactHref}" target="_blank" onclick="handleChatClick('${item.id}', '${contactHref}')" class="w-full py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs shadow-md transition-all flex items-center justify-center space-x-1.5"><i class="fa-brands fa-whatsapp text-sm"></i><span>BUY NOW & CHAT</span></a></div>`;
     }
 
     function createCardHTML(item) {
@@ -1999,109 +1388,21 @@
       const isRental = item.category === 'rentals';
       const priceUnit = isRental ? '/ day' : '';
 
-      const courseBadge = item.courseNick ? `
-        <span class="absolute top-8 left-2.5 px-2 py-0.5 rounded-lg bg-emerald-50 text-emerald-800 text-[8px] font-black uppercase tracking-wider shadow-sm border border-emerald-200">
-          ${item.courseNick}
-        </span>
-      ` : '';
+      const courseBadge = item.courseNick ? `<span class="absolute top-8 left-2.5 px-2 py-0.5 rounded-lg bg-emerald-50 text-emerald-800 text-[8px] font-black uppercase tracking-wider shadow-sm border border-emerald-200">${item.courseNick}</span>` : '';
 
-      return `
-        <div class="grab-card rounded-2xl overflow-hidden transition-all group flex flex-col justify-between relative text-left">
-          <div>
-            <div class="relative w-full aspect-square overflow-hidden bg-slate-100">
-              <img src="${item.image || 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=800'}" alt="${item.title}" class="w-full h-full object-cover group-hover:scale-105 transition-all duration-300">
-              
-              <span class="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-lg bg-white/95 backdrop-blur-md text-[9px] font-extrabold uppercase tracking-wider text-slate-800 shadow-sm border border-slate-200">
-                ${item.category === 'rentals' ? 'Belongings Rental' : (item.category || 'general')}
-              </span>
-
-              ${courseBadge}
-
-              <button onclick="toggleWishlist('${item.id}')" title="Save to Favourite" class="absolute top-2.5 right-2.5 z-20 w-7 h-7 rounded-full bg-white/95 backdrop-blur-md shadow-md flex items-center justify-center transition-all hover:scale-110">
-                <i class="fa-solid fa-heart ${isWishlisted ? 'text-rose-500' : 'text-slate-300'} text-xs"></i>
-              </button>
-
-              ${(isFounderUser || isOwner) ? `
-                <button onclick="terminateListing('${item.id}')" class="absolute top-11 right-2.5 px-2 py-0.5 rounded-lg bg-rose-600 text-white font-bold text-[9px] shadow-md hover:bg-rose-700 z-10 transition-all">
-                  ${isFounderUser ? 'TERMINATE' : 'Delete'}
-                </button>
-              ` : ''}
-            </div>
-
-            <div class="p-2.5 sm:p-3">
-              <h4 class="font-bold text-xs sm:text-sm text-slate-900 mb-1 line-clamp-2 leading-snug">${item.title || 'Item Title'}</h4>
-              <div class="text-[10px] text-slate-500 mb-2 leading-relaxed">
-                ${isExpanded || !shouldTruncate ? fullDesc : fullDesc.substring(0, 55) + '...'}
-                ${shouldTruncate ? `
-                  <button onclick="toggleDescription('${item.id}')" class="text-emerald-700 font-bold hover:underline ml-1 focus:outline-none">
-                    ${isExpanded ? 'Show Less' : 'Show More'}
-                  </button>
-                ` : ''}
-              </div>
-
-              <div class="flex items-baseline justify-between mb-1">
-                <div class="flex items-baseline space-x-1">
-                  <span class="text-[10px] text-emerald-600 font-bold">RM</span>
-                  <span class="text-base sm:text-lg font-black text-emerald-700 leading-none">${safePrice.toFixed(2)}</span>
-                  ${priceUnit ? `<span class="text-[9px] text-slate-500 font-bold">${priceUnit}</span>` : ''}
-                </div>
-                <span class="text-[9px] text-slate-400 flex items-center space-x-1">
-                  <i class="fa-solid fa-location-dot text-emerald-500 text-[8px]"></i>
-                  <span>AIMST</span>
-                </span>
-              </div>
-            </div>
-          </div>
-
-          <div class="p-2.5 sm:p-3 pt-0 mt-auto">
-            <div class="pt-2 border-t border-slate-100 flex items-center justify-between gap-1 text-[10px]">
-              <span class="text-slate-600 truncate max-w-[50%] font-semibold">${itemSeller}</span>
-              <div class="flex items-center space-x-1 shrink-0">
-                ${(isOwner || isFounderUser) ? `
-                  <button onclick="markItemSold('${item.id}')" class="px-2 py-1 rounded-lg bg-slate-100 text-slate-700 hover:bg-emerald-600 hover:text-white font-bold text-[9px] transition-all border border-slate-200">Sold</button>
-                ` : ''}
-                <button onclick="handleChatClick('${item.id}', '${contactHref}')" class="px-2 py-1 rounded-xl bg-emerald-50 hover:bg-emerald-600 hover:text-white text-emerald-700 font-bold transition-all border border-slate-200 flex items-center space-x-1 text-[10px] shadow-sm">
-                  <i class="fa-brands fa-whatsapp text-xs"></i>
-                  <span>Chat</span>
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      `;
+      return `<div class="grab-card rounded-2xl overflow-hidden transition-all group flex flex-col justify-between relative text-left"><div><div class="relative w-full aspect-square overflow-hidden bg-slate-100"><img src="${item.image || 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=800'}" alt="${item.title}" class="w-full h-full object-cover group-hover:scale-105 transition-all duration-300"><span class="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-lg bg-white/95 backdrop-blur-md text-[9px] font-extrabold uppercase tracking-wider text-slate-800 shadow-sm border border-slate-200">${item.category === 'rentals' ? 'Belongings Rental' : (item.category || 'general')}</span>${courseBadge}<button onclick="toggleWishlist('${item.id}')" title="Save to Favourite" class="absolute top-2.5 right-2.5 z-20 w-7 h-7 rounded-full bg-white/95 backdrop-blur-md shadow-md flex items-center justify-center transition-all hover:scale-110"><i class="fa-solid fa-heart ${isWishlisted ? 'text-rose-500' : 'text-slate-300'} text-xs"></i></button>${(isFounderUser || isOwner) ? `<button onclick="terminateListing('${item.id}')" class="absolute top-11 right-2.5 px-2 py-0.5 rounded-lg bg-rose-600 text-white font-bold text-[9px] shadow-md hover:bg-rose-700 z-10 transition-all">${isFounderUser ? 'TERMINATE' : 'Delete'}</button>` : ''}</div><div class="p-2.5 sm:p-3"><h4 class="font-bold text-xs sm:text-sm text-slate-900 mb-1 line-clamp-2 leading-snug">${item.title || 'Item Title'}</h4><div class="text-[10px] text-slate-500 mb-2 leading-relaxed">${isExpanded || !shouldTruncate ? fullDesc : fullDesc.substring(0, 55) + '...'}${shouldTruncate ? `<button onclick="toggleDescription('${item.id}')" class="text-emerald-700 font-bold hover:underline ml-1 focus:outline-none">${isExpanded ? 'Show Less' : 'Show More'}</button>` : ''}</div><div class="flex items-baseline justify-between mb-1"><div class="flex items-baseline space-x-1"><span class="text-[10px] text-emerald-600 font-bold">RM</span><span class="text-base sm:text-lg font-black text-emerald-700 leading-none">${safePrice.toFixed(2)}</span>${priceUnit ? `<span class="text-[9px] text-slate-500 font-bold">${priceUnit}</span>` : ''}</div><span class="text-[9px] text-slate-400 flex items-center space-x-1"><i class="fa-solid fa-location-dot text-emerald-500 text-[8px]"></i><span>AIMST</span></span></div></div></div><div class="p-2.5 sm:p-3 pt-0 mt-auto"><div class="pt-2 border-t border-slate-100 flex items-center justify-between gap-1 text-[10px]"><span class="text-slate-600 truncate max-w-[50%] font-semibold">${itemSeller}</span><div class="flex items-center space-x-1 shrink-0">${(isOwner || isFounderUser) ? `<button onclick="markItemSold('${item.id}')" class="px-2 py-1 rounded-lg bg-slate-100 text-slate-700 hover:bg-emerald-600 hover:text-white font-bold text-[9px] transition-all border border-slate-200">Sold</button>` : ''}<button onclick="handleChatClick('${item.id}', '${contactHref}')" class="px-2 py-1 rounded-xl bg-emerald-50 hover:bg-emerald-600 hover:text-white text-emerald-700 font-bold transition-all border border-slate-200 flex items-center space-x-1 text-[10px] shadow-sm"><i class="fa-brands fa-whatsapp text-xs"></i><span>Chat</span></button></div></div></div></div>`;
     }
 
     window.renderClubs = function() {
       const grid = document.getElementById('clubsGrid');
       grid.innerHTML = allClubs.map(club => {
         const contactHref = (club.contact || '').startsWith('http') ? club.contact : `https://wa.me/${(club.contact || '').replace(/[^0-9]/g, '')}`;
-        return `
-          <div class="grab-card rounded-2xl p-3.5 transition-all flex flex-col justify-between relative">
-            <div>
-              <div class="flex items-center justify-between mb-2.5">
-                <div class="flex items-center space-x-2.5">
-                  ${club.logo ? `<img src="${club.logo}" alt="${club.name}" class="w-10 h-10 rounded-2xl object-cover border border-slate-200 shrink-0 shadow-sm">` : `<div class="w-10 h-10 rounded-2xl bg-teal-50 border border-teal-200 text-teal-600 flex items-center justify-center font-bold shrink-0"><i class="fa-solid fa-users text-base"></i></div>`}
-                  <div class="min-w-0">
-                    <h4 class="font-bold text-xs sm:text-sm text-slate-900 leading-tight truncate">${club.name}</h4>
-                    <span class="text-[9px] text-teal-600 uppercase tracking-wider font-bold">${club.category}</span>
-                  </div>
-                </div>
-              </div>
-              <p class="text-[11px] text-slate-600 leading-relaxed mb-3 line-clamp-2">${club.desc}</p>
-            </div>
-            <a href="${contactHref}" target="_blank" class="w-full py-2 rounded-xl bg-teal-50 hover:bg-teal-600 hover:text-white text-teal-700 font-bold border border-teal-200 text-xs transition-all flex items-center justify-center space-x-1.5 shadow-sm">
-              <i class="fa-brands fa-whatsapp text-xs"></i>
-              <span>Join via WhatsApp</span>
-            </a>
-          </div>
-        `;
+        return `<div class="grab-card rounded-2xl p-3.5 transition-all flex flex-col justify-between relative"><div><div class="flex items-center justify-between mb-2.5"><div class="flex items-center space-x-2.5">${club.logo ? `<img src="${club.logo}" alt="${club.name}" class="w-10 h-10 rounded-2xl object-cover border border-slate-200 shrink-0 shadow-sm">` : `<div class="w-10 h-10 rounded-2xl bg-teal-50 border border-teal-200 text-teal-600 flex items-center justify-center font-bold shrink-0"><i class="fa-solid fa-users text-base"></i></div>`}<div class="min-w-0"><h4 class="font-bold text-xs sm:text-sm text-slate-900 leading-tight truncate">${club.name}</h4><span class="text-[9px] text-teal-600 uppercase tracking-wider font-bold">${club.category}</span></div></div></div><p class="text-[11px] text-slate-600 leading-relaxed mb-3 line-clamp-2">${club.desc}</p></div><a href="${contactHref}" target="_blank" class="w-full py-2 rounded-xl bg-teal-50 hover:bg-teal-600 hover:text-white text-teal-700 font-bold border border-teal-200 text-xs transition-all flex items-center justify-center space-x-1.5 shadow-sm"><i class="fa-brands fa-whatsapp text-xs"></i><span>Join via WhatsApp</span></a></div>`;
       }).join('');
     };
 
     window.renderSellerManagerTable = async function() {
-      await loadSellers();
-      await loadListings();
-
+      await loadSellers(); await loadListings();
       const searchPendingBoosts = (document.getElementById('searchPendingBoostsInput')?.value || '').toLowerCase();
       const searchPendingPro = (document.getElementById('searchPendingProInput')?.value || '').toLowerCase();
       const searchPendingStudents = (document.getElementById('searchPendingStudentsInput')?.value || '').toLowerCase();
@@ -2115,48 +1416,15 @@
 
       const pendingBoosts = allListings.filter(i => i.boostStatus === 'pending' && (i.title.toLowerCase().includes(searchPendingBoosts) || (i.seller||'').toLowerCase().includes(searchPendingBoosts)));
       document.getElementById('pendingBoostsCountBadge').innerText = `${pendingBoosts.length} Pending`;
-      pendingBoostsContainer.innerHTML = pendingBoosts.length === 0 ? `<p class="text-[11px] text-amber-800 italic">No matching pending ad boosts.</p>` : pendingBoosts.map(i => `
-        <div class="bg-white p-2.5 rounded-xl border border-amber-300 flex items-center justify-between text-xs">
-          <div>
-            <span class="font-extrabold text-slate-900 block">${i.title}</span>
-            <span class="text-[10px] text-slate-500">Seller: ${i.seller} | Requested: ${i.boostRequestedDays || 1} Day(s) (RM ${(i.boostRequestedDays || 1)}.00)</span>
-          </div>
-          <div class="space-x-1 shrink-0">
-            <button onclick="approveBoost('${i.id}')" class="px-2.5 py-1 rounded-lg bg-emerald-600 text-white font-bold text-[10px]">Accept</button>
-            <button onclick="rejectBoost('${i.id}')" class="px-2.5 py-1 rounded-lg bg-rose-600 text-white font-bold text-[10px]">Reject</button>
-          </div>
-        </div>
-      `).join('');
+      pendingBoostsContainer.innerHTML = pendingBoosts.length === 0 ? `<p class="text-[11px] text-amber-800 italic">No matching pending ad boosts.</p>` : pendingBoosts.map(i => `<div class="bg-white p-2.5 rounded-xl border border-amber-300 flex items-center justify-between text-xs"><div><span class="font-extrabold text-slate-900 block">${i.title}</span><span class="text-[10px] text-slate-500">Seller: ${i.seller} | Requested: ${i.boostRequestedDays || 1} Day(s)</span></div><div class="space-x-1 shrink-0"><button onclick="approveBoost('${i.id}')" class="px-2.5 py-1 rounded-lg bg-emerald-600 text-white font-bold text-[10px]">Accept</button><button onclick="rejectBoost('${i.id}')" class="px-2.5 py-1 rounded-lg bg-rose-600 text-white font-bold text-[10px]">Reject</button></div></div>`).join('');
 
       const pendingProSellers = allSellers.filter(s => s.proUpgradeStatus === 'pending' && (s.username.toLowerCase().includes(searchPendingPro) || s.email.toLowerCase().includes(searchPendingPro)));
       document.getElementById('pendingProCountBadge').innerText = `${pendingProSellers.length} Pending`;
-      pendingProContainer.innerHTML = pendingProSellers.length === 0 ? `<p class="text-[11px] text-purple-800 italic">No matching pending pro tier upgrades.</p>` : pendingProSellers.map(s => `
-        <div class="bg-white p-2.5 rounded-xl border border-purple-300 flex items-center justify-between text-xs">
-          <div>
-            <span class="font-extrabold text-slate-900 block">${s.username}</span>
-            <span class="text-[10px] text-slate-500">${s.email} | Requested Pro Tier (RM5.00)</span>
-          </div>
-          <div class="space-x-1 shrink-0">
-            <button onclick="approveProUpgrade('${s.id}')" class="px-2.5 py-1 rounded-lg bg-emerald-600 text-white font-bold text-[10px]">Accept</button>
-            <button onclick="rejectProUpgrade('${s.id}')" class="px-2.5 py-1 rounded-lg bg-rose-600 text-white font-bold text-[10px]">Reject</button>
-          </div>
-        </div>
-      `).join('');
+      pendingProContainer.innerHTML = pendingProSellers.length === 0 ? `<p class="text-[11px] text-purple-800 italic">No matching pending pro upgrades.</p>` : pendingProSellers.map(s => `<div class="bg-white p-2.5 rounded-xl border border-purple-300 flex items-center justify-between text-xs"><div><span class="font-extrabold text-slate-900 block">${s.username}</span><span class="text-[10px] text-slate-500">${s.email} | Pro Tier (RM5)</span></div><div class="space-x-1 shrink-0"><button onclick="approveProUpgrade('${s.id}')" class="px-2.5 py-1 rounded-lg bg-emerald-600 text-white font-bold text-[10px]">Accept</button><button onclick="rejectProUpgrade('${s.id}')" class="px-2.5 py-1 rounded-lg bg-rose-600 text-white font-bold text-[10px]">Reject</button></div></div>`).join('');
 
       const pendingStudents = allSellers.filter(s => !s.isVerified && (s.username.toLowerCase().includes(searchPendingStudents) || s.email.toLowerCase().includes(searchPendingStudents)));
       document.getElementById('pendingCountBadge').innerText = `${pendingStudents.length} Pending`;
-      pendingContainer.innerHTML = pendingStudents.length === 0 ? `<p class="text-[11px] text-amber-800 italic">No matching pending student verifications.</p>` : pendingStudents.map(s => `
-        <div class="bg-white p-2.5 rounded-xl border border-amber-300 flex items-center justify-between text-xs">
-          <div>
-            <span class="font-extrabold text-slate-900 block">${s.username}</span>
-            <span class="text-[10px] text-slate-500">${s.email}</span>
-          </div>
-          <div class="space-x-1 shrink-0">
-            <button onclick="approveSeller('${s.id}')" class="px-2.5 py-1 rounded-lg bg-emerald-600 text-white font-bold text-[10px]">Accept</button>
-            <button onclick="rejectSeller('${s.id}')" class="px-2.5 py-1 rounded-lg bg-rose-600 text-white font-bold text-[10px]">Reject</button>
-          </div>
-        </div>
-      `).join('');
+      pendingContainer.innerHTML = pendingStudents.length === 0 ? `<p class="text-[11px] text-amber-800 italic">No matching pending students.</p>` : pendingStudents.map(s => `<div class="bg-white p-2.5 rounded-xl border border-amber-300 flex items-center justify-between text-xs"><div><span class="font-extrabold text-slate-900 block">${s.username}</span><span class="text-[10px] text-slate-500">${s.email}</span></div><div class="space-x-1 shrink-0"><button onclick="approveSeller('${s.id}')" class="px-2.5 py-1 rounded-lg bg-emerald-600 text-white font-bold text-[10px]">Accept</button><button onclick="rejectSeller('${s.id}')" class="px-2.5 py-1 rounded-lg bg-rose-600 text-white font-bold text-[10px]">Reject</button></div></div>`).join('');
 
       tbody.innerHTML = allSellers.filter(s => s.isVerified && (s.username.toLowerCase().includes(searchVerified) || s.email.toLowerCase().includes(searchVerified))).map(seller => {
         let tierDisplay = `<span class="px-2 py-1 rounded-lg text-[9px] font-black uppercase bg-slate-100 text-slate-700">FREE</span>`;
@@ -2164,27 +1432,12 @@
           if (seller.proExpiryDate) {
             const exp = new Date(seller.proExpiryDate);
             if (exp > now) {
-              const diffMs = exp - now;
-              const days = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-              const hrs = Math.floor((diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-              const mins = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
-              tierDisplay = `<div class="flex flex-col items-center"><span class="px-2 py-0.5 rounded-lg text-[9px] font-black uppercase bg-amber-100 text-amber-900 mb-0.5">PRO</span><span class="text-[9px] font-bold text-amber-700">${days > 0 ? days + 'd ' : ''}${hrs}h ${mins}m left</span></div>`;
-            } else {
-              seller.tier = 'free';
-              tierDisplay = `<span class="px-2 py-1 rounded-lg text-[9px] font-black uppercase bg-slate-100 text-slate-700">EXPIRED / FREE</span>`;
-            }
-          } else {
-            tierDisplay = `<span class="px-2 py-1 rounded-lg text-[9px] font-black uppercase bg-amber-100 text-amber-900">PRO (Active)</span>`;
-          }
+              const diffMs = exp - now; const days = Math.floor(diffMs / (1000 * 60 * 60 * 24)); const hrs = Math.floor((diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+              tierDisplay = `<div class="flex flex-col items-center"><span class="px-2 py-0.5 rounded-lg text-[9px] font-black uppercase bg-amber-100 text-amber-900 mb-0.5">PRO</span><span class="text-[9px] font-bold text-amber-700">${days > 0 ? days + 'd ' : ''}${hrs}h left</span></div>`;
+            } else { seller.tier = 'free'; tierDisplay = `<span class="px-2 py-1 rounded-lg text-[9px] font-black uppercase bg-slate-100 text-slate-700">EXPIRED</span>`; }
+          } else { tierDisplay = `<span class="px-2 py-1 rounded-lg text-[9px] font-black uppercase bg-amber-100 text-amber-900">PRO</span>`; }
         }
-
-        return `
-          <tr class="hover:bg-slate-50 transition-all">
-            <td class="p-3"><div class="font-bold text-slate-900">${seller.username}</div><div class="text-[10px] text-slate-400">${seller.email}</div></td>
-            <td class="p-3 text-center">${tierDisplay}</td>
-            <td class="p-3 text-right"><button onclick="rejectSeller('${seller.id}')" class="px-2 py-1 rounded-xl bg-rose-600 text-white text-[10px] font-bold">Revoke</button></td>
-          </tr>
-        `;
+        return `<tr class="hover:bg-slate-50 transition-all"><td class="p-3"><div class="font-bold text-slate-900">${seller.username}</div><div class="text-[10px] text-slate-400">${seller.email}</div></td><td class="p-3 text-center">${tierDisplay}</td><td class="p-3 text-right"><button onclick="rejectSeller('${seller.id}')" class="px-2 py-1 rounded-xl bg-rose-600 text-white text-[10px] font-bold">Revoke</button></td></tr>`;
       }).join('');
     };
 
@@ -2192,24 +1445,15 @@
       const s = allSellers.find(x => x.id === id);
       if (s) { 
         s.isVerified = true; 
-        try { 
-          await updateDoc(doc(db, "verified_sellers", id), { isVerified: true }); 
-        } catch(e) {
-          try {
-            await setDoc(doc(db, "verified_sellers", id), s);
-          } catch(err) {}
-        }
-        syncLocalStorage(); 
-        renderSellerManagerTable(); 
-        alert(`Successfully verified ${s.username}!`); 
+        try { await updateDoc(doc(db, "verified_sellers", id), { isVerified: true }); } catch(e) { try { await setDoc(doc(db, "verified_sellers", id), s); } catch(err) {} }
+        syncLocalStorage(); renderSellerManagerTable(); alert(`Successfully verified ${s.username}!`); 
       }
     };
 
     window.rejectSeller = async function(id) {
       allSellers = allSellers.filter(x => x.id !== id);
       try { await deleteDoc(doc(db, "verified_sellers", id)); } catch(e){}
-      syncLocalStorage();
-      renderSellerManagerTable();
+      syncLocalStorage(); renderSellerManagerTable();
     };
 
     window.terminateListing = async function(id) {
@@ -2217,9 +1461,7 @@
       try {
         await deleteDoc(doc(db, "listings", id));
         allListings = allListings.filter(item => item.id !== id);
-        renderListings();
-        renderMyProductsTab();
-        updateMetrics();
+        renderListings(); renderMyProductsTab(); updateMetrics();
       } catch (e) { alert("Error: " + e.message); }
     };
 
@@ -2228,11 +1470,7 @@
       try {
         await deleteDoc(doc(db, "listings", id));
         allListings = allListings.filter(item => item.id !== id);
-        soldCount += 1;
-        syncLocalStorage();
-        renderListings();
-        renderMyProductsTab();
-        updateMetrics();
+        soldCount += 1; syncLocalStorage(); renderListings(); renderMyProductsTab(); updateMetrics();
       } catch (e) { alert("Error: " + e.message); }
     };
 
@@ -2240,10 +1478,7 @@
       const email = document.getElementById('loginUser').value.trim().toLowerCase();
       const pass = document.getElementById('loginPass').value.trim();
       const formatted = email.includes('@') ? email : `${email}@apm.com`;
-      try {
-        await signInWithEmailAndPassword(auth, formatted, pass);
-        closeAuthModal();
-      } catch (err) {
+      try { await signInWithEmailAndPassword(auth, formatted, pass); closeAuthModal(); } catch (err) {
         document.getElementById('loginError').innerText = "Invalid credentials.";
         document.getElementById('loginError').classList.remove('hidden');
       }
@@ -2251,13 +1486,7 @@
 
     window.openAuthModal = function() { document.getElementById('authModal').classList.remove('hidden'); };
     window.closeAuthModal = function() { document.getElementById('authModal').classList.add('hidden'); };
-
-    window.performLogout = function() { 
-      signOut(auth).then(() => { 
-        applyUserTheme(false); 
-        switchMainTab('home'); 
-      }); 
-    };
+    window.performLogout = function() { signOut(auth).then(() => { applyUserTheme(false); switchMainTab('home'); }); };
 
     window.openSellerManagerModal = function() { renderSellerManagerTable(); document.getElementById('sellerManagerModal').classList.remove('hidden'); };
     window.closeSellerManagerModal = function() { document.getElementById('sellerManagerModal').classList.add('hidden'); };
@@ -2265,31 +1494,19 @@
     window.closeUpgradeModal = function() { document.getElementById('upgradeModal').classList.add('hidden'); };
 
     window.openAddListingModal = function() {
-      if (!currentUser) { 
-        alert("🔒 Login Required!\n\nPlease register/log in as a Verified APM Buyer/Seller to publish new items.");
-        openAuthModal(); 
-        return; 
-      }
-      
+ if (!currentUser) { alert("🔒 Login Required!\n\nPlease register/log in as a Verified APM Buyer/Seller to publish new items."); openAuthModal(); return; }
       const sellerProfile = allSellers.find(s => (s.email || '').toLowerCase() === currentUserEmail);
       const isPro = sellerProfile && sellerProfile.tier === 'pro';
       const maxAllowed = isPro ? 7 : 3;
-
       const myListings = allListings.filter(item => {
         const itemSeller = (item.seller || '').toLowerCase();
         return currentUser && (currentUser.toLowerCase() === itemSeller || currentUser.includes(itemSeller));
       });
-
       if (myListings.length >= maxAllowed) {
-        if (!isPro) {
-          alert(`⚠️ Active Listing Limit Reached!\n\nFree Tier sellers can list up to 3 active products. To list up to 7 items, please subscribe & upgrade to Pro Tier (RM5/month)!`);
-          openUpgradeModal();
-        } else {
-          alert(`⚠️ Maximum Listing Exceeded!\n\nYou have reached the absolute maximum limit of 7 active listings for Pro Tier sellers.`);
-        }
+        if (!isPro) { alert(`⚠️ Active Listing Limit Reached!\n\nFree Tier sellers can list up to 3 active products. Upgrade to Pro Tier (RM5/month) for 7 listings!`); openUpgradeModal(); }
+        else { alert(`⚠️ Maximum Listing Exceeded!\n\nYou have reached the absolute maximum limit of 7 active listings.`); }
         return;
       }
-
       document.getElementById('sellerTierIndicator').innerText = `Your Tier: ${isPro ? 'Pro Tier (Up to 7 Listings)' : 'Free Tier (Up to 3 Listings)'}`;
       document.getElementById('categorySelect').value = 'academic';
       onCategoryChange();
@@ -2297,53 +1514,9 @@
     };
     window.closeAddListingModal = function() { document.getElementById('addListingModal').classList.add('hidden'); };
 
-    window.openAddClubModal = function() {
-      if (!currentUser) { openAuthModal(); return; }
-      document.getElementById('addClubModal').classList.remove('hidden');
-    };
+    window.openAddClubModal = function() { if (!currentUser) { openAuthModal(); return; } document.getElementById('addClubModal').classList.remove('hidden'); };
     window.closeAddClubModal = function() { document.getElementById('addClubModal').classList.add('hidden'); };
 
-    // --- AUTOMATIC IMAGE COMPRESSOR HELPER (Prevents Firestore 1MB Limit Crash) ---
-    async function compressImage(file) {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = (event) => {
-          const img = new Image();
-          img.onload = () => {
-            const canvas = document.createElement('canvas');
-            const MAX_WIDTH = 800;
-            const MAX_HEIGHT = 800;
-            let width = img.width;
-            let height = img.height;
-
-            if (width > height) {
-              if (width > MAX_WIDTH) {
-                height *= MAX_WIDTH / width;
-                width = MAX_WIDTH;
-              }
-            } else {
-              if (height > MAX_HEIGHT) {
-                width *= MAX_HEIGHT / height;
-                height = MAX_HEIGHT;
-              }
-            }
-
-            canvas.width = width;
-            canvas.height = height;
-            const ctx = canvas.getContext('2d');
-            ctx.drawImage(img, 0, 0, width, height);
-            
-            resolve(canvas.toDataURL('image/jpeg', 0.7));
-          };
-          img.onerror = (err) => reject(err);
-          img.src = event.target.result;
-        };
-        reader.onerror = (err) => reject(err);
-        reader.readAsDataURL(file);
-      });
-    }
-
-    // --- OPTIMIZED LISTING SUBMISSION (Instant Modal Dismissal & Published State) ---
     window.handlePostListing = async function(e) {
       if (e) e.preventDefault();
       const submitBtn = document.getElementById('publishListingSubmitBtn');
@@ -2370,14 +1543,16 @@
         }
 
         const file = fileInput.files[0];
-        const imageUrl = await compressImage(file);
+        const fileName = `${Date.now()}_${file.name.replace(/[^a-zA-Z0-9.]/g, "_")}`;
+        const storageRef = ref(storage, `listings/${fileName}`);
+        const uploadSnapshot = await uploadBytes(storageRef, file);
+        const imageUrl = await getDownloadURL(uploadSnapshot.ref);
 
         const newItem = { title, category, courseId, courseName, courseNick, price, contact, image: imageUrl, desc, seller: currentUser, isDisabled: false, isBoosted: false };
         const docRef = await addDoc(collection(db, "listings"), newItem);
         newItem.id = docRef.id;
         allListings.unshift(newItem);
         
-        // INSTANTLY RESET BUTTON TO PUBLISHED / READY STATE BEFORE CLOSING
         if (submitBtn) {
           submitBtn.disabled = false;
           submitBtn.innerHTML = `<i class="fa-solid fa-check"></i> <span>Published Successfully!</span>`;
@@ -2387,14 +1562,11 @@
         renderMyProductsTab();
         updateMetrics();
 
-        // INSTANT MODAL DISMISSAL
         setTimeout(() => {
           closeAddListingModal();
           document.getElementById('listingForm').reset();
           document.getElementById('imagePreviewContainer').classList.add('hidden');
-          if (submitBtn) {
-            submitBtn.innerText = "Publish Listing";
-          }
+          if (submitBtn) { submitBtn.innerText = "Publish Listing"; }
         }, 400);
 
         alert("Published listing successfully!");
@@ -2407,7 +1579,6 @@
       }
     };
 
-    // --- OPTIMIZED CLUB SUBMISSION WITH COMPRESSION ---
     window.handlePostClub = async function(e) {
       if (e) e.preventDefault();
       const submitBtn = document.getElementById('saveClubSubmitBtn');
@@ -2425,7 +1596,11 @@
 
         let logo = "";
         if (fileInput.files[0]) {
-          logo = await compressImage(fileInput.files[0]);
+          const file = fileInput.files[0];
+          const fileName = `${Date.now()}_${file.name.replace(/[^a-zA-Z0-9.]/g, "_")}`;
+          const storageRef = ref(storage, `clubs/${fileName}`);
+          const uploadSnapshot = await uploadBytes(storageRef, file);
+          logo = await getDownloadURL(uploadSnapshot.ref);
         }
 
         const newClub = { name, category, contact, desc, logo, createdBy: currentUser };
