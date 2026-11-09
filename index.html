@@ -820,7 +820,7 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { initializeFirestore, memoryLocalCache, collection, getDocs, addDoc, deleteDoc, doc, updateDoc, setDoc, query, increment } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
     import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-    import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
+    import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyCJ_YKk_Js671vhIhR1dRYfEaQ1tWWbU3w",
@@ -1230,7 +1230,11 @@
 
       let photo = "";
       if (fileInput.files[0]) {
-        photo = await uploadImageWithProgress(fileInput.files[0], 'contributors', null);
+        const file = fileInput.files[0];
+        const fileName = `${Date.now()}_${file.name.replace(/[^a-zA-Z0-9.]/g, "_")}`;
+        const storageRef = ref(storage, `contributors/${fileName}`);
+        const uploadSnapshot = await uploadBytes(storageRef, file);
+        photo = await getDownloadURL(uploadSnapshot.ref);
       }
 
       try {
@@ -1323,31 +1327,6 @@
       const temp = document.createElement('div');
       temp.textContent = str;
       return temp.innerHTML.trim();
-    }
-
-    // Helper for uploading image file with 0% - 100% progress updates
-    function uploadImageWithProgress(file, folderPath, btnElement) {
-      return new Promise((resolve, reject) => {
-        const fileName = `${Date.now()}_${file.name.replace(/[^a-zA-Z0-9.]/g, "_")}`;
-        const storageRef = ref(storage, `${folderPath}/${fileName}`);
-        const uploadTask = uploadBytesResumable(storageRef, file);
-
-        uploadTask.on('state_changed',
-          (snapshot) => {
-            const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
-            if (btnElement) {
-              btnElement.innerText = `Uploading... ${progress}%`;
-            }
-          },
-          (error) => {
-            reject(error);
-          },
-          async () => {
-            const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-            resolve(downloadURL);
-          }
-        );
-      });
     }
 
     window.closeWelcomeModal = function() {
@@ -2317,6 +2296,7 @@
     };
     window.closeAddClubModal = function() { document.getElementById('addClubModal').classList.add('hidden'); };
 
+    // Direct uploadBytes listing submission preventing 0% freeze
     window.handlePostListing = async function(e) {
       if (e) e.preventDefault();
       const submitBtn = document.getElementById('publishListingSubmitBtn');
@@ -2339,10 +2319,16 @@
       try {
         if (submitBtn) {
           submitBtn.disabled = true;
-          submitBtn.innerText = "Uploading... 0%";
+          submitBtn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> <span>Uploading image...</span>`;
         }
 
-        const imageUrl = await uploadImageWithProgress(fileInput.files[0], 'listings', submitBtn);
+        const file = fileInput.files[0];
+        const fileName = `${Date.now()}_${file.name.replace(/[^a-zA-Z0-9.]/g, "_")}`;
+        const storageRef = ref(storage, `listings/${fileName}`);
+        
+        const uploadSnapshot = await uploadBytes(storageRef, file);
+        const imageUrl = await getDownloadURL(uploadSnapshot.ref);
+
         const newItem = { title, category, courseId, courseName, courseNick, price, contact, image: imageUrl, desc, seller: currentUser, isDisabled: false, isBoosted: false };
         const ref = await addDoc(collection(db, "listings"), newItem);
         newItem.id = ref.id;
@@ -2356,7 +2342,7 @@
         document.getElementById('imagePreviewContainer').classList.add('hidden');
         alert("Published listing successfully!");
       } catch (err) {
-        alert("Firebase Write Error: " + err.message);
+        alert("Upload Error: " + err.message);
       } finally {
         if (submitBtn) {
           submitBtn.disabled = false;
@@ -2365,6 +2351,7 @@
       }
     };
 
+    // Direct uploadBytes club submission preventing 0% freeze
     window.handlePostClub = async function(e) {
       if (e) e.preventDefault();
       const submitBtn = document.getElementById('saveClubSubmitBtn');
@@ -2377,12 +2364,16 @@
       try {
         if (submitBtn) {
           submitBtn.disabled = true;
-          submitBtn.innerText = "Saving... 0%";
+          submitBtn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> <span>Saving club...</span>`;
         }
 
         let logo = "";
         if (fileInput.files[0]) {
-          logo = await uploadImageWithProgress(fileInput.files[0], 'clubs', submitBtn);
+          const file = fileInput.files[0];
+          const fileName = `${Date.now()}_${file.name.replace(/[^a-zA-Z0-9.]/g, "_")}`;
+          const storageRef = ref(storage, `clubs/${fileName}`);
+          const uploadSnapshot = await uploadBytes(storageRef, file);
+          logo = await getDownloadURL(uploadSnapshot.ref);
         }
 
         const newClub = { name, category, contact, desc, logo, createdBy: currentUser };
@@ -2393,9 +2384,9 @@
         renderClubs();
         closeAddClubModal();
         document.getElementById('clubForm').reset();
-        alert("Club published successfully!");
+        alert("Club saved successfully!");
       } catch (err) {
-        alert("Firebase Write Error: " + err.message);
+        alert("Upload Error: " + err.message);
       } finally {
         if (submitBtn) {
           submitBtn.disabled = false;
