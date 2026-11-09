@@ -557,7 +557,9 @@
           <textarea id="itemDesc" rows="3" required placeholder="Describe condition, pickup location, notes coverage..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-semibold text-slate-800 focus:outline-none focus:border-emerald-500"></textarea>
         </div>
 
-        <button type="submit" class="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md">Publish Listing</button>
+        <button type="submit" id="publishListingSubmitBtn" class="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md transition-all flex items-center justify-center space-x-2">
+          <span>Publish Listing</span>
+        </button>
       </form>
     </div>
   </div>
@@ -588,7 +590,9 @@
           <label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">Description</label>
           <textarea id="clubDesc" rows="2" required placeholder="What does this club do?" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-semibold text-slate-800"></textarea>
         </div>
-        <button type="submit" class="w-full py-3 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-bold text-xs shadow-md">Save Club</button>
+        <button type="submit" id="saveClubSubmitBtn" class="w-full py-3 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-bold text-xs shadow-md transition-all flex items-center justify-center space-x-2">
+          <span>Save Club</span>
+        </button>
       </form>
     </div>
   </div>
@@ -766,6 +770,37 @@
     </div>
   </div>
 
+  <!-- RENEW BOOST EXPIRED MODAL FOR SELLER -->
+  <div id="boostExpiredModal" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-sm w-full p-6 relative text-center shadow-2xl border-2 border-amber-400">
+      <button onclick="closeBoostExpiredModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+      <div class="w-14 h-14 rounded-2xl bg-amber-100 text-amber-600 flex items-center justify-center text-2xl mx-auto mb-3">
+        <i class="fa-solid fa-hourglass-end"></i>
+      </div>
+      <h3 class="text-base font-black text-slate-900 mb-1">Ad Boost Expired</h3>
+      <p id="boostExpiredText" class="text-xs text-slate-600 mb-5 leading-relaxed">
+        Good day <span id="boostExpiredSellerName" class="font-bold text-slate-900">Seller</span>, your boosted product <strong id="boostExpiredItemTitle">Product</strong> has expired. Would you like to renew?
+      </p>
+      <div class="grid grid-cols-2 gap-3">
+        <button onclick="closeBoostExpiredModal()" class="py-2.5 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition-all">Cancel</button>
+        <button onclick="renewExpiredBoost()" class="py-2.5 rounded-2xl bg-amber-500 hover:bg-amber-600 text-white font-black text-xs shadow-md transition-all">Renew Again</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOUNDER REAL-TIME PAYMENT ALERT MODAL -->
+  <div id="founderPaymentAlertModal" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-sm w-full p-6 relative text-center shadow-2xl border-2 border-emerald-500">
+      <button onclick="closeFounderAlertModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+      <div class="w-14 h-14 rounded-2xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-2xl mx-auto mb-3">
+        <i class="fa-solid fa-bell animate-bounce"></i>
+      </div>
+      <h3 class="text-base font-black text-slate-900 mb-1">New Payment Notification!</h3>
+      <p id="founderAlertText" class="text-xs text-slate-600 mb-5 leading-relaxed">A user has submitted a TNG payment proof for verification.</p>
+      <button onclick="openAdminHubFromAlert()" class="w-full py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xs shadow-md transition-all">Open Founder Admin Hub</button>
+    </div>
+  </div>
+
   <!-- iOS INSTALL PWA MODAL -->
   <div id="iosInstallModal" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm hidden flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl max-w-sm w-full p-6 relative text-center shadow-2xl">
@@ -785,7 +820,7 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { initializeFirestore, memoryLocalCache, collection, getDocs, addDoc, deleteDoc, doc, updateDoc, setDoc, query, increment } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
     import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-    import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
+    import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyCJ_YKk_Js671vhIhR1dRYfEaQ1tWWbU3w",
@@ -850,6 +885,25 @@
     let activeBoostItemId = null;
     let carouselAutoTimer = null;
     let profileCountdownInterval = null;
+    let expiredBoostQueue = [];
+
+    // Web Audio Synthesizer sound effect for Wishlist chime
+    function playWishlistBellSound() {
+      try {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(880, audioCtx.currentTime); // A5 note
+        osc.frequency.exponentialRampToValueAtTime(1760, audioCtx.currentTime + 0.15); // A6 note
+        gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.4);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.4);
+      } catch(e) {}
+    }
 
     window.addEventListener('beforeinstallprompt', (e) => {
       e.preventDefault();
@@ -864,7 +918,7 @@
         const { outcome } = await deferredPrompt.userChoice;
         if (outcome === 'accepted') { deferredPrompt = null; }
       } else {
-        alert("PWA installation is already available or already installed on your device browser! You can also check your browser menu (Chrome / Edge) and select 'Install App' or 'Add to Home Screen'.");
+        alert("PWA installation is already available or already installed on your device browser!");
       }
     };
 
@@ -978,6 +1032,8 @@
           boostStatusHTML = `<span class="text-[9px] font-black text-amber-900 bg-amber-100 px-2 py-0.5 rounded-md border border-amber-300 inline-block">🚀 Boosted: ${diffHrs}h ${diffMins}m remaining</span>`;
         } else if (item.boostStatus === 'pending') {
           boostStatusHTML = '<span class="text-[9px] font-bold text-amber-700 bg-amber-100 px-2 py-0.5 rounded-md inline-block">⏳ Boost Pending Approval</span>';
+        } else if (item.isBoosted && item.boostExpiryDate && new Date(item.boostExpiryDate) <= now) {
+          boostStatusHTML = '<span class="text-[9px] font-bold text-rose-700 bg-rose-100 px-2 py-0.5 rounded-md inline-block">⚠️ Boost Expired</span>';
         }
 
         return `
@@ -1174,7 +1230,7 @@
 
       let photo = "";
       if (fileInput.files[0]) {
-        photo = await uploadImageToStorage(fileInput.files[0], 'contributors');
+        photo = await uploadImageWithProgress(fileInput.files[0], 'contributors', null);
       }
 
       try {
@@ -1186,7 +1242,7 @@
         closeAddContributorModal();
         document.getElementById('contributorForm').reset();
         renderAboutContributors();
-        alert("Contributor added to Firebase Firestore successfully!");
+        alert("Contributor added to Wall of Fame!");
       } catch (err) {
         alert("Firebase Save Error: " + err.message);
       }
@@ -1198,7 +1254,7 @@
         await deleteDoc(doc(db, "contributors", id));
         allContributors = allContributors.filter(c => c.id !== id);
         renderAboutContributors();
-        alert("Contributor removed from Firebase.");
+        alert("Contributor removed.");
       } catch (err) {
         alert("Firebase Delete Error: " + err.message);
       }
@@ -1269,11 +1325,29 @@
       return temp.innerHTML.trim();
     }
 
-    async function uploadImageToStorage(file, folderPath) {
-      const fileName = `${Date.now()}_${file.name.replace(/[^a-zA-Z0-9.]/g, "_")}`;
-      const storageRef = ref(storage, `${folderPath}/${fileName}`);
-      const snapshot = await uploadBytes(storageRef, file);
-      return await getDownloadURL(snapshot.ref);
+    // Helper for uploading image file with 0% - 100% progress updates
+    function uploadImageWithProgress(file, folderPath, btnElement) {
+      return new Promise((resolve, reject) => {
+        const fileName = `${Date.now()}_${file.name.replace(/[^a-zA-Z0-9.]/g, "_")}`;
+        const storageRef = ref(storage, `${folderPath}/${fileName}`);
+        const uploadTask = uploadBytesResumable(storageRef, file);
+
+        uploadTask.on('state_changed',
+          (snapshot) => {
+            const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+            if (btnElement) {
+              btnElement.innerText = `Uploading... ${progress}%`;
+            }
+          },
+          (error) => {
+            reject(error);
+          },
+          async () => {
+            const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+            resolve(downloadURL);
+          }
+        );
+      });
     }
 
     window.closeWelcomeModal = function() {
@@ -1317,8 +1391,12 @@
       }
       const wishlist = getWishlist();
       const idx = wishlist.indexOf(itemId);
-      if (idx > -1) wishlist.splice(idx, 1);
-      else wishlist.push(itemId);
+      if (idx > -1) {
+        wishlist.splice(idx, 1);
+      } else {
+        wishlist.push(itemId);
+        playWishlistBellSound(); // Play bell chime on save!
+      }
       localStorage.setItem(getWishlistKey(), JSON.stringify(wishlist));
       updateMetrics();
       renderListings();
@@ -1364,10 +1442,22 @@
         await updateDoc(doc(db, "listings", activeBoostItemId), { boostStatus: 'pending', boostRequestedDays: days });
       } catch(e){}
 
-      const waMsg = `Hi Founder Keven, I have paid for my boosting. Product Name: "${targetItem.title}", Total Days: ${days} Day(s), Total Amount: RM ${(days * 1.00).toFixed(2)}. Here is my payment receipt screenshot.`;
+      // Push real-time founder payment alert record
+      try {
+        await addDoc(collection(db, "payment_alerts"), {
+          type: "Ad Boost",
+          seller: currentUser,
+          email: currentUserEmail,
+          title: targetItem.title,
+          amount: (days * 1.00).toFixed(2),
+          createdAt: new Date().toISOString()
+        });
+      } catch(e){}
+
+      const waMsg = `Hi Founder Keven, I have paid for my ad boost. Product Name: "${targetItem.title}", Total Days: ${days} Day(s), Total Amount: RM ${(days * 1.00).toFixed(2)}. Here is my payment receipt screenshot.`;
       closeBoostModal();
       window.open(`https://wa.me/60126384757?text=${encodeURIComponent(waMsg)}`, '_blank');
-      alert("Boost request & receipt notice submitted! Awaiting Founder verification.");
+      alert("Boost payment submitted! Awaiting Founder verification.");
       renderMyProductsTab();
     };
 
@@ -1409,11 +1499,23 @@
         seller.proUpgradeStatus = 'pending';
         try { await updateDoc(doc(db, "verified_sellers", seller.id), { proUpgradeStatus: 'pending' }); } catch(e){}
       }
+      
+      // Push payment alert trigger for founder
+      try {
+        await addDoc(collection(db, "payment_alerts"), {
+          type: "Pro Upgrade",
+          seller: currentUser,
+          email: currentUserEmail,
+          amount: "5.00",
+          createdAt: new Date().toISOString()
+        });
+      } catch(e){}
+
       syncLocalStorage();
       const waMsg = `Hi Founder Keven, I have paid RM5 for the APM Pro Tier upgrade. Here is my payment receipt screenshot. Seller Account: ${currentUserEmail}`;
       closeUpgradeModal();
       window.open(`https://wa.me/60126384757?text=${encodeURIComponent(waMsg)}`, '_blank');
-      alert("Pro tier upgrade request sent to Founder! Awaiting verification.");
+      alert("Pro tier upgrade payment sent to Founder! Awaiting verification.");
     };
 
     window.approveProUpgrade = async function(sellerId) {
@@ -1500,6 +1602,14 @@
         document.getElementById('floatingPostBtn').style.display = 'block';
         document.getElementById('addClubBtn').style.display = 'flex';
         if (isFounderUser) document.getElementById('sellerManagerNavBtn').style.display = 'flex';
+
+        // Check for Expired Boosts for logged-in Seller
+        checkExpiredBoostsForSeller();
+
+        // Check Founder Alerts
+        if (isFounderUser) {
+          checkFounderPaymentAlerts();
+        }
       } else {
         currentUser = null; currentUserEmail = null; isFounderUser = false;
         applyUserTheme(false);
@@ -1513,6 +1623,75 @@
       loadContributors();
       if (isFounderUser) renderSellerManagerTable();
     });
+
+    // Check Expired Boosts Popup Trigger
+    function checkExpiredBoostsForSeller() {
+      if (!currentUser) return;
+      const now = new Date();
+      expiredBoostQueue = allListings.filter(item => {
+        const itemSeller = (item.seller || '').toLowerCase();
+        const isOwner = currentUser && (currentUser.toLowerCase() === itemSeller || currentUser.includes(itemSeller));
+        if (!isOwner) return false;
+        if (!item.isBoosted || !item.boostExpiryDate) return false;
+        
+        const expiry = new Date(item.boostExpiryDate);
+        const hasNotified = localStorage.getItem(`apm_expired_notified_${item.id}`);
+        return expiry <= now && !hasNotified;
+      });
+
+      if (expiredBoostQueue.length > 0) {
+        showExpiredBoostModal(expiredBoostQueue[0]);
+      }
+    }
+
+    function showExpiredBoostModal(item) {
+      document.getElementById('boostExpiredSellerName').innerText = currentUser || "Seller";
+      document.getElementById('boostExpiredItemTitle').innerText = `"${item.title}"`;
+      document.getElementById('boostExpiredModal').classList.remove('hidden');
+    }
+
+    window.closeBoostExpiredModal = function() {
+      if (expiredBoostQueue.length > 0) {
+        localStorage.setItem(`apm_expired_notified_${expiredBoostQueue[0].id}`, 'true');
+      }
+      document.getElementById('boostExpiredModal').classList.add('hidden');
+    };
+
+    window.renewExpiredBoost = function() {
+      if (expiredBoostQueue.length > 0) {
+        const item = expiredBoostQueue[0];
+        closeBoostExpiredModal();
+        openBoostBenefitsModal(item.id);
+      }
+    };
+
+    // Check Real-Time Payment Alerts for Founder
+    async function checkFounderPaymentAlerts() {
+      try {
+        const q = query(collection(db, "payment_alerts"));
+        const snapshot = await getDocs(q);
+        const unreadAlerts = [];
+        snapshot.forEach(d => {
+          const alertData = d.data();
+          if (!localStorage.getItem(`apm_alert_seen_${d.id}`)) {
+            unreadAlerts.push({ id: d.id, ...alertData });
+          }
+        });
+
+        if (unreadAlerts.length > 0) {
+          const firstAlert = unreadAlerts[0];
+          document.getElementById('founderAlertText').innerText = `Good day Founder! Seller ${firstAlert.seller} (${firstAlert.email}) has submitted payment proof for ${firstAlert.type} (RM ${firstAlert.amount}).`;
+          document.getElementById('founderPaymentAlertModal').classList.remove('hidden');
+          localStorage.setItem(`apm_alert_seen_${firstAlert.id}`, 'true');
+        }
+      } catch(e){}
+    }
+
+    window.closeFounderAlertModal = function() { document.getElementById('founderPaymentAlertModal').classList.add('hidden'); };
+    window.openAdminHubFromAlert = function() {
+      closeFounderAlertModal();
+      openSellerManagerModal();
+    };
 
     async function loadData() {
       checkWelcomeModal();
@@ -2139,7 +2318,8 @@
     window.closeAddClubModal = function() { document.getElementById('addClubModal').classList.add('hidden'); };
 
     window.handlePostListing = async function(e) {
-      e.preventDefault();
+      if (e) e.preventDefault();
+      const submitBtn = document.getElementById('publishListingSubmitBtn');
       const title = sanitizeInput(document.getElementById('itemTitle').value);
       const price = parseFloat(document.getElementById('itemPrice').value) || 0;
       const contact = sanitizeInput(document.getElementById('itemContact').value);
@@ -2157,22 +2337,37 @@
       if (!fileInput.files[0]) { alert("Please select a product photo!"); return; }
 
       try {
-        const imageUrl = await uploadImageToStorage(fileInput.files[0], 'listings');
+        if (submitBtn) {
+          submitBtn.disabled = true;
+          submitBtn.innerText = "Uploading... 0%";
+        }
+
+        const imageUrl = await uploadImageWithProgress(fileInput.files[0], 'listings', submitBtn);
         const newItem = { title, category, courseId, courseName, courseNick, price, contact, image: imageUrl, desc, seller: currentUser, isDisabled: false, isBoosted: false };
         const ref = await addDoc(collection(db, "listings"), newItem);
         newItem.id = ref.id;
         allListings.unshift(newItem);
+        
         renderListings();
         renderMyProductsTab();
         updateMetrics();
         closeAddListingModal();
         document.getElementById('listingForm').reset();
-        alert("Published successfully with Firebase Storage!");
-      } catch (err) { alert("Firebase Write Error: " + err.message); }
+        document.getElementById('imagePreviewContainer').classList.add('hidden');
+        alert("Published listing successfully!");
+      } catch (err) {
+        alert("Firebase Write Error: " + err.message);
+      } finally {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.innerText = "Publish Listing";
+        }
+      }
     };
 
     window.handlePostClub = async function(e) {
-      e.preventDefault();
+      if (e) e.preventDefault();
+      const submitBtn = document.getElementById('saveClubSubmitBtn');
       const name = sanitizeInput(document.getElementById('clubName').value);
       const category = sanitizeInput(document.getElementById('clubCategory').value);
       const contact = sanitizeInput(document.getElementById('clubContact').value);
@@ -2180,8 +2375,16 @@
       const fileInput = document.getElementById('clubLogoFile');
 
       try {
+        if (submitBtn) {
+          submitBtn.disabled = true;
+          submitBtn.innerText = "Saving... 0%";
+        }
+
         let logo = "";
-        if (fileInput.files[0]) logo = await uploadImageToStorage(fileInput.files[0], 'clubs');
+        if (fileInput.files[0]) {
+          logo = await uploadImageWithProgress(fileInput.files[0], 'clubs', submitBtn);
+        }
+
         const newClub = { name, category, contact, desc, logo, createdBy: currentUser };
         const ref = await addDoc(collection(db, "clubs"), newClub);
         newClub.id = ref.id;
@@ -2190,8 +2393,15 @@
         renderClubs();
         closeAddClubModal();
         document.getElementById('clubForm').reset();
-        alert("Club published!");
-      } catch (err) { alert("Firebase Write Error: " + err.message); }
+        alert("Club published successfully!");
+      } catch (err) {
+        alert("Firebase Write Error: " + err.message);
+      } finally {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.innerText = "Save Club";
+        }
+      }
     };
 
     document.getElementById('itemImageFile')?.addEventListener('change', function(e) {
