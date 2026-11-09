@@ -1517,7 +1517,7 @@
     window.openAddClubModal = function() { if (!currentUser) { openAuthModal(); return; } document.getElementById('addClubModal').classList.remove('hidden'); };
     window.closeAddClubModal = function() { document.getElementById('addClubModal').classList.add('hidden'); };
 
-    window.handlePostListing = async function(e) {
+ window.handlePostListing = async function(e) {
       if (e) e.preventDefault();
       const submitBtn = document.getElementById('publishListingSubmitBtn');
       const title = sanitizeInput(document.getElementById('itemTitle').value);
@@ -1536,6 +1536,18 @@
       const fileInput = document.getElementById('itemImageFile');
       if (!fileInput.files[0]) { alert("Please select a product photo!"); return; }
 
+      // Timeout safety guard so it NEVER hangs forever
+      let isCompleted = false;
+      const timeoutId = setTimeout(() => {
+        if (!isCompleted) {
+          if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.innerText = "Publish Listing";
+          }
+          alert("⚠️ Connection Timeout: Image upload took too long. Please check your internet connection or Firebase Storage rules.");
+        }
+      }, 20000); // 20 seconds timeout
+
       try {
         if (submitBtn) {
           submitBtn.disabled = true;
@@ -1545,14 +1557,36 @@
         const file = fileInput.files[0];
         const fileName = `${Date.now()}_${file.name.replace(/[^a-zA-Z0-9.]/g, "_")}`;
         const storageRef = ref(storage, `listings/${fileName}`);
+        
+        console.log("Starting image upload to Firebase Storage...");
         const uploadSnapshot = await uploadBytes(storageRef, file);
+        console.log("Image uploaded successfully. Getting download URL...");
         const imageUrl = await getDownloadURL(uploadSnapshot.ref);
 
-        const newItem = { title, category, courseId, courseName, courseNick, price, contact, image: imageUrl, desc, seller: currentUser, isDisabled: false, isBoosted: false };
+        const newItem = { 
+          title, 
+          category, 
+          courseId, 
+          courseName, 
+          courseNick, 
+          price, 
+          contact, 
+          image: imageUrl, 
+          desc, 
+          seller: currentUser, 
+          isDisabled: false, 
+          isBoosted: false,
+          createdAt: new Date().toISOString()
+        };
+
+        console.log("Saving listing document to Firestore...");
         const docRef = await addDoc(collection(db, "listings"), newItem);
         newItem.id = docRef.id;
         allListings.unshift(newItem);
         
+        isCompleted = true;
+        clearTimeout(timeoutId);
+
         if (submitBtn) {
           submitBtn.disabled = false;
           submitBtn.innerHTML = `<i class="fa-solid fa-check"></i> <span>Published Successfully!</span>`;
@@ -1571,10 +1605,13 @@
 
         alert("Published listing successfully!");
       } catch (err) {
+        isCompleted = true;
+        clearTimeout(timeoutId);
         if (submitBtn) {
           submitBtn.disabled = false;
           submitBtn.innerText = "Publish Listing";
         }
+        console.error("Publish listing error:", err);
         alert("Upload Error: " + err.message);
       }
     };
