@@ -129,869 +129,681 @@
       <span>Install APM App on Android, iPhone & Laptop:</span>
     </div>
     
-    <button id="installAppBtn" class="px-3 py-1 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-[11px] shadow-sm transition-all flex items-center space-x-1">
-      <i class="fa-solid fa-download text-[10px]"></i>
-      <span>Install App Now</span>
-    </button>
-
-    <button onclick="openIOSInstallModal()" class="px-3 py-1 rounded-xl bg-white/10 hover:bg-white/20 text-emerald-200 font-bold text-[11px] transition-all flex items-center space-x-1">
-      <i class="fa-brands fa-apple text-[10px]"></i>
-      <span>iPhone / iPad Guide</span>
-    </button>
+    <div class="flex items-center space-x-2">
+      <button onclick="openIOSInstallModal()" class="px-3 py-1 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-[11px] border border-slate-600 shadow-sm transition-all flex items-center space-x-1">
+        <i class="fa-brands fa-apple"></i>
+        <span>iPhone Guide</span>
+      </button>
+      <button id="installAppBtn" class="px-3 py-1 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-[11px] shadow-sm transition-all flex items-center space-x-1">
+        <i class="fa-solid fa-download"></i>
+        <span>Install PWA</span>
+      </button>
+    </div>
   </div>
 
-  <!-- Header / Navbar -->
+  <!-- LIVE SYNC STATUS BANNER -->
+  <div id="liveSyncBanner" class="bg-emerald-50 border-b border-emerald-200 py-1.5 px-3 text-center text-[10px] sm:text-[11px] font-medium text-emerald-900 flex flex-wrap items-center justify-center gap-2 sm:gap-6 transition-all">
+    <div class="flex items-center space-x-1.5">
+      <span id="liveDotSpan" class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+      <span class="font-bold">AIMST Firestore Sync Live</span>
+    </div>
+    <div id="syncBorder1" class="flex items-center space-x-1 border-l border-emerald-300 pl-2">
+      <i id="syncStoreIcon" class="fa-solid fa-store text-emerald-600 text-[9px]"></i>
+      <span id="statActiveCount" class="font-black">0</span> Active Listings
+    </div>
+    <div id="syncBorder2" class="flex items-center space-x-1 border-l border-emerald-300 pl-2">
+      <i id="syncCheckIcon" class="fa-solid fa-circle-check text-emerald-600 text-[9px]"></i>
+      <span id="statSoldsCount" class="font-black">0</span> Items Sold
+    </div>
+  </div>
+
+  <!-- MAIN HEADER / NAVBAR -->
   <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm">
-    <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-2 min-h-[4.2rem] flex flex-row items-center justify-between gap-2">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
       
-      <div class="flex items-center space-x-2 cursor-pointer shrink min-w-0" onclick="switchMainTab('home')">
-        <img src="market-logo.png" alt="AIMST Prestige Market Logo" class="w-8 h-8 sm:w-10 sm:h-10 rounded-xl object-contain shadow-md border border-emerald-500/30 shrink-0" onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=400'">
-        <div class="min-w-0">
-          <h1 class="font-black tracking-wider text-[11px] sm:text-base text-slate-900 leading-tight truncate">
-            AIMST PRESTIGE MARKET
-          </h1>
-          <p id="navSubTitle" class="text-[7px] sm:text-[8px] uppercase tracking-widest text-emerald-600 font-bold leading-none mt-0.5 truncate">
-            We Listen, We Create, You Enjoy!
-          </p>
+      <div class="flex items-center space-x-3 cursor-pointer" onclick="switchMainTab('home')">
+        <img src="market-logo.png" alt="Logo" class="w-9 h-9 sm:w-10 sm:h-10 object-contain drop-shadow" onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=400'">
+        <div>
+          <h1 class="font-black text-xs sm:text-base text-slate-900 tracking-tight leading-none">AIMST PRESTIGE MARKET</h1>
+          <p id="navSubTitle" class="text-[7px] sm:text-[8px] uppercase tracking-widest text-emerald-600 font-bold leading-none mt-0.5 truncate">Student Marketplace & Study Hub</p>
         </div>
       </div>
 
-      <div class="flex items-center space-x-2 shrink-0">
-        <!-- Founders Portal (Founders only) -->
-        <button onclick="openSellerManagerModal()" id="sellerManagerNavBtn" class="hidden px-2.5 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 border border-amber-300 text-[10px] sm:text-xs font-bold text-amber-800 transition-all flex items-center space-x-1">
-          <i class="fa-solid fa-users-gear text-amber-600"></i>
-          <span class="hidden sm:inline">Founders Portal</span>
+      <div class="flex items-center space-x-2">
+        <button id="sellerManagerNavBtn" onclick="openSellerManagerModal()" class="hidden px-3 py-2 rounded-xl bg-amber-100 hover:bg-amber-200 text-amber-900 font-black text-xs items-center space-x-1 border border-amber-300 shadow-sm">
+          <i class="fa-solid fa-shield-halved"></i>
+          <span class="hidden sm:inline">Admin Hub</span>
         </button>
 
-        <!-- Dynamic Auth / Login Status Button -->
-        <button id="authBtn" onclick="handleAuthClick()" class="px-2.5 py-1.5 sm:px-3 sm:py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-[10px] sm:text-xs font-bold shadow-md shadow-emerald-600/20 transition-all flex items-center space-x-1 max-w-[110px] sm:max-w-[180px] shrink-0">
-          <i class="fa-solid fa-user-shield text-[11px] shrink-0"></i>
-          <span id="authBtnText" class="truncate">APM Verified Login</span>
+        <button onclick="handleAuthClick()" class="px-3.5 py-2 rounded-2xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs shadow-md transition-all flex items-center space-x-1.5">
+          <i class="fa-solid fa-user-shield text-emerald-400"></i>
+          <span id="authBtnText">APM Verified Login</span>
         </button>
       </div>
 
     </div>
   </header>
 
-  <!-- Live Sync Banner -->
-  <div id="liveSyncBanner" class="bg-emerald-50 border-b border-emerald-200 py-1.5 px-3 text-center text-[10px] sm:text-[11px] font-medium text-emerald-900 flex flex-wrap items-center justify-center gap-2 sm:gap-6 transition-all">
-    <div class="flex items-center space-x-1.5">
-      <span id="liveDotSpan" class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-      <span>Network: <strong class="text-emerald-950">Active</strong></span>
-    </div>
-    <div class="flex items-center space-x-1 border-l border-emerald-300 pl-2" id="syncBorder1">
-      <i id="syncStoreIcon" class="fa-solid fa-store text-emerald-600 text-[9px]"></i>
-      <span>Active Listings: <strong id="statActiveCount" class="text-emerald-950">0</strong></span>
-    </div>
-    <div class="flex items-center space-x-1 border-l border-emerald-300 pl-2" id="syncBorder2">
-      <i id="syncCheckIcon" class="fa-solid fa-circle-check text-emerald-600 text-[9px]"></i>
-      <span>Already Sold: <strong id="statSoldsCount" class="text-emerald-950">0</strong></span>
-    </div>
-  </div>
+  <!-- MAIN CONTENT CONTAINER -->
+  <main class="max-w-6xl mx-auto px-4 pt-4">
 
-  <!-- SHOPEE-STYLE FIXED BOTTOM NAVIGATION BAR -->
-  <nav class="fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200 shadow-lg py-1.5 px-2 sm:px-4">
-    <div class="max-w-md mx-auto flex items-center justify-around">
+    <!-- HOME TAB VIEW PAGE -->
+    <div id="viewHome" class="tab-view-page">
       
-      <!-- 1. Home Tab -->
-      <button id="navBottomHome" onclick="switchMainTab('home')" class="nav-bottom-btn active-tab flex flex-col items-center justify-center py-1 px-3 text-slate-500 hover:text-emerald-600 transition-all">
-        <i class="fa-solid fa-house text-lg mb-0.5"></i>
-        <span class="text-[10px] font-bold leading-none">Home</span>
-      </button>
-
-      <!-- 2. My Product Tab -->
-      <button id="navBottomMyProducts" onclick="switchMainTab('myproducts')" class="nav-bottom-btn flex flex-col items-center justify-center py-1 px-3 text-slate-500 hover:text-emerald-600 transition-all relative">
-        <i class="fa-solid fa-boxes-stacked text-lg mb-0.5"></i>
-        <span class="text-[10px] font-bold leading-none">My Product</span>
-      </button>
-
-      <!-- 3. Favourite Tab -->
-      <button id="navBottomWishlist" onclick="switchMainTab('wishlist')" class="nav-bottom-btn flex flex-col items-center justify-center py-1 px-3 text-slate-500 hover:text-emerald-600 transition-all relative">
-        <div class="relative">
-          <i class="fa-solid fa-heart text-lg mb-0.5 text-rose-500"></i>
-          <span id="wishlistCountBadge" class="absolute -top-1 -right-2 px-1.5 py-0.2 rounded-full bg-rose-500 text-white font-black text-[9px]">0</span>
+      <!-- HERO BANNER -->
+      <div class="rounded-3xl bg-gradient-to-br from-slate-900 via-slate-800 to-emerald-950 text-white p-6 sm:p-10 mb-6 shadow-xl relative overflow-hidden border border-emerald-500/20">
+        <div class="absolute right-0 top-0 bottom-0 w-1/3 opacity-10 bg-[radial-gradient(#34d399_1px,transparent_1px)] [background-size:16px_16px] pointer-events-none"></div>
+        <div class="relative z-10 max-w-xl">
+          <span class="inline-block px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-400 text-[10px] font-black uppercase tracking-widest mb-3 border border-emerald-500/30">
+            🌱 AIMST University Official PWA
+          </span>
+          <h2 class="text-xl sm:text-3xl font-black tracking-tight mb-2">We Listen, We Create, You Enjoy!</h2>
+          <p class="text-xs sm:text-sm text-slate-300 leading-relaxed mb-5">
+            The premier student-to-student marketplace at Semeling, Kedah. Buy/sell study notes, textbooks, tech gear, hostel essentials, and rent belongings securely.
+          </p>
+          <div class="flex flex-wrap items-center gap-3">
+            <button onclick="openAddListingModal()" class="px-5 py-2.5 rounded-2xl bg-emerald-500 hover:bg-emerald-600 text-white font-black text-xs shadow-lg shadow-emerald-500/30 transition-all flex items-center space-x-2">
+              <i class="fa-solid fa-plus"></i>
+              <span>Post Listing Now</span>
+            </button>
+            <button onclick="scrollToClubs()" class="px-4 py-2.5 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs backdrop-blur-md transition-all border border-white/20 flex items-center space-x-1.5">
+              <i class="fa-solid fa-users"></i>
+              <span>Campus Clubs Hub</span>
+            </button>
+          </div>
         </div>
-        <span class="text-[10px] font-bold leading-none mt-0.5">Favourite</span>
+      </div>
+
+      <!-- SEARCH & CATEGORY FILTERS -->
+      <div class="space-y-4 mb-6">
+        <div class="relative">
+          <i class="fa-solid fa-magnifying-glass absolute left-4 top-3.5 text-slate-400"></i>
+          <input type="text" id="searchInput" oninput="filterListings()" placeholder="Search items, textbooks, calculators, hostel gear, event tickets..." class="w-full bg-white border border-slate-200 rounded-2xl pl-11 pr-4 py-3 text-xs sm:text-sm font-semibold text-slate-800 focus:outline-none focus:border-emerald-500 shadow-sm">
+        </div>
+
+        <!-- CATEGORIES GRID -->
+        <div class="grid grid-cols-3 sm:grid-cols-6 gap-2 sm:gap-3">
+          <button onclick="setCategory('all', this)" class="category-btn grab-card p-2.5 rounded-2xl flex flex-col items-center justify-center text-center transition-all group bg-emerald-50 border-emerald-300 shadow-sm">
+            <i class="fa-solid fa-store text-emerald-600 text-base mb-1"></i>
+            <span class="text-[10px] font-bold text-slate-800">All Items</span>
+          </button>
+          <button onclick="setCategory('academic', this)" class="category-btn grab-card p-2.5 rounded-2xl flex flex-col items-center justify-center text-center transition-all group">
+            <i class="fa-solid fa-book-open text-emerald-600 text-base mb-1"></i>
+            <span class="text-[10px] font-bold text-slate-800">Academic</span>
+          </button>
+          <button onclick="setCategory('rentals', this)" class="category-btn grab-card p-2.5 rounded-2xl flex flex-col items-center justify-center text-center transition-all group">
+            <i class="fa-solid fa-hand-holding-hand text-emerald-600 text-base mb-1"></i>
+            <span class="text-[10px] font-bold text-slate-800">Rentals</span>
+          </button>
+          <button onclick="setCategory('tech', this)" class="category-btn grab-card p-2.5 rounded-2xl flex flex-col items-center justify-center text-center transition-all group">
+            <i class="fa-solid fa-laptop text-emerald-600 text-base mb-1"></i>
+            <span class="text-[10px] font-bold text-slate-800">Tech & Gadgets</span>
+          </button>
+          <button onclick="setCategory('hostel', this)" class="category-btn grab-card p-2.5 rounded-2xl flex flex-col items-center justify-center text-center transition-all group">
+            <i class="fa-solid fa-house-chimney text-emerald-600 text-base mb-1"></i>
+            <span class="text-[10px] font-bold text-slate-800">Hostel Gear</span>
+          </button>
+          <button onclick="setCategory('services', this)" class="category-btn grab-card p-2.5 rounded-2xl flex flex-col items-center justify-center text-center transition-all group">
+            <i class="fa-solid fa-print text-emerald-600 text-base mb-1"></i>
+            <span class="text-[10px] font-bold text-slate-800">Services</span>
+          </button>
+        </div>
+
+        <!-- ACADEMIC COURSE FILTER SECTION -->
+        <div id="courseFilterSection" class="bg-white p-3.5 rounded-2xl border-2 border-emerald-500/40 mb-4 shadow-lg hidden transition-all">
+          <div class="flex items-center justify-between mb-2">
+            <div class="flex items-center space-x-2">
+              <i id="courseFilterIcon" class="fa-solid fa-book-medical text-emerald-600 text-sm"></i>
+              <span class="text-xs font-black text-slate-900 uppercase">Filter Academic Notes by AIMST Programme / Course</span>
+            </div>
+            <button id="resetCourseFiltersBtn" onclick="clearCourseFilters()" class="text-[10px] font-bold text-emerald-700 hover:underline">Reset Filters</button>
+          </div>
+          <div class="relative mb-2">
+            <input type="text" id="courseSearchInput" oninput="renderCourseFilterPills()" placeholder="Search course name or code (e.g., MBBS, CS, Nursing, Physiotherapy)..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-800 focus:outline-none focus:border-emerald-500">
+          </div>
+          <div id="coursePillsContainer" class="flex flex-wrap gap-1.5 max-h-36 overflow-y-auto pr-1">
+            <!-- Rendered via JS -->
+          </div>
+        </div>
+      </div>
+
+      <!-- SPONSORED / BOOSTED ADS CAROUSEL -->
+      <div id="sponsoredSection" class="mb-8 hidden">
+        <div class="flex items-center justify-between mb-3">
+          <div class="flex items-center space-x-2">
+            <span class="w-6 h-6 rounded-lg bg-amber-500 text-slate-950 flex items-center justify-center font-black text-xs shadow-sm">
+              <i class="fa-solid fa-bolt"></i>
+            </span>
+            <h3 class="text-xs sm:text-sm font-black text-slate-900 uppercase tracking-wide">Sponsored Featured Listings</h3>
+          </div>
+          <span class="text-[10px] text-amber-600 font-bold bg-amber-50 px-2.5 py-0.5 rounded-full border border-amber-200">🚀 Promoted</span>
+        </div>
+        
+        <div id="sponsoredCarousel" class="flex space-x-3 overflow-x-auto no-scrollbar pb-2 pt-1 snap-x">
+          <!-- Injected via JS -->
+        </div>
+      </div>
+
+      <!-- MAIN LISTINGS GRID HEADER -->
+      <div class="flex items-center justify-between mb-4">
+        <h3 id="listingCount" class="text-xs sm:text-sm font-black text-slate-800 uppercase tracking-wide">Showing all available items</h3>
+        <button onclick="toggleCourseFilterPanel()" class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs flex items-center space-x-1.5 transition-all">
+          <i class="fa-solid fa-filter text-emerald-600 text-[10px]"></i>
+          <span>Filter Courses</span>
+        </button>
+      </div>
+
+      <!-- LISTINGS GRID -->
+      <div id="listingsGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 sm:gap-4">
+        <!-- Rendered via JS -->
+      </div>
+
+      <!-- CAMPUS CLUBS SECTION -->
+      <div id="clubsSection" class="mt-12 pt-8 border-t border-slate-200">
+        <div class="flex items-center justify-between mb-4">
+          <div>
+            <h3 class="text-base sm:text-lg font-black text-slate-900">AIMST Campus Clubs & Societies</h3>
+            <p class="text-xs text-slate-500">Connect with student leaders and join official WhatsApp community groups.</p>
+          </div>
+          <button id="addClubBtn" onclick="openAddClubModal()" class="hidden px-3.5 py-2 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-bold text-xs shadow-md transition-all flex items-center space-x-1.5">
+            <i class="fa-solid fa-plus"></i>
+            <span>Add Club</span>
+          </button>
+        </div>
+
+        <div id="clubsGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
+          <!-- Rendered via JS -->
+        </div>
+      </div>
+    </div>
+
+    <!-- MY PRODUCTS TAB VIEW PAGE -->
+    <div id="viewMyProducts" class="tab-view-page hidden">
+      <div class="flex items-center justify-between mb-4">
+        <div>
+          <h3 class="text-base sm:text-lg font-black text-slate-900">My Listed Products & Rentals</h3>
+          <p class="text-xs text-slate-500">Manage your active posts, boost visibility, or delete items.</p>
+        </div>
+        <button onclick="openAddListingModal()" class="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md">
+          <i class="fa-solid fa-plus mr-1"></i> Add Product
+        </button>
+      </div>
+      <div id="myProductsTabContainer" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+        <!-- Rendered via JS -->
+      </div>
+    </div>
+
+    <!-- FAVOURITE / WISHLIST TAB VIEW PAGE -->
+    <div id="viewWishlist" class="tab-view-page hidden">
+      <div class="mb-4">
+        <h3 class="text-base sm:text-lg font-black text-slate-900">Saved Favourites</h3>
+        <p class="text-xs text-slate-500">Quickly access items you saved for later.</p>
+      </div>
+      <div id="wishlistTabContainer" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <!-- Rendered via JS -->
+      </div>
+    </div>
+
+    <!-- ME / PROFILE TAB VIEW PAGE -->
+    <div id="viewMe" class="tab-view-page hidden">
+      <div class="max-w-md mx-auto grab-card rounded-3xl p-6 border border-slate-200 text-center">
+        <div class="w-20 h-20 rounded-full bg-emerald-100 text-emerald-800 font-black text-2xl flex items-center justify-center mx-auto mb-3 shadow-inner">
+          <i class="fa-solid fa-user-graduate"></i>
+        </div>
+        <h3 id="meTabUsername" class="text-lg font-black text-slate-900 mb-0.5">Username</h3>
+        <p id="meTabEmail" class="text-xs text-slate-500 mb-4">email@apm.com</p>
+        
+        <div class="mb-4">
+          <span id="meTabTierBadge" class="inline-block px-4 py-1.5 rounded-full bg-emerald-50 text-emerald-800 font-extrabold text-xs border border-emerald-300 mb-3 uppercase tracking-wider">VERIFIED SELLER/BUYER (FREE TIER)</span>
+          <p class="text-xs text-slate-600">Active Listings Usage: <span id="meTabListingCount" class="font-bold text-slate-900">0 / 3 Used</span></p>
+        </div>
+
+        <div id="meTabProCountdownContainer" class="hidden mb-4 bg-purple-50 p-3 rounded-2xl border border-purple-200">
+          <p class="text-[11px] font-bold text-purple-900">👑 Pro Tier Countdown Remaining:</p>
+          <p id="meTabProCountdownTimer" class="text-sm font-black text-purple-700">--</p>
+        </div>
+
+        <div class="space-y-2">
+          <button id="meTabUpgradeBtn" onclick="openUpgradeModal()" class="w-full py-3 rounded-2xl bg-amber-500 hover:bg-amber-600 text-white font-black text-xs shadow-md transition-all flex items-center justify-center space-x-2">
+            <i class="fa-solid fa-crown text-sm"></i>
+            <span>Upgrade to Pro Tier (RM5/mo - 7 Listings)</span>
+          </button>
+          <button onclick="performLogout()" class="w-full py-2.5 rounded-2xl bg-rose-50 hover:bg-rose-100 text-rose-600 font-bold text-xs transition-all border border-rose-200">
+            Log Out
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ABOUT APM & FOUNDERS TAB VIEW PAGE -->
+    <div id="viewAbout" class="tab-view-page hidden">
+      <div class="max-w-4xl mx-auto space-y-6">
+        
+        <!-- FOUNDERS HERO CARD -->
+        <div class="grab-card rounded-3xl p-6 sm:p-8 border border-slate-200 text-center relative overflow-hidden">
+          <div class="absolute -right-10 -top-10 w-40 h-40 bg-emerald-500/10 rounded-full blur-2xl pointer-events-none"></div>
+          
+          <h3 class="text-xs font-black uppercase tracking-widest text-emerald-600 mb-1">Architects of Innovation</h3>
+          <h2 class="text-xl sm:text-2xl font-black text-slate-900 mb-6">AIMST Prestige Market Leadership</h2>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <!-- Keven -->
+            <div class="bg-slate-50 rounded-2xl p-5 border border-slate-200 flex flex-col items-center">
+              <img src="founder1.jpg" alt="Keventhiran" class="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl object-cover shadow-md mb-3 border-2 border-emerald-500/30" onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=400'">
+              <h4 class="font-black text-sm text-slate-900">Keventhiran Devandren</h4>
+              <p class="text-[11px] font-bold text-emerald-700 mb-2">Founder & CEO • Computer Science</p>
+              <p class="text-[11px] text-slate-600 leading-relaxed text-center">Lead Backend Architect & Database Security Specialist managing APM server infrastructure and core system operations.</p>
+            </div>
+
+            <!-- Taarisini -->
+            <div class="bg-slate-50 rounded-2xl p-5 border border-slate-200 flex flex-col items-center">
+              <img src="founder2.jpg" alt="Taarisini" class="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl object-cover shadow-md mb-3 border-2 border-emerald-500/30" onerror="this.src='https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&q=80&w=400'">
+              <h4 class="font-black text-sm text-slate-900">Taarisini Selvakumar</h4>
+              <p class="text-[11px] font-bold text-emerald-700 mb-2">Co-Founder & CTO • Computer Science</p>
+              <p class="text-[11px] text-slate-600 leading-relaxed text-center">Lead Frontend Developer & UI/UX Specialist crafting beautiful user experiences, interfaces, and web responsiveness.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- CONTRIBUTORS WALL OF FAME -->
+        <div class="grab-card rounded-3xl p-6 sm:p-8 border border-slate-200">
+          <div class="flex items-center justify-between mb-4">
+            <div>
+              <h3 class="text-base font-black text-slate-900 flex items-center space-x-2">
+                <i class="fa-solid fa-award text-amber-500"></i>
+                <span>CONTRIBUTORS WALL OF FAME</span>
+              </h3>
+              <p class="text-xs text-slate-500">Recognizing student ideas, helpers, and contributors who powered APM.</p>
+            </div>
+            <button id="addAboutContribBtn" onclick="openAddContributorModal()" class="hidden px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md transition-all flex items-center space-x-1">
+              <i class="fa-solid fa-plus"></i>
+              <span>Add Contributor</span>
+            </button>
+          </div>
+
+          <div id="aboutContributorsList" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+            <!-- Rendered via Firebase in JS -->
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+
+  <!-- SHOPEE STYLE BOTTOM NAVIGATION BAR -->
+  <nav class="fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200 shadow-2xl py-2 px-2">
+    <div class="max-w-md mx-auto grid grid-cols-5 gap-1 text-center">
+      
+      <button id="navBottomHome" onclick="switchMainTab('home')" class="nav-bottom-btn active-tab flex flex-col items-center justify-center py-1 rounded-xl">
+        <i class="fa-solid fa-store text-base mb-0.5"></i>
+        <span class="text-[9px] font-bold tracking-wide">Home</span>
       </button>
 
-      <!-- 4. Me Tab -->
-      <button id="navBottomMe" onclick="switchMainTab('me')" class="nav-bottom-btn flex flex-col items-center justify-center py-1 px-3 text-slate-500 hover:text-emerald-600 transition-all relative">
-        <i class="fa-solid fa-user text-lg mb-0.5"></i>
-        <span class="text-[10px] font-bold leading-none">Me</span>
+      <button id="navBottomMyProducts" onclick="switchMainTab('myproducts')" class="nav-bottom-btn disabled-tab flex flex-col items-center justify-center py-1 rounded-xl">
+        <i class="fa-solid fa-box-archive text-base mb-0.5"></i>
+        <span class="text-[9px] font-bold tracking-wide">My Product</span>
       </button>
 
-      <!-- 5. About APM Tab -->
-      <button id="navBottomAbout" onclick="switchMainTab('about')" class="nav-bottom-btn flex flex-col items-center justify-center py-1 px-3 text-slate-500 hover:text-emerald-600 transition-all relative">
-        <img src="market-logo.png" alt="APM" class="w-5 h-5 rounded-md object-contain mb-0.5 border border-emerald-500/30 shadow-sm" onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=400'">
-        <span class="text-[10px] font-bold leading-none">About APM</span>
+      <button id="navBottomWishlist" onclick="switchMainTab('wishlist')" class="nav-bottom-btn disabled-tab flex flex-col items-center justify-center py-1 rounded-xl relative">
+        <i class="fa-solid fa-heart text-base mb-0.5"></i>
+        <span class="text-[9px] font-bold tracking-wide">Favourite</span>
+        <span id="wishlistCountBadge" class="absolute top-0 right-4 px-1 bg-rose-500 text-white text-[8px] font-black rounded-full">0</span>
+      </button>
+
+      <button id="navBottomMe" onclick="switchMainTab('me')" class="nav-bottom-btn disabled-tab flex flex-col items-center justify-center py-1 rounded-xl">
+        <i class="fa-solid fa-user text-base mb-0.5"></i>
+        <span class="text-[9px] font-bold tracking-wide">Me</span>
+      </button>
+
+      <button id="navBottomAbout" onclick="switchMainTab('about')" class="nav-bottom-btn flex flex-col items-center justify-center py-1 rounded-xl">
+        <i class="fa-solid fa-circle-info text-base mb-0.5"></i>
+        <span class="text-[9px] font-bold tracking-wide">About APM</span>
       </button>
 
     </div>
   </nav>
 
-  <!-- TAB VIEW 1: HOME PAGE VIEW -->
-  <div id="viewHome" class="tab-view-page">
-    
-    <!-- Grab-Style Quick Categories Grid Bar -->
-    <section class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 pt-5 sm:pt-7 pb-3">
-      <div class="text-center mb-4">
-        <h2 class="text-lg sm:text-2xl font-black text-slate-900 tracking-tight mb-0.5">
-          Explore Campus Categories
-        </h2>
-        <p class="text-slate-500 text-[11px] sm:text-xs">Tap any category to filter campus items instantly.</p>
-      </div>
-
-      <div class="grid grid-cols-4 sm:grid-cols-4 lg:grid-cols-8 gap-2 sm:gap-3.5 mb-4">
-        
-        <button onclick="setCategory('academic', this)" class="category-btn grab-card p-2.5 rounded-2xl flex flex-col items-center justify-center text-center transition-all group active">
-          <div id="catIcon1" class="w-11 h-11 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-lg mb-1.5 group-hover:scale-110 transition-all shadow-sm">
-            <i class="fa-solid fa-book-medical"></i>
-          </div>
-          <span class="text-[10px] sm:text-xs font-bold text-slate-800 leading-tight">Academic Notes</span>
-        </button>
-
-        <button onclick="setCategory('rentals', this)" class="category-btn grab-card p-2.5 rounded-2xl flex flex-col items-center justify-center text-center transition-all group">
-          <div class="w-11 h-11 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-lg mb-1.5 group-hover:scale-110 transition-all shadow-sm">
-            <i class="fa-solid fa-user-tie"></i>
-          </div>
-          <span class="text-[10px] sm:text-xs font-bold text-slate-800 leading-tight">Belongings Rentals</span>
-        </button>
-
-        <button onclick="setCategory('tech', this)" class="category-btn grab-card p-2.5 rounded-2xl flex flex-col items-center justify-center text-center transition-all group">
-          <div class="w-11 h-11 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-lg mb-1.5 group-hover:scale-110 transition-all shadow-sm">
-            <i class="fa-solid fa-laptop-code"></i>
-          </div>
-          <span class="text-[10px] sm:text-xs font-bold text-slate-800 leading-tight">Tech & Gadgets</span>
-        </button>
-
-        <button onclick="setCategory('hostel', this)" class="category-btn grab-card p-2.5 rounded-2xl flex flex-col items-center justify-center text-center transition-all group">
-          <div class="w-11 h-11 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center text-lg mb-1.5 group-hover:scale-110 transition-all shadow-sm">
-            <i class="fa-solid fa-bed"></i>
-          </div>
-          <span class="text-[10px] sm:text-xs font-bold text-slate-800 leading-tight">Hostel Essentials</span>
-        </button>
-
-        <button onclick="setCategory('services', this)" class="category-btn grab-card p-2.5 rounded-2xl flex flex-col items-center justify-center text-center transition-all group">
-          <div class="w-11 h-11 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center text-lg mb-1.5 group-hover:scale-110 transition-all shadow-sm">
-            <i class="fa-solid fa-print"></i>
-          </div>
-          <span class="text-[10px] sm:text-xs font-bold text-slate-800 leading-tight">Campus Services</span>
-        </button>
-
-        <button onclick="setCategory('events', this)" class="category-btn grab-card p-2.5 rounded-2xl flex flex-col items-center justify-center text-center transition-all group">
-          <div class="w-11 h-11 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center text-lg mb-1.5 group-hover:scale-110 transition-all shadow-sm">
-            <i class="fa-solid fa-calendar-days"></i>
-          </div>
-          <span class="text-[10px] sm:text-xs font-bold text-slate-800 leading-tight">Campus Events</span>
-        </button>
-
-        <button onclick="scrollToClubs()" class="grab-card p-2.5 rounded-2xl flex flex-col items-center justify-center text-center transition-all group bg-gradient-to-b from-teal-50 to-white border-teal-200">
-          <div class="w-11 h-11 rounded-2xl bg-teal-500 text-white flex items-center justify-center text-lg mb-1.5 group-hover:scale-110 transition-all shadow-sm">
-            <i class="fa-solid fa-users"></i>
-          </div>
-          <span class="text-[10px] sm:text-xs font-bold text-teal-900 leading-tight">Campus Clubs</span>
-        </button>
-
-        <button onclick="setCategory('all', this)" class="category-btn grab-card p-2.5 rounded-2xl flex flex-col items-center justify-center text-center transition-all group">
-          <div class="w-11 h-11 rounded-2xl bg-slate-100 text-slate-700 flex items-center justify-center text-lg mb-1.5 group-hover:scale-110 transition-all shadow-sm">
-            <i class="fa-solid fa-border-all"></i>
-          </div>
-          <span class="text-[10px] sm:text-xs font-bold text-slate-800 leading-tight">All Listings</span>
-        </button>
-
-      </div>
-
-      <!-- DEDICATED AIMST COURSE POPUP / DROPDOWN PANEL (ONLY SHOWN WHEN ACADEMIC NOTES SELECTED) -->
-      <div id="courseFilterSection" class="bg-white p-3.5 rounded-2xl border-2 border-emerald-500/40 mb-4 shadow-lg hidden transition-all">
-        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 mb-2">
-          <div class="flex items-center space-x-2">
-            <i id="courseFilterIcon" class="fa-solid fa-book-medical text-emerald-600 text-sm"></i>
-            <span class="text-xs font-black uppercase tracking-wider text-slate-900">Academic Notes Programme Filter (Select 1 or more):</span>
-          </div>
-          <div class="flex items-center space-x-3">
-            <button id="resetCourseFiltersBtn" onclick="clearCourseFilters()" class="text-[10px] font-bold text-emerald-700 hover:underline">
-              Reset Filters
-            </button>
-            <button onclick="toggleCourseFilterPanel()" class="px-2 py-1 rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200 text-xs font-bold">
-              <i class="fa-solid fa-xmark"></i> Close Filter
-            </button>
-          </div>
-        </div>
-
-        <div class="relative mb-2.5">
-          <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-[11px]"></i>
-          <input type="text" id="courseSearchInput" oninput="renderCourseFilterPills()" placeholder="Quick search courses (e.g., MBBS, Computer Science, Foundation in Arts)..." class="w-full bg-slate-50 border border-slate-200 rounded-xl py-1.5 pl-8 pr-3 text-xs text-slate-900 focus:outline-none focus:border-emerald-500">
-        </div>
-
-        <div id="coursePillsContainer" class="flex flex-wrap gap-1.5 max-h-40 overflow-y-auto p-1">
-          <!-- Dynamically rendered via JS -->
-        </div>
-      </div>
-
-      <!-- General Search Bar -->
-      <div class="max-w-xl mx-auto relative mb-3">
-        <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
-        <input type="text" id="searchInput" oninput="filterListings()" placeholder="Search notes, calculator rental, printing services, stethoscope..." class="w-full bg-white border border-slate-300 rounded-2xl py-2.5 pl-10 pr-4 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-emerald-500 shadow-sm transition-all">
-      </div>
-    </section>
-
-    <!-- Main Content Feed -->
-    <main class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 pb-10">
-      
-      <!-- TOP SPONSORED ADVERTISEMENTS AUTO-SWIPE CAROUSEL BANNER SECTION -->
-      <div id="sponsoredSection" class="mb-6 hidden">
-        <div class="flex items-center justify-between mb-2">
-          <div class="flex items-center space-x-2">
-            <i class="fa-solid fa-bolt text-amber-500 text-sm animate-bounce"></i>
-            <h3 class="text-xs sm:text-sm font-black uppercase tracking-wider text-amber-900">Featured Sponsored Campus Ads</h3>
-          </div>
-          <span class="text-[10px] font-bold text-amber-700 bg-amber-100 px-2 py-0.5 rounded-full border border-amber-200">Auto Swiping By Remaining Time</span>
-        </div>
-        
-        <div class="relative group">
-          <div id="sponsoredCarousel" class="flex overflow-x-auto snap-x snap-mandatory space-x-3 no-scrollbar scroll-smooth py-1">
-            <!-- Dynamically injected auto-swiping sponsored cards -->
-          </div>
-        </div>
-      </div>
-
-      <div class="flex items-center justify-between mb-3">
-        <h3 class="text-sm sm:text-base font-bold tracking-tight text-slate-900">Featured Campus Listings</h3>
-        <div id="listingCount" class="text-[11px] text-slate-500">Loading items...</div>
-      </div>
-
-      <div id="listingsGrid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2.5 sm:gap-4">
-        <!-- Dynamic cards injected via JS -->
-      </div>
-    </main>
-
-    <!-- AIMST Campus Clubs Section -->
-    <section id="clubsSection" class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 pb-16">
-      <div class="border-t border-slate-200 pt-6">
-        <div class="flex items-center justify-between mb-3">
-          <div>
-            <h3 class="text-sm sm:text-base font-bold tracking-tight text-slate-900 flex items-center space-x-2">
-              <i class="fa-solid fa-users text-teal-600"></i>
-              <span>AIMST Clubs & Student Societies</span>
-            </h3>
-            <p class="text-[11px] text-slate-500 mt-0.5">Join active campus communities, participate in events, and build networks.</p>
-          </div>
-          
-          <button id="addClubBtn" onclick="openAddClubModal()" class="hidden flex items-center space-x-1 px-3 py-1.5 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-bold text-xs shadow-sm transition-all">
-            <i class="fa-solid fa-plus text-xs"></i>
-            <span>Post Club</span>
-          </button>
-        </div>
-
-        <div id="clubsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
-          <!-- Dynamic Club cards injected via JS -->
-        </div>
-      </div>
-    </section>
-  </div>
-
-  <!-- TAB VIEW 2: MY PRODUCT PAGE VIEW -->
-  <div id="viewMyProducts" class="tab-view-page max-w-5xl mx-auto px-3 sm:px-6 lg:px-8 py-6 hidden">
-    <div class="bg-white rounded-3xl p-5 sm:p-8 border border-slate-200 shadow-sm mb-6">
-      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6 pb-4 border-b border-slate-100">
-        <div>
-          <h2 class="text-xl sm:text-2xl font-black text-slate-900 flex items-center space-x-2">
-            <i class="fa-solid fa-boxes-stacked text-emerald-600"></i>
-            <span>My Product Listings</span>
-          </h2>
-          <p class="text-xs text-slate-500 mt-1">Manage items you have listed for sale or rental on APM.</p>
-        </div>
-        
-        <!-- Tiny Add Product Button -->
-        <button onclick="openAddListingModal()" class="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-md transition-all flex items-center space-x-1.5">
-          <i class="fa-solid fa-plus text-xs"></i>
-          <span>Add Product</span>
-        </button>
-      </div>
-
-      <div id="myProductsTabContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        <!-- Rendered via JS -->
-      </div>
-    </div>
-  </div>
-
-  <!-- TAB VIEW 3: FAVOURITY (WISHLIST) PAGE VIEW -->
-  <div id="viewWishlist" class="tab-view-page max-w-4xl mx-auto px-3 sm:px-6 lg:px-8 py-6 hidden">
-    <div class="bg-white rounded-3xl p-5 sm:p-8 border border-slate-200 shadow-sm">
-      <div class="mb-6 pb-4 border-b border-slate-100">
-        <h2 class="text-xl sm:text-2xl font-black text-slate-900 flex items-center space-x-2">
-          <i class="fa-solid fa-heart text-rose-500"></i>
-          <span>Favourite Saved Items</span>
-        </h2>
-        <p class="text-xs text-slate-500 mt-1">Items you saved to view or buy later.</p>
-      </div>
-
-      <div id="wishlistTabContainer" class="space-y-3">
-        <!-- Rendered via JS -->
-      </div>
-    </div>
-  </div>
-
-  <!-- TAB VIEW 4: ME / PROFILE PAGE VIEW -->
-  <div id="viewMe" class="tab-view-page max-w-xl mx-auto px-3 sm:px-6 lg:px-8 py-6 hidden">
-    <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm text-center">
-      <div class="w-20 h-20 rounded-3xl bg-emerald-100 text-emerald-700 flex items-center justify-center mx-auto mb-4 text-3xl shadow-sm border border-emerald-300">
-        <i class="fa-solid fa-user-gear"></i>
-      </div>
-
-      <h3 id="meTabUsername" class="text-xl font-black text-slate-900 leading-tight">Username</h3>
-      <p id="meTabEmail" class="text-xs text-slate-500 mb-4">user@apm.com</p>
-
-      <div id="meTabTierBadge" class="inline-block px-4 py-1.5 rounded-full bg-emerald-50 text-emerald-800 font-extrabold text-xs border border-emerald-300 mb-3 uppercase tracking-wider">
-        VERIFIED SELLER/BUYER (FREE TIER)
-      </div>
-
-      <div id="meTabProCountdownContainer" class="hidden bg-amber-50 p-3.5 rounded-2xl border border-amber-200 mb-4 text-center">
-        <p class="text-[10px] font-bold text-amber-900 uppercase tracking-wider mb-1 flex items-center justify-center space-x-1">
-          <i class="fa-solid fa-clock text-amber-600"></i>
-          <span>Pro Subscription Time Remaining</span>
-        </p>
-        <div id="meTabProCountdownTimer" class="text-lg font-black text-amber-700 tracking-wider">00h 00m 00s</div>
-      </div>
-
-      <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 mb-6 text-left space-y-2">
-        <div class="flex justify-between items-center text-xs font-bold text-slate-700">
-          <span>Active Listing Usage:</span>
-          <span id="meTabListingCount" class="text-emerald-700 font-black">0 / 3 Used</span>
-        </div>
-      </div>
-
-      <div class="space-y-3">
-        <button onclick="switchMainTab('myproducts')" class="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md transition-all flex items-center justify-center space-x-2">
-          <i class="fa-solid fa-boxes-stacked text-xs"></i>
-          <span>Manage My Products</span>
-        </button>
-
-        <button id="meTabUpgradeBtn" onclick="openUpgradeModal()" class="w-full py-3 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs shadow-md transition-all flex items-center justify-center space-x-2">
-          <i class="fa-solid fa-crown text-xs"></i>
-          <span>Upgrade to Pro Tier (RM5/mo)</span>
-        </button>
-
-        <button onclick="performLogout()" class="w-full py-3 rounded-xl bg-slate-100 hover:bg-rose-50 text-rose-600 hover:text-rose-700 font-bold text-xs border border-slate-200 transition-all flex items-center justify-center space-x-2">
-          <i class="fa-solid fa-right-from-bracket text-xs"></i>
-          <span>Logout Account</span>
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- TAB VIEW 5: ABOUT APM PAGE VIEW -->
-  <div id="viewAbout" class="tab-view-page max-w-4xl mx-auto px-3 sm:px-6 lg:px-8 py-6 hidden">
-    <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
-      
-      <div class="text-center max-w-xl mx-auto">
-        <img src="market-logo.png" alt="APM Logo" class="w-20 h-20 object-contain mx-auto mb-3 drop-shadow-md" onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=400'">
-        <h2 class="text-2xl font-black text-slate-900 tracking-wider uppercase">AIMST PRESTIGE MARKET</h2>
-        <p class="text-xs font-bold text-emerald-600 uppercase tracking-widest mt-1">We Listen, We Create, You Enjoy!</p>
-        <p class="text-xs text-slate-600 leading-relaxed mt-3">
-          APM is an exclusive campus ecosystem built to connect AIMST University students. Buy study notes, rent belongings, find hostel gear, or advertise campus club events effortlessly.
-        </p>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t border-slate-100">
-        <!-- Founder 1 -->
-        <div class="grab-card rounded-2xl p-5 border border-slate-200 text-center flex flex-col items-center">
-          <div class="w-24 h-24 rounded-full overflow-hidden border-4 border-emerald-500/30 mb-3 shrink-0 bg-slate-100 shadow-sm">
-            <img src="founder1.jpg" alt="Keventhiran Devandren" class="w-full h-full object-cover object-[center_20%]" onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=800'">
-          </div>
-          <h4 class="font-black text-base text-slate-900">Keventhiran Devandren</h4>
-          <p class="text-[11px] font-bold text-emerald-700 mb-2">Founder & CEO • Computer Science</p>
-          <p class="text-xs text-slate-600 leading-relaxed">Lead Backend Architect & Database Security Specialist managing APM server infrastructure and core system operations.</p>
-        </div>
-
-        <!-- Founder 2 -->
-        <div class="grab-card rounded-2xl p-5 border border-slate-200 text-center flex flex-col items-center">
-          <div class="w-24 h-24 rounded-full overflow-hidden border-4 border-emerald-500/30 mb-3 shrink-0 bg-slate-100 shadow-sm">
-            <img src="founder2.jpg" alt="Taarisini Selvakumar" class="w-full h-full object-cover object-[center_20%]" onerror="this.src='https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&q=80&w=800'">
-          </div>
-          <h4 class="font-black text-base text-slate-900">Taarisini Selvakumar</h4>
-          <p class="text-[11px] font-bold text-emerald-700 mb-2">Co-Founder & CTO • Computer Science</p>
-          <p class="text-xs text-slate-600 leading-relaxed">Lead Frontend Developer & UI/UX Specialist crafting beautiful user experiences, interfaces, and web responsiveness.</p>
-        </div>
-      </div>
-
-      <!-- Wall of Fame Helpers Section -->
-      <div class="pt-4 border-t border-slate-100">
-        <div class="flex items-center justify-between mb-3">
-          <h3 class="text-sm font-black text-slate-900 uppercase tracking-wider flex items-center space-x-2">
-            <i class="fa-solid fa-award text-amber-500"></i>
-            <span>Contributors Wall of Fame</span>
-          </h3>
-          <button id="addAboutContribBtn" onclick="openAddContributorModal()" class="hidden px-2.5 py-1 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-[10px] transition-all">
-            + Add Contributor
-          </button>
-        </div>
-
-        <div id="aboutContributorsList" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <!-- Dynamically injected JS -->
-        </div>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- FLOATING BUTTONS BAR (Positioned safely above bottom nav) -->
-  <div class="fixed bottom-20 left-4 right-4 sm:left-6 sm:right-auto z-40 flex items-center justify-between sm:justify-start sm:space-x-3 pointer-events-none">
-    <div id="floatingAddBtn" class="pointer-events-auto hidden">
-      <button id="floatingPostBtn" onclick="openAddListingModal()" class="flex items-center space-x-2 px-4 py-3 sm:px-5 sm:py-3.5 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold shadow-2xl shadow-emerald-600/40 ring-2 ring-white hover:scale-105 transition-all text-xs sm:text-sm">
-        <i class="fa-solid fa-plus text-sm sm:text-base"></i>
-        <span>Post Listing / Event</span>
-      </button>
-    </div>
-
-    <div class="pointer-events-auto">
-      <button onclick="forceRefreshApp()" title="Force Refresh App" class="flex items-center space-x-1.5 px-3.5 py-3 sm:px-4 sm:py-3.5 rounded-2xl bg-slate-900 hover:bg-slate-800 text-white font-bold shadow-2xl shadow-slate-900/40 ring-2 ring-white hover:scale-105 transition-all text-xs">
-        <i class="fa-solid fa-rotate-right text-emerald-400"></i>
-        <span class="inline">Refresh App</span>
-      </button>
-    </div>
-  </div>
-
-  <!-- BOOST BENEFITS MODAL -->
-  <div id="boostBenefitsModal" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm hidden flex items-center justify-center p-3">
-    <div class="bg-white rounded-3xl max-w-sm w-full p-6 relative shadow-2xl text-center border border-slate-200">
-      <button onclick="closeBoostBenefitsModal()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-700">
-        <i class="fa-solid fa-xmark text-lg"></i>
-      </button>
-
-      <div class="w-12 h-12 rounded-2xl bg-amber-100 text-amber-700 flex items-center justify-center mx-auto mb-3 text-xl shadow-sm border border-amber-300">
-        <i class="fa-solid fa-rocket"></i>
-      </div>
-
-      <h3 class="text-lg font-black text-slate-900 mb-1">Boost Your Product Ad</h3>
-      <p class="text-xs text-slate-600 leading-relaxed mb-4">
-        Unlock maximum campus visibility with APM Ad Boosting! Here are the exclusive benefits:
-      </p>
-
-      <div class="bg-amber-50/60 p-3.5 rounded-2xl border border-amber-200 mb-5 text-left space-y-2.5 text-xs text-slate-700">
-        <div class="flex items-start space-x-2">
-          <i class="fa-solid fa-circle-check text-amber-600 mt-0.5"></i>
-          <span><strong>Orange Glowing Border:</strong> Your product card stands out with an orange border until your boost period ends.</span>
-        </div>
-        <div class="flex items-start space-x-2">
-          <i class="fa-solid fa-circle-check text-amber-600 mt-0.5"></i>
-          <span><strong>Top Banner Carousel:</strong> Your product stays pinned right in the top carousel ordered by countdown time.</span>
-        </div>
-        <div class="flex items-start space-x-2">
-          <i class="fa-solid fa-circle-check text-amber-600 mt-0.5"></i>
-          <span><strong>Daily Random Pop-Up Ad:</strong> Your item pops up automatically once a day to all buyers and visitors, cycling every 5 minutes!</span>
-        </div>
-      </div>
-
-      <div class="grid grid-cols-2 gap-2">
-        <button onclick="closeBoostBenefitsModal()" class="py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition-all">Cancel</button>
-        <button onclick="proceedToBoostDays()" class="py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs shadow-md transition-all">Proceed Boosting</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- SELECT BOOST DAYS MODAL -->
-  <div id="boostDaysModal" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm hidden flex items-center justify-center p-3">
-    <div class="bg-white rounded-3xl max-w-sm w-full p-6 relative shadow-2xl text-center border border-slate-200">
-      <button onclick="closeBoostDaysModal()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-700">
-        <i class="fa-solid fa-xmark text-lg"></i>
-      </button>
-
-      <div class="w-12 h-12 rounded-2xl bg-amber-100 text-amber-700 flex items-center justify-center mx-auto mb-3 text-xl shadow-sm border border-amber-300">
-        <i class="fa-solid fa-calendar-days"></i>
-      </div>
-
-      <h3 class="text-lg font-black text-slate-900 mb-1">Select Boost Duration</h3>
-      <p class="text-xs text-slate-600 leading-relaxed mb-4">
-        Rate: <strong class="text-amber-800">RM 1.00 per day</strong>
-      </p>
-
-      <div class="mb-4 text-left">
-        <label class="block text-[10px] font-bold text-slate-700 uppercase tracking-wider mb-1">Duration (Days)</label>
-        <select id="boostDaysSelect" onchange="updateBoostCostDisplay()" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs font-bold text-slate-900 focus:outline-none focus:border-amber-500">
-          <option value="1">1 Day (RM 1.00)</option>
-          <option value="2">2 Days (RM 2.00)</option>
-          <option value="3">3 Days (RM 3.00)</option>
-          <option value="5">5 Days (RM 5.00)</option>
-          <option value="7">7 Days (RM 7.00)</option>
-          <option value="14">14 Days (RM 14.00)</option>
-          <option value="30">30 Days (RM 30.00)</option>
-        </select>
-      </div>
-
-      <div class="bg-slate-50 p-3 rounded-2xl border border-slate-200 mb-4 text-center">
-        <p class="text-[11px] font-extrabold text-slate-700 uppercase tracking-wider">
-          Total Price: <span id="boostTotalDisplay" class="text-amber-600 text-base font-black">RM 1.00</span>
-        </p>
-      </div>
-
-      <button onclick="proceedToPaymentQR()" class="w-full py-3 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs shadow-md transition-all">Proceed to Payment</button>
-    </div>
-  </div>
-
-  <!-- TNG PAYMENT QR MODAL -->
-  <div id="boostModal" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm hidden flex items-center justify-center p-3">
-    <div class="bg-white rounded-3xl max-w-sm w-full p-6 relative shadow-2xl text-center border border-slate-200">
-      <button onclick="closeBoostModal()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-700">
-        <i class="fa-solid fa-xmark text-lg"></i>
-      </button>
-
-      <div class="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center mx-auto mb-3 text-xl shadow-sm border border-emerald-300">
-        <i class="fa-solid fa-qrcode"></i>
-      </div>
-
-      <h3 class="text-lg font-black text-slate-900 mb-1">Scan & Pay via Touch 'n Go</h3>
-      <p class="text-xs text-slate-600 leading-relaxed mb-3">
-        Scan the QR code to pay <strong id="tngPayAmountDisplay" class="text-emerald-700">RM 1.00</strong>.
-      </p>
-
-      <div class="bg-slate-50 p-3 rounded-2xl border border-slate-200 mb-4 inline-block w-full">
-        <img src="tng.png" alt="Touch 'n Go QR Code" class="w-40 h-40 object-contain mx-auto rounded-xl shadow-sm" onerror="this.src='https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=400'">
-      </div>
-
-      <button id="boostSubmitBtn" onclick="submitBoostRequest()" class="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md transition-all flex items-center justify-center space-x-2">
-        <i class="fa-brands fa-whatsapp text-base"></i>
-        <span>Send Payment Receipt to Founder</span>
-      </button>
-    </div>
-  </div>
-
-  <!-- IOS INSTALL INSTRUCTIONS MODAL -->
-  <div id="iosInstallModal" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm hidden flex items-center justify-center p-3">
-    <div class="bg-white rounded-3xl max-w-sm w-full p-6 relative shadow-2xl text-center border border-slate-200">
-      <button onclick="closeIOSInstallModal()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-700">
-        <i class="fa-solid fa-xmark text-lg"></i>
-      </button>
-
-      <div class="w-14 h-14 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center mx-auto mb-3 text-2xl shadow-sm border border-emerald-300">
-        <i class="fa-brands fa-apple"></i>
-      </div>
-
-      <h3 class="text-lg font-black text-slate-900 mb-1">Install on iPhone / iPad</h3>
-      <p class="text-xs text-slate-600 leading-relaxed mb-4">Follow these 2 quick steps in Safari:</p>
-
-      <div class="bg-slate-50 p-3.5 rounded-2xl border border-slate-200 mb-4 text-left space-y-2 text-xs font-medium text-slate-700">
-        <div class="flex items-center space-x-2">
-          <span class="w-5 h-5 rounded-full bg-emerald-600 text-white font-bold flex items-center justify-center text-[10px]">1</span>
-          <span>Tap the <strong class="text-slate-900">Share</strong> button <i class="fa-solid fa-arrow-up-from-bracket text-emerald-600"></i>.</span>
-        </div>
-        <div class="flex items-center space-x-2">
-          <span class="w-5 h-5 rounded-full bg-emerald-600 text-white font-bold flex items-center justify-center text-[10px]">2</span>
-          <span>Tap <strong class="text-slate-900">"Add to Home Screen"</strong> <i class="fa-solid fa-square-plus text-emerald-600"></i>.</span>
-        </div>
-      </div>
-
-      <button onclick="closeIOSInstallModal()" class="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md transition-all">Got It!</button>
-    </div>
+  <!-- FLOATING POST LISTING BUTTON -->
+  <div id="floatingPostBtnContainer" class="fixed right-6 bottom-20 z-30">
+    <button id="floatingPostBtn" onclick="openAddListingModal()" style="display: none;" class="flex items-center space-x-2 px-4 py-3 sm:px-5 sm:py-3.5 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold shadow-2xl shadow-emerald-600/40 ring-2 ring-white hover:scale-105 transition-all text-xs sm:text-sm">
+      <i class="fa-solid fa-plus text-base"></i>
+      <span>Post Listing</span>
+    </button>
   </div>
 
   <!-- AUTH MODAL -->
-  <div id="authModal" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm hidden flex items-center justify-center p-3">
-    <div class="bg-white rounded-3xl max-w-sm w-full p-6 relative shadow-2xl border border-slate-200">
-      <button onclick="closeAuthModal()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-700">
-        <i class="fa-solid fa-xmark text-lg"></i>
-      </button>
-
-      <div class="text-center mb-4">
-        <img src="market-logo.png" alt="APM Logo" class="w-12 h-12 object-contain mx-auto mb-1" onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=400'">
-        <h3 class="text-base font-black text-slate-900 uppercase">APM Verified Login / Register</h3>
-        <p class="text-[11px] text-slate-500">Sign in to unlock all APM features & save wishlists!</p>
+  <div id="authModal" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-sm w-full p-6 relative shadow-2xl">
+      <button onclick="closeAuthModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 font-bold"><i class="fa-solid fa-xmark text-lg"></i></button>
+      <div class="text-center mb-5">
+        <h3 class="text-lg font-black text-slate-900">APM Verified Access</h3>
+        <p class="text-xs text-slate-500">Login or register to list items & manage products.</p>
+      </div>
+      
+      <div class="flex space-x-1 bg-slate-100 p-1 rounded-2xl mb-4">
+        <button id="tabLoginBtn" onclick="switchAuthTab('login')" class="flex-1 py-1.5 rounded-xl text-xs font-extrabold bg-white text-slate-900 shadow-sm transition-all">Login</button>
+        <button id="tabRegisterBtn" onclick="switchAuthTab('register')" class="flex-1 py-1.5 rounded-xl text-xs font-extrabold text-slate-500 hover:text-slate-900 transition-all">Register</button>
       </div>
 
-      <div class="flex rounded-2xl bg-slate-100 p-1 mb-4">
-        <button id="tabLoginBtn" onclick="switchAuthTab('login')" class="flex-1 py-1.5 rounded-xl text-xs font-extrabold bg-white text-slate-900 shadow-sm transition-all">Verified Login</button>
-        <button id="tabRegisterBtn" onclick="switchAuthTab('register')" class="flex-1 py-1.5 rounded-xl text-xs font-extrabold text-slate-500 hover:text-slate-900 transition-all">Register APM</button>
-      </div>
-
+      <!-- Login Container -->
       <div id="loginFormContainer" class="space-y-3">
         <div>
-          <label class="block text-[10px] font-bold text-slate-700 uppercase tracking-wider mb-1">Matrix / Email (@apm.com)</label>
-          <input type="text" id="loginUser" placeholder="e.g. keventhiran_e25101420@apm.com" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-emerald-500">
+          <label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">Student Username / Email</label>
+          <input type="text" id="loginUser" placeholder="e.g. keventhiran_e25101420" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-bold text-slate-800 focus:outline-none focus:border-emerald-500">
         </div>
         <div>
-          <label class="block text-[10px] font-bold text-slate-700 uppercase tracking-wider mb-1">Password</label>
-          <input type="password" id="loginPass" placeholder="••••••••" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-emerald-500">
+          <label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">Password</label>
+          <input type="password" id="loginPass" placeholder="••••••••" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-bold text-slate-800 focus:outline-none focus:border-emerald-500">
         </div>
-        
-        <div id="loginError" class="text-xs text-rose-600 text-center font-semibold hidden bg-rose-50 p-2.5 rounded-xl border border-rose-200"></div>
-
-        <button onclick="handleLogin()" class="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md transition-all">Sign In to APM Account</button>
+        <div id="loginError" class="text-[11px] text-rose-500 font-bold hidden"></div>
+        <button onclick="handleLogin()" class="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md">Login to APM</button>
       </div>
 
+      <!-- Register Container -->
       <div id="registerFormContainer" class="space-y-3 hidden">
-        <p class="text-[11px] text-slate-500 leading-relaxed text-center mb-1">
-          Format: <strong class="text-slate-900">name_matrixid@apm.com</strong>
-        </p>
         <div>
-          <label class="block text-[10px] font-bold text-slate-700 uppercase tracking-wider mb-1">Custom APM Username</label>
-          <input type="text" id="regUser" placeholder="keventhiran_e25101420" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-emerald-500">
+          <label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">Student Username</label>
+          <input type="text" id="regUser" placeholder="e.g. yourname_studentID" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-bold text-slate-800 focus:outline-none focus:border-emerald-500">
         </div>
         <div>
-          <label class="block text-[10px] font-bold text-slate-700 uppercase tracking-wider mb-1">Create Password</label>
-          <input type="password" id="regPass" placeholder="••••••••" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-emerald-500">
+          <label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">Create Password</label>
+          <input type="password" id="regPass" placeholder="••••••••" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-bold text-slate-800 focus:outline-none focus:border-emerald-500">
         </div>
-
-        <button onclick="handleRegister()" id="regSubmitBtn" class="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md transition-all">Complete Step 1: Submit Registration</button>
-      </div>
-
-      <div class="mt-4 pt-3 border-t border-slate-200 text-center">
-        <p class="text-[10px] text-slate-500 leading-relaxed mb-2">Step 2 Verification: Send student ID matrix proof to Founder Keven:</p>
-        <a href="https://wa.me/60126384757?text=Hi%20Founder%20Keven,%20I%20have%20submitted%20my%20registration%20Step%201.%20Here%20is%20my%20Student%20ID%20card%20for%20verification." target="_blank" class="w-full py-2 rounded-xl bg-emerald-50 text-emerald-800 font-bold text-xs transition-all border border-emerald-300 flex items-center justify-center space-x-1.5 shadow-sm">
-          <i class="fa-brands fa-whatsapp text-sm"></i>
-          <span>Send Student ID to Founder</span>
-        </a>
-      </div>
-    </div>
-  </div>
-
-  <!-- FOUNDER PORTAL -->
-  <div id="sellerManagerModal" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm hidden flex items-center justify-center p-3">
-    <div class="bg-white rounded-3xl max-w-3xl w-full p-5 sm:p-7 relative shadow-2xl max-h-[90vh] overflow-y-auto border border-slate-200">
-      <button onclick="closeSellerManagerModal()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-700">
-        <i class="fa-solid fa-xmark text-lg"></i>
-      </button>
-      
-      <div class="mb-4">
-        <h3 class="text-lg font-black text-slate-900 flex items-center space-x-2">
-          <i class="fa-solid fa-user-shield text-amber-600"></i>
-          <span>Founders Verification & Ad Boost Portal</span>
-        </h3>
-        <p class="text-xs text-slate-500 mt-0.5">Strictly Managed by Founders: Keventhiran & Taarisini</p>
-      </div>
-
-      <!-- 1. PENDING AD BOOST APPROVALS -->
-      <div class="bg-gradient-to-r from-amber-50 to-orange-50 p-4 rounded-2xl border border-amber-300 mb-4">
-        <h4 class="font-bold text-xs text-amber-900 mb-2 flex items-center justify-between">
-          <span class="flex items-center space-x-1.5">
-            <i class="fa-solid fa-rocket text-amber-600"></i>
-            <span>Pending Ad Boost Approvals (RM 1.00 / day)</span>
-          </span>
-          <span id="pendingBoostsCountBadge" class="px-2 py-0.5 rounded-full bg-amber-200 text-amber-900 text-[10px] font-black">0 Pending</span>
-        </h4>
-        <div class="relative mb-2.5">
-          <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-[11px]"></i>
-          <input type="text" id="searchPendingBoostsInput" oninput="renderSellerManagerTable()" placeholder="Search pending ad boosts..." class="w-full bg-white border border-amber-200 rounded-xl py-1.5 pl-8 pr-3 text-xs text-slate-900 focus:outline-none focus:border-amber-500">
-        </div>
-        <div id="pendingBoostsContainer" class="space-y-2"></div>
-      </div>
-
-      <!-- 2. PENDING PRO TIER UPGRADES -->
-      <div class="bg-gradient-to-r from-purple-50 to-indigo-50 p-4 rounded-2xl border border-purple-300 mb-4">
-        <h4 class="font-bold text-xs text-purple-900 mb-2 flex items-center justify-between">
-          <span class="flex items-center space-x-1.5">
-            <i class="fa-solid fa-crown text-purple-600"></i>
-            <span>Pending Pro Tier Upgrades (RM 5.00 / mo)</span>
-          </span>
-          <span id="pendingProCountBadge" class="px-2 py-0.5 rounded-full bg-purple-200 text-purple-900 text-[10px] font-black">0 Pending</span>
-        </h4>
-        <div class="relative mb-2.5">
-          <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-[11px]"></i>
-          <input type="text" id="searchPendingProInput" oninput="renderSellerManagerTable()" placeholder="Search pending pro upgrades..." class="w-full bg-white border border-purple-200 rounded-xl py-1.5 pl-8 pr-3 text-xs text-slate-900 focus:outline-none focus:border-purple-500">
-        </div>
-        <div id="pendingProContainer" class="space-y-2"></div>
-      </div>
-
-      <!-- 3. PENDING STUDENT VERIFICATIONS -->
-      <div class="bg-amber-50 p-4 rounded-2xl border border-amber-200 mb-4">
-        <h4 class="font-bold text-xs text-amber-900 mb-2 flex items-center justify-between">
-          <span class="flex items-center space-x-1.5">
-            <i class="fa-solid fa-clock text-amber-600"></i>
-            <span>Pending Student Verification Approvals</span>
-          </span>
-          <span id="pendingCountBadge" class="px-2 py-0.5 rounded-full bg-amber-200 text-amber-900 text-[10px] font-black">0 Pending</span>
-        </h4>
-        <div class="relative mb-2.5">
-          <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-[11px]"></i>
-          <input type="text" id="searchPendingStudentsInput" oninput="renderSellerManagerTable()" placeholder="Search pending students..." class="w-full bg-white border border-amber-200 rounded-xl py-1.5 pl-8 pr-3 text-xs text-slate-900 focus:outline-none focus:border-amber-500">
-        </div>
-        <div id="pendingSellersContainer" class="space-y-2"></div>
-      </div>
-
-      <div class="relative mb-3">
-        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
-        <input type="text" id="sellerSearchInput" oninput="renderSellerManagerTable()" placeholder="Search verified sellers..." class="w-full bg-slate-50 border border-slate-300 rounded-xl py-2 pl-9 pr-3 text-xs text-slate-900 focus:outline-none focus:border-amber-500">
-      </div>
-
-      <div class="overflow-x-auto rounded-2xl border border-slate-200">
-        <table class="w-full text-left border-collapse bg-white">
-          <thead>
-            <tr class="bg-slate-100 border-b border-slate-200 text-[10px] uppercase font-black tracking-wider text-slate-600">
-              <th class="p-3 w-5/12">Seller Username / Email</th>
-              <th class="p-3 w-3/12 text-center">Status / Tier & Countdown</th>
-              <th class="p-3 w-4/12 text-right">Actions</th>
-            </tr>
-          </thead>
-          <tbody id="sellersTableBody" class="divide-y divide-slate-100 text-xs"></tbody>
-        </table>
+        <p class="text-[10px] text-slate-500 italic">Note: New registrations require Founder approval before listing products.</p>
+        <button onclick="handleRegister()" class="w-full py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs shadow-md">Register Account</button>
       </div>
     </div>
   </div>
 
   <!-- ADD LISTING MODAL -->
-  <div id="addListingModal" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm hidden flex items-center justify-center p-3">
-    <div class="bg-white rounded-3xl max-w-md w-full p-6 relative shadow-2xl max-h-[90vh] overflow-y-auto border border-slate-200">
-      <button onclick="closeAddListingModal()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-700">
-        <i class="fa-solid fa-xmark text-lg"></i>
-      </button>
-      
+  <div id="addListingModal" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm hidden flex items-center justify-center p-4 overflow-y-auto">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-6 relative shadow-2xl my-8">
+      <button onclick="closeAddListingModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
       <div class="mb-4">
-        <h3 class="text-lg font-bold text-slate-900">Create Campus Listing / Announcement</h3>
-        <p id="sellerTierIndicator" class="text-xs font-semibold text-emerald-600 mt-0.5">Checking your seller tier...</p>
+        <h3 class="text-base font-black text-slate-900">Post New Item or Rental</h3>
+        <p id="sellerTierIndicator" class="text-xs text-emerald-700 font-bold">Free Tier: Up to 3 Listings</p>
       </div>
 
-      <form id="listingForm" onsubmit="handlePostListing(event)" class="space-y-3.5">
+      <form id="listingForm" onsubmit="handlePostListing(event)" class="space-y-3 text-left">
         <div>
-          <label class="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1">Category Type</label>
-          <select id="categorySelect" onchange="onCategoryChange()" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-emerald-500">
-            <option value="academic">Academic Notes & Materials</option>
-            <option value="rentals">Belongings Rentals (Per Day)</option>
+          <label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">Category</label>
+          <select id="categorySelect" onchange="onCategoryChange()" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-bold text-slate-800 focus:outline-none focus:border-emerald-500">
+            <option value="academic">Academic Notes / Study Materials</option>
+            <option value="rentals">Belongings Rental (Calculators, Blazers, etc.)</option>
             <option value="tech">Tech & Gadgets</option>
             <option value="hostel">Hostel Essentials</option>
-            <option value="services">Campus Services (Printing/Repair)</option>
-            <option value="events">Campus Events & Announcements</option>
+            <option value="services">Student Services</option>
+            <option value="events">Campus Events & Tickets</option>
           </select>
         </div>
 
         <div id="courseSelectContainer">
-          <label id="courseSelectLabel" class="block text-[11px] font-bold text-emerald-800 uppercase tracking-wider mb-1">Select AIMST Programme / Course *</label>
-          <select id="itemCourseSelect" class="w-full bg-emerald-50 border border-emerald-300 rounded-xl px-3.5 py-2.5 text-xs text-emerald-950 font-bold focus:outline-none focus:border-emerald-500"></select>
+          <label id="courseSelectLabel" class="block text-[11px] font-bold text-emerald-800 uppercase tracking-wider mb-1">Select AIMST Programme / Course</label>
+          <select id="itemCourseSelect" class="w-full bg-emerald-50 border border-emerald-300 rounded-xl px-3.5 py-2.5 text-xs text-emerald-950 font-bold focus:outline-none focus:border-emerald-500">
+            <!-- Populated via JS -->
+          </select>
         </div>
 
         <div>
-          <label class="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1">Title</label>
-          <input type="text" id="itemTitle" required placeholder="e.g., DBMS Semester 3 Lecture Notes & Past Year Papers" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-emerald-500">
+          <label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">Item Title</label>
+          <input type="text" id="itemTitle" required placeholder="e.g., DBMS Semester 3 Lecture Notes" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-bold text-slate-800 focus:outline-none focus:border-emerald-500">
         </div>
 
-        <div>
-          <label id="priceLabel" class="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1">Price (MYR)</label>
-          <input type="number" step="0.01" id="itemPrice" required placeholder="0.00" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-emerald-500">
-        </div>
-
-        <div>
-          <label class="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1">WhatsApp Link or Phone Number</label>
-          <input type="text" id="itemContact" required placeholder="e.g., https://wa.me/60123456789 or +60123456789" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-emerald-500">
-        </div>
-
-        <div>
-          <label class="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1">Upload Photo / Event Banner</label>
-          <input type="file" id="itemImageFile" accept="image/*" required class="w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100 cursor-pointer bg-slate-50 border border-slate-300 rounded-xl p-1.5">
-          
-          <div id="imagePreviewContainer" class="mt-2 hidden">
-            <img id="imagePreview" src="" alt="Preview" class="h-28 w-full object-cover rounded-xl border border-slate-200">
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label id="priceLabel" class="block text-[11px] font-bold text-slate-700 uppercase mb-1">Price (MYR)</label>
+            <input type="number" step="0.01" id="itemPrice" required placeholder="0.00" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-bold text-slate-800 focus:outline-none focus:border-emerald-500">
+          </div>
+          <div>
+            <label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">WhatsApp Contact</label>
+            <input type="text" id="itemContact" required placeholder="60123456789" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-bold text-slate-800 focus:outline-none focus:border-emerald-500">
           </div>
         </div>
 
         <div>
-          <label class="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1">Description & Details</label>
-          <textarea id="itemDesc" rows="2.5" required placeholder="Provide rental terms or event schedule..." class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-emerald-500"></textarea>
+          <label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">Product Photo</label>
+          <input type="file" id="itemImageFile" accept="image/*" required class="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100">
+          <div id="imagePreviewContainer" class="mt-2 hidden">
+            <img id="imagePreview" src="" alt="Preview" class="w-20 h-20 rounded-xl object-cover border border-slate-200">
+          </div>
         </div>
 
-        <button type="submit" id="submitListingBtn" class="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md transition-all mt-1">
-          <span>Publish to Campus Network</span>
-        </button>
+        <div>
+          <label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">Detailed Description</label>
+          <textarea id="itemDesc" rows="3" required placeholder="Describe condition, pickup location, notes coverage..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-semibold text-slate-800 focus:outline-none focus:border-emerald-500"></textarea>
+        </div>
+
+        <button type="submit" class="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md">Publish Listing</button>
       </form>
-    </div>
-  </div>
-
-  <!-- UPGRADE TO PRO MODAL -->
-  <div id="upgradeModal" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm hidden flex items-center justify-center p-3">
-    <div class="bg-white rounded-3xl max-w-sm w-full p-6 relative shadow-2xl text-center border border-slate-200">
-      <button onclick="closeUpgradeModal()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-700">
-        <i class="fa-solid fa-xmark text-lg"></i>
-      </button>
-      
-      <div class="w-12 h-12 rounded-2xl bg-amber-50 border border-amber-200 text-amber-600 flex items-center justify-center mx-auto mb-3 text-xl shadow-sm">
-        <i class="fa-solid fa-crown"></i>
-      </div>
-      
-      <h3 class="text-lg font-black text-slate-900 mb-1">Upgrade to APM Pro Tier</h3>
-      <p class="text-xs text-slate-600 leading-relaxed mb-4">Upgrade to APM Pro for RM5/month to unlock up to 7 active listings!</p>
-
-      <div class="bg-slate-50 p-3 rounded-2xl border border-slate-200 mb-4 inline-block">
-        <img src="tng.png" alt="Touch 'n Go QR Code" class="w-48 h-48 object-contain mx-auto rounded-xl shadow-sm" onerror="this.src='https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=400'">
-        <p class="text-[10px] font-bold text-slate-500 uppercase tracking-wider mt-2">Scan with Touch 'n Go eWallet (RM5.00)</p>
-      </div>
-
-      <button onclick="requestProUpgrade()" class="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md transition-all flex items-center justify-center space-x-2">
-        <i class="fa-brands fa-whatsapp text-base"></i>
-        <span>Send Payment Receipt to Founder Keven</span>
-      </button>
     </div>
   </div>
 
   <!-- ADD CLUB MODAL -->
-  <div id="addClubModal" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm hidden flex items-center justify-center p-3">
-    <div class="bg-white rounded-3xl max-w-md w-full p-6 relative shadow-2xl max-h-[90vh] overflow-y-auto border border-slate-200">
-      <button onclick="closeAddClubModal()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-700">
-        <i class="fa-solid fa-xmark text-lg"></i>
-      </button>
-      
-      <div class="mb-4">
-        <h3 class="text-lg font-bold text-slate-900">Register Campus Club</h3>
-        <p class="text-xs text-slate-500 mt-0.5">Add your club or society details</p>
-      </div>
-
-      <form id="clubForm" onsubmit="handlePostClub(event)" class="space-y-3.5">
+  <div id="addClubModal" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 relative shadow-2xl">
+      <button onclick="closeAddClubModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+      <h3 class="text-base font-black text-slate-900 mb-4">Add Campus Club / Society</h3>
+      <form id="clubForm" onsubmit="handlePostClub(event)" class="space-y-3 text-left">
         <div>
-          <label class="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1">Club Name</label>
-          <input type="text" id="clubName" required placeholder="e.g., Rotaract Club of AIMST" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-teal-500">
+          <label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">Club Name</label>
+          <input type="text" id="clubName" required placeholder="e.g. AIMST IT Society" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-bold text-slate-800">
         </div>
         <div>
-          <label class="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1">Category / Tagline</label>
-          <input type="text" id="clubCategory" required placeholder="e.g., Community Service, Tech" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-teal-500">
+          <label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">Category / Focus</label>
+          <input type="text" id="clubCategory" required placeholder="e.g. Academic & Technology" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-bold text-slate-800">
         </div>
         <div>
-          <label class="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1">Upload Club Logo</label>
-          <input type="file" id="clubLogoFile" accept="image/*" class="w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-teal-50 file:text-teal-700 hover:file:bg-teal-100 cursor-pointer bg-slate-50 border border-slate-300 rounded-xl p-1.5">
+          <label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">WhatsApp Group Link / Number</label>
+          <input type="text" id="clubContact" required placeholder="https://chat.whatsapp.com/..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-bold text-slate-800">
         </div>
         <div>
-          <label class="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1">WhatsApp Link or Phone Number</label>
-          <input type="text" id="clubContact" required placeholder="e.g., https://chat.whatsapp.com/... or +60123456789" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-teal-500">
+          <label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">Club Logo Image</label>
+          <input type="file" id="clubLogoFile" accept="image/*" class="w-full text-xs text-slate-500">
         </div>
         <div>
-          <label class="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1">Club Description & Activities</label>
-          <textarea id="clubDesc" rows="2.5" required placeholder="Describe weekly activities..." class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-teal-500"></textarea>
+          <label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">Description</label>
+          <textarea id="clubDesc" rows="2" required placeholder="What does this club do?" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-semibold text-slate-800"></textarea>
         </div>
-        <button type="submit" id="submitClubBtn" class="w-full py-2.5 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-bold text-xs shadow-md transition-all mt-1">Publish Club</button>
+        <button type="submit" class="w-full py-3 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-bold text-xs shadow-md">Save Club</button>
       </form>
     </div>
   </div>
 
-  <!-- ADD CONTRIBUTOR MODAL (FOUNDER ONLY) -->
-  <div id="addContributorModal" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm hidden flex items-center justify-center p-3">
-    <div class="bg-white rounded-3xl max-w-md w-full p-6 relative shadow-2xl max-h-[90vh] overflow-y-auto border border-slate-200">
-      <button onclick="closeAddContributorModal()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-700">
-        <i class="fa-solid fa-xmark text-lg"></i>
-      </button>
-      
-      <div class="mb-4">
-        <h3 class="text-lg font-bold text-slate-900">Add APM Contributor / Helper</h3>
-        <p class="text-xs text-slate-500 mt-0.5">Recognize student ideas & contributions</p>
-      </div>
-
-      <form id="contributorForm" onsubmit="handlePostContributor(event)" class="space-y-3.5">
+  <!-- ADD CONTRIBUTOR MODAL -->
+  <div id="addContributorModal" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 relative shadow-2xl">
+      <button onclick="closeAddContributorModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+      <h3 class="text-base font-black text-slate-900 mb-4">Add APM Contributor / Helper</h3>
+      <form id="contributorForm" onsubmit="handlePostContributor(event)" class="space-y-3 text-left">
         <div>
-          <label class="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1">Full Name</label>
-          <input type="text" id="contribName" required placeholder="e.g., Sudarshan Parthipan" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-emerald-500">
+          <label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">Full Name</label>
+          <input type="text" id="contribName" required placeholder="e.g., Sudarshan Parthipan" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-bold text-slate-800">
         </div>
         <div>
-          <label class="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1">Diploma / Programme</label>
-          <input type="text" id="contribProgram" required placeholder="e.g., Diploma in Biotechnology" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-emerald-500">
+          <label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">Diploma / Programme</label>
+          <input type="text" id="contribProgram" required placeholder="e.g., Diploma in Biotechnology, Aimst University" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-bold text-slate-800">
         </div>
         <div>
-          <label class="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1">Upload Photo (Optional)</label>
-          <input type="file" id="contribPhotoFile" accept="image/*" class="w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100 cursor-pointer bg-slate-50 border border-slate-300 rounded-xl p-1.5">
+          <label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">Upload Photo (Optional)</label>
+          <input type="file" id="contribPhotoFile" accept="image/*" class="w-full text-xs text-slate-500">
         </div>
         <div>
-          <label class="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1">Contribution / Idea Shared</label>
-          <textarea id="contribDesc" rows="3" required placeholder="e.g., Suggested segregating study materials into general to specific like MBBS, dentistry, and so on." class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-emerald-500"></textarea>
+          <label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">Contribution / Idea Shared</label>
+          <textarea id="contribDesc" rows="3" required placeholder="e.g., Suggested segregating study materials into general to specific..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-semibold text-slate-800"></textarea>
         </div>
-        <button type="submit" class="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md transition-all mt-1">Add to Wall of Fame</button>
+        <button type="submit" class="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md">Add to Wall of Fame</button>
       </form>
     </div>
   </div>
 
-  <!-- Script Modules -->
+  <!-- ADMIN SELLER MANAGER MODAL -->
+  <div id="sellerManagerModal" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm hidden flex items-center justify-center p-4 overflow-y-auto">
+    <div class="bg-white rounded-3xl max-w-2xl w-full p-6 relative shadow-2xl my-8">
+      <button onclick="closeSellerManagerModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+      <h3 class="text-base font-black text-slate-900 mb-1"><i class="fa-solid fa-shield-halved text-amber-500"></i> Founder Admin Hub</h3>
+      <p class="text-xs text-slate-500 mb-4">Manage pending student verifications, pro upgrades, and ad boosts.</p>
+      
+      <div class="space-y-6 max-h-[70vh] overflow-y-auto pr-2">
+        
+        <!-- Pending Boosts -->
+        <div class="bg-amber-50 p-4 rounded-2xl border border-amber-200">
+          <div class="flex items-center justify-between mb-2">
+            <h4 class="font-bold text-xs text-amber-900 uppercase">Pending Ad Boost Requests</h4>
+            <span id="pendingBoostsCountBadge" class="px-2 py-0.5 rounded-full bg-amber-200 text-amber-900 text-[10px] font-black">0 Pending</span>
+          </div>
+          <div class="mb-2">
+            <input type="text" id="searchPendingBoostsInput" oninput="renderSellerManagerTable()" placeholder="Search pending boosts..." class="w-full bg-white border border-amber-300 rounded-xl px-3 py-1.5 text-xs">
+          </div>
+          <div id="pendingBoostsContainer" class="space-y-2"></div>
+        </div>
+
+        <!-- Pending Pro Upgrades -->
+        <div class="bg-purple-50 p-4 rounded-2xl border border-purple-200">
+          <div class="flex items-center justify-between mb-2">
+            <h4 class="font-bold text-xs text-purple-900 uppercase">Pending Pro Tier Upgrades (RM5)</h4>
+            <span id="pendingProCountBadge" class="px-2 py-0.5 rounded-full bg-purple-200 text-purple-900 text-[10px] font-black">0 Pending</span>
+          </div>
+          <div class="mb-2">
+            <input type="text" id="searchPendingProInput" oninput="renderSellerManagerTable()" placeholder="Search pending pro upgrades..." class="w-full bg-white border border-purple-300 rounded-xl px-3 py-1.5 text-xs">
+          </div>
+          <div id="pendingProContainer" class="space-y-2"></div>
+        </div>
+
+        <!-- Pending Student Registrations -->
+        <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200">
+          <div class="flex items-center justify-between mb-2">
+            <h4 class="font-bold text-xs text-slate-900 uppercase">Pending Student Verifications</h4>
+            <span id="pendingCountBadge" class="px-2 py-0.5 rounded-full bg-slate-200 text-slate-800 text-[10px] font-black">0 Pending</span>
+          </div>
+          <div class="mb-2">
+            <input type="text" id="searchPendingStudentsInput" oninput="renderSellerManagerTable()" placeholder="Search pending students..." class="w-full bg-white border border-slate-300 rounded-xl px-3 py-1.5 text-xs">
+          </div>
+          <div id="pendingSellersContainer" class="space-y-2"></div>
+        </div>
+
+        <!-- Verified Sellers Table -->
+        <div>
+          <h4 class="font-bold text-xs text-slate-900 uppercase mb-2">All Verified Users & Sellers</h4>
+          <div class="mb-2">
+            <input type="text" id="sellerSearchInput" oninput="renderSellerManagerTable()" placeholder="Search verified users..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-1.5 text-xs">
+          </div>
+          <div class="overflow-x-auto border border-slate-200 rounded-2xl">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-slate-100 text-slate-700">
+                <tr>
+                  <th class="p-3">User</th>
+                  <th class="p-3 text-center">Tier Status</th>
+                  <th class="p-3 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="sellersTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- UPGRADE PRO TIER MODAL -->
+  <div id="upgradeModal" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-sm w-full p-6 relative text-center shadow-2xl border-2 border-amber-400">
+      <button onclick="closeUpgradeModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+      <div class="w-14 h-14 rounded-2xl bg-amber-100 text-amber-600 flex items-center justify-center text-2xl mx-auto mb-3 shadow-inner">
+        <i class="fa-solid fa-crown"></i>
+      </div>
+      <h3 class="text-base font-black text-slate-900 mb-1">Upgrade to APM Pro Tier</h3>
+      <p class="text-xs text-slate-600 mb-4">Unlock up to <strong>7 active listings</strong>, priority purple theme styling, and extended placement for just <strong>RM 5.00 / month</strong>!</p>
+      
+      <div class="bg-slate-50 p-3 rounded-2xl border border-slate-200 mb-4">
+        <p class="text-[11px] font-bold text-slate-800 mb-2">Scan TNG eWallet QR to Pay RM 5.00:</p>
+        <div class="w-36 h-36 mx-auto bg-white p-2 rounded-xl border border-slate-200 flex items-center justify-center">
+          <i class="fa-solid fa-qrcode text-6xl text-slate-800"></i>
+        </div>
+        <p class="text-[10px] text-slate-500 mt-2">DuitNow / TNG Reference: Founder Keven</p>
+      </div>
+
+      <button onclick="requestProUpgrade()" class="w-full py-3 rounded-2xl bg-amber-500 hover:bg-amber-600 text-white font-black text-xs shadow-lg shadow-amber-500/30">
+        I Have Paid RM5 — Send Verification to Founder
+      </button>
+    </div>
+  </div>
+
+  <!-- BOOST BENEFITS MODAL -->
+  <div id="boostBenefitsModal" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-sm w-full p-6 relative text-center shadow-2xl border-2 border-amber-400">
+      <button onclick="closeBoostBenefitsModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+      <div class="w-14 h-14 rounded-2xl bg-amber-100 text-amber-600 flex items-center justify-center text-2xl mx-auto mb-3">
+        <i class="fa-solid fa-rocket"></i>
+      </div>
+      <h3 class="text-base font-black text-slate-900 mb-1">Boost Your Product Ad</h3>
+      <p class="text-xs text-slate-600 mb-4">Pinned to the top carousel with an eye-catching gold badge. Only <strong>RM 1.00 / day</strong>!</p>
+      <button onclick="proceedToBoostDays()" class="w-full py-3 rounded-2xl bg-amber-500 hover:bg-amber-600 text-white font-black text-xs shadow-md">
+        Continue to Boost
+      </button>
+    </div>
+  </div>
+
+  <!-- BOOST DAYS MODAL -->
+  <div id="boostDaysModal" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-sm w-full p-6 relative text-center shadow-2xl">
+      <button onclick="closeBoostDaysModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+      <h3 class="text-base font-black text-slate-900 mb-3">Select Boost Duration</h3>
+      <div class="mb-4 text-left">
+        <label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">Number of Days (RM1.00 / day)</label>
+        <select id="boostDaysSelect" onchange="updateBoostCostDisplay()" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-xs font-bold text-slate-800">
+          <option value="1">1 Day - RM 1.00</option>
+          <option value="3">3 Days - RM 3.00</option>
+          <option value="7">7 Days - RM 7.00</option>
+          <option value="30">30 Days - RM 30.00</option>
+        </select>
+      </div>
+      <div class="mb-4 bg-amber-50 p-3 rounded-xl border border-amber-200 flex items-center justify-between">
+        <span class="text-xs font-bold text-amber-900">Total Cost:</span>
+        <span id="boostTotalDisplay" class="text-sm font-black text-amber-700">RM 1.00</span>
+      </div>
+      <button onclick="proceedToPaymentQR()" class="w-full py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md">
+        Proceed to Payment QR
+      </button>
+    </div>
+  </div>
+
+  <!-- BOOST PAYMENT QR MODAL -->
+  <div id="boostModal" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-sm w-full p-6 relative text-center shadow-2xl border-2 border-amber-400">
+      <button onclick="closeBoostModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+      <h3 class="text-base font-black text-slate-900 mb-1">Scan to Pay for Ad Boost</h3>
+      <p class="text-xs text-slate-600 mb-3">Amount Due: <strong id="tngPayAmountDisplay" class="text-emerald-700">RM 1.00</strong></p>
+      
+      <div class="bg-slate-50 p-3 rounded-2xl border border-slate-200 mb-4">
+        <div class="w-36 h-36 mx-auto bg-white p-2 rounded-xl border border-slate-200 flex items-center justify-center">
+          <i class="fa-solid fa-qrcode text-6xl text-slate-800"></i>
+        </div>
+        <p class="text-[10px] text-slate-500 mt-2">TNG eWallet / DuitNow QR</p>
+      </div>
+
+      <button onclick="submitBoostRequest()" class="w-full py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md">
+        I Have Paid — Submit for Founder Approval
+      </button>
+    </div>
+  </div>
+
+  <!-- iOS INSTALL PWA MODAL -->
+  <div id="iosInstallModal" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-sm w-full p-6 relative text-center shadow-2xl">
+      <button onclick="closeIOSInstallModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+      <h3 class="text-base font-black text-slate-900 mb-2">Install on iPhone / iPad</h3>
+      <p class="text-xs text-slate-600 leading-relaxed mb-4">
+        1. Tap the <i class="fa-solid fa-arrow-up-from-bracket text-emerald-600"></i> **Share** button in Safari.<br>
+        2. Scroll down and select <i class="fa-solid fa-square-plus text-emerald-600"></i> **Add to Home Screen**.<br>
+        3. Tap **Add** in the top right corner!
+      </p>
+      <button onclick="closeIOSInstallModal()" class="w-full py-2.5 rounded-xl bg-slate-900 text-white font-bold text-xs">Got It</button>
+    </div>
+  </div>
+
+  <!-- SCRIPT MODULES -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { initializeFirestore, memoryLocalCache, collection, getDocs, addDoc, deleteDoc, doc, updateDoc, setDoc, query, increment } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -1047,9 +859,7 @@
     let allClubs = JSON.parse(localStorage.getItem('aimst_clubs')) || [];
     let allSellers = JSON.parse(localStorage.getItem('aimst_sellers')) || [];
     let soldCount = parseInt(localStorage.getItem('aimst_sold_count')) || 0;
-
-    // CONTRIBUTORS STORED IN LOCALSTORAGE FOR RELIABLE INSTANT SAVING
-    let allContributors = JSON.parse(localStorage.getItem('aimst_contributors')) || [];
+    let allContributors = [];
 
     let currentCategory = 'all';
     let selectedCourses = new Set();
@@ -1069,10 +879,9 @@
       return JSON.parse(localStorage.getItem(getWishlistKey())) || [];
     }
 
-    /* MAIN TAB NAVIGATION CONTROL & LOGIN RESTRICTION ENFORCEMENT */
     window.switchMainTab = function(tabName) {
       if (!currentUser && (tabName === 'myproducts' || tabName === 'wishlist' || tabName === 'me')) {
-        alert("🔒 Verification Required!\n\nTo access this tab, please log in as a Verified APM Seller/Buyer. APM Guests can view Home and About APM, and directly contact sellers to buy items!");
+        alert("🔒 Verification Required!\n\nTo access this tab, please log in as a Verified APM Seller/Buyer.");
         openAuthModal();
         return;
       }
@@ -1106,7 +915,7 @@
       } else if (tabName === 'about') {
         document.getElementById('viewAbout').classList.remove('hidden');
         document.getElementById('navBottomAbout').classList.add(activeClass);
-        renderAboutContributors();
+        loadContributors();
       }
     };
 
@@ -1120,20 +929,13 @@
         tabMyProducts?.classList.add('disabled-tab');
         tabWishlist?.classList.add('disabled-tab');
         tabMe?.classList.add('disabled-tab');
-        if (tabMyProducts) tabMyProducts.title = "Login required to access My Product";
-        if (tabWishlist) tabWishlist.title = "Login required to access Favourite";
-        if (tabMe) tabMe.title = "Login required to access Me/Profile";
       } else {
         tabMyProducts?.classList.remove('disabled-tab');
         tabWishlist?.classList.remove('disabled-tab');
         tabMe?.classList.remove('disabled-tab');
-        if (tabMyProducts) tabMyProducts.title = "View your products";
-        if (tabWishlist) tabWishlist.title = "View saved favourite";
-        if (tabMe) tabMe.title = "View account details";
       }
     }
 
-    /* RENDER MY PRODUCTS INSIDE TAB VIEW */
     function renderMyProductsTab() {
       const container = document.getElementById('myProductsTabContainer');
       const myListings = allListings.filter(item => {
@@ -1189,7 +991,6 @@
       }).join('');
     }
 
-    /* RENDER FAVOURITE (WISHLIST) INSIDE TAB VIEW */
     function renderWishlistTab() {
       const container = document.getElementById('wishlistTabContainer');
       const wishlist = getWishlist();
@@ -1200,7 +1001,6 @@
           <div class="py-12 text-center text-slate-400">
             <i class="fa-solid fa-heart-crack text-4xl mb-2 text-rose-300"></i>
             <p class="text-xs font-bold text-slate-600">Your favourite items list is empty!</p>
-            <p class="text-[11px] text-slate-400 mt-1">Click the heart icon on any product to save it here.</p>
           </div>
         `;
         return;
@@ -1209,8 +1009,7 @@
       container.innerHTML = savedItems.map(item => {
         const rawContact = item.contact || '';
         const contactHref = rawContact.startsWith('http') ? rawContact : `https://wa.me/${rawContact.replace(/[^0-9]/g, '')}?text=Hi%20${encodeURIComponent(item.seller || 'Seller')},%20I%20am%20interested%20in%20your%20favourite%20item:%20${encodeURIComponent(item.title || 'Item')}`;
-        const isRental = item.category === 'rentals';
-        const priceLabel = isRental ? `RM ${Number(item.price).toFixed(2)} / day` : `RM ${Number(item.price).toFixed(2)}`;
+        const priceLabel = `RM ${Number(item.price).toFixed(2)}`;
 
         return `
           <div class="grab-card rounded-2xl p-3 border border-slate-200 flex items-center justify-between space-x-3">
@@ -1236,7 +1035,6 @@
       }).join('');
     }
 
-    /* RENDER ME / PROFILE TAB DETAILS */
     function renderMeTabDetails() {
       if (!currentUser) return;
       document.getElementById('meTabUsername').innerText = currentUser;
@@ -1298,6 +1096,21 @@
       }
     }
 
+    async function loadContributors() {
+      try {
+        const q = query(collection(db, "contributors"));
+        const querySnapshot = await getDocs(q);
+        const firebaseContribs = [];
+        querySnapshot.forEach((docSnap) => {
+          firebaseContribs.push({ id: docSnap.id, ...docSnap.data() });
+        });
+        allContributors = firebaseContribs;
+      } catch (err) {
+        allContributors = [];
+      }
+      renderAboutContributors();
+    }
+
     function renderAboutContributors() {
       const container = document.getElementById('aboutContributorsList');
       const addBtn = document.getElementById('addAboutContribBtn');
@@ -1336,7 +1149,52 @@
       }).join('');
     }
 
-    /* APPLY THEME DYNAMICALLY (GREEN FOR NORMAL, PURPLE FOR PRO) */
+    window.openAddContributorModal = function() {
+      document.getElementById('addContributorModal').classList.remove('hidden');
+    };
+    window.closeAddContributorModal = function() {
+      document.getElementById('addContributorModal').classList.add('hidden');
+    };
+
+    window.handlePostContributor = async function(e) {
+      e.preventDefault();
+      const name = sanitizeInput(document.getElementById('contribName').value);
+      const program = sanitizeInput(document.getElementById('contribProgram').value);
+      const desc = sanitizeInput(document.getElementById('contribDesc').value);
+      const fileInput = document.getElementById('contribPhotoFile');
+
+      let photo = "";
+      if (fileInput.files[0]) {
+        photo = await compressImage(fileInput.files[0], 300, 0.7);
+      }
+
+      try {
+        const newContrib = { name, program, desc, photo, createdAt: new Date().toISOString() };
+        const docRef = await addDoc(collection(db, "contributors"), newContrib);
+        newContrib.id = docRef.id;
+        allContributors.push(newContrib);
+        
+        closeAddContributorModal();
+        document.getElementById('contributorForm').reset();
+        renderAboutContributors();
+        alert("Contributor added to Firebase Firestore successfully!");
+      } catch (err) {
+        alert("Firebase Save Error: " + err.message);
+      }
+    };
+
+    window.deleteContributor = async function(id) {
+      if (!confirm("Are you sure you want to remove this contributor?")) return;
+      try {
+        await deleteDoc(doc(db, "contributors", id));
+        allContributors = allContributors.filter(c => c.id !== id);
+        renderAboutContributors();
+        alert("Contributor removed from Firebase.");
+      } catch (err) {
+        alert("Firebase Delete Error: " + err.message);
+      }
+    };
+
     function applyUserTheme(isPro) {
       const banner = document.getElementById('installBanner');
       const subTitle = document.getElementById('navSubTitle');
@@ -1394,54 +1252,6 @@
         if (welcomeStartBtn) welcomeStartBtn.className = "relative z-10 w-full py-3.5 px-6 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold text-sm shadow-xl shadow-emerald-600/20 flex items-center justify-center space-x-3 transition-all hover:scale-[1.02]";
       }
     }
-
-    window.openAddContributorModal = function() {
-      document.getElementById('addContributorModal').classList.remove('hidden');
-    };
-    window.closeAddContributorModal = function() {
-      document.getElementById('addContributorModal').classList.add('hidden');
-    };
-
-    window.handlePostContributor = async function(e) {
-      e.preventDefault();
-      const name = sanitizeInput(document.getElementById('contribName').value);
-      const program = sanitizeInput(document.getElementById('contribProgram').value);
-      const desc = sanitizeInput(document.getElementById('contribDesc').value);
-      const fileInput = document.getElementById('contribPhotoFile');
-
-      let photo = "";
-      if (fileInput.files[0]) {
-        photo = await compressImage(fileInput.files[0], 300, 0.7);
-      }
-
-      const newContrib = { id: 'contrib-' + Date.now(), name, program, desc, photo };
-      allContributors.push(newContrib);
-      localStorage.setItem('aimst_contributors', JSON.stringify(allContributors));
-      closeAddContributorModal();
-      document.getElementById('contributorForm').reset();
-      renderAboutContributors();
-      alert("Contributor added successfully to Wall of Fame!");
-    };
-
-    window.deleteContributor = function(id) {
-      if (!confirm("Are you sure you want to remove this contributor?")) return;
-      allContributors = allContributors.filter(c => c.id !== id);
-      localStorage.setItem('aimst_contributors', JSON.stringify(allContributors));
-      renderAboutContributors();
-    };
-
-    window.forceRefreshApp = function() {
-      if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.getRegistrations().then(registrations => {
-          for (let r of registrations) r.unregister();
-        });
-      }
-      sessionStorage.clear();
-      window.location.href = window.location.pathname + '?v=' + Date.now();
-    };
-
-    window.openIOSInstallModal = function() { document.getElementById('iosInstallModal').classList.remove('hidden'); };
-    window.closeIOSInstallModal = function() { document.getElementById('iosInstallModal').classList.add('hidden'); };
 
     function sanitizeInput(str) {
       if (!str) return '';
@@ -1526,7 +1336,6 @@
       renderWishlistTab();
     };
 
-    /* BOOSTING WORKFLOW MODALS */
     window.openBoostBenefitsModal = function(itemId) {
       activeBoostItemId = itemId;
       document.getElementById('boostBenefitsModal').classList.remove('hidden');
@@ -1714,21 +1523,21 @@
         applyUserTheme(isPro);
 
         document.getElementById('authBtnText').innerText = `${currentUser} (${isFounderUser ? 'Founder' : 'Verified'})`;
-        document.getElementById('floatingAddBtn').style.display = 'block';
+        document.getElementById('floatingPostBtn').style.display = 'block';
         document.getElementById('addClubBtn').style.display = 'flex';
         if (isFounderUser) document.getElementById('sellerManagerNavBtn').style.display = 'flex';
       } else {
         currentUser = null; currentUserEmail = null; isFounderUser = false;
         applyUserTheme(false);
         document.getElementById('authBtnText').innerText = "APM Verified Login";
-        document.getElementById('floatingAddBtn').style.display = 'none';
+        document.getElementById('floatingPostBtn').style.display = 'none';
         document.getElementById('addClubBtn').style.display = 'none';
         document.getElementById('sellerManagerNavBtn').style.display = 'none';
       }
       updateNavTabVisuals();
       renderListings();
       renderClubs();
-      renderAboutContributors();
+      loadContributors();
       if (isFounderUser) renderSellerManagerTable();
     });
 
@@ -1739,8 +1548,8 @@
       await loadSellers();
       await loadListings();
       await loadClubs();
+      await loadContributors();
       updateMetrics();
-      renderAboutContributors();
       updateNavTabVisuals();
       
       startDailyBoostPopupSequence();
@@ -2179,7 +1988,6 @@
       const tbody = document.getElementById('sellersTableBody');
       const now = new Date();
 
-      // 1. Pending Boosts
       const pendingBoosts = allListings.filter(i => i.boostStatus === 'pending' && (i.title.toLowerCase().includes(searchPendingBoosts) || (i.seller||'').toLowerCase().includes(searchPendingBoosts)));
       document.getElementById('pendingBoostsCountBadge').innerText = `${pendingBoosts.length} Pending`;
       pendingBoostsContainer.innerHTML = pendingBoosts.length === 0 ? `<p class="text-[11px] text-amber-800 italic">No matching pending ad boosts.</p>` : pendingBoosts.map(i => `
@@ -2195,7 +2003,6 @@
         </div>
       `).join('');
 
-      // 2. Pending Pro Upgrades
       const pendingProSellers = allSellers.filter(s => s.proUpgradeStatus === 'pending' && (s.username.toLowerCase().includes(searchPendingPro) || s.email.toLowerCase().includes(searchPendingPro)));
       document.getElementById('pendingProCountBadge').innerText = `${pendingProSellers.length} Pending`;
       pendingProContainer.innerHTML = pendingProSellers.length === 0 ? `<p class="text-[11px] text-purple-800 italic">No matching pending pro tier upgrades.</p>` : pendingProSellers.map(s => `
@@ -2211,7 +2018,6 @@
         </div>
       `).join('');
 
-      // 3. Pending Students
       const pendingStudents = allSellers.filter(s => !s.isVerified && (s.username.toLowerCase().includes(searchPendingStudents) || s.email.toLowerCase().includes(searchPendingStudents)));
       document.getElementById('pendingCountBadge').innerText = `${pendingStudents.length} Pending`;
       pendingContainer.innerHTML = pendingStudents.length === 0 ? `<p class="text-[11px] text-amber-800 italic">No matching pending student verifications.</p>` : pendingStudents.map(s => `
@@ -2227,7 +2033,6 @@
         </div>
       `).join('');
 
-      // 4. Verified Sellers Table with Live Pro Countdowns for Founder
       tbody.innerHTML = allSellers.filter(s => s.isVerified && (s.username.toLowerCase().includes(searchVerified) || s.email.toLowerCase().includes(searchVerified))).map(seller => {
         let tierDisplay = `<span class="px-2 py-1 rounded-lg text-[9px] font-black uppercase bg-slate-100 text-slate-700">FREE</span>`;
         if (seller.tier === 'pro') {
@@ -2441,6 +2246,6 @@
     });
 
     loadData();
-  </script> 
+  </script>
 </body>
 </html>
