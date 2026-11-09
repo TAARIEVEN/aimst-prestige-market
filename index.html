@@ -2296,7 +2296,6 @@
     };
     window.closeAddClubModal = function() { document.getElementById('addClubModal').classList.add('hidden'); };
 
-    // Direct uploadBytes listing submission preventing 0% freeze & ref collision
     window.handlePostListing = async function(e) {
       if (e) e.preventDefault();
       const submitBtn = document.getElementById('publishListingSubmitBtn');
@@ -2319,19 +2318,20 @@
       try {
         if (submitBtn) {
           submitBtn.disabled = true;
-          submitBtn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> <span>Uploading image...</span>`;
+          submitBtn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> <span>Publishing...</span>`;
         }
 
         const file = fileInput.files[0];
-        const fileName = `${Date.now()}_${file.name.replace(/[^a-zA-Z0-9.]/g, "_")}`;
-        const storageRef = ref(storage, `listings/${fileName}`);
         
-        const uploadSnapshot = await uploadBytes(storageRef, file);
-        const imageUrl = await getDownloadURL(uploadSnapshot.ref);
+        // Instant Base64 FileReader conversion (No Firebase Storage bucket hanging)
+        const imageUrl = await new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result);
+          reader.onerror = error => reject(error);
+          reader.readAsDataURL(file);
+        });
 
         const newItem = { title, category, courseId, courseName, courseNick, price, contact, image: imageUrl, desc, seller: currentUser, isDisabled: false, isBoosted: false };
-        
-        // Renamed from 'ref' to 'docRef' to fix the collision error
         const docRef = await addDoc(collection(db, "listings"), newItem);
         newItem.id = docRef.id;
         allListings.unshift(newItem);
@@ -2344,11 +2344,56 @@
         document.getElementById('imagePreviewContainer').classList.add('hidden');
         alert("Published listing successfully!");
       } catch (err) {
-        alert("Upload Error: " + err.message);
+        alert("Error: " + err.message);
       } finally {
         if (submitBtn) {
           submitBtn.disabled = false;
           submitBtn.innerText = "Publish Listing";
+        }
+      }
+    };
+
+    // --- ROBUST BASE64 IMAGE CLUB SUBMISSION ---
+    window.handlePostClub = async function(e) {
+      if (e) e.preventDefault();
+      const submitBtn = document.getElementById('saveClubSubmitBtn');
+      const name = sanitizeInput(document.getElementById('clubName').value);
+      const category = sanitizeInput(document.getElementById('clubCategory').value);
+      const contact = sanitizeInput(document.getElementById('clubContact').value);
+      const desc = sanitizeInput(document.getElementById('clubDesc').value);
+      const fileInput = document.getElementById('clubLogoFile');
+
+      try {
+        if (submitBtn) {
+          submitBtn.disabled = true;
+          submitBtn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> <span>Saving...</span>`;
+        }
+
+        let logo = "";
+        if (fileInput.files[0]) {
+          logo = await new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = error => reject(error);
+            reader.readAsDataURL(fileInput.files[0]);
+          });
+        }
+
+        const newClub = { name, category, contact, desc, logo, createdBy: currentUser };
+        const docRef = await addDoc(collection(db, "clubs"), newClub);
+        newClub.id = docRef.id;
+        allClubs.unshift(newClub);
+        syncLocalStorage();
+        renderClubs();
+        closeAddClubModal();
+        document.getElementById('clubForm').reset();
+        alert("Club saved successfully!");
+      } catch (err) {
+        alert("Error: " + err.message);
+      } finally {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.innerText = "Save Club";
         }
       }
     };
