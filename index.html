@@ -48,6 +48,20 @@
       -ms-overflow-style: none;
       scrollbar-width: none;
     }
+
+    .nav-tab-btn {
+      transition: all 0.2s ease-in-out;
+    }
+    .nav-tab-btn.active-tab {
+      background-color: #ecfdf5;
+      color: #047857;
+      border-color: #a7f3d0;
+    }
+    .nav-tab-btn.disabled-tab {
+      opacity: 0.4;
+      cursor: not-allowed;
+      filter: grayscale(80%);
+    }
   </style>
 </head>
 <body id="appBodyTag" class="min-h-screen font-sans selection:bg-amber-400 selection:text-slate-950 pb-24">
@@ -129,7 +143,7 @@
   <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm">
     <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-2 min-h-[4.2rem] flex flex-row items-center justify-between gap-1.5 sm:gap-4">
       
-      <div class="flex items-center space-x-2 cursor-pointer shrink min-w-0" onclick="location.reload()">
+      <div class="flex items-center space-x-2 cursor-pointer shrink min-w-0" onclick="switchMainTab('home')">
         <img src="market-logo.png" alt="AIMST Prestige Market Logo" class="w-8 h-8 sm:w-10 sm:h-10 rounded-xl object-contain shadow-md border border-emerald-500/30 shrink-0" onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=400'">
         <div class="min-w-0">
           <h1 class="font-black tracking-wider text-[11px] sm:text-base text-slate-900 leading-tight truncate">
@@ -141,32 +155,50 @@
         </div>
       </div>
 
-      <div class="flex items-center space-x-1 sm:space-x-2 shrink-0">
-        <button onclick="openFoundersModal()" class="px-2 py-1.5 sm:px-3 sm:py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 border border-slate-300 text-[10px] sm:text-xs font-bold text-slate-700 transition-all flex items-center space-x-1">
-          <i id="navShieldIcon" class="fa-solid fa-shield-halved text-emerald-600"></i>
-          <span class="hidden sm:inline">Founders</span>
+      <!-- NAVBAR TABS NAVIGATION HUB -->
+      <div class="flex items-center space-x-1 sm:space-x-1.5 overflow-x-auto no-scrollbar py-1">
+        
+        <!-- 1. Home Tab -->
+        <button id="navTabHome" onclick="switchMainTab('home')" class="nav-tab-btn active-tab px-2 py-1.5 sm:px-3 sm:py-1.5 rounded-xl border border-slate-200 text-[10px] sm:text-xs font-bold transition-all flex items-center space-x-1 shrink-0">
+          <i class="fa-solid fa-house"></i>
+          <span>Home</span>
         </button>
 
-        <!-- Wishlist Button -->
-        <button onclick="openWishlistModal()" class="px-2 py-1.5 sm:px-3 sm:py-1.5 rounded-xl bg-rose-50 hover:bg-rose-100 border border-rose-200 text-[10px] sm:text-xs font-bold text-rose-700 transition-all flex items-center space-x-1">
+        <!-- 2. My Product Tab (Login required to access contents) -->
+        <button id="navTabMyProducts" onclick="switchMainTab('myproducts')" class="nav-tab-btn px-2 py-1.5 sm:px-3 sm:py-1.5 rounded-xl border border-slate-200 text-[10px] sm:text-xs font-bold text-slate-600 hover:text-slate-900 transition-all flex items-center space-x-1 shrink-0">
+          <i class="fa-solid fa-boxes-stacked"></i>
+          <span>My Product</span>
+        </button>
+
+        <!-- 3. My Favourity Tab (Login required to access contents) -->
+        <button id="navTabWishlist" onclick="switchMainTab('wishlist')" class="nav-tab-btn px-2 py-1.5 sm:px-3 sm:py-1.5 rounded-xl border border-slate-200 text-[10px] sm:text-xs font-bold text-slate-600 hover:text-slate-900 transition-all flex items-center space-x-1 shrink-0">
           <i class="fa-solid fa-heart text-rose-500"></i>
-          <span class="hidden sm:inline">Wishlist</span>
+          <span class="hidden sm:inline">My Favourity</span>
           <span id="wishlistCountBadge" class="px-1.5 py-0.2 rounded-full bg-rose-500 text-white font-black text-[9px]">0</span>
         </button>
 
-        <button onclick="openMyListingsModal()" id="myListingsNavBtn" class="hidden px-2 py-1.5 sm:px-3 sm:py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 border border-emerald-300 text-[10px] sm:text-xs font-bold text-emerald-800 transition-all flex items-center space-x-1">
-          <i class="fa-solid fa-boxes-stacked text-emerald-600"></i>
-          <span>My Listings</span>
+        <!-- 4. Me / Profile Tab (Login required to access contents) -->
+        <button id="navTabMe" onclick="switchMainTab('me')" class="nav-tab-btn px-2 py-1.5 sm:px-3 sm:py-1.5 rounded-xl border border-slate-200 text-[10px] sm:text-xs font-bold text-slate-600 hover:text-slate-900 transition-all flex items-center space-x-1 shrink-0">
+          <i class="fa-solid fa-user"></i>
+          <span>Me</span>
         </button>
 
-        <button onclick="openSellerManagerModal()" id="sellerManagerNavBtn" class="hidden px-2 py-1.5 sm:px-3 sm:py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 border border-amber-300 text-[10px] sm:text-xs font-bold text-amber-800 transition-all flex items-center space-x-1">
+        <!-- 5. About APM Tab (Publicly accessible) -->
+        <button id="navTabAbout" onclick="switchMainTab('about')" class="nav-tab-btn px-2 py-1.5 sm:px-3 sm:py-1.5 rounded-xl border border-slate-200 text-[10px] sm:text-xs font-bold text-slate-600 hover:text-slate-900 transition-all flex items-center space-x-1 shrink-0">
+          <i class="fa-solid fa-shield-halved text-emerald-600"></i>
+          <span>About APM</span>
+        </button>
+
+        <!-- Founders Portal (Founders only) -->
+        <button onclick="openSellerManagerModal()" id="sellerManagerNavBtn" class="hidden px-2 py-1.5 sm:px-3 sm:py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 border border-amber-300 text-[10px] sm:text-xs font-bold text-amber-800 transition-all flex items-center space-x-1 shrink-0">
           <i class="fa-solid fa-users-gear text-amber-600"></i>
           <span class="hidden sm:inline">Founders Portal</span>
         </button>
 
-        <button id="authBtn" onclick="handleAuthClick()" class="px-2.5 py-1.5 sm:px-3 sm:py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-[10px] sm:text-xs font-bold shadow-md shadow-emerald-600/20 transition-all flex items-center space-x-1 max-w-[110px] sm:max-w-[180px]">
+        <!-- Dynamic Auth / Login Status Button -->
+        <button id="authBtn" onclick="handleAuthClick()" class="px-2.5 py-1.5 sm:px-3 sm:py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-[10px] sm:text-xs font-bold shadow-md shadow-emerald-600/20 transition-all flex items-center space-x-1 max-w-[110px] sm:max-w-[180px] shrink-0">
           <i class="fa-solid fa-user-shield text-[11px] shrink-0"></i>
-          <span id="authBtnText" class="truncate">APM Seller Login</span>
+          <span id="authBtnText" class="truncate">APM Verified Login</span>
         </button>
       </div>
 
@@ -189,162 +221,311 @@
     </div>
   </div>
 
-  <!-- Grab-Style Quick Categories Grid Bar -->
-  <section class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 pt-5 sm:pt-7 pb-3">
-    <div class="text-center mb-4">
-      <h2 class="text-lg sm:text-2xl font-black text-slate-900 tracking-tight mb-0.5">
-        Explore Campus Categories
-      </h2>
-      <p class="text-slate-500 text-[11px] sm:text-xs">Tap any category to filter campus items instantly.</p>
-    </div>
-
-    <div class="grid grid-cols-4 sm:grid-cols-4 lg:grid-cols-8 gap-2 sm:gap-3.5 mb-4">
-      
-      <button onclick="setCategory('academic', this)" class="category-btn grab-card p-2.5 rounded-2xl flex flex-col items-center justify-center text-center transition-all group active">
-        <div id="catIcon1" class="w-11 h-11 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-lg mb-1.5 group-hover:scale-110 transition-all shadow-sm">
-          <i class="fa-solid fa-book-medical"></i>
-        </div>
-        <span class="text-[10px] sm:text-xs font-bold text-slate-800 leading-tight">Academic Notes</span>
-      </button>
-
-      <button onclick="setCategory('rentals', this)" class="category-btn grab-card p-2.5 rounded-2xl flex flex-col items-center justify-center text-center transition-all group">
-        <div class="w-11 h-11 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-lg mb-1.5 group-hover:scale-110 transition-all shadow-sm">
-          <i class="fa-solid fa-user-tie"></i>
-        </div>
-        <span class="text-[10px] sm:text-xs font-bold text-slate-800 leading-tight">Belongings Rentals</span>
-      </button>
-
-      <button onclick="setCategory('tech', this)" class="category-btn grab-card p-2.5 rounded-2xl flex flex-col items-center justify-center text-center transition-all group">
-        <div class="w-11 h-11 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-lg mb-1.5 group-hover:scale-110 transition-all shadow-sm">
-          <i class="fa-solid fa-laptop-code"></i>
-        </div>
-        <span class="text-[10px] sm:text-xs font-bold text-slate-800 leading-tight">Tech & Gadgets</span>
-      </button>
-
-      <button onclick="setCategory('hostel', this)" class="category-btn grab-card p-2.5 rounded-2xl flex flex-col items-center justify-center text-center transition-all group">
-        <div class="w-11 h-11 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center text-lg mb-1.5 group-hover:scale-110 transition-all shadow-sm">
-          <i class="fa-solid fa-bed"></i>
-        </div>
-        <span class="text-[10px] sm:text-xs font-bold text-slate-800 leading-tight">Hostel Essentials</span>
-      </button>
-
-      <button onclick="setCategory('services', this)" class="category-btn grab-card p-2.5 rounded-2xl flex flex-col items-center justify-center text-center transition-all group">
-        <div class="w-11 h-11 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center text-lg mb-1.5 group-hover:scale-110 transition-all shadow-sm">
-          <i class="fa-solid fa-print"></i>
-        </div>
-        <span class="text-[10px] sm:text-xs font-bold text-slate-800 leading-tight">Campus Services</span>
-      </button>
-
-      <button onclick="setCategory('events', this)" class="category-btn grab-card p-2.5 rounded-2xl flex flex-col items-center justify-center text-center transition-all group">
-        <div class="w-11 h-11 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center text-lg mb-1.5 group-hover:scale-110 transition-all shadow-sm">
-          <i class="fa-solid fa-calendar-days"></i>
-        </div>
-        <span class="text-[10px] sm:text-xs font-bold text-slate-800 leading-tight">Campus Events</span>
-      </button>
-
-      <button onclick="scrollToClubs()" class="grab-card p-2.5 rounded-2xl flex flex-col items-center justify-center text-center transition-all group bg-gradient-to-b from-teal-50 to-white border-teal-200">
-        <div class="w-11 h-11 rounded-2xl bg-teal-500 text-white flex items-center justify-center text-lg mb-1.5 group-hover:scale-110 transition-all shadow-sm">
-          <i class="fa-solid fa-users"></i>
-        </div>
-        <span class="text-[10px] sm:text-xs font-bold text-teal-900 leading-tight">Campus Clubs</span>
-      </button>
-
-      <button onclick="setCategory('all', this)" class="category-btn grab-card p-2.5 rounded-2xl flex flex-col items-center justify-center text-center transition-all group">
-        <div class="w-11 h-11 rounded-2xl bg-slate-100 text-slate-700 flex items-center justify-center text-lg mb-1.5 group-hover:scale-110 transition-all shadow-sm">
-          <i class="fa-solid fa-border-all"></i>
-        </div>
-        <span class="text-[10px] sm:text-xs font-bold text-slate-800 leading-tight">All Listings</span>
-      </button>
-
-    </div>
-
-    <!-- DEDICATED AIMST COURSE POPUP / DROPDOWN PANEL (ONLY SHOWN WHEN ACADEMIC NOTES SELECTED) -->
-    <div id="courseFilterSection" class="bg-white p-3.5 rounded-2xl border-2 border-emerald-500/40 mb-4 shadow-lg hidden transition-all">
-      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 mb-2">
-        <div class="flex items-center space-x-2">
-          <i id="courseFilterIcon" class="fa-solid fa-book-medical text-emerald-600 text-sm"></i>
-          <span class="text-xs font-black uppercase tracking-wider text-slate-900">Academic Notes Programme Filter (Select 1 or more):</span>
-        </div>
-        <div class="flex items-center space-x-3">
-          <button id="resetCourseFiltersBtn" onclick="clearCourseFilters()" class="text-[10px] font-bold text-emerald-700 hover:underline">
-            Reset Filters
-          </button>
-          <button onclick="toggleCourseFilterPanel()" class="px-2 py-1 rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200 text-xs font-bold">
-            <i class="fa-solid fa-xmark"></i> Close Filter
-          </button>
-        </div>
-      </div>
-
-      <div class="relative mb-2.5">
-        <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-[11px]"></i>
-        <input type="text" id="courseSearchInput" oninput="renderCourseFilterPills()" placeholder="Quick search courses (e.g., MBBS, Computer Science, Foundation in Arts)..." class="w-full bg-slate-50 border border-slate-200 rounded-xl py-1.5 pl-8 pr-3 text-xs text-slate-900 focus:outline-none focus:border-emerald-500">
-      </div>
-
-      <div id="coursePillsContainer" class="flex flex-wrap gap-1.5 max-h-40 overflow-y-auto p-1">
-        <!-- Dynamically rendered via JS -->
-      </div>
-    </div>
-
-    <!-- General Search Bar -->
-    <div class="max-w-xl mx-auto relative mb-3">
-      <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
-      <input type="text" id="searchInput" oninput="filterListings()" placeholder="Search notes, calculator rental, printing services, stethoscope..." class="w-full bg-white border border-slate-300 rounded-2xl py-2.5 pl-10 pr-4 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-emerald-500 shadow-sm transition-all">
-    </div>
-  </section>
-
-  <!-- Main Content Feed -->
-  <main class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 pb-10">
+  <!-- TAB VIEW 1: HOME PAGE VIEW -->
+  <div id="viewHome" class="tab-view-page">
     
-    <!-- TOP SPONSORED ADVERTISEMENTS AUTO-SWIPE CAROUSEL BANNER SECTION -->
-    <div id="sponsoredSection" class="mb-6 hidden">
-      <div class="flex items-center justify-between mb-2">
-        <div class="flex items-center space-x-2">
-          <i class="fa-solid fa-bolt text-amber-500 text-sm animate-bounce"></i>
-          <h3 class="text-xs sm:text-sm font-black uppercase tracking-wider text-amber-900">Featured Sponsored Campus Ads</h3>
-        </div>
-        <span class="text-[10px] font-bold text-amber-700 bg-amber-100 px-2 py-0.5 rounded-full border border-amber-200">Auto Swiping By Remaining Time</span>
+    <!-- Grab-Style Quick Categories Grid Bar -->
+    <section class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 pt-5 sm:pt-7 pb-3">
+      <div class="text-center mb-4">
+        <h2 class="text-lg sm:text-2xl font-black text-slate-900 tracking-tight mb-0.5">
+          Explore Campus Categories
+        </h2>
+        <p class="text-slate-500 text-[11px] sm:text-xs">Tap any category to filter campus items instantly.</p>
       </div>
+
+      <div class="grid grid-cols-4 sm:grid-cols-4 lg:grid-cols-8 gap-2 sm:gap-3.5 mb-4">
+        
+        <button onclick="setCategory('academic', this)" class="category-btn grab-card p-2.5 rounded-2xl flex flex-col items-center justify-center text-center transition-all group active">
+          <div id="catIcon1" class="w-11 h-11 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-lg mb-1.5 group-hover:scale-110 transition-all shadow-sm">
+            <i class="fa-solid fa-book-medical"></i>
+          </div>
+          <span class="text-[10px] sm:text-xs font-bold text-slate-800 leading-tight">Academic Notes</span>
+        </button>
+
+        <button onclick="setCategory('rentals', this)" class="category-btn grab-card p-2.5 rounded-2xl flex flex-col items-center justify-center text-center transition-all group">
+          <div class="w-11 h-11 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-lg mb-1.5 group-hover:scale-110 transition-all shadow-sm">
+            <i class="fa-solid fa-user-tie"></i>
+          </div>
+          <span class="text-[10px] sm:text-xs font-bold text-slate-800 leading-tight">Belongings Rentals</span>
+        </button>
+
+        <button onclick="setCategory('tech', this)" class="category-btn grab-card p-2.5 rounded-2xl flex flex-col items-center justify-center text-center transition-all group">
+          <div class="w-11 h-11 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-lg mb-1.5 group-hover:scale-110 transition-all shadow-sm">
+            <i class="fa-solid fa-laptop-code"></i>
+          </div>
+          <span class="text-[10px] sm:text-xs font-bold text-slate-800 leading-tight">Tech & Gadgets</span>
+        </button>
+
+        <button onclick="setCategory('hostel', this)" class="category-btn grab-card p-2.5 rounded-2xl flex flex-col items-center justify-center text-center transition-all group">
+          <div class="w-11 h-11 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center text-lg mb-1.5 group-hover:scale-110 transition-all shadow-sm">
+            <i class="fa-solid fa-bed"></i>
+          </div>
+          <span class="text-[10px] sm:text-xs font-bold text-slate-800 leading-tight">Hostel Essentials</span>
+        </button>
+
+        <button onclick="setCategory('services', this)" class="category-btn grab-card p-2.5 rounded-2xl flex flex-col items-center justify-center text-center transition-all group">
+          <div class="w-11 h-11 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center text-lg mb-1.5 group-hover:scale-110 transition-all shadow-sm">
+            <i class="fa-solid fa-print"></i>
+          </div>
+          <span class="text-[10px] sm:text-xs font-bold text-slate-800 leading-tight">Campus Services</span>
+        </button>
+
+        <button onclick="setCategory('events', this)" class="category-btn grab-card p-2.5 rounded-2xl flex flex-col items-center justify-center text-center transition-all group">
+          <div class="w-11 h-11 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center text-lg mb-1.5 group-hover:scale-110 transition-all shadow-sm">
+            <i class="fa-solid fa-calendar-days"></i>
+          </div>
+          <span class="text-[10px] sm:text-xs font-bold text-slate-800 leading-tight">Campus Events</span>
+        </button>
+
+        <button onclick="scrollToClubs()" class="grab-card p-2.5 rounded-2xl flex flex-col items-center justify-center text-center transition-all group bg-gradient-to-b from-teal-50 to-white border-teal-200">
+          <div class="w-11 h-11 rounded-2xl bg-teal-500 text-white flex items-center justify-center text-lg mb-1.5 group-hover:scale-110 transition-all shadow-sm">
+            <i class="fa-solid fa-users"></i>
+          </div>
+          <span class="text-[10px] sm:text-xs font-bold text-teal-900 leading-tight">Campus Clubs</span>
+        </button>
+
+        <button onclick="setCategory('all', this)" class="category-btn grab-card p-2.5 rounded-2xl flex flex-col items-center justify-center text-center transition-all group">
+          <div class="w-11 h-11 rounded-2xl bg-slate-100 text-slate-700 flex items-center justify-center text-lg mb-1.5 group-hover:scale-110 transition-all shadow-sm">
+            <i class="fa-solid fa-border-all"></i>
+          </div>
+          <span class="text-[10px] sm:text-xs font-bold text-slate-800 leading-tight">All Listings</span>
+        </button>
+
+      </div>
+
+      <!-- DEDICATED AIMST COURSE POPUP / DROPDOWN PANEL (ONLY SHOWN WHEN ACADEMIC NOTES SELECTED) -->
+      <div id="courseFilterSection" class="bg-white p-3.5 rounded-2xl border-2 border-emerald-500/40 mb-4 shadow-lg hidden transition-all">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 mb-2">
+          <div class="flex items-center space-x-2">
+            <i id="courseFilterIcon" class="fa-solid fa-book-medical text-emerald-600 text-sm"></i>
+            <span class="text-xs font-black uppercase tracking-wider text-slate-900">Academic Notes Programme Filter (Select 1 or more):</span>
+          </div>
+          <div class="flex items-center space-x-3">
+            <button id="resetCourseFiltersBtn" onclick="clearCourseFilters()" class="text-[10px] font-bold text-emerald-700 hover:underline">
+              Reset Filters
+            </button>
+            <button onclick="toggleCourseFilterPanel()" class="px-2 py-1 rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200 text-xs font-bold">
+              <i class="fa-solid fa-xmark"></i> Close Filter
+            </button>
+          </div>
+        </div>
+
+        <div class="relative mb-2.5">
+          <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-[11px]"></i>
+          <input type="text" id="courseSearchInput" oninput="renderCourseFilterPills()" placeholder="Quick search courses (e.g., MBBS, Computer Science, Foundation in Arts)..." class="w-full bg-slate-50 border border-slate-200 rounded-xl py-1.5 pl-8 pr-3 text-xs text-slate-900 focus:outline-none focus:border-emerald-500">
+        </div>
+
+        <div id="coursePillsContainer" class="flex flex-wrap gap-1.5 max-h-40 overflow-y-auto p-1">
+          <!-- Dynamically rendered via JS -->
+        </div>
+      </div>
+
+      <!-- General Search Bar -->
+      <div class="max-w-xl mx-auto relative mb-3">
+        <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+        <input type="text" id="searchInput" oninput="filterListings()" placeholder="Search notes, calculator rental, printing services, stethoscope..." class="w-full bg-white border border-slate-300 rounded-2xl py-2.5 pl-10 pr-4 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-emerald-500 shadow-sm transition-all">
+      </div>
+    </section>
+
+    <!-- Main Content Feed -->
+    <main class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 pb-10">
       
-      <div class="relative group">
-        <div id="sponsoredCarousel" class="flex overflow-x-auto snap-x snap-mandatory space-x-3 no-scrollbar scroll-smooth py-1">
-          <!-- Dynamically injected auto-swiping sponsored cards -->
-        </div>
-      </div>
-    </div>
-
-    <div class="flex items-center justify-between mb-3">
-      <h3 class="text-sm sm:text-base font-bold tracking-tight text-slate-900">Featured Campus Listings</h3>
-      <div id="listingCount" class="text-[11px] text-slate-500">Loading items...</div>
-    </div>
-
-    <div id="listingsGrid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2.5 sm:gap-4">
-      <!-- Dynamic cards injected via JS -->
-    </div>
-  </main>
-
-  <!-- AIMST Campus Clubs Section -->
-  <section id="clubsSection" class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 pb-16">
-    <div class="border-t border-slate-200 pt-6">
-      <div class="flex items-center justify-between mb-3">
-        <div>
-          <h3 class="text-sm sm:text-base font-bold tracking-tight text-slate-900 flex items-center space-x-2">
-            <i class="fa-solid fa-users text-teal-600"></i>
-            <span>AIMST Clubs & Student Societies</span>
-          </h3>
-          <p class="text-[11px] text-slate-500 mt-0.5">Join active campus communities, participate in events, and build networks.</p>
+      <!-- TOP SPONSORED ADVERTISEMENTS AUTO-SWIPE CAROUSEL BANNER SECTION -->
+      <div id="sponsoredSection" class="mb-6 hidden">
+        <div class="flex items-center justify-between mb-2">
+          <div class="flex items-center space-x-2">
+            <i class="fa-solid fa-bolt text-amber-500 text-sm animate-bounce"></i>
+            <h3 class="text-xs sm:text-sm font-black uppercase tracking-wider text-amber-900">Featured Sponsored Campus Ads</h3>
+          </div>
+          <span class="text-[10px] font-bold text-amber-700 bg-amber-100 px-2 py-0.5 rounded-full border border-amber-200">Auto Swiping By Remaining Time</span>
         </div>
         
-        <button id="addClubBtn" onclick="openAddClubModal()" class="hidden flex items-center space-x-1 px-3 py-1.5 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-bold text-xs shadow-sm transition-all">
+        <div class="relative group">
+          <div id="sponsoredCarousel" class="flex overflow-x-auto snap-x snap-mandatory space-x-3 no-scrollbar scroll-smooth py-1">
+            <!-- Dynamically injected auto-swiping sponsored cards -->
+          </div>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between mb-3">
+        <h3 class="text-sm sm:text-base font-bold tracking-tight text-slate-900">Featured Campus Listings</h3>
+        <div id="listingCount" class="text-[11px] text-slate-500">Loading items...</div>
+      </div>
+
+      <div id="listingsGrid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2.5 sm:gap-4">
+        <!-- Dynamic cards injected via JS -->
+      </div>
+    </main>
+
+    <!-- AIMST Campus Clubs Section -->
+    <section id="clubsSection" class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 pb-16">
+      <div class="border-t border-slate-200 pt-6">
+        <div class="flex items-center justify-between mb-3">
+          <div>
+            <h3 class="text-sm sm:text-base font-bold tracking-tight text-slate-900 flex items-center space-x-2">
+              <i class="fa-solid fa-users text-teal-600"></i>
+              <span>AIMST Clubs & Student Societies</span>
+            </h3>
+            <p class="text-[11px] text-slate-500 mt-0.5">Join active campus communities, participate in events, and build networks.</p>
+          </div>
+          
+          <button id="addClubBtn" onclick="openAddClubModal()" class="hidden flex items-center space-x-1 px-3 py-1.5 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-bold text-xs shadow-sm transition-all">
+            <i class="fa-solid fa-plus text-xs"></i>
+            <span>Post Club</span>
+          </button>
+        </div>
+
+        <div id="clubsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
+          <!-- Dynamic Club cards injected via JS -->
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- TAB VIEW 2: MY PRODUCT PAGE VIEW -->
+  <div id="viewMyProducts" class="tab-view-page max-w-5xl mx-auto px-3 sm:px-6 lg:px-8 py-6 hidden">
+    <div class="bg-white rounded-3xl p-5 sm:p-8 border border-slate-200 shadow-sm mb-6">
+      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6 pb-4 border-b border-slate-100">
+        <div>
+          <h2 class="text-xl sm:text-2xl font-black text-slate-900 flex items-center space-x-2">
+            <i class="fa-solid fa-boxes-stacked text-emerald-600"></i>
+            <span>My Product Listings</span>
+          </h2>
+          <p class="text-xs text-slate-500 mt-1">Manage items you have listed for sale or rental on APM.</p>
+        </div>
+        
+        <!-- Tiny Add Product Button -->
+        <button onclick="openAddListingModal()" class="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-md transition-all flex items-center space-x-1.5">
           <i class="fa-solid fa-plus text-xs"></i>
-          <span>Post Club</span>
+          <span>Add Product</span>
         </button>
       </div>
 
-      <div id="clubsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
-        <!-- Dynamic Club cards injected via JS -->
+      <div id="myProductsTabContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <!-- Rendered via JS -->
       </div>
     </div>
-  </section>
+  </div>
+
+  <!-- TAB VIEW 3: MY FAVOURITY (WISHLIST) PAGE VIEW -->
+  <div id="viewWishlist" class="tab-view-page max-w-4xl mx-auto px-3 sm:px-6 lg:px-8 py-6 hidden">
+    <div class="bg-white rounded-3xl p-5 sm:p-8 border border-slate-200 shadow-sm">
+      <div class="mb-6 pb-4 border-b border-slate-100">
+        <h2 class="text-xl sm:text-2xl font-black text-slate-900 flex items-center space-x-2">
+          <i class="fa-solid fa-heart text-rose-500"></i>
+          <span>My Favourity Saved Items</span>
+        </h2>
+        <p class="text-xs text-slate-500 mt-1">Items you saved to view or buy later.</p>
+      </div>
+
+      <div id="wishlistTabContainer" class="space-y-3">
+        <!-- Rendered via JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB VIEW 4: ME / PROFILE PAGE VIEW -->
+  <div id="viewMe" class="tab-view-page max-w-xl mx-auto px-3 sm:px-6 lg:px-8 py-6 hidden">
+    <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm text-center">
+      <div class="w-20 h-20 rounded-3xl bg-emerald-100 text-emerald-700 flex items-center justify-center mx-auto mb-4 text-3xl shadow-sm border border-emerald-300">
+        <i class="fa-solid fa-user-gear"></i>
+      </div>
+
+      <h3 id="meTabUsername" class="text-xl font-black text-slate-900 leading-tight">Username</h3>
+      <p id="meTabEmail" class="text-xs text-slate-500 mb-4">user@apm.com</p>
+
+      <div id="meTabTierBadge" class="inline-block px-4 py-1.5 rounded-full bg-emerald-50 text-emerald-800 font-extrabold text-xs border border-emerald-300 mb-3 uppercase tracking-wider">
+        VERIFIED SELLER/BUYER (FREE TIER)
+      </div>
+
+      <div id="meTabProCountdownContainer" class="hidden bg-amber-50 p-3.5 rounded-2xl border border-amber-200 mb-4 text-center">
+        <p class="text-[10px] font-bold text-amber-900 uppercase tracking-wider mb-1 flex items-center justify-center space-x-1">
+          <i class="fa-solid fa-clock text-amber-600"></i>
+          <span>Pro Subscription Time Remaining</span>
+        </p>
+        <div id="meTabProCountdownTimer" class="text-lg font-black text-amber-700 tracking-wider">00h 00m 00s</div>
+      </div>
+
+      <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 mb-6 text-left space-y-2">
+        <div class="flex justify-between items-center text-xs font-bold text-slate-700">
+          <span>Active Listing Usage:</span>
+          <span id="meTabListingCount" class="text-emerald-700 font-black">0 / 3 Used</span>
+        </div>
+      </div>
+
+      <div class="space-y-3">
+        <button onclick="switchMainTab('myproducts')" class="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md transition-all flex items-center justify-center space-x-2">
+          <i class="fa-solid fa-boxes-stacked text-xs"></i>
+          <span>Manage My Products</span>
+        </button>
+
+        <button id="meTabUpgradeBtn" onclick="openUpgradeModal()" class="w-full py-3 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs shadow-md transition-all flex items-center justify-center space-x-2">
+          <i class="fa-solid fa-crown text-xs"></i>
+          <span>Upgrade to Pro Tier (RM5/mo)</span>
+        </button>
+
+        <button onclick="performLogout()" class="w-full py-3 rounded-xl bg-slate-100 hover:bg-rose-50 text-rose-600 hover:text-rose-700 font-bold text-xs border border-slate-200 transition-all flex items-center justify-center space-x-2">
+          <i class="fa-solid fa-right-from-bracket text-xs"></i>
+          <span>Logout Account</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB VIEW 5: ABOUT APM PAGE VIEW -->
+  <div id="viewAbout" class="tab-view-page max-w-4xl mx-auto px-3 sm:px-6 lg:px-8 py-6 hidden">
+    <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
+      
+      <div class="text-center max-w-xl mx-auto">
+        <img src="market-logo.png" alt="APM Logo" class="w-20 h-20 object-contain mx-auto mb-3 drop-shadow-md" onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=400'">
+        <h2 class="text-2xl font-black text-slate-900 tracking-wider uppercase">AIMST PRESTIGE MARKET</h2>
+        <p class="text-xs font-bold text-emerald-600 uppercase tracking-widest mt-1">We Listen, We Create, You Enjoy!</p>
+        <p class="text-xs text-slate-600 leading-relaxed mt-3">
+          APM is an exclusive campus ecosystem built to connect AIMST University students. Buy study notes, rent belongings, find hostel gear, or advertise campus club events effortlessly.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t border-slate-100">
+        <!-- Founder 1 -->
+        <div class="grab-card rounded-2xl p-5 border border-slate-200 text-center flex flex-col items-center">
+          <div class="w-24 h-24 rounded-full overflow-hidden border-4 border-emerald-500/30 mb-3 shrink-0 bg-slate-100 shadow-sm">
+            <img src="founder1.jpg" alt="Keventhiran Devandren" class="w-full h-full object-cover object-[center_20%]" onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=800'">
+          </div>
+          <h4 class="font-black text-base text-slate-900">Keventhiran Devandren</h4>
+          <p class="text-[11px] font-bold text-emerald-700 mb-2">Founder & CEO • Computer Science</p>
+          <p class="text-xs text-slate-600 leading-relaxed">Lead Backend Architect & Database Security Specialist managing APM server infrastructure and core system operations.</p>
+        </div>
+
+        <!-- Founder 2 -->
+        <div class="grab-card rounded-2xl p-5 border border-slate-200 text-center flex flex-col items-center">
+          <div class="w-24 h-24 rounded-full overflow-hidden border-4 border-emerald-500/30 mb-3 shrink-0 bg-slate-100 shadow-sm">
+            <img src="founder2.jpg" alt="Taarisini Selvakumar" class="w-full h-full object-cover object-[center_20%]" onerror="this.src='https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&q=80&w=800'">
+          </div>
+          <h4 class="font-black text-base text-slate-900">Taarisini Selvakumar</h4>
+          <p class="text-[11px] font-bold text-emerald-700 mb-2">Co-Founder & CTO • Computer Science</p>
+          <p class="text-xs text-slate-600 leading-relaxed">Lead Frontend Developer & UI/UX Specialist crafting beautiful user experiences, interfaces, and web responsiveness.</p>
+        </div>
+      </div>
+
+      <!-- Wall of Fame Helpers Section -->
+      <div class="pt-4 border-t border-slate-100">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-sm font-black text-slate-900 uppercase tracking-wider flex items-center space-x-2">
+            <i class="fa-solid fa-award text-amber-500"></i>
+            <span>Contributors Wall of Fame</span>
+          </h3>
+          <button id="addAboutContribBtn" onclick="openAddContributorModal()" class="hidden px-2.5 py-1 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-[10px] transition-all">
+            + Add Contributor
+          </button>
+        </div>
+
+        <div id="aboutContributorsList" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <!-- Dynamically injected JS -->
+        </div>
+      </div>
+
+    </div>
+  </div>
 
   <!-- FLOATING BUTTONS BAR -->
   <div class="fixed bottom-6 left-4 right-4 sm:left-6 sm:right-auto z-40 flex items-center justify-between sm:justify-start sm:space-x-3 pointer-events-none">
@@ -360,27 +541,6 @@
         <i class="fa-solid fa-rotate-right text-emerald-400"></i>
         <span class="inline">Refresh App</span>
       </button>
-    </div>
-  </div>
-
-  <!-- WISHLIST MODAL -->
-  <div id="wishlistModal" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm hidden flex items-center justify-center p-3">
-    <div class="bg-white rounded-3xl max-w-lg w-full p-5 sm:p-7 relative shadow-2xl max-h-[90vh] overflow-y-auto border border-slate-200">
-      <button onclick="closeWishlistModal()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-700">
-        <i class="fa-solid fa-xmark text-lg"></i>
-      </button>
-      
-      <div class="mb-4">
-        <h3 class="text-lg font-black text-slate-900 flex items-center space-x-2">
-          <i class="fa-solid fa-heart text-rose-500"></i>
-          <span>My Saved Wishlist Items</span>
-        </h3>
-        <p class="text-xs text-slate-500 mt-0.5">Quickly access items you saved to purchase later.</p>
-      </div>
-
-      <div id="wishlistContainer" class="space-y-3">
-        <!-- Wishlist items injected via JS -->
-      </div>
     </div>
   </div>
 
@@ -517,25 +677,6 @@
     </div>
   </div>
 
-  <!-- SELLER'S OWN LISTINGS MODAL -->
-  <div id="myListingsModal" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm hidden flex items-center justify-center p-3">
-    <div class="bg-white rounded-3xl max-w-2xl w-full p-5 sm:p-7 relative shadow-2xl max-h-[90vh] overflow-y-auto border border-slate-200">
-      <button onclick="closeMyListingsModal()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-700">
-        <i class="fa-solid fa-xmark text-lg"></i>
-      </button>
-      
-      <div class="mb-4">
-        <h3 class="text-lg font-black text-slate-900 flex items-center space-x-2">
-          <i class="fa-solid fa-boxes-stacked text-emerald-600"></i>
-          <span>My Listed Products & Boost Status</span>
-        </h3>
-        <p class="text-xs text-slate-500 mt-0.5">Track your listing activity, buyer chat clicks, and active ad boost timers.</p>
-      </div>
-
-      <div id="myListingsContainer" class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4"></div>
-    </div>
-  </div>
-
   <!-- AUTH MODAL -->
   <div id="authModal" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm hidden flex items-center justify-center p-3">
     <div class="bg-white rounded-3xl max-w-sm w-full p-6 relative shadow-2xl border border-slate-200">
@@ -543,9 +684,15 @@
         <i class="fa-solid fa-xmark text-lg"></i>
       </button>
 
+      <div class="text-center mb-4">
+        <img src="market-logo.png" alt="APM Logo" class="w-12 h-12 object-contain mx-auto mb-1" onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=400'">
+        <h3 class="text-base font-black text-slate-900 uppercase">APM Verified Login / Register</h3>
+        <p class="text-[11px] text-slate-500">Sign in to unlock all APM features & save wishlists!</p>
+      </div>
+
       <div class="flex rounded-2xl bg-slate-100 p-1 mb-4">
-        <button id="tabLoginBtn" onclick="switchAuthTab('login')" class="flex-1 py-1.5 rounded-xl text-xs font-extrabold bg-white text-slate-900 shadow-sm transition-all">Seller Login</button>
-        <button id="tabRegisterBtn" onclick="switchAuthTab('register')" class="flex-1 py-1.5 rounded-xl text-xs font-extrabold text-slate-500 hover:text-slate-900 transition-all">New Register (Step 1)</button>
+        <button id="tabLoginBtn" onclick="switchAuthTab('login')" class="flex-1 py-1.5 rounded-xl text-xs font-extrabold bg-white text-slate-900 shadow-sm transition-all">Verified Login</button>
+        <button id="tabRegisterBtn" onclick="switchAuthTab('register')" class="flex-1 py-1.5 rounded-xl text-xs font-extrabold text-slate-500 hover:text-slate-900 transition-all">Register APM</button>
       </div>
 
       <div id="loginFormContainer" class="space-y-3">
@@ -560,7 +707,7 @@
         
         <div id="loginError" class="text-xs text-rose-600 text-center font-semibold hidden bg-rose-50 p-2.5 rounded-xl border border-rose-200"></div>
 
-        <button onclick="handleLogin()" class="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md transition-all">Sign In to Seller Account</button>
+        <button onclick="handleLogin()" class="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md transition-all">Sign In to APM Account</button>
       </div>
 
       <div id="registerFormContainer" class="space-y-3 hidden">
@@ -586,59 +733,6 @@
           <span>Send Student ID to Founder</span>
         </a>
       </div>
-    </div>
-  </div>
-
-  <!-- USER PROFILE MODAL -->
-  <div id="userProfileModal" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm hidden flex items-center justify-center p-3">
-    <div class="bg-white rounded-3xl max-w-sm w-full p-6 relative shadow-2xl text-center border border-slate-200">
-      <button onclick="closeUserProfileModal()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-700">
-        <i class="fa-solid fa-xmark text-lg"></i>
-      </button>
-
-      <div class="w-14 h-14 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center mx-auto mb-3 text-2xl shadow-sm border border-emerald-300">
-        <i class="fa-solid fa-user-gear"></i>
-      </div>
-
-      <h3 id="profileUsername" class="text-lg font-black text-slate-900 leading-tight">Username</h3>
-      <p id="profileEmail" class="text-xs text-slate-500 mb-3">user@apm.com</p>
-
-      <div id="profileTierBadge" class="inline-block px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 font-extrabold text-xs border border-emerald-300 mb-2 uppercase tracking-wider">
-        VERIFIED SELLER (FREE TIER)
-      </div>
-
-      <div id="proCountdownContainer" class="hidden bg-amber-50 p-3 rounded-2xl border border-amber-200 mb-3 text-center">
-        <p class="text-[10px] font-bold text-amber-900 uppercase tracking-wider mb-1 flex items-center justify-center space-x-1">
-          <i class="fa-solid fa-clock text-amber-600"></i>
-          <span>Pro Subscription Time Remaining</span>
-        </p>
-        <div id="proCountdownTimer" class="text-base font-black text-amber-700 tracking-wider">00h 00m 00s</div>
-      </div>
-
-      <div class="bg-slate-50 p-3.5 rounded-2xl border border-slate-200 mb-4 text-left space-y-1.5">
-        <div class="flex justify-between items-center text-xs font-bold text-slate-700">
-          <span>Active Listing Usage:</span>
-          <span id="profileListingCount" class="text-emerald-700 font-black">0 / 3 Used</span>
-        </div>
-      </div>
-
-      <div class="space-y-2">
-        <button onclick="openMyListingsFromProfile()" class="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md transition-all flex items-center justify-center space-x-1.5">
-          <i class="fa-solid fa-boxes-stacked text-xs"></i>
-          <span>View My Listed Products</span>
-        </button>
-
-        <button id="profileUpgradeBtn" onclick="openUpgradeFromProfile()" class="w-full py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs shadow-md transition-all flex items-center justify-center space-x-1.5">
-          <i class="fa-solid fa-crown text-xs"></i>
-          <span>Upgrade to Pro Tier (RM5/mo)</span>
-        </button>
-
-        <button onclick="performLogout()" class="w-full py-2.5 rounded-xl bg-slate-100 hover:bg-rose-50 text-rose-600 hover:text-rose-700 font-bold text-xs border border-slate-200 transition-all flex items-center justify-center space-x-1.5">
-          <i class="fa-solid fa-right-from-bracket text-xs"></i>
-          <span>Logout Account</span>
-        </button>
-      </div>
-
     </div>
   </div>
 
@@ -855,120 +949,37 @@
     </div>
   </div>
 
-  <!-- FOUNDERS & LEADERSHIP CAROUSEL MODAL (LARGE CIRCULAR PORTRAIT DESIGN) -->
-  <div id="foundersModal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md hidden flex items-center justify-center p-3 sm:p-6">
-    <div class="bg-white rounded-3xl max-w-sm sm:max-w-md w-full p-5 sm:p-7 text-center relative shadow-2xl border border-slate-200 overflow-hidden max-h-[92vh] flex flex-col">
-      
-      <!-- Close Button -->
-      <button onclick="closeFoundersModal()" class="absolute top-4 right-4 z-30 w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center font-bold text-base transition-all shadow-sm">
-        <i class="fa-solid fa-xmark"></i>
+  <!-- ADD CONTRIBUTOR MODAL (FOUNDER ONLY) -->
+  <div id="addContributorModal" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm hidden flex items-center justify-center p-3">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 relative shadow-2xl max-h-[90vh] overflow-y-auto border border-slate-200">
+      <button onclick="closeAddContributorModal()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-700">
+        <i class="fa-solid fa-xmark text-lg"></i>
       </button>
       
-      <!-- Top Header Tag -->
-      <div class="mb-3 shrink-0">
-        <p class="text-[10px] font-black uppercase tracking-widest text-emerald-600 mb-0.5">WHO MADE IT</p>
-        <h3 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">MEET THE TEAM</h3>
+      <div class="mb-4">
+        <h3 class="text-lg font-bold text-slate-900">Add APM Contributor / Helper</h3>
+        <p class="text-xs text-slate-500 mt-0.5">Recognize student ideas & contributions</p>
       </div>
 
-      <!-- CAROUSEL WRAPPER -->
-      <div class="relative flex-1 overflow-hidden">
-        <div id="teamCarousel" class="flex overflow-x-auto snap-x snap-mandatory no-scrollbar scroll-smooth space-x-4 py-2 px-1 h-full items-center">
-          
-          <!-- 1. KEVENTHIRAN DEVANDREN (FOUNDER & CEO) -->
-          <div class="snap-center shrink-0 w-full rounded-3xl overflow-hidden relative shadow-lg border border-slate-200 bg-white p-5 sm:p-6 flex flex-col items-center text-center h-full max-h-[460px] overflow-y-auto">
-            <div class="absolute top-3 left-3 z-20 flex items-center space-x-1.5 bg-slate-50 px-2.5 py-1 rounded-xl shadow-sm border border-slate-200">
-              <img src="market-logo.png" alt="APM Logo" class="w-4 h-4 object-contain" onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=400'">
-              <span class="text-[9px] font-black text-slate-900 uppercase tracking-wider">APM Executive</span>
-            </div>
-
-            <div class="w-28 h-28 sm:w-32 sm:h-32 rounded-full overflow-hidden border-4 border-emerald-500/30 shadow-md mb-3 mt-4 shrink-0 bg-slate-100">
-              <img src="founder1.jpg" alt="Keventhiran Devandren" class="w-full h-full object-cover object-[center_20%]" onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=800'">
-            </div>
-
-            <h4 class="text-base sm:text-lg font-black text-slate-900 leading-tight mb-0.5">Keventhiran Devandren</h4>
-            <p class="text-[11px] font-bold text-emerald-700 mb-1">Bachelor of Computer Science (Hons) • AIMST University</p>
-            <div class="mb-2">
-              <span class="inline-block px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 text-[9px] font-black border border-emerald-200 uppercase tracking-wider">FOUNDER & CHIEF EXECUTIVE OFFICER (CEO)</span>
-            </div>
-            <p class="text-xs text-slate-600 leading-relaxed">Lead Backend Architect & Firebase Database Developer managing core system security, database structures, and platform infrastructure.</p>
-          </div>
-
-          <!-- 2. TAARISINI SELVAKUMAR (CO-FOUNDER & CTO) -->
-          <div class="snap-center shrink-0 w-full rounded-3xl overflow-hidden relative shadow-lg border border-slate-200 bg-white p-5 sm:p-6 flex flex-col items-center text-center h-full max-h-[460px] overflow-y-auto">
-            <div class="absolute top-3 left-3 z-20 flex items-center space-x-1.5 bg-slate-50 px-2.5 py-1 rounded-xl shadow-sm border border-slate-200">
-              <img src="market-logo.png" alt="APM Logo" class="w-4 h-4 object-contain" onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=400'">
-              <span class="text-[9px] font-black text-slate-900 uppercase tracking-wider">APM Executive</span>
-            </div>
-
-            <div class="w-28 h-28 sm:w-32 sm:h-32 rounded-full overflow-hidden border-4 border-emerald-500/30 shadow-md mb-3 mt-4 shrink-0 bg-slate-100">
-              <img src="founder2.jpg" alt="Taarisini Selvakumar" class="w-full h-full object-cover object-[center_20%]" onerror="this.src='https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&q=80&w=800'">
-            </div>
-
-            <h4 class="text-base sm:text-lg font-black text-slate-900 leading-tight mb-0.5">Taarisini Selvakumar</h4>
-            <p class="text-[11px] font-bold text-emerald-700 mb-1">Bachelor of Computer Science (Hons) • AIMST University</p>
-            <div class="mb-2">
-              <span class="inline-block px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 text-[9px] font-black border border-emerald-200 uppercase tracking-wider">CO-FOUNDER & CHIEF TECHNOLOGY OFFICER (CTO)</span>
-            </div>
-            <p class="text-xs text-slate-600 leading-relaxed">Lead Frontend Developer & UI/UX Specialist crafting user interface screens, responsive layouts, and seamless client interactions.</p>
-          </div>
-
-          <!-- 3. GAURA KISHORE KATHIRESAN (HEAD OF PR & INSTITUTIONAL AFFAIRS) -->
-          <div class="snap-center shrink-0 w-full rounded-3xl overflow-hidden relative shadow-lg border border-slate-200 bg-white p-5 sm:p-6 flex flex-col items-center text-center h-full max-h-[460px] overflow-y-auto">
-            <div class="absolute top-3 left-3 z-20 flex items-center space-x-1.5 bg-slate-50 px-2.5 py-1 rounded-xl shadow-sm border border-slate-200">
-              <img src="market-logo.png" alt="APM Logo" class="w-4 h-4 object-contain" onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=400'">
-              <span class="text-[9px] font-black text-slate-900 uppercase tracking-wider">APM Executive</span>
-            </div>
-
-            <div class="w-28 h-28 sm:w-32 sm:h-32 rounded-full overflow-hidden border-4 border-blue-500/30 shadow-md mb-3 mt-4 shrink-0 bg-slate-100">
-              <img src="gaura.jpg" alt="Gaura Kishore Kathiresan" class="w-full h-full object-cover object-[center_20%]" onerror="this.src='https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&q=80&w=800'">
-            </div>
-
-            <h4 class="text-base sm:text-lg font-black text-slate-900 leading-tight mb-0.5">Gaura Kishore Kathiresan</h4>
-            <p class="text-[11px] font-bold text-blue-700 mb-1">Diploma in Physiotherapy • AIMST University</p>
-            <div class="mb-2">
-              <span class="inline-block px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-800 text-[9px] font-black border border-blue-200 uppercase tracking-wider">HEAD OF PR & INSTITUTIONAL AFFAIRS</span>
-            </div>
-            <p class="text-xs text-slate-600 leading-relaxed">Responsible for campus-wide promotion and ethically liaising with AIMST University leadership for official platform endorsement.</p>
-          </div>
-
-          <!-- 4. SUDARSHAN PARTHIPAN (CHIEF PRODUCT OFFICER) -->
-          <div class="snap-center shrink-0 w-full rounded-3xl overflow-hidden relative shadow-lg border border-slate-200 bg-white p-5 sm:p-6 flex flex-col items-center text-center h-full max-h-[460px] overflow-y-auto">
-            <div class="absolute top-3 left-3 z-20 flex items-center space-x-1.5 bg-slate-50 px-2.5 py-1 rounded-xl shadow-sm border border-slate-200">
-              <img src="market-logo.png" alt="APM Logo" class="w-4 h-4 object-contain" onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=400'">
-              <span class="text-[9px] font-black text-slate-900 uppercase tracking-wider">APM Executive</span>
-            </div>
-
-            <div class="w-28 h-28 sm:w-32 sm:h-32 rounded-full overflow-hidden border-4 border-purple-500/30 shadow-md mb-3 mt-4 shrink-0 bg-slate-100">
-              <img src="sudarshan.jpg" alt="Sudarshan Parthipan" class="w-full h-full object-cover object-[center_20%]" onerror="this.src='https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=800'">
-            </div>
-
-            <h4 class="text-base sm:text-lg font-black text-slate-900 leading-tight mb-0.5">Sudarshan Parthipan</h4>
-            <p class="text-[11px] font-bold text-purple-700 mb-1">Diploma in Biotechnology • AIMST University</p>
-            <div class="mb-2">
-              <span class="inline-block px-2.5 py-0.5 rounded-full bg-purple-50 text-purple-800 text-[9px] font-black border border-purple-200 uppercase tracking-wider">CHIEF PRODUCT OFFICER & HEAD OF RESEARCH</span>
-            </div>
-            <p class="text-xs text-slate-600 leading-relaxed">Responsible for discovering student pain points, gathering daily campus feedback, and reporting platform needs to leadership.</p>
-          </div>
-
+      <form id="contributorForm" onsubmit="handlePostContributor(event)" class="space-y-3.5">
+        <div>
+          <label class="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1">Full Name</label>
+          <input type="text" id="contribName" required placeholder="e.g., Sudarshan Parthipan" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-emerald-500">
         </div>
-
-        <!-- Carousel Navigation Controls -->
-        <button onclick="scrollTeamCarousel(-1)" class="absolute left-1 top-1/2 -translate-y-1/2 z-30 w-9 h-9 rounded-full bg-white hover:bg-slate-100 text-slate-800 shadow-md flex items-center justify-center transition-all border border-slate-200">
-          <i class="fa-solid fa-chevron-left text-xs"></i>
-        </button>
-        <button onclick="scrollTeamCarousel(1)" class="absolute right-1 top-1/2 -translate-y-1/2 z-30 w-9 h-9 rounded-full bg-white hover:bg-slate-100 text-slate-800 shadow-md flex items-center justify-center transition-all border border-slate-200">
-          <i class="fa-solid fa-chevron-right text-xs"></i>
-        </button>
-      </div>
-
-      <!-- Carousel Pagination Indicator Dots -->
-      <div class="flex items-center justify-center space-x-2 mt-4 shrink-0">
-        <span class="team-dot w-2.5 h-2.5 rounded-full bg-emerald-600 transition-all cursor-pointer" onclick="scrollToSlide(0)"></span>
-        <span class="team-dot w-2.5 h-2.5 rounded-full bg-slate-300 transition-all cursor-pointer" onclick="scrollToSlide(1)"></span>
-        <span class="team-dot w-2.5 h-2.5 rounded-full bg-slate-300 transition-all cursor-pointer" onclick="scrollToSlide(2)"></span>
-        <span class="team-dot w-2.5 h-2.5 rounded-full bg-slate-300 transition-all cursor-pointer" onclick="scrollToSlide(3)"></span>
-      </div>
-
+        <div>
+          <label class="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1">Diploma / Programme</label>
+          <input type="text" id="contribProgram" required placeholder="e.g., Diploma in Biotechnology" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-emerald-500">
+        </div>
+        <div>
+          <label class="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1">Upload Photo (Optional)</label>
+          <input type="file" id="contribPhotoFile" accept="image/*" class="w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100 cursor-pointer bg-slate-50 border border-slate-300 rounded-xl p-1.5">
+        </div>
+        <div>
+          <label class="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1">Contribution / Idea Shared</label>
+          <textarea id="contribDesc" rows="3" required placeholder="e.g., Suggested segregating study materials into general to specific like MBBS, dentistry, and so on." class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-emerald-500"></textarea>
+        </div>
+        <button type="submit" class="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md transition-all mt-1">Add to Wall of Fame</button>
+      </form>
     </div>
   </div>
 
@@ -1029,6 +1040,24 @@
     let allSellers = JSON.parse(localStorage.getItem('aimst_sellers')) || [];
     let soldCount = parseInt(localStorage.getItem('aimst_sold_count')) || 0;
 
+    // CONTRIBUTORS DEFAULT DATA
+    let allContributors = JSON.parse(localStorage.getItem('aimst_contributors')) || [
+      {
+        id: 'contrib-1',
+        name: 'Sudarshan Parthipan',
+        program: 'Diploma in Biotechnology',
+        desc: 'Suggested segregating study materials into general to specific categories like MBBS, dentistry, and so on.',
+        photo: ''
+      },
+      {
+        id: 'contrib-2',
+        name: 'Gaura Kishore Kathiresan',
+        program: 'Diploma in Physiotherapy',
+        desc: 'Helped secure the institutional track to meet authorities and obtain official approvals related to APM.',
+        photo: ''
+      }
+    ];
+
     let currentCategory = 'all';
     let selectedCourses = new Set();
     let currentUser = null;
@@ -1047,11 +1076,264 @@
       return JSON.parse(localStorage.getItem(getWishlistKey())) || [];
     }
 
+    /* MAIN TAB NAVIGATION CONTROL & LOGIN RESTRICTION ENFORCEMENT */
+    window.switchMainTab = function(tabName) {
+      // APM Guest Protection: Restrict My Products, My Favourity (Wishlist), and Me tabs if not logged in
+      if (!currentUser && (tabName === 'myproducts' || tabName === 'wishlist' || tabName === 'me')) {
+        alert("🔒 Verification Required!\n\nTo access this tab, please log in as a Verified APM Seller/Buyer. APM Guests can view Home and About APM, and directly contact sellers to buy items!");
+        openAuthModal();
+        return;
+      }
+
+      // Hide all view sections
+      document.querySelectorAll('.tab-view-page').forEach(el => el.classList.add('hidden'));
+
+      // Remove active-tab class from buttons
+      document.querySelectorAll('.nav-tab-btn').forEach(btn => btn.classList.remove('active-tab'));
+
+      // Show selected tab view
+      if (tabName === 'home') {
+        document.getElementById('viewHome').classList.remove('hidden');
+        document.getElementById('navTabHome').classList.add('active-tab');
+      } else if (tabName === 'myproducts') {
+        document.getElementById('viewMyProducts').classList.remove('hidden');
+        document.getElementById('navTabMyProducts').classList.add('active-tab');
+        renderMyProductsTab();
+      } else if (tabName === 'wishlist') {
+        document.getElementById('viewWishlist').classList.remove('hidden');
+        document.getElementById('navTabWishlist').classList.add('active-tab');
+        renderWishlistTab();
+      } else if (tabName === 'me') {
+        document.getElementById('viewMe').classList.remove('hidden');
+        document.getElementById('navTabMe').classList.add('active-tab');
+        renderMeTabDetails();
+      } else if (tabName === 'about') {
+        document.getElementById('viewAbout').classList.remove('hidden');
+        document.getElementById('navTabAbout').classList.add('active-tab');
+        renderAboutContributors();
+      }
+    };
+
+    function updateNavTabVisuals() {
+      const isLogged = !!currentUser;
+      const tabMyProducts = document.getElementById('navTabMyProducts');
+      const tabWishlist = document.getElementById('navTabWishlist');
+      const tabMe = document.getElementById('navTabMe');
+
+      if (!isLogged) {
+        tabMyProducts?.classList.add('disabled-tab');
+        tabWishlist?.classList.add('disabled-tab');
+        tabMe?.classList.add('disabled-tab');
+        if (tabMyProducts) tabMyProducts.title = "Login required to access My Product";
+        if (tabWishlist) tabWishlist.title = "Login required to access Wishlist";
+        if (tabMe) tabMe.title = "Login required to access Me/Profile";
+      } else {
+        tabMyProducts?.classList.remove('disabled-tab');
+        tabWishlist?.classList.remove('disabled-tab');
+        tabMe?.classList.remove('disabled-tab');
+        if (tabMyProducts) tabMyProducts.title = "View your products";
+        if (tabWishlist) tabWishlist.title = "View saved wishlist";
+        if (tabMe) tabMe.title = "View account details";
+      }
+    }
+
+    /* RENDER MY PRODUCTS INSIDE TAB VIEW */
+    function renderMyProductsTab() {
+      const container = document.getElementById('myProductsTabContainer');
+      const myListings = allListings.filter(item => {
+        const itemSeller = (item.seller || '').toLowerCase();
+        return currentUser && (currentUser.toLowerCase() === itemSeller || currentUser.includes(itemSeller));
+      });
+
+      if (myListings.length === 0) {
+        container.innerHTML = `
+          <div class="col-span-full py-12 text-center grab-card rounded-2xl p-6 border border-slate-200">
+            <i class="fa-solid fa-box-open text-4xl text-slate-300 mb-2"></i>
+            <h4 class="text-sm font-black text-slate-800">No products listed yet</h4>
+            <p class="text-xs text-slate-500 mb-4">You have not listed any items for sale or rental.</p>
+            <button onclick="openAddListingModal()" class="px-4 py-2 rounded-xl bg-emerald-600 text-white font-bold text-xs shadow-md">
+              <i class="fa-solid fa-plus mr-1"></i> Add Your First Product
+            </button>
+          </div>
+        `;
+        return;
+      }
+
+      const now = new Date();
+      container.innerHTML = myListings.map(item => {
+        let boostStatusHTML = '';
+        if (item.isBoosted && item.boostExpiryDate && new Date(item.boostExpiryDate) > now) {
+          const diffMs = new Date(item.boostExpiryDate) - now;
+          const diffHrs = Math.floor(diffMs / (1000 * 60 * 60));
+          const diffMins = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+          boostStatusHTML = `<span class="text-[9px] font-black text-amber-900 bg-amber-100 px-2 py-0.5 rounded-md border border-amber-300 inline-block">🚀 Boosted: ${diffHrs}h ${diffMins}m remaining</span>`;
+        } else if (item.boostStatus === 'pending') {
+          boostStatusHTML = '<span class="text-[9px] font-bold text-amber-700 bg-amber-100 px-2 py-0.5 rounded-md inline-block">⏳ Boost Pending Approval</span>';
+        }
+
+        return `
+          <div class="grab-card rounded-2xl p-3 border border-slate-200 flex flex-col justify-between">
+            <div class="flex space-x-3 mb-2.5">
+              <img src="${item.image || 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=800'}" alt="${item.title}" class="w-16 h-16 rounded-xl object-cover shrink-0">
+              <div class="min-w-0 flex-1">
+                <h4 class="font-bold text-xs text-slate-900 truncate mb-0.5">${item.title}</h4>
+                <p class="text-[10px] text-emerald-700 font-extrabold mb-1">RM ${(Number(item.price)||0).toFixed(2)}</p>
+                ${boostStatusHTML}
+              </div>
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+              <button onclick="openBoostBenefitsModal('${item.id}')" class="py-1.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-[10px] shadow-sm transition-all flex items-center justify-center space-x-1">
+                <i class="fa-solid fa-rocket text-[10px]"></i>
+                <span>Boost Ad</span>
+              </button>
+              <button onclick="terminateListing('${item.id}')" class="py-1.5 rounded-xl bg-rose-50 hover:bg-rose-600 text-rose-600 hover:text-white font-bold text-[10px] border border-rose-200 transition-all">Delete</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    /* RENDER WISHLIST INSIDE TAB VIEW */
+    function renderWishlistTab() {
+      const container = document.getElementById('wishlistTabContainer');
+      const wishlist = getWishlist();
+      const savedItems = allListings.filter(item => wishlist.includes(item.id));
+
+      if (savedItems.length === 0) {
+        container.innerHTML = `
+          <div class="py-12 text-center text-slate-400">
+            <i class="fa-solid fa-heart-crack text-4xl mb-2 text-rose-300"></i>
+            <p class="text-xs font-bold text-slate-600">Your wishlist is empty!</p>
+            <p class="text-[11px] text-slate-400 mt-1">Click the heart icon on any product to save it here.</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = savedItems.map(item => {
+        const rawContact = item.contact || '';
+        const contactHref = rawContact.startsWith('http') ? rawContact : `https://wa.me/${rawContact.replace(/[^0-9]/g, '')}?text=Hi%20${encodeURIComponent(item.seller || 'Seller')},%20I%20am%20interested%20in%20your%20wishlisted%20item:%20${encodeURIComponent(item.title || 'Item')}`;
+        const isRental = item.category === 'rentals';
+        const priceLabel = isRental ? `RM ${Number(item.price).toFixed(2)} / day` : `RM ${Number(item.price).toFixed(2)}`;
+
+        return `
+          <div class="grab-card rounded-2xl p-3 border border-slate-200 flex items-center justify-between space-x-3">
+            <div class="flex items-center space-x-3 min-w-0">
+              <img src="${item.image || 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=800'}" alt="${item.title}" class="w-14 h-14 rounded-xl object-cover border border-slate-200 shrink-0">
+              <div class="min-w-0">
+                <h4 class="font-bold text-xs text-slate-900 truncate mb-0.5">${item.title}</h4>
+                <p class="text-[10px] text-emerald-700 font-extrabold mb-0.5">${priceLabel}</p>
+                <p class="text-[9px] text-slate-500">Seller: ${item.seller}</p>
+              </div>
+            </div>
+            <div class="flex items-center space-x-1.5 shrink-0">
+              <button onclick="handleChatClick('${item.id}', '${contactHref}')" class="px-3 py-1.5 rounded-xl bg-emerald-600 text-white font-bold text-[10px] shadow-sm flex items-center space-x-1">
+                <i class="fa-brands fa-whatsapp text-xs"></i>
+                <span>Chat</span>
+              </button>
+              <button onclick="toggleWishlist('${item.id}')" class="px-2 py-1.5 rounded-xl bg-slate-100 text-rose-500 hover:bg-rose-50 text-xs">
+                <i class="fa-solid fa-trash-can"></i>
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    /* RENDER ME / PROFILE TAB DETAILS */
+    function renderMeTabDetails() {
+      if (!currentUser) return;
+      document.getElementById('meTabUsername').innerText = currentUser;
+      document.getElementById('meTabEmail').innerText = currentUserEmail || `${currentUser}@apm.com`;
+      
+      const sellerProfile = allSellers.find(s => s.email.toLowerCase() === currentUserEmail);
+      const isPro = sellerProfile && sellerProfile.tier === 'pro';
+
+      const tierBadge = document.getElementById('meTabTierBadge');
+      const upgradeBtn = document.getElementById('meTabUpgradeBtn');
+      const proCountdown = document.getElementById('meTabProCountdownContainer');
+      const timerDisplay = document.getElementById('meTabProCountdownTimer');
+      const profileListingCount = document.getElementById('meTabListingCount');
+
+      const myListings = allListings.filter(item => {
+        const itemSeller = (item.seller || '').toLowerCase();
+        return currentUser && (currentUser.toLowerCase() === itemSeller || currentUser.includes(itemSeller));
+      });
+      const maxAllowed = isPro ? 7 : 3;
+      if (profileListingCount) {
+        profileListingCount.innerText = `${myListings.length} / ${maxAllowed} Used`;
+      }
+
+      if (profileCountdownInterval) clearInterval(profileCountdownInterval);
+
+      if (isPro) {
+        tierBadge.innerText = "APM PRO TIER SELLER/BUYER (UNLOCKED)";
+        tierBadge.className = "inline-block px-4 py-1.5 rounded-full bg-amber-100 text-amber-900 font-extrabold text-xs border border-amber-300 mb-3 uppercase tracking-wider";
+        if (upgradeBtn) upgradeBtn.classList.add('hidden');
+        if (proCountdown) proCountdown.classList.remove('hidden');
+
+        function updateTimer() {
+          const now = new Date();
+          const expiry = new Date(sellerProfile.proExpiryDate);
+          const diffMs = expiry - now;
+
+          if (diffMs <= 0) {
+            sellerProfile.tier = 'free';
+            syncLocalStorage();
+            applyUserTheme(false);
+            clearInterval(profileCountdownInterval);
+            renderMeTabDetails();
+            return;
+          }
+
+          const hours = Math.floor(diffMs / (1000 * 60 * 60));
+          const mins = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+          const secs = Math.floor((diffMs % (1000 * 60)) / 1000);
+          timerDisplay.innerText = `${hours}h ${mins}m ${secs}s`;
+        }
+
+        updateTimer();
+        profileCountdownInterval = setInterval(updateTimer, 1000);
+      } else {
+        tierBadge.innerText = "VERIFIED SELLER/BUYER (FREE TIER)";
+        tierBadge.className = "inline-block px-4 py-1.5 rounded-full bg-emerald-50 text-emerald-800 font-extrabold text-xs border border-emerald-300 mb-3 uppercase tracking-wider";
+        if (upgradeBtn) upgradeBtn.classList.remove('hidden');
+        if (proCountdown) proCountdown.classList.add('hidden');
+      }
+    }
+
+    function renderAboutContributors() {
+      const container = document.getElementById('aboutContributorsList');
+      const addBtn = document.getElementById('addAboutContribBtn');
+      if (isFounderUser) addBtn.classList.remove('hidden');
+      else addBtn.classList.add('hidden');
+
+      container.innerHTML = allContributors.map(c => {
+        const initials = c.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+        return `
+          <div class="grab-card rounded-2xl p-3.5 border border-slate-200 flex flex-col justify-between">
+            <div class="flex items-start space-x-3 mb-2">
+              ${c.photo ? `<img src="${c.photo}" alt="${c.name}" class="w-10 h-10 rounded-xl object-cover shrink-0 border border-slate-200 shadow-sm">` : `<div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-800 font-black flex items-center justify-center text-xs shrink-0 shadow-sm">${initials}</div>`}
+              <div class="min-w-0">
+                <h4 class="font-black text-xs text-slate-900 truncate">${c.name}</h4>
+                <p class="text-[10px] font-bold text-emerald-700">${c.program}</p>
+              </div>
+            </div>
+            <p class="text-[10px] text-slate-600 leading-relaxed bg-slate-50 p-2 rounded-xl border border-slate-100">💡 "${c.desc}"</p>
+            ${isFounderUser ? `
+              <button onclick="deleteContributor('${c.id}')" title="Remove" class="text-rose-500 hover:text-rose-700 text-right text-[10px] font-bold mt-2">
+                <i class="fa-solid fa-trash-can"></i> Remove
+              </button>
+            ` : ''}
+          </div>
+        `;
+      }).join('');
+    }
+
     /* APPLY THEME DYNAMICALLY (GREEN FOR NORMAL, PURPLE FOR PRO) */
     function applyUserTheme(isPro) {
       const banner = document.getElementById('installBanner');
       const subTitle = document.getElementById('navSubTitle');
-      const shieldIcon = document.getElementById('navShieldIcon');
       const liveBanner = document.getElementById('liveSyncBanner');
       const liveDot = document.getElementById('liveDotSpan');
       const syncBorder1 = document.getElementById('syncBorder1');
@@ -1072,7 +1354,6 @@
         if (metaThemeColor) metaThemeColor.content = "#581c87";
         if (banner) banner.className = "bg-gradient-to-r from-purple-950 via-indigo-950 to-slate-900 text-white py-2 px-3 text-center text-xs font-medium flex flex-wrap items-center justify-center gap-2 sm:gap-4 border-b border-purple-700 shadow-md transition-all";
         if (subTitle) { subTitle.className = "text-[7px] sm:text-[8px] uppercase tracking-widest text-purple-600 font-bold leading-none mt-0.5 truncate"; }
-        if (shieldIcon) shieldIcon.className = "fa-solid fa-shield-halved text-purple-600";
         if (liveBanner) liveBanner.className = "bg-purple-50 border-b border-purple-200 py-1.5 px-3 text-center text-[10px] sm:text-[11px] font-medium text-purple-900 flex flex-wrap items-center justify-center gap-2 sm:gap-6 transition-all";
         if (liveDot) liveDot.className = "w-2 h-2 rounded-full bg-purple-600 animate-pulse";
         if (syncBorder1) syncBorder1.className = "flex items-center space-x-1 border-l border-purple-300 pl-2";
@@ -1091,7 +1372,6 @@
         if (metaThemeColor) metaThemeColor.content = "#059669";
         if (banner) banner.className = "bg-gradient-to-r from-emerald-900 via-teal-900 to-slate-900 text-white py-2 px-3 text-center text-xs font-medium flex flex-wrap items-center justify-center gap-2 sm:gap-4 border-b border-emerald-700 shadow-md transition-all";
         if (subTitle) { subTitle.className = "text-[7px] sm:text-[8px] uppercase tracking-widest text-emerald-600 font-bold leading-none mt-0.5 truncate"; }
-        if (shieldIcon) shieldIcon.className = "fa-solid fa-shield-halved text-emerald-600";
         if (liveBanner) liveBanner.className = "bg-emerald-50 border-b border-emerald-200 py-1.5 px-3 text-center text-[10px] sm:text-[11px] font-medium text-emerald-900 flex flex-wrap items-center justify-center gap-2 sm:gap-6 transition-all";
         if (liveDot) liveDot.className = "w-2 h-2 rounded-full bg-emerald-500 animate-pulse";
         if (syncBorder1) syncBorder1.className = "flex items-center space-x-1 border-l border-emerald-300 pl-2";
@@ -1109,36 +1389,40 @@
       }
     }
 
-    /* CAROUSEL NAVIGATION LOGIC */
-    window.scrollTeamCarousel = function(direction) {
-      const carousel = document.getElementById('teamCarousel');
-      if (!carousel) return;
-      const cardWidth = carousel.firstElementChild ? carousel.firstElementChild.clientWidth + 16 : 300;
-      carousel.scrollBy({ left: direction * cardWidth, behavior: 'smooth' });
+    window.openAddContributorModal = function() {
+      document.getElementById('addContributorModal').classList.remove('hidden');
+    };
+    window.closeAddContributorModal = function() {
+      document.getElementById('addContributorModal').classList.add('hidden');
     };
 
-    window.scrollToSlide = function(index) {
-      const carousel = document.getElementById('teamCarousel');
-      if (!carousel) return;
-      const cardWidth = carousel.firstElementChild ? carousel.firstElementChild.clientWidth + 16 : 300;
-      carousel.scrollTo({ left: index * cardWidth, behavior: 'smooth' });
+    window.handlePostContributor = async function(e) {
+      e.preventDefault();
+      const name = sanitizeInput(document.getElementById('contribName').value);
+      const program = sanitizeInput(document.getElementById('contribProgram').value);
+      const desc = sanitizeInput(document.getElementById('contribDesc').value);
+      const fileInput = document.getElementById('contribPhotoFile');
+
+      let photo = "";
+      if (fileInput.files[0]) {
+        photo = await compressImage(fileInput.files[0], 300, 0.7);
+      }
+
+      const newContrib = { id: 'contrib-' + Date.now(), name, program, desc, photo };
+      allContributors.push(newContrib);
+      localStorage.setItem('aimst_contributors', JSON.stringify(allContributors));
+      closeAddContributorModal();
+      document.getElementById('contributorForm').reset();
+      renderAboutContributors();
+      alert("Contributor added successfully to Wall of Fame!");
     };
 
-    document.getElementById('teamCarousel')?.addEventListener('scroll', () => {
-      const carousel = document.getElementById('teamCarousel');
-      const dots = document.querySelectorAll('.team-dot');
-      if (!carousel || !dots.length) return;
-      const cardWidth = carousel.firstElementChild ? carousel.firstElementChild.clientWidth + 16 : 300;
-      const activeIdx = Math.round(carousel.scrollLeft / cardWidth);
-
-      dots.forEach((dot, idx) => {
-        if (idx === activeIdx) {
-          dot.className = "team-dot w-2.5 h-2.5 rounded-full bg-emerald-600 transition-all cursor-pointer";
-        } else {
-          dot.className = "team-dot w-2.5 h-2.5 rounded-full bg-slate-300 transition-all cursor-pointer";
-        }
-      });
-    });
+    window.deleteContributor = function(id) {
+      if (!confirm("Are you sure you want to remove this contributor?")) return;
+      allContributors = allContributors.filter(c => c.id !== id);
+      localStorage.setItem('aimst_contributors', JSON.stringify(allContributors));
+      renderAboutContributors();
+    };
 
     window.forceRefreshApp = function() {
       if ('serviceWorker' in navigator) {
@@ -1221,6 +1505,11 @@
     }
 
     window.toggleWishlist = function(itemId) {
+      if (!currentUser) {
+        alert("🔒 Login Required!\n\nGuest buyers can directly contact sellers on WhatsApp, but saving items to Wishlist requires registering and logging in as a Verified APM Buyer/Seller.");
+        openAuthModal();
+        return;
+      }
       const wishlist = getWishlist();
       const idx = wishlist.indexOf(itemId);
       if (idx > -1) wishlist.splice(idx, 1);
@@ -1228,65 +1517,12 @@
       localStorage.setItem(getWishlistKey(), JSON.stringify(wishlist));
       updateMetrics();
       renderListings();
-      if (!document.getElementById('wishlistModal').classList.contains('hidden')) renderWishlist();
+      renderWishlistTab();
     };
-
-    window.openWishlistModal = function() {
-      renderWishlist();
-      document.getElementById('wishlistModal').classList.remove('hidden');
-    };
-
-    window.closeWishlistModal = function() { document.getElementById('wishlistModal').classList.add('hidden'); };
-
-    function renderWishlist() {
-      const container = document.getElementById('wishlistContainer');
-      const wishlist = getWishlist();
-      const savedItems = allListings.filter(item => wishlist.includes(item.id));
-
-      if (savedItems.length === 0) {
-        container.innerHTML = `
-          <div class="py-12 text-center text-slate-400">
-            <i class="fa-solid fa-heart-crack text-4xl mb-2 text-rose-300"></i>
-            <p class="text-xs font-bold text-slate-600">Your wishlist is empty!</p>
-          </div>
-        `;
-        return;
-      }
-
-      container.innerHTML = savedItems.map(item => {
-        const rawContact = item.contact || '';
-        const contactHref = rawContact.startsWith('http') ? rawContact : `https://wa.me/${rawContact.replace(/[^0-9]/g, '')}?text=Hi%20${encodeURIComponent(item.seller || 'Seller')},%20I%20am%20interested%20in%20your%20wishlisted%20item:%20${encodeURIComponent(item.title || 'Item')}`;
-        const isRental = item.category === 'rentals';
-        const priceLabel = isRental ? `RM ${Number(item.price).toFixed(2)} / day` : `RM ${Number(item.price).toFixed(2)}`;
-
-        return `
-          <div class="grab-card rounded-2xl p-3 border border-slate-200 flex items-center justify-between space-x-3">
-            <div class="flex items-center space-x-3 min-w-0">
-              <img src="${item.image || 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=800'}" alt="${item.title}" class="w-14 h-14 rounded-xl object-cover border border-slate-200 shrink-0">
-              <div class="min-w-0">
-                <h4 class="font-bold text-xs text-slate-900 truncate mb-0.5">${item.title}</h4>
-                <p class="text-[10px] text-emerald-700 font-extrabold mb-0.5">${priceLabel}</p>
-                <p class="text-[9px] text-slate-500">Seller: ${item.seller}</p>
-              </div>
-            </div>
-            <div class="flex items-center space-x-1.5 shrink-0">
-              <button onclick="handleChatClick('${item.id}', '${contactHref}')" class="px-3 py-1.5 rounded-xl bg-emerald-600 text-white font-bold text-[10px] shadow-sm flex items-center space-x-1">
-                <i class="fa-brands fa-whatsapp text-xs"></i>
-                <span>Chat</span>
-              </button>
-              <button onclick="toggleWishlist('${item.id}')" class="px-2 py-1.5 rounded-xl bg-slate-100 text-rose-500 hover:bg-rose-50 text-xs">
-                <i class="fa-solid fa-trash-can"></i>
-              </button>
-            </div>
-          </div>
-        `;
-      }).join('');
-    }
 
     /* BOOSTING WORKFLOW MODALS */
     window.openBoostBenefitsModal = function(itemId) {
       activeBoostItemId = itemId;
-      closeMyListingsModal();
       document.getElementById('boostBenefitsModal').classList.remove('hidden');
     };
 
@@ -1338,7 +1574,7 @@
       closeBoostModal();
       window.open(`https://wa.me/60126384757?text=${encodeURIComponent(waMsg)}`, '_blank');
       alert("Boost request & receipt notice submitted! Awaiting Founder verification.");
-      renderMyListings();
+      renderMyProductsTab();
     };
 
     window.approveBoost = async function(itemId) {
@@ -1449,7 +1685,7 @@
     };
 
     window.handleAuthClick = function() {
-      if (currentUser) openUserProfileModal();
+      if (currentUser) switchMainTab('me');
       else openAuthModal();
     };
 
@@ -1474,19 +1710,19 @@
         document.getElementById('authBtnText').innerText = `${currentUser} (${isFounderUser ? 'Founder' : 'Verified'})`;
         document.getElementById('floatingAddBtn').style.display = 'block';
         document.getElementById('addClubBtn').style.display = 'flex';
-        document.getElementById('myListingsNavBtn').style.display = 'flex';
         if (isFounderUser) document.getElementById('sellerManagerNavBtn').style.display = 'flex';
       } else {
         currentUser = null; currentUserEmail = null; isFounderUser = false;
         applyUserTheme(false);
-        document.getElementById('authBtnText').innerText = "APM Seller Login";
+        document.getElementById('authBtnText').innerText = "APM Verified Login";
         document.getElementById('floatingAddBtn').style.display = 'none';
         document.getElementById('addClubBtn').style.display = 'none';
-        document.getElementById('myListingsNavBtn').style.display = 'none';
         document.getElementById('sellerManagerNavBtn').style.display = 'none';
       }
+      updateNavTabVisuals();
       renderListings();
       renderClubs();
+      renderAboutContributors();
       if (isFounderUser) renderSellerManagerTable();
     });
 
@@ -1498,6 +1734,8 @@
       await loadListings();
       await loadClubs();
       updateMetrics();
+      renderAboutContributors();
+      updateNavTabVisuals();
       
       startDailyBoostPopupSequence();
       setInterval(startDailyBoostPopupSequence, 5 * 60 * 1000);
@@ -1920,59 +2158,6 @@
       }).join('');
     };
 
-    window.openMyListingsModal = function() {
-      if (!currentUser) return;
-      renderMyListings();
-      document.getElementById('myListingsModal').classList.remove('hidden');
-    };
-    window.closeMyListingsModal = function() { document.getElementById('myListingsModal').classList.add('hidden'); };
-
-    window.renderMyListings = function() {
-      const container = document.getElementById('myListingsContainer');
-      const myListings = allListings.filter(item => {
-        const itemSeller = (item.seller || '').toLowerCase();
-        return currentUser && (currentUser.toLowerCase() === itemSeller || currentUser.includes(itemSeller));
-      });
-
-      if (myListings.length === 0) {
-        container.innerHTML = `<div class="col-span-full py-10 text-center text-slate-400"><p class="text-xs font-bold text-slate-600">No listings posted yet.</p></div>`;
-        return;
-      }
-
-      const now = new Date();
-      container.innerHTML = myListings.map(item => {
-        let boostStatusHTML = '';
-        if (item.isBoosted && item.boostExpiryDate && new Date(item.boostExpiryDate) > now) {
-          const diffMs = new Date(item.boostExpiryDate) - now;
-          const diffHrs = Math.floor(diffMs / (1000 * 60 * 60));
-          const diffMins = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
-          boostStatusHTML = `<span class="text-[9px] font-black text-amber-900 bg-amber-100 px-2 py-0.5 rounded-md border border-amber-300 inline-block">🚀 Boosted: ${diffHrs}h ${diffMins}m remaining</span>`;
-        } else if (item.boostStatus === 'pending') {
-          boostStatusHTML = '<span class="text-[9px] font-bold text-amber-700 bg-amber-100 px-2 py-0.5 rounded-md inline-block">⏳ Boost Pending Approval</span>';
-        }
-
-        return `
-          <div class="grab-card rounded-2xl p-3 border border-slate-200 flex flex-col justify-between">
-            <div class="flex space-x-3 mb-2.5">
-              <img src="${item.image || 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=800'}" alt="${item.title}" class="w-16 h-16 rounded-xl object-cover shrink-0">
-              <div class="min-w-0 flex-1">
-                <h4 class="font-bold text-xs text-slate-900 truncate mb-0.5">${item.title}</h4>
-                <p class="text-[10px] text-emerald-700 font-extrabold mb-1">RM ${(Number(item.price)||0).toFixed(2)}</p>
-                ${boostStatusHTML}
-              </div>
-            </div>
-            <div class="grid grid-cols-2 gap-2">
-              <button onclick="openBoostBenefitsModal('${item.id}')" class="py-1.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-[10px] shadow-sm transition-all flex items-center justify-center space-x-1">
-                <i class="fa-solid fa-rocket text-[10px]"></i>
-                <span>Boost Product</span>
-              </button>
-              <button onclick="terminateListing('${item.id}')" class="py-1.5 rounded-xl bg-rose-50 hover:bg-rose-600 text-rose-600 hover:text-white font-bold text-[10px] border border-rose-200 transition-all">Delete</button>
-            </div>
-          </div>
-        `;
-      }).join('');
-    };
-
     window.renderSellerManagerTable = async function() {
       await loadSellers();
       await loadListings();
@@ -2095,7 +2280,7 @@
         await deleteDoc(doc(db, "listings", id));
         allListings = allListings.filter(item => item.id !== id);
         renderListings();
-        renderMyListings();
+        renderMyProductsTab();
         updateMetrics();
       } catch (e) { alert("Error: " + e.message); }
     };
@@ -2108,7 +2293,7 @@
         soldCount += 1;
         syncLocalStorage();
         renderListings();
-        renderMyListings();
+        renderMyProductsTab();
         updateMetrics();
       } catch (e) { alert("Error: " + e.message); }
     };
@@ -2129,96 +2314,24 @@
     window.openAuthModal = function() { document.getElementById('authModal').classList.remove('hidden'); };
     window.closeAuthModal = function() { document.getElementById('authModal').classList.add('hidden'); };
 
-    window.openUserProfileModal = function() {
-      if (!currentUser) return;
-      document.getElementById('profileUsername').innerText = currentUser;
-      document.getElementById('profileEmail').innerText = currentUserEmail || `${currentUser}@apm.com`;
-      
-      const sellerProfile = allSellers.find(s => s.email.toLowerCase() === currentUserEmail);
-      
-      // Automatic Expiry Check
-      if (sellerProfile && sellerProfile.tier === 'pro' && sellerProfile.proExpiryDate) {
-        if (new Date() > new Date(sellerProfile.proExpiryDate)) {
-          sellerProfile.tier = 'free';
-          syncLocalStorage();
-        }
-      }
-
-      const isPro = sellerProfile && sellerProfile.tier === 'pro';
-      applyUserTheme(isPro);
-
-      const tierBadge = document.getElementById('profileTierBadge');
-      const upgradeBtn = document.getElementById('profileUpgradeBtn');
-      const proCountdown = document.getElementById('proCountdownContainer');
-      const timerDisplay = document.getElementById('proCountdownTimer');
-      const profileListingCount = document.getElementById('profileListingCount');
-
-      // FIXED: Active listing usage count calculation for Pro vs Free
-      const myListings = allListings.filter(item => {
-        const itemSeller = (item.seller || '').toLowerCase();
-        return currentUser && (currentUser.toLowerCase() === itemSeller || currentUser.includes(itemSeller));
-      });
-      const maxAllowed = isPro ? 7 : 3;
-      if (profileListingCount) {
-        profileListingCount.innerText = `${myListings.length} / ${maxAllowed} Used`;
-      }
-
-      if (profileCountdownInterval) clearInterval(profileCountdownInterval);
-
-      if (isPro) {
-        tierBadge.innerText = "APM PRO TIER SELLER (UNLOCKED)";
-        tierBadge.className = "inline-block px-3 py-1 rounded-full bg-amber-100 text-amber-900 font-extrabold text-xs border border-amber-300 mb-2 uppercase tracking-wider";
-        if (upgradeBtn) upgradeBtn.classList.add('hidden');
-        if (proCountdown) proCountdown.classList.remove('hidden');
-
-        function updateTimer() {
-          const now = new Date();
-          const expiry = new Date(sellerProfile.proExpiryDate);
-          const diffMs = expiry - now;
-
-          if (diffMs <= 0) {
-            sellerProfile.tier = 'free';
-            syncLocalStorage();
-            applyUserTheme(false);
-            clearInterval(profileCountdownInterval);
-            openUserProfileModal(); // Refresh modal view
-            return;
-          }
-
-          const hours = Math.floor(diffMs / (1000 * 60 * 60));
-          const mins = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
-          const secs = Math.floor((diffMs % (1000 * 60)) / 1000);
-          timerDisplay.innerText = `${hours}h ${mins}m ${secs}s`;
-        }
-
-        updateTimer();
-        profileCountdownInterval = setInterval(updateTimer, 1000);
-      } else {
-        tierBadge.innerText = "VERIFIED SELLER (FREE TIER)";
-        tierBadge.className = "inline-block px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 font-extrabold text-xs border border-emerald-300 mb-2 uppercase tracking-wider";
-        if (upgradeBtn) upgradeBtn.classList.remove('hidden');
-        if (proCountdown) proCountdown.classList.add('hidden');
-      }
-
-      document.getElementById('userProfileModal').classList.remove('hidden');
+    window.performLogout = function() { 
+      signOut(auth).then(() => { 
+        applyUserTheme(false); 
+        switchMainTab('home'); 
+      }); 
     };
 
-    window.closeUserProfileModal = function() {
-      if (profileCountdownInterval) clearInterval(profileCountdownInterval);
-      document.getElementById('userProfileModal').classList.add('hidden');
-    };
-
-    window.openUpgradeFromProfile = function() { closeUserProfileModal(); openUpgradeModal(); };
-    window.performLogout = function() { signOut(auth).then(() => { applyUserTheme(false); closeUserProfileModal(); }); };
-    window.openFoundersModal = function() { document.getElementById('foundersModal').classList.remove('hidden'); };
-    window.closeFoundersModal = function() { document.getElementById('foundersModal').classList.add('hidden'); };
     window.openSellerManagerModal = function() { renderSellerManagerTable(); document.getElementById('sellerManagerModal').classList.remove('hidden'); };
     window.closeSellerManagerModal = function() { document.getElementById('sellerManagerModal').classList.add('hidden'); };
     window.openUpgradeModal = function() { document.getElementById('upgradeModal').classList.remove('hidden'); };
     window.closeUpgradeModal = function() { document.getElementById('upgradeModal').classList.add('hidden'); };
 
     window.openAddListingModal = function() {
-      if (!currentUser) { openAuthModal(); return; }
+      if (!currentUser) { 
+        alert("🔒 Login Required!\n\nPlease register/log in as a Verified APM Buyer/Seller to publish new items.");
+        openAuthModal(); 
+        return; 
+      }
       
       const sellerProfile = allSellers.find(s => s.email.toLowerCase() === currentUserEmail);
       const isPro = sellerProfile && sellerProfile.tier === 'pro';
@@ -2230,8 +2343,12 @@
       });
 
       if (myListings.length >= maxAllowed) {
-        alert(`Listing Limit Reached! Your current tier (${isPro ? 'Pro' : 'Free'}) allows up to ${maxAllowed} active listings. ${!isPro ? 'Upgrade to Pro Tier to post up to 7 listings!' : ''}`);
-        if (!isPro) openUpgradeModal();
+        if (!isPro) {
+          alert(`⚠️ Active Listing Limit Reached!\n\nFree Tier sellers can list up to 3 active products. To list up to 7 items, please subscribe & upgrade to Pro Tier (RM5/month)!`);
+          openUpgradeModal();
+        } else {
+          alert(`⚠️ Maximum Listing Exceeded!\n\nYou have reached the absolute maximum limit of 7 active listings for Pro Tier sellers.`);
+        }
         return;
       }
 
@@ -2273,6 +2390,7 @@
         newItem.id = ref.id;
         allListings.unshift(newItem);
         renderListings();
+        renderMyProductsTab();
         updateMetrics();
         closeAddListingModal();
         document.getElementById('listingForm').reset();
