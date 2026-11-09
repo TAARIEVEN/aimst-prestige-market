@@ -40,6 +40,12 @@
       box-shadow: 0 8px 20px -4px rgba(245, 158, 11, 0.25) !important;
     }
 
+    /* Smooth scroll behavior for carousel */
+    .smooth-carousel {
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+    }
+
     /* Hide scrollbars for clean carousel swipe */
     .no-scrollbar::-webkit-scrollbar {
       display: none;
@@ -174,11 +180,6 @@
           <i class="fa-solid fa-shield-halved"></i>
           <span class="hidden sm:inline">Admin Hub</span>
         </button>
-
-        <button onclick="handleAuthClick()" class="px-3.5 py-2 rounded-2xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs shadow-md transition-all flex items-center space-x-1.5">
-          <i class="fa-solid fa-user-shield text-emerald-400"></i>
-          <span id="authBtnText">APM Verified Login</span>
-        </button>
       </div>
 
     </div>
@@ -194,9 +195,6 @@
       <div class="rounded-3xl bg-gradient-to-br from-slate-900 via-slate-800 to-emerald-950 text-white p-6 sm:p-10 mb-6 shadow-xl relative overflow-hidden border border-emerald-500/20">
         <div class="absolute right-0 top-0 bottom-0 w-1/3 opacity-10 bg-[radial-gradient(#34d399_1px,transparent_1px)] [background-size:16px_16px] pointer-events-none"></div>
         <div class="relative z-10 max-w-xl">
-          <span class="inline-block px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-400 text-[10px] font-black uppercase tracking-widest mb-3 border border-emerald-500/30">
-            🌱 AIMST University Official PWA
-          </span>
           <h2 class="text-xl sm:text-3xl font-black tracking-tight mb-2">We Listen, We Create, You Enjoy!</h2>
           <p class="text-xs sm:text-sm text-slate-300 leading-relaxed mb-5">
             The premier student-to-student marketplace at Semeling, Kedah. Buy/sell study notes, textbooks, tech gear, hostel essentials, and rent belongings securely.
@@ -279,7 +277,7 @@
           <span class="text-[10px] text-amber-600 font-bold bg-amber-50 px-2.5 py-0.5 rounded-full border border-amber-200">🚀 Promoted</span>
         </div>
         
-        <div id="sponsoredCarousel" class="flex space-x-3 overflow-x-auto no-scrollbar pb-2 pt-1 snap-x">
+        <div id="sponsoredCarousel" class="flex space-x-3 overflow-x-auto no-scrollbar smooth-carousel pb-2 pt-1 snap-x">
           <!-- Injected via JS -->
         </div>
       </div>
@@ -718,8 +716,8 @@
       
       <div class="bg-slate-50 p-3 rounded-2xl border border-slate-200 mb-4">
         <p class="text-[11px] font-bold text-slate-800 mb-2">Scan TNG eWallet QR to Pay RM 5.00:</p>
-        <div class="w-36 h-36 mx-auto bg-white p-2 rounded-xl border border-slate-200 flex items-center justify-center">
-          <i class="fa-solid fa-qrcode text-6xl text-slate-800"></i>
+        <div class="w-36 h-36 mx-auto bg-white p-2 rounded-xl border border-slate-200 flex items-center justify-center overflow-hidden">
+          <img src="tng.png" alt="TNG QR" class="w-full h-full object-contain" onerror="this.parentElement.innerHTML='<i class=\'fa-solid fa-qrcode text-6xl text-slate-800\'></i>'">
         </div>
         <p class="text-[10px] text-slate-500 mt-2">DuitNow / TNG Reference: Founder Keven</p>
       </div>
@@ -777,8 +775,8 @@
       <p class="text-xs text-slate-600 mb-3">Amount Due: <strong id="tngPayAmountDisplay" class="text-emerald-700">RM 1.00</strong></p>
       
       <div class="bg-slate-50 p-3 rounded-2xl border border-slate-200 mb-4">
-        <div class="w-36 h-36 mx-auto bg-white p-2 rounded-xl border border-slate-200 flex items-center justify-center">
-          <i class="fa-solid fa-qrcode text-6xl text-slate-800"></i>
+        <div class="w-36 h-36 mx-auto bg-white p-2 rounded-xl border border-slate-200 flex items-center justify-center overflow-hidden">
+          <img src="tng.png" alt="TNG QR" class="w-full h-full object-contain" onerror="this.parentElement.innerHTML='<i class=\'fa-solid fa-qrcode text-6xl text-slate-800\'></i>'">
         </div>
         <p class="text-[10px] text-slate-500 mt-2">TNG eWallet / DuitNow QR</p>
       </div>
@@ -1522,14 +1520,12 @@
         const isPro = sellerProfile && sellerProfile.tier === 'pro';
         applyUserTheme(isPro);
 
-        document.getElementById('authBtnText').innerText = `${currentUser} (${isFounderUser ? 'Founder' : 'Verified'})`;
         document.getElementById('floatingPostBtn').style.display = 'block';
         document.getElementById('addClubBtn').style.display = 'flex';
         if (isFounderUser) document.getElementById('sellerManagerNavBtn').style.display = 'flex';
       } else {
         currentUser = null; currentUserEmail = null; isFounderUser = false;
         applyUserTheme(false);
-        document.getElementById('authBtnText').innerText = "APM Verified Login";
         document.getElementById('floatingPostBtn').style.display = 'none';
         document.getElementById('addClubBtn').style.display = 'none';
         document.getElementById('sellerManagerNavBtn').style.display = 'none';
@@ -1780,6 +1776,7 @@
         carouselContainer.innerHTML = boostedItems.map(item => createSponsoredCardHTML(item, now)).join('');
 
         if (boostedItems.length > 1) {
+          // Smoother & slower auto-slide every 7 seconds
           carouselAutoTimer = setInterval(() => {
             if (!carouselContainer) return;
             const maxScroll = carouselContainer.scrollWidth - carouselContainer.clientWidth;
@@ -1789,7 +1786,7 @@
             } else {
               carouselContainer.scrollBy({ left: cardWidth, behavior: 'smooth' });
             }
-          }, 5000);
+          }, 7000);
         }
       } else {
         sponsoredSec.classList.add('hidden');
