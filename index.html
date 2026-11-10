@@ -1493,38 +1493,47 @@
     window.openUpgradeModal = function() { document.getElementById('upgradeModal').classList.remove('hidden'); };
     window.closeUpgradeModal = function() { document.getElementById('upgradeModal').classList.add('hidden'); };
 
-   window.openAddListingModal = function() {
-  if (!currentUser) { 
-    alert("🔒 Login Required!\n\nPlease register/log in as a Verified APM Buyer/Seller to publish new items."); 
-    openAuthModal(); 
-    return; 
-  }
-
-  const sellerProfile = allSellers.find(s => (s.email || '').toLowerCase() === currentUserEmail);
-  const isPro = sellerProfile && sellerProfile.tier === 'pro';
-
-  // Founder bypass (no listing limits for founders)
-  const founderEmails = ['keventhiran_e25101420@apm.com', 'taarisini_e25101220@apm.com'];
-  const isFounder = founderEmails.includes((currentUserEmail || '').toLowerCase());
-
-  if (!isFounder) {
-    const maxAllowed = isPro ? 7 : 3;
-    const myListings = allListings.filter(item => {
-      const itemSeller = (item.seller || '').toLowerCase();
-      return currentUser && (currentUser.toLowerCase() === itemSeller || currentUser.includes(itemSeller));
-    });
-
-    if (myListings.length >= maxAllowed) {
-      if (!isPro) { 
-        alert(`⚠️ Active Listing Limit Reached!\n\nFree Tier sellers can list up to 3 active products. Upgrade to Pro Tier (RM5/month) for 7 listings!`); 
-        openUpgradeModal(); 
-      } else { 
-        alert(`⚠️ Maximum Listing Exceeded!\n\nYou have reached the absolute maximum limit of 7 active listings.`); 
+window.openAddListingModal = function() {
+      if (!currentUser) { 
+        alert("🔒 Login Required!\n\nPlease register/log in as a Verified APM Buyer/Seller to publish new items."); 
+        openAuthModal(); 
+        return; 
       }
-      return;
-    }
-  }
 
+      const sellerProfile = allSellers.find(s => (s.email || '').toLowerCase() === currentUserEmail);
+      const isPro = sellerProfile && sellerProfile.tier === 'pro';
+
+      // Founder bypass (no listing limits for founders)
+      const founderEmails = ['keventhiran_e25101420@apm.com', 'taarisini_e25101220@apm.com'];
+      const isFounder = founderEmails.includes((currentUserEmail || '').toLowerCase());
+
+      if (!isFounder) {
+        const maxAllowed = isPro ? 7 : 3;
+        const myListings = allListings.filter(item => {
+          const itemSeller = (item.seller || '').toLowerCase();
+          return currentUser && (currentUser.toLowerCase() === itemSeller || currentUser.includes(itemSeller));
+        });
+
+        if (myListings.length >= maxAllowed) {
+          if (!isPro) { 
+            alert(`⚠️ Active Listing Limit Reached!\n\nFree Tier sellers can list up to 3 active products. Upgrade to Pro Tier (RM5/month) for 7 listings!`); 
+            openUpgradeModal(); 
+          } else { 
+            alert(`⚠️ Maximum Listing Exceeded!\n\nYou have reached the absolute maximum limit of 7 active listings.`); 
+          }
+          return;
+        }
+      }
+
+      document.getElementById('sellerTierIndicator').innerText = isFounder ? 'Founder Unlimited Access Unlocked 🚀' : `Your Tier: ${isPro ? 'Pro Tier (Up to 7 Listings)' : 'Free Tier (Up to 3 Listings)'}`;
+      document.getElementById('categorySelect').value = 'academic';
+      onCategoryChange();
+      document.getElementById('addListingModal').classList.remove('hidden');
+    };
+
+    window.closeAddListingModal = function() { 
+      document.getElementById('addListingModal').classList.add('hidden'); 
+    };
   document.getElementById('sellerTierIndicator').innerText = isFounder ? 'Founder Unlimited Access Unlocked 🚀' : `Your Tier: ${isPro ? 'Pro Tier (Up to 7 Listings)' : 'Free Tier (Up to 3 Listings)'}`;
   document.getElementById('categorySelect').value = 'academic';
   onCategoryChange();
