@@ -1534,13 +1534,8 @@ window.openAddListingModal = function() {
     window.closeAddListingModal = function() { 
       document.getElementById('addListingModal').classList.add('hidden'); 
     };
-  document.getElementById('sellerTierIndicator').innerText = isFounder ? 'Founder Unlimited Access Unlocked 🚀' : `Your Tier: ${isPro ? 'Pro Tier (Up to 7 Listings)' : 'Free Tier (Up to 3 Listings)'}`;
-  document.getElementById('categorySelect').value = 'academic';
-  onCategoryChange();
-  document.getElementById('addListingModal').classList.remove('hidden');
-};
 
-window.handlePostListing = async function(e) {
+    window.handlePostListing = async function(e) {
       if (e) e.preventDefault();
       const submitBtn = document.getElementById('publishListingSubmitBtn');
       const title = sanitizeInput(document.getElementById('itemTitle').value);
@@ -1593,7 +1588,6 @@ window.handlePostListing = async function(e) {
         newItem.id = docRef.id;
         allListings.unshift(newItem);
 
-        // Reset button state
         if (submitBtn) {
           submitBtn.disabled = false;
           submitBtn.innerHTML = `<span>Publish Listing</span>`;
@@ -1607,7 +1601,6 @@ window.handlePostListing = async function(e) {
         document.getElementById('listingForm').reset();
         document.getElementById('imagePreviewContainer').classList.add('hidden');
 
-        // Allow the browser to paint the button reset before locking thread with alert
         setTimeout(() => {
           alert("Published listing successfully!");
         }, 50);
