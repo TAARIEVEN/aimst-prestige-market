@@ -451,7 +451,8 @@
         <div><label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">Diploma / Programme</label><input type="text" id="contribProgram" required placeholder="e.g., Diploma in Biotechnology, Aimst University" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-bold text-slate-800"></div>
         <div><label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">Upload Photo (Optional)</label><input type="file" id="contribPhotoFile" accept="image/*" class="w-full text-xs text-slate-500"></div>
         <div><label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">Contribution / Idea Shared</label><textarea id="contribDesc" rows="3" required placeholder="e.g., Suggested segregating study materials into general to specific..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-semibold text-slate-800"></textarea></div>
-        <button type="submit" class="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md">Add to Wall of Fame</button>
+        <!-- FIXED: Added type="submit" to ensure click event triggers onsubmit -->
+        <button type="submit" id="saveContribSubmitBtn" class="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md transition-all flex items-center justify-center space-x-2"><span>Add to Wall of Fame</span></button>
       </form>
     </div>
   </div>
@@ -899,26 +900,47 @@
     window.closeAddContributorModal = function() { document.getElementById('addContributorModal').classList.add('hidden'); };
 
     window.handlePostContributor = async function(e) {
-      e.preventDefault();
+      if (e) e.preventDefault();
+      const submitBtn = document.getElementById('saveContribSubmitBtn');
       const name = sanitizeInput(document.getElementById('contribName').value);
       const program = sanitizeInput(document.getElementById('contribProgram').value);
       const desc = sanitizeInput(document.getElementById('contribDesc').value);
       const fileInput = document.getElementById('contribPhotoFile');
-      let photo = "";
-      if (fileInput.files[0]) {
-        const file = fileInput.files[0];
-        const fileName = `${Date.now()}_${file.name.replace(/[^a-zA-Z0-9.]/g, "_")}`;
-        const storageRef = ref(storage, `contributors/${fileName}`);
-        const uploadSnapshot = await uploadBytes(storageRef, file);
-        photo = await getDownloadURL(uploadSnapshot.ref);
-      }
+      
       try {
+        if (submitBtn) {
+          submitBtn.disabled = true;
+          submitBtn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> <span>Adding to Wall of Fame...</span>`;
+        }
+
+        let photo = "";
+        if (fileInput.files[0]) {
+          const file = fileInput.files[0];
+          photo = await new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = error => reject(error);
+            reader.readAsDataURL(file);
+          });
+        }
+
         const newContrib = { name, program, desc, photo, createdAt: new Date().toISOString() };
         const docRef = await addDoc(collection(db, "contributors"), newContrib);
-        newContrib.id = docRef.id; allContributors.push(newContrib);
-        closeAddContributorModal(); document.getElementById('contributorForm').reset();
-        renderAboutContributors(); alert("Contributor added to Wall of Fame!");
-      } catch (err) { alert("Firebase Save Error: " + err.message); }
+        newContrib.id = docRef.id; 
+        allContributors.push(newContrib);
+        
+        closeAddContributorModal(); 
+        document.getElementById('contributorForm').reset();
+        renderAboutContributors(); 
+        alert("Contributor added to Wall of Fame!");
+      } catch (err) { 
+        alert("Firebase Save Error: " + err.message); 
+      } finally {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = `<span>Add to Wall of Fame</span>`;
+        }
+      }
     };
 
     window.deleteContributor = async function(id) {
