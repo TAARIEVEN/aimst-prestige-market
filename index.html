@@ -210,7 +210,7 @@
       </div>
     </div>
 
- <!-- ABOUT APM & FOUNDERS TAB VIEW PAGE -->
+    <!-- ABOUT APM & FOUNDERS TAB VIEW PAGE -->
     <div id="viewAbout" class="tab-view-page hidden">
       <div class="max-w-4xl mx-auto space-y-6">
         <div class="grab-card rounded-3xl p-6 sm:p-8 border border-slate-200 text-center relative overflow-hidden">
@@ -304,9 +304,13 @@
         <button onclick="handleLogin()" class="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md">Login to APM</button>
       </div>
       <div id="registerFormContainer" class="space-y-3 hidden">
-        <div><label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">Student Username</label><input type="text" id="regUser" placeholder="e.g. yourname_studentID" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-bold text-slate-800 focus:outline-none focus:border-emerald-500"></div>
+        <div class="bg-emerald-50 p-3 rounded-2xl border border-emerald-200 text-left">
+          <p class="text-[11px] font-bold text-emerald-900 mb-1"><i class="fa-solid fa-circle-info text-emerald-600"></i> Registration Criteria:</p>
+          <p class="text-[10px] text-emerald-800 leading-relaxed">Do <strong>NOT</strong> use personal Gmail. Your email <strong>MUST</strong> follow the format: <code class="bg-emerald-100 px-1 py-0.5 rounded font-bold">Firstname_matrixID@apm.com</code> (e.g., <span class="font-semibold">keventhiran_e25101420@apm.com</span>). If criteria are not met, registration will fail!</p>
+        </div>
+        <div><label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">Student Email (Firstname_matrixID@apm.com)</label><input type="text" id="regUser" placeholder="e.g. keventhiran_e25101420" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-bold text-slate-800 focus:outline-none focus:border-emerald-500"></div>
         <div><label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">Create Password</label><input type="password" id="regPass" placeholder="••••••••" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-bold text-slate-800 focus:outline-none focus:border-emerald-500"></div>
-        <p class="text-[10px] text-slate-500 italic">Note: New registrations require Founder approval before listing products.</p>
+        <div id="registerError" class="text-[11px] text-rose-500 font-bold hidden"></div>
         <button onclick="handleRegister()" class="w-full py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs shadow-md">Register Account</button>
       </div>
     </div>
@@ -540,7 +544,7 @@
   <!-- SCRIPT MODULES - PART 1 -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { initializeFirestore, memoryLocalCache, collection, getDocs, addDoc, deleteDoc, doc, updateDoc, setDoc, query, increment } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { initializeFirestore, memoryLocalCache, collection, getDocs, addDoc, deleteDoc, doc, updateDoc, setDoc, query, increment, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
     import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
     import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
 
@@ -607,6 +611,11 @@
     let profileCountdownInterval = null;
     let expiredBoostQueue = [];
 
+    // Request Notification Permission on load
+    if ("Notification" in window && Notification.permission !== "granted") {
+      Notification.requestPermission();
+    }
+
     function playWishlistBellSound() {
       try {
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -615,11 +624,23 @@
         osc.type = 'sine';
         osc.frequency.setValueAtTime(880, audioCtx.currentTime);
         osc.frequency.exponentialRampToValueAtTime(1760, audioCtx.currentTime + 0.15);
-        gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.4);
+        gain.gain.setValueAtTime(0.4, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.5);
         osc.connect(gain); gain.connect(audioCtx.destination);
-        osc.start(); osc.stop(audioCtx.currentTime + 0.4);
+        osc.start(); osc.stop(audioCtx.currentTime + 0.5);
       } catch(e) {}
+    }
+
+    function triggerDesktopNotification(title, body) {
+      playWishlistBellSound();
+      if ("Notification" in window && Notification.permission === "granted") {
+        try {
+          new Notification(title, {
+            body: body,
+            icon: "market-logo.png"
+          });
+        } catch(e) {}
+      }
     }
 
     window.addEventListener('beforeinstallprompt', (e) => {
@@ -1045,7 +1066,7 @@
       const seller = allSellers.find(s => s.id === sellerId);
       if (seller) {
         seller.proUpgradeStatus = 'rejected';
-        try { await updateDoc(doc(db, "verified_sellers", sellerId), { proUpgradeStatus: 'rejected' }); } catch(e){}
+        try { await updateDoc(doc(db, "verified_sellers", seller.id), { proUpgradeStatus: 'rejected' }); } catch(e){}
         syncLocalStorage(); renderSellerManagerTable();
       }
     };
@@ -1067,17 +1088,47 @@
     window.handleRegister = async function() {
       let rawUser = document.getElementById('regUser').value.trim().toLowerCase();
       const pass = document.getElementById('regPass').value.trim();
-      if (!rawUser || !pass) { alert("Please fill in both fields."); return; }
-      if (!rawUser.includes('@')) rawUser = `${rawUser}@apm.com`;
-      const cleanUsername = rawUser.split('@')[0];
+      const errEl = document.getElementById('registerError');
+      errEl.classList.add('hidden');
+
+      if (!rawUser || !pass) { 
+        errEl.innerText = "Please fill in all registration fields."; 
+        errEl.classList.remove('hidden'); 
+        return; 
+      }
+
+      // Format validation: must be Firstname_matrixID@apm.com
+      if (!rawUser.endsWith('@apm.com')) {
+        rawUser = `${rawUser}@apm.com`;
+      }
+      
+      const emailPrefix = rawUser.split('@')[0];
+      if (!emailPrefix.includes('_') || emailPrefix.includes('@gmail.com') || emailPrefix.includes('gmail')) {
+        errEl.innerText = "Registration Failed! You haven't followed the criteria. Email MUST be in the format: Firstname_matrixID@apm.com (e.g. keventhiran_e25101420@apm.com). Personal Gmail is not allowed.";
+        errEl.classList.remove('hidden');
+        return;
+      }
+
+      const cleanUsername = emailPrefix;
       try {
         await createUserWithEmailAndPassword(auth, rawUser, pass);
         const newSellerDoc = { id: 'seller-' + Date.now(), username: cleanUsername, email: rawUser.toLowerCase(), isVerified: false, tier: 'free' };
         try { await setDoc(doc(db, "verified_sellers", newSellerDoc.id), newSellerDoc); } catch(e){}
+        
+        // Trigger notification for founders
+        try {
+          await addDoc(collection(db, "payment_alerts"), {
+            type: "New Student Verification", seller: cleanUsername, email: rawUser, amount: "0.00", createdAt: new Date().toISOString()
+          });
+        } catch(e){}
+
         allSellers.push(newSellerDoc); syncLocalStorage(); await signOut(auth);
-        alert("Step 1 Complete! Send your Student ID proof to Founder Keven on WhatsApp.");
+        alert("Registration Successful! Your account is pending Founder approval. Please check back soon.");
         switchAuthTab('login');
-      } catch (err) { alert(`Registration Error: ${err.message}`); }
+      } catch (err) { 
+        errEl.innerText = `Registration Error: ${err.message}`;
+        errEl.classList.remove('hidden');
+      }
     };
 
     window.handleAuthClick = function() { if (currentUser) switchMainTab('me'); else openAuthModal(); };
@@ -1101,10 +1152,12 @@
 
         document.getElementById('floatingPostBtn').style.display = 'block';
         document.getElementById('addClubBtn').style.display = 'flex';
-        if (isFounderUser) document.getElementById('sellerManagerNavBtn').style.display = 'flex';
+        if (isFounderUser) {
+          document.getElementById('sellerManagerNavBtn').style.display = 'flex';
+          setupFounderRealtimeListeners();
+        }
 
         checkExpiredBoostsForSeller();
-        if (isFounderUser) checkFounderPaymentAlerts();
       } else {
         currentUser = null; currentUserEmail = null; isFounderUser = false;
         applyUserTheme(false);
@@ -1115,6 +1168,35 @@
       updateNavTabVisuals(); renderListings(); renderClubs(); loadContributors();
       if (isFounderUser) renderSellerManagerTable();
     });
+
+    // Realtime listeners for founder to get instant bell notification popup
+    function setupFounderRealtimeListeners() {
+      try {
+        onSnapshot(collection(db, "payment_alerts"), (snapshot) => {
+          snapshot.docChanges().forEach((change) => {
+            if (change.type === "added") {
+              const data = change.doc.data();
+              if (!localStorage.getItem(`apm_notified_${change.doc.id}`)) {
+                localStorage.setItem(`apm_notified_${change.doc.id}`, 'true');
+                triggerDesktopNotification("APM Founder Alert!", `${data.type} submitted by ${data.seller}! Check Admin Hub.`);
+              }
+            }
+          });
+        });
+
+        onSnapshot(collection(db, "verified_sellers"), (snapshot) => {
+          snapshot.docChanges().forEach((change) => {
+            if (change.type === "added") {
+              const data = change.doc.data();
+              if (data.isVerified === false && !localStorage.getItem(`apm_seller_notified_${change.doc.id}`)) {
+                localStorage.setItem(`apm_seller_notified_${change.doc.id}`, 'true');
+                triggerDesktopNotification("New Student Registration!", `New student ${data.username} requested verification.`);
+              }
+            }
+          });
+        });
+      } catch(e) {}
+    }
 
     function checkExpiredBoostsForSeller() {
       if (!currentUser) return;
@@ -1145,27 +1227,6 @@
     window.renewExpiredBoost = function() {
       if (expiredBoostQueue.length > 0) { const item = expiredBoostQueue[0]; closeBoostExpiredModal(); openBoostBenefitsModal(item.id); }
     };
-
-    async function checkFounderPaymentAlerts() {
-      try {
-        const q = query(collection(db, "payment_alerts"));
-        const snapshot = await getDocs(q);
-        const unreadAlerts = [];
-        snapshot.forEach(d => {
-          const alertData = d.data();
-          if (!localStorage.getItem(`apm_alert_seen_${d.id}`)) unreadAlerts.push({ id: d.id, ...alertData });
-        });
-        if (unreadAlerts.length > 0) {
-          const firstAlert = unreadAlerts[0];
-          document.getElementById('founderAlertText').innerText = `Good day Founder! Seller ${firstAlert.seller} (${firstAlert.email}) has submitted payment proof for ${firstAlert.type} (RM ${firstAlert.amount}).`;
-          document.getElementById('founderPaymentAlertModal').classList.remove('hidden');
-          localStorage.setItem(`apm_alert_seen_${firstAlert.id}`, 'true');
-        }
-      } catch(e){}
-    }
-
-    window.closeFounderAlertModal = function() { document.getElementById('founderPaymentAlertModal').classList.add('hidden'); };
-    window.openAdminHubFromAlert = function() { closeFounderAlertModal(); openSellerManagerModal(); };
 
     async function loadData() {
       checkWelcomeModal(); populateCourseDropdowns(); renderCourseFilterPills();
@@ -1604,6 +1665,13 @@
         const docRef = await addDoc(collection(db, "listings"), newItem);
         newItem.id = docRef.id;
         allListings.unshift(newItem);
+
+        // Notify founders in real-time
+        try {
+          await addDoc(collection(db, "payment_alerts"), {
+            type: "New Product Listing", seller: currentUser, email: currentUserEmail, title: title, amount: price.toFixed(2), createdAt: new Date().toISOString()
+          });
+        } catch(e){}
 
         if (submitBtn) {
           submitBtn.disabled = false;
