@@ -451,7 +451,6 @@
         <div><label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">Diploma / Programme</label><input type="text" id="contribProgram" required placeholder="e.g., Diploma in Biotechnology, Aimst University" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-bold text-slate-800"></div>
         <div><label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">Upload Photo (Optional)</label><input type="file" id="contribPhotoFile" accept="image/*" class="w-full text-xs text-slate-500"></div>
         <div><label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">Contribution / Idea Shared</label><textarea id="contribDesc" rows="3" required placeholder="e.g., Suggested segregating study materials into general to specific..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-semibold text-slate-800"></textarea></div>
-        <!-- FIXED: Added type="submit" to ensure click event triggers onsubmit -->
         <button type="submit" id="saveContribSubmitBtn" class="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md transition-all flex items-center justify-center space-x-2"><span>Add to Wall of Fame</span></button>
       </form>
     </div>
@@ -461,8 +460,14 @@
   <div id="sellerManagerModal" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm hidden flex items-center justify-center p-4 overflow-y-auto">
     <div class="bg-white rounded-3xl max-w-2xl w-full p-6 relative shadow-2xl my-8">
       <button onclick="closeSellerManagerModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
-      <h3 class="text-base font-black text-slate-900 mb-1"><i class="fa-solid fa-shield-halved text-amber-500"></i> Founder Admin Hub</h3>
+      
+      <!-- HEADER WITH FOUNDER RED QUOTA BUTTON -->
+      <div class="flex flex-wrap items-center justify-between gap-2 mb-1">
+        <h3 class="text-base font-black text-slate-900"><i class="fa-solid fa-shield-halved text-amber-500"></i> Founder Admin Hub</h3>
+        <button onclick="openFounderQuotaModal()" class="px-3 py-1.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-black text-xs shadow-md flex items-center space-x-1.5 transition-all animate-pulse"><i class="fa-solid fa-database"></i><span>Live Quota (GitHub)</span></button>
+      </div>
       <p class="text-xs text-slate-500 mb-4">Manage pending student verifications, pro upgrades, and ad boosts.</p>
+
       <div class="space-y-6 max-h-[70vh] overflow-y-auto pr-2">
         <div class="bg-amber-50 p-4 rounded-2xl border border-amber-200">
           <div class="flex items-center justify-between mb-2"><h4 class="font-bold text-xs text-amber-900 uppercase">Pending Ad Boost Requests</h4><span id="pendingBoostsCountBadge" class="px-2 py-0.5 rounded-full bg-amber-200 text-amber-900 text-[10px] font-black">0 Pending</span></div>
@@ -490,6 +495,38 @@
           </div>
         </div>
       </div>
+    </div>
+  </div>
+
+  <!-- FOUNDER LIVE QUOTA MODAL -->
+  <div id="founderQuotaModal" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-sm w-full p-6 relative shadow-2xl border-2 border-rose-500 text-center">
+      <button onclick="closeFounderQuotaModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 font-bold"><i class="fa-solid fa-xmark text-lg"></i></button>
+      <div class="w-14 h-14 rounded-2xl bg-rose-100 text-rose-600 flex items-center justify-center text-2xl mx-auto mb-3 shadow-inner"><i class="fa-solid fa-chart-pie"></i></div>
+      <h3 class="text-base font-black text-slate-900 mb-1">GitHub & Firestore Live Quota</h3>
+      <p class="text-[11px] text-slate-500 mb-4">Daily operation counts & resets based on GitHub repository & Firebase limits.</p>
+      
+      <div class="space-y-2 mb-5 text-left">
+        <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 flex items-center justify-between">
+          <span class="text-xs font-bold text-slate-700"><i class="fa-solid fa-book-open text-emerald-600 mr-1"></i> READ Operations:</span>
+          <span id="quotaReadCount" class="text-xs font-black text-emerald-700">0 / 50,000</span>
+        </div>
+        <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 flex items-center justify-between">
+          <span class="text-xs font-bold text-slate-700"><i class="fa-solid fa-pen text-amber-600 mr-1"></i> WRITE Operations:</span>
+          <span id="quotaWriteCount" class="text-xs font-black text-amber-700">0 / 20,000</span>
+        </div>
+        <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 flex items-center justify-between">
+          <span class="text-xs font-bold text-slate-700"><i class="fa-solid fa-trash text-rose-600 mr-1"></i> DELETE Operations:</span>
+          <span id="quotaDeleteCount" class="text-xs font-black text-rose-700">0 / 20,000</span>
+        </div>
+      </div>
+
+      <div class="bg-amber-50 p-3 rounded-xl border border-amber-200 text-left mb-4">
+        <p class="text-[10px] text-amber-900 font-bold">ℹ️ Automatic Daily Reset Active:</p>
+        <p id="quotaResetInfo" class="text-[9px] text-amber-800 mt-0.5">Resets automatically at midnight UTC / local daily cycle.</p>
+      </div>
+
+      <button onclick="closeFounderQuotaModal()" class="w-full py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs">Close</button>
     </div>
   </div>
 
@@ -664,6 +701,47 @@
     let carouselAnimId = null;
     let profileCountdownInterval = null;
     let expiredBoostQueue = [];
+
+    // Track GitHub & Firestore quota locally with daily reset check
+    function getTodayDateString() {
+      return new Date().toISOString().split('T')[0];
+    }
+
+    function checkAndResetDailyQuota() {
+      const today = getTodayDateString();
+      const lastResetDate = localStorage.getItem('apm_quota_reset_date');
+      if (lastResetDate !== today) {
+        localStorage.setItem('apm_quota_reset_date', today);
+        localStorage.setItem('apm_op_reads', '0');
+        localStorage.setItem('apm_op_writes', '0');
+        localStorage.setItem('apm_op_deletes', '0');
+      }
+    }
+
+    function incrementQuota(type) {
+      checkAndResetDailyQuota();
+      let key = type === 'read' ? 'apm_op_reads' : type === 'write' ? 'apm_op_writes' : 'apm_op_deletes';
+      let current = parseInt(localStorage.getItem(key)) || 0;
+      localStorage.setItem(key, (current + 1).toString());
+    }
+
+    window.openFounderQuotaModal = function() {
+      checkAndResetDailyQuota();
+      const reads = parseInt(localStorage.getItem('apm_op_reads')) || 0;
+      const writes = parseInt(localStorage.getItem('apm_op_writes')) || 0;
+      const deletes = parseInt(localStorage.getItem('apm_op_deletes')) || 0;
+
+      document.getElementById('quotaReadCount').innerText = `${reads} / 50,000 (Free Daily Limit)`;
+      document.getElementById('quotaWriteCount').innerText = `${writes} / 20,000 (Free Daily Limit)`;
+      document.getElementById('quotaDeleteCount').innerText = `${deletes} / 20,000 (Free Daily Limit)`;
+      document.getElementById('quotaResetInfo').innerText = `Current Date: ${getTodayDateString()} (Auto resets at midnight)`;
+      
+      document.getElementById('founderQuotaModal').classList.remove('hidden');
+    };
+
+    window.closeFounderQuotaModal = function() {
+      document.getElementById('founderQuotaModal').classList.add('hidden');
+    };
 
     // Request Notification Permission on load
     if ("Notification" in window && Notification.permission !== "granted") {
@@ -870,6 +948,7 @@
     }
 
     async function loadContributors() {
+      incrementQuota('read');
       try {
         const q = query(collection(db, "contributors"));
         const querySnapshot = await getDocs(q);
@@ -925,6 +1004,7 @@
         }
 
         const newContrib = { name, program, desc, photo, createdAt: new Date().toISOString() };
+        incrementQuota('write');
         const docRef = await addDoc(collection(db, "contributors"), newContrib);
         newContrib.id = docRef.id; 
         allContributors.push(newContrib);
@@ -946,6 +1026,7 @@
     window.deleteContributor = async function(id) {
       if (!confirm("Are you sure you want to remove this contributor?")) return;
       try {
+        incrementQuota('delete');
         await deleteDoc(doc(db, "contributors", id));
         allContributors = allContributors.filter(c => c.id !== id);
         renderAboutContributors(); alert("Contributor removed.");
@@ -1086,8 +1167,12 @@
       const targetItem = allListings.find(i => i.id === activeBoostItemId);
       if (!targetItem) return;
       targetItem.boostStatus = 'pending'; targetItem.boostRequestedDays = days;
-      try { await updateDoc(doc(db, "listings", activeBoostItemId), { boostStatus: 'pending', boostRequestedDays: days }); } catch(e){}
       try {
+        incrementQuota('write');
+        await updateDoc(doc(db, "listings", activeBoostItemId), { boostStatus: 'pending', boostRequestedDays: days });
+      } catch(e){}
+      try {
+        incrementQuota('write');
         await addDoc(collection(db, "payment_alerts"), {
           type: "Ad Boost", seller: currentUser, email: currentUserEmail, title: targetItem.title, amount: (days * 1.00).toFixed(2), createdAt: new Date().toISOString()
         });
@@ -1105,7 +1190,10 @@
       const days = item.boostRequestedDays || 1;
       const boostExpiry = new Date(Date.now() + (days * 24 * 60 * 60 * 1000)).toISOString();
       item.isBoosted = true; item.boostStatus = 'approved'; item.boostExpiryDate = boostExpiry;
-      try { await updateDoc(doc(db, "listings", itemId), { isBoosted: true, boostStatus: 'approved', boostExpiryDate: boostExpiry }); } catch(e){}
+      try {
+        incrementQuota('write');
+        await updateDoc(doc(db, "listings", itemId), { isBoosted: true, boostStatus: 'approved', boostExpiryDate: boostExpiry });
+      } catch(e){}
       syncLocalStorage(); renderListings(); renderSellerManagerTable();
       alert(`Approved Ad Boost for "${item.title}" (${days} days)!`);
     };
@@ -1114,7 +1202,10 @@
       const item = allListings.find(i => i.id === itemId);
       if (!item) return;
       item.isBoosted = false; item.boostStatus = 'rejected';
-      try { await updateDoc(doc(db, "listings", itemId), { isBoosted: false, boostStatus: 'rejected' }); } catch(e){}
+      try {
+        incrementQuota('write');
+        await updateDoc(doc(db, "listings", itemId), { isBoosted: false, boostStatus: 'rejected' });
+      } catch(e){}
       syncLocalStorage(); renderListings(); renderSellerManagerTable();
     };
 
@@ -1123,9 +1214,13 @@
       const seller = allSellers.find(s => s.email.toLowerCase() === currentUserEmail);
       if (seller) {
         seller.proUpgradeStatus = 'pending';
-        try { await updateDoc(doc(db, "verified_sellers", seller.id), { proUpgradeStatus: 'pending' }); } catch(e){}
+        try {
+          incrementQuota('write');
+          await updateDoc(doc(db, "verified_sellers", seller.id), { proUpgradeStatus: 'pending' });
+        } catch(e){}
       }
       try {
+        incrementQuota('write');
         await addDoc(collection(db, "payment_alerts"), {
           type: "Pro Upgrade", seller: currentUser, email: currentUserEmail, amount: "5.00", createdAt: new Date().toISOString()
         });
@@ -1178,6 +1273,7 @@
         targetItem.contact = contact;
         targetItem.desc = desc;
         try {
+          incrementQuota('write');
           await updateDoc(doc(db, "listings", itemId), { title, price, contact, desc });
         } catch(err) {}
       }
@@ -1192,7 +1288,10 @@
       if (seller) {
         seller.tier = 'pro'; seller.proUpgradeStatus = 'approved';
         seller.proExpiryDate = new Date(Date.now() + (30 * 24 * 60 * 60 * 1000)).toISOString();
-        try { await updateDoc(doc(db, "verified_sellers", sellerId), { tier: 'pro', proUpgradeStatus: 'approved', proExpiryDate: seller.proExpiryDate }); } catch(e){}
+        try {
+          incrementQuota('write');
+          await updateDoc(doc(db, "verified_sellers", sellerId), { tier: 'pro', proUpgradeStatus: 'approved', proExpiryDate: seller.proExpiryDate });
+        } catch(e){}
         syncLocalStorage(); renderSellerManagerTable();
         alert(`Approved Pro Tier for ${seller.username}!`);
       }
@@ -1202,7 +1301,10 @@
       const seller = allSellers.find(s => s.id === sellerId);
       if (seller) {
         seller.proUpgradeStatus = 'rejected';
-        try { await updateDoc(doc(db, "verified_sellers", sellerId), { proUpgradeStatus: 'rejected' }); } catch(e){}
+        try {
+          incrementQuota('write');
+          await updateDoc(doc(db, "verified_sellers", sellerId), { proUpgradeStatus: 'rejected' });
+        } catch(e){}
         syncLocalStorage(); renderSellerManagerTable();
       }
     };
@@ -1233,7 +1335,6 @@
         return; 
       }
 
-      // Format validation: must be Firstname_matrixID@apm.com
       if (!rawUser.endsWith('@apm.com')) {
         rawUser = `${rawUser}@apm.com`;
       }
@@ -1249,10 +1350,13 @@
       try {
         await createUserWithEmailAndPassword(auth, rawUser, pass);
         const newSellerDoc = { id: 'seller-' + Date.now(), username: cleanUsername, email: rawUser.toLowerCase(), isVerified: false, tier: 'free' };
-        try { await setDoc(doc(db, "verified_sellers", newSellerDoc.id), newSellerDoc); } catch(e){}
-        
-        // Trigger notification for founders
         try {
+          incrementQuota('write');
+          await setDoc(doc(db, "verified_sellers", newSellerDoc.id), newSellerDoc);
+        } catch(e){}
+        
+        try {
+          incrementQuota('write');
           await addDoc(collection(db, "payment_alerts"), {
             type: "New Student Verification", seller: cleanUsername, email: rawUser, amount: "0.00", createdAt: new Date().toISOString()
           });
@@ -1305,10 +1409,10 @@
       if (isFounderUser) renderSellerManagerTable();
     });
 
-    // Realtime listeners for founder to get instant bell notification popup
     function setupFounderRealtimeListeners() {
       try {
         onSnapshot(collection(db, "payment_alerts"), (snapshot) => {
+          incrementQuota('read');
           snapshot.docChanges().forEach((change) => {
             if (change.type === "added") {
               const data = change.doc.data();
@@ -1321,6 +1425,7 @@
         });
 
         onSnapshot(collection(db, "verified_sellers"), (snapshot) => {
+          incrementQuota('read');
           snapshot.docChanges().forEach((change) => {
             if (change.type === "added") {
               const data = change.doc.data();
@@ -1460,6 +1565,7 @@
     };
 
     async function loadListings() {
+      incrementQuota('read');
       try {
         const q = query(collection(db, "listings"));
         const querySnapshot = await getDocs(q);
@@ -1471,6 +1577,7 @@
     }
 
     async function loadClubs() {
+      incrementQuota('read');
       try {
         const q = query(collection(db, "clubs"));
         const querySnapshot = await getDocs(q);
@@ -1482,6 +1589,7 @@
     }
 
     async function loadSellers() {
+      incrementQuota('read');
       try {
         const q = query(collection(db, "verified_sellers"));
         const querySnapshot = await getDocs(q);
@@ -1503,7 +1611,10 @@
       const targetItem = allListings.find(item => item.id === id);
       if (targetItem) {
         targetItem.clicksCount = (targetItem.clicksCount || 0) + 1;
-        try { await updateDoc(doc(db, "listings", id), { clicksCount: increment(1) }); } catch(e) {}
+        try {
+          incrementQuota('write');
+          await updateDoc(doc(db, "listings", id), { clicksCount: increment(1) });
+        } catch(e) {}
       }
       window.open(contactUrl, '_blank');
     };
@@ -1660,20 +1771,32 @@
       const s = allSellers.find(x => x.id === id);
       if (s) { 
         s.isVerified = true; 
-        try { await updateDoc(doc(db, "verified_sellers", id), { isVerified: true }); } catch(e) { try { await setDoc(doc(db, "verified_sellers", id), s); } catch(err) {} }
+        try {
+          incrementQuota('write');
+          await updateDoc(doc(db, "verified_sellers", id), { isVerified: true });
+        } catch(e) { 
+          try {
+            incrementQuota('write');
+            await setDoc(doc(db, "verified_sellers", id), s);
+          } catch(err) {} 
+        }
         syncLocalStorage(); renderSellerManagerTable(); alert(`Successfully verified ${s.username}!`); 
       }
     };
 
     window.rejectSeller = async function(id) {
       allSellers = allSellers.filter(x => x.id !== id);
-      try { await deleteDoc(doc(db, "verified_sellers", id)); } catch(e){}
+      try {
+        incrementQuota('delete');
+        await deleteDoc(doc(db, "verified_sellers", id));
+      } catch(e){}
       syncLocalStorage(); renderSellerManagerTable();
     };
 
     window.terminateListing = async function(id) {
       if (!confirm("Delete listing?")) return;
       try {
+        incrementQuota('delete');
         await deleteDoc(doc(db, "listings", id));
         allListings = allListings.filter(item => item.id !== id);
         renderListings(); renderMyProductsTab(); updateMetrics();
@@ -1683,6 +1806,7 @@
     window.markItemSold = async function(id) {
       if (!confirm("Mark as sold?")) return;
       try {
+        incrementQuota('delete');
         await deleteDoc(doc(db, "listings", id));
         allListings = allListings.filter(item => item.id !== id);
         soldCount += 1; syncLocalStorage(); renderListings(); renderMyProductsTab(); updateMetrics();
@@ -1798,12 +1922,13 @@
           createdAt: new Date().toISOString()
         };
 
+        incrementQuota('write');
         const docRef = await addDoc(collection(db, "listings"), newItem);
         newItem.id = docRef.id;
         allListings.unshift(newItem);
 
-        // Notify founders in real-time
         try {
+          incrementQuota('write');
           await addDoc(collection(db, "payment_alerts"), {
             type: "New Product Listing", seller: currentUser, email: currentUserEmail, title: title, amount: price.toFixed(2), createdAt: new Date().toISOString()
           });
@@ -1863,6 +1988,7 @@
         }
 
         const newClub = { name, category, contact, desc, logo, createdBy: currentUser };
+        incrementQuota('write');
         const docRef = await addDoc(collection(db, "clubs"), newClub);
         newClub.id = docRef.id;
         allClubs.unshift(newClub);
