@@ -10,9 +10,10 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="AIMST Market">
   <link rel="apple-touch-icon" href="market-logo.png">
-  <meta name="theme-color" content="#059669" id="metaThemeColor">
+  <meta name="theme-color" content="#ffffff" id="metaThemeColor">
 
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="apm-config.js" defer></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     body { background-color: #f8fafc; color: #0f172a; }
@@ -26,11 +27,99 @@
     .nav-bottom-btn.active-pro-tab { color: #7c3aed; }
     .nav-bottom-btn.disabled-tab { opacity: 0.4; cursor: not-allowed; filter: grayscale(80%); }
   </style>
+
+  <style id="apmPremiumDesign">
+    :root{color-scheme:light;--apm-ink:#101828;--apm-muted:#667085;--apm-line:#e9edf2;--apm-green:#087b5d;--apm-bg:#fff}
+    html{scroll-behavior:smooth;scroll-padding-top:102px}*,*::before,*::after{box-sizing:border-box}
+    body,#appBodyTag{background:#fff!important;color:var(--apm-ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Arial,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+    button,a,input,select,textarea{-webkit-tap-highlight-color:transparent}button,a{touch-action:manipulation}button{cursor:pointer}button:disabled{cursor:not-allowed;opacity:.65}
+    button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid #74d6b9;outline-offset:2px}
+    .grab-card{background:#fff!important;border:1px solid var(--apm-line)!important;box-shadow:0 2px 12px rgba(16,24,40,.035)!important;transition:box-shadow .2s ease,transform .2s ease,border-color .2s ease}
+    .grab-card:hover{box-shadow:0 9px 28px rgba(16,24,40,.08)!important;border-color:#d5dce5!important;transform:translateY(-2px)}
+    .boosted-card{border:1.5px solid #ead8a1!important;background:#fff!important;box-shadow:0 5px 25px rgba(154,111,31,.07)!important}
+    .apm-hero{background:radial-gradient(circle at 94% 12%,rgba(201,247,221,.72),transparent 29%),linear-gradient(125deg,#f8fffc 0%,#f2f9f6 56%,#f8fafc 100%);border:1px solid #e0eee7;border-radius:30px;min-height:220px}
+    .apm-eyebrow{display:inline-flex;align-items:center;gap:7px;color:#087b5d;text-transform:uppercase;font-weight:800;font-size:10px;letter-spacing:.11em;margin:0 0 14px}
+    header{background:rgba(255,255,255,.96)!important;box-shadow:none!important;border-color:#ecf0f2!important}
+    main{padding-bottom:28px}#installBanner{background:#f5faf7!important;color:#24634e!important;border-bottom:1px solid #e5eee9!important;box-shadow:none!important}#installBanner button{background:white!important;color:#1e5545!important;border:1px solid #dce7df!important;box-shadow:none!important}
+    #liveSyncBanner{background:white!important;color:#64748b!important;border-bottom:1px solid #f0f2f4!important;font-weight:500!important}#liveSyncBanner #liveDotSpan{background:#0e9f6e!important}
+    #listingCount,#sponsoredSection h3{letter-spacing:-.01em;text-transform:none!important;font-size:15px!important;color:#101828!important}
+    #searchInput{font-size:14px!important;border-color:#e4e9ef!important;min-height:52px!important;background:#f9fbfa!important;border-radius:18px!important;box-shadow:none!important}
+    .category-btn{border-radius:17px!important;min-height:82px;gap:4px;padding:11px 5px!important}.category-btn i{font-size:18px!important}.category-btn span{font-size:10px!important;line-height:1.3}
+    .category-btn.bg-emerald-50{background:#effaf4!important;border-color:#89dcb7!important;box-shadow:0 0 0 1px #89dcb7 inset!important}
+    #sponsoredCarousel{scrollbar-width:none}#listingsGrid img{aspect-ratio:1;object-fit:cover}
+    #listingsGrid .grab-card{border-radius:20px!important}#listingsGrid .grab-card>div:last-child{min-width:0}
+    #listingsGrid .grab-card h4{font-size:13px!important;font-weight:750!important;letter-spacing:-.01em}
+    #listingsGrid .grab-card .text-emerald-700{color:#087b5d!important}
+    .apm-pro-ribbon{position:absolute;bottom:9px;left:9px;border:1px solid #eed99d;background:rgba(255,255,255,.96);color:#84571f;font-size:9px;letter-spacing:.02em;border-radius:100px;padding:5px 8px;font-weight:850;box-shadow:0 3px 10px rgba(0,0,0,.09)}
+    .apm-pro-card{border-color:#e9deb9!important}.apm-priority-note{font-size:10px;color:#8b651f;font-weight:700}
+    .apm-icon-button{display:inline-flex;align-items:center;justify-content:center;width:37px;height:37px;border:1px solid #edf0f3;border-radius:13px;background:#fff;color:#3d5062;font-size:14px;transition:.15s ease}
+    .apm-icon-button:hover{background:#f2f6f4;color:#087b5d}.apm-notif-count{position:absolute;top:-5px;right:-5px;background:#e65450;color:white;border-radius:99px;min-width:17px;height:17px;font-size:9px;font-weight:900;display:grid;place-items:center;border:2px solid white}
+    .apm-notif-count.hidden{display:none}.apm-dialog{max-height:calc(100dvh - 28px);overflow-y:auto;box-shadow:0 18px 60px rgba(10,22,30,.16)!important}
+    .apm-auth-icon{height:44px;width:44px;border-radius:15px;background:#ecfaf1;color:#087b5d;display:grid;place-items:center;font-size:20px;margin-bottom:13px}
+    .apm-auth-switch{background:#f3f6f4;padding:5px;border-radius:15px;display:grid;grid-template-columns:1fr 1fr;gap:4px}
+    .apm-auth-tab{font-weight:800;font-size:12px;padding:10px 6px;color:#718096;border-radius:11px}.apm-auth-tab.selected{background:#fff;color:#102a22;box-shadow:0 2px 10px rgba(22,41,32,.08)}
+    .apm-form-label{font-size:11px;font-weight:760;color:#3b4856;display:block;margin-bottom:6px}.apm-field{background:#fbfcfd;border:1px solid #e3e9ed;border-radius:13px;padding:12px 13px;width:100%;font-size:13px;color:#10202e;min-height:45px;outline:0}.apm-field:focus{border-color:#41a887;box-shadow:0 0 0 3px rgba(33,156,115,.10)}
+    .apm-form-error{font-size:11px;color:#ad2942;font-weight:700;background:#fff2f3;border:1px solid #f6d6d9;border-radius:11px;padding:10px}.apm-submit{min-height:47px;background:#098765;color:white;border-radius:14px;padding:12px 16px;display:flex;align-items:center;justify-content:center;gap:10px;width:100%;font-weight:800;font-size:13px}.apm-submit:hover{background:#076b50}
+    .apm-soft-panel{border:1px solid #e8eee9;border-radius:15px;background:#f8fbf9}.apm-small-action{border-radius:11px;padding:9px 12px;background:#e8f8ee;color:#076947;font-weight:800;font-size:11px}.apm-small-action:hover{background:#d5f2e0}
+    .apm-profile-perks{background:#fffbef;border:1px solid #f3e6be;border-radius:13px;padding:12px;color:#856419;font-size:11px;font-weight:700;line-height:1.6}
+    .apm-inbox-entry{display:flex;align-items:flex-start;gap:10px;padding:11px;background:#fafcfb;border:1px solid #edf1ee;border-radius:13px}.apm-inbox-entry i{color:#118363;margin-top:2px}.apm-inbox-entry strong{font-size:12px;display:block;color:#152c22}.apm-inbox-entry p{font-size:11px;color:#596b66;margin-top:3px;line-height:1.4}.apm-inbox-entry time{font-size:10px;color:#8d9793}
+    #sellerManagerNavBtn{background:#fff8e6!important;color:#976b1e!important;border:1px solid #f4e6b8!important}
+    nav{padding-bottom:max(9px,env(safe-area-inset-bottom))!important;background:rgba(255,255,255,.98)!important;box-shadow:0 -7px 24px rgba(21,38,49,.04)!important;border-top:1px solid #eef1f3!important}
+    .nav-bottom-btn{min-height:47px;border-radius:13px;gap:2px}.nav-bottom-btn i{font-size:17px!important}.nav-bottom-btn span{font-size:9px!important}.nav-bottom-btn.active-tab,.nav-bottom-btn.active-pro-tab{background:#ebf8f1;color:#087b5d!important}
+    #floatingPostBtnContainer{right:16px;bottom:calc(80px + env(safe-area-inset-bottom))}#floatingPostBtn{border-radius:999px!important;box-shadow:0 7px 24px rgba(10,127,89,.23)!important}
+    .tab-view-page .rounded-3xl{border-radius:23px}.tab-view-page button{transition:background .17s ease,transform .16s ease,border-color .16s ease}
+    .tab-view-page button:active,.apm-icon-button:active,.apm-submit:active{transform:scale(.97)}
+    #randomBoostPopupModal{animation:apmFade .2s ease}@keyframes apmFade{from{opacity:0}to{opacity:1}}
+    #apmMusicControl{position:fixed;z-index:35;left:12px;bottom:calc(85px + env(safe-area-inset-bottom));min-height:43px;display:inline-flex;align-items:center;gap:9px;padding:9px 13px 9px 10px;border:1px solid #dceae2;border-radius:999px;background:rgba(255,255,255,.97);box-shadow:0 5px 22px rgba(18,48,37,.11);color:#28654d;font-size:11px;font-weight:800;backdrop-filter:blur(12px);transition:border-color .18s,box-shadow .18s,transform .18s}
+    #apmMusicControl:hover{border-color:#71c5a0;box-shadow:0 8px 26px rgba(18,48,37,.16)}
+    #apmMusicControl:active{transform:scale(.97)}#apmMusicControl.is-playing{color:#087b5d;border-color:#8bdbb5;background:#f4fffa}
+    #apmMusicControl .apm-music-icon{display:grid;place-items:center;width:25px;height:25px;background:#e8f9ef;border-radius:50%;font-size:11px}
+    @media (max-width:540px){header .max-w-6xl{padding:10px 11px!important}header h1{font-size:11px!important;line-height:1.2!important;max-width:165px}header img{width:32px!important;height:32px!important}#headerAuthBtn{padding:9px 10px!important;font-size:10px!important}#headerAuthText{max-width:64px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}#sellerManagerNavBtn{padding:9px!important}#notificationsBtn,#soundToggle{width:32px;height:34px;border-radius:11px}#installBanner{padding:7px!important;font-size:10px!important;gap:6px!important}#installBanner button{font-size:10px!important;padding:5px 9px!important}#liveSyncBanner{font-size:9px!important;gap:8px!important}main{padding:13px 12px 22px!important}.apm-hero{border-radius:23px;padding:24px 18px!important;min-height:225px}.apm-hero h2{font-size:26px!important;line-height:1.12}.apm-hero p{font-size:12px!important}.apm-hero button{font-size:11px!important;min-height:39px}.category-btn{min-height:75px;padding:8px 3px!important;border-radius:14px!important}.category-btn span{font-size:9px!important}.category-btn i{font-size:16px!important}#listingsGrid{gap:10px!important}#listingsGrid .grab-card h4{font-size:12px!important}#listingsGrid .grab-card .p-2\.5{padding:9px!important}#listingsGrid .grab-card button{min-height:27px}#viewMyProducts>.flex{align-items:flex-start;gap:9px}#viewMyProducts>.flex>button{flex-shrink:0}#floatingPostBtnContainer{right:12px}#floatingPostBtn{padding:10px 12px!important}#floatingPostBtn span{font-size:11px}#notificationsHeading{font-size:20px}#sellerManagerModal .flex.items-center.justify-between{gap:7px}}
+    @media (max-width:370px){header h1{max-width:130px;font-size:10px!important}#soundToggle{display:none}#installBanner{display:none}.category-btn span{font-size:8px!important}}
+    @media all and (display-mode:standalone){#installBanner{display:none!important}}
+    @media(prefers-reduced-motion:reduce){*,*::after,*::before{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
+  </style>
+<style>
+/* APM WHITE / BLUE / GOLD MARBLE CAMPUS EDITION */
+:root{--apm-blue:#103f72;--apm-gold:#d1a65d;--apm-subtle:#64748b}
+body,#appBodyTag{background:#f8fafc url('./apm-marble-bg.webp') center top / cover fixed no-repeat!important;color:#14273c!important}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;background:rgba(255,255,255,.37);z-index:-1}
+#viewHome,#viewCampusHub,#viewMyProducts,#viewWishlist,#viewMe,#viewAbout{min-width:0}
+.grab-card,.apm-hub-shell,.apm-advanced,.apm-feature-card{background:rgba(255,255,255,.95)!important;box-shadow:0 8px 32px rgba(23,65,106,.095)!important;border:1px solid rgba(206,224,236,.94)!important;backdrop-filter:blur(11px)}
+#viewHome .apm-hero{background:linear-gradient(105deg,rgba(255,255,255,.95),rgba(231,244,252,.91))!important;border:1px solid #d6e7ef;box-shadow:0 20px 48px rgba(14,66,111,.12)}
+#viewHome .apm-hero h2{color:#173451!important}
+header,nav.fixed{background:rgba(255,255,255,.94)!important;backdrop-filter:blur(17px)}
+#listingsGrid>div{min-width:0}
+.apm-entry-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin:12px 0 20px}
+.apm-entry-row button{display:flex;min-height:80px;align-items:center;gap:7px;justify-content:center;flex-direction:column;padding:12px 7px;text-align:center;background:rgba(255,255,255,.96);border:1px solid #d4e5f1;border-radius:19px;font-weight:750;font-size:11px;color:#173f67;box-shadow:0 6px 18px #103f720e;transition:transform .2s,box-shadow .2s}
+.apm-entry-row button i{font-size:18px;color:#b88d47}.apm-entry-row button:active{transform:scale(.97)}
+.apm-advanced{border-radius:20px;margin:0 0 20px;padding:15px;max-width:100%;overflow:hidden}
+.apm-advanced summary{cursor:pointer;font-size:12px;list-style:none;font-weight:800;display:flex;justify-content:space-between;align-items:center;color:#173d63}
+.apm-advanced summary::-webkit-details-marker{display:none}.apm-advanced .filter-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:15px 0 10px}
+.apm-advanced label,.apm-label{display:flex;flex-direction:column;gap:7px;color:#43546c;font-size:11px;font-weight:750}
+.apm-advanced select,.apm-advanced input,.apm-field{background:#fff;border:1px solid #dbe5ed;min-height:42px;border-radius:12px;font-size:13px;width:100%;min-width:0;padding:10px 11px;color:#173451;outline:none}
+.apm-field:focus,.apm-advanced select:focus,.apm-advanced input:focus{border-color:#3c7ba3;box-shadow:0 0 0 3px #3c7ba322}
+.apm-hub-shell{border-radius:25px;padding:16px;min-height:350px}.apm-hub-tabs{display:flex;gap:8px;max-width:100%;overflow-x:auto;scrollbar-width:none;padding:4px 0 13px;scroll-snap-type:x mandatory}
+.apm-hub-tab{flex:0 0 auto;scroll-snap-align:start;border:1px solid #dce9f0;background:#fff;color:#63788a;min-height:47px;border-radius:13px;padding:9px 12px;display:flex;align-items:center;gap:8px;font-size:11px;font-weight:750}
+.apm-hub-tab.selected{background:#103f72;border-color:#103f72;color:#fff}.apm-hub-tab i{color:#c69c59}.apm-hub-tab.selected i{color:#ffe2a0}
+.apm-section-intro{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:18px}.apm-section-intro h3{font-size:18px;font-weight:850;color:#173451;letter-spacing:-.35px}.apm-section-intro p{font-size:12px;color:#64748b;margin-top:4px;line-height:1.6;max-width:560px}
+.apm-record{background:#fff;border:1px solid #e1eaf1;border-radius:16px;padding:15px;margin-bottom:11px;box-shadow:0 3px 12px #103f7209;overflow-wrap:anywhere}.apm-record p{font-size:12px;line-height:1.65;color:#56657a;margin-top:7px}.apm-record strong{font-size:13px;color:#203952;font-weight:800}
+.apm-record-head{display:flex;align-items:flex-start;justify-content:space-between;gap:9px}.apm-state{display:inline-flex;align-items:center;justify-content:center;background:#edf2f7;color:#567;border-radius:999px;font-size:10px;text-transform:capitalize;padding:5px 9px;font-weight:800;white-space:nowrap}.state-confirmed,.state-available,.state-collected,.state-resolved,.state-accepted{background:#e4f8ed;color:#17694b}.state-requested,.state-pending,.state-reserved,.state-countered{background:#fff5dd;color:#865a12}.state-declined,.state-cancelled,.state-sold,.state-dismissed{background:#fce9e9;color:#a63d3d}
+.apm-action-row{display:flex;flex-wrap:wrap;align-items:center;gap:7px;margin:12px 0 0}.apm-action{display:inline-flex;align-items:center;justify-content:center;min-height:38px;border:1px solid #ccdeea;border-radius:11px;padding:8px 13px;font-size:11px;font-weight:800;background:#f8fbff;color:#174a72}.apm-action:active{transform:scale(.98)}.apm-action-primary{border-color:#14416f;background:#14416f;color:#fff}.apm-action-full{width:100%;margin-top:13px;min-height:47px}
+.apm-empty{margin:12px auto;padding:28px 18px;text-align:center;color:#748395;background:#f8fafc;border-radius:16px}.apm-empty i{display:block;font-size:29px;color:#c2a06b;margin-bottom:8px}.apm-empty p{font-size:12px}.apm-help{font-size:12px;line-height:1.6;color:#65758b;margin:10px 0}.apm-label{margin:12px 0}.apm-subheading{margin:17px 0 11px;font-size:13px;color:#214565;font-weight:800}.apm-product-heading{display:flex;gap:10px;align-items:center;justify-content:space-between;margin:13px 0;color:#173451}.apm-product-heading strong{font-size:16px}.apm-product-heading span{color:#12614f;font-weight:850;font-size:15px;white-space:nowrap}
+.apm-chip-row{display:flex;gap:8px;flex-wrap:wrap}.apm-chip{background:#fff;border:1px solid #d6e3ea;padding:9px 12px;border-radius:20px;text-transform:capitalize;font-size:11px;font-weight:800;color:#30516e}.apm-chip.on{color:#fff;background:#1c597e;border-color:#1c597e}
+.apm-stat-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:12px 0 18px}.apm-stat-grid>div{padding:16px 13px;background:#f2f7fa;border:1px solid #dce9ef;border-radius:15px}.apm-stat-grid span{display:block;font-size:10px;color:#65768a}.apm-stat-grid strong{display:block;font-size:24px;margin-top:6px;color:#163d62}.apm-mini-stats{display:flex;gap:12px;flex-wrap:wrap;font-size:11px;color:#64748b;margin:9px 0}.apm-mini-stats i{color:#c39e66}.apm-replies{margin-top:12px;background:#f5f8fb;border-radius:11px;padding:11px;border:1px solid #e1eaf1}.apm-replies strong{font-size:11px}.apm-replies p{border-top:1px solid #e2e9ed;padding-top:8px}
+.apm-card-tools{padding:0 11px 8px}.apm-card-subline{display:flex;align-items:center;justify-content:space-between;gap:6px;font-size:9px;color:#677f91;white-space:nowrap;overflow:hidden}.apm-card-subline span{overflow:hidden;text-overflow:ellipsis}.apm-card-tool-row{display:flex;gap:4px;margin-top:7px;flex-wrap:wrap}.apm-card-tool-row button{font-size:9px;display:inline-flex;align-items:center;gap:4px;font-weight:800;padding:7px 8px;border-radius:9px;background:#eef4fa;color:#204d76;flex:1 1 auto;justify-content:center;min-height:32px}.apm-card-tool-row button:first-child{background:#143f6c;color:#fff}.apm-seller-link-small{font-size:10px;color:#22577c;font-weight:800;overflow:hidden;text-overflow:ellipsis;max-width:45%;white-space:nowrap;text-align:left}.apm-seller-link{display:block;padding:12px;border-radius:13px;width:100%;background:#f1f7fa;text-align:left;color:#20496e;font-size:12px;font-weight:800;margin-top:12px}.apm-detail-photo{width:100%;aspect-ratio:16/10;border-radius:14px;object-fit:cover;background:#f2f6fa}.apm-detail-desc{color:#51687b;font-size:12px;line-height:1.7;white-space:pre-line}
+.apm-store-head{display:flex;align-items:center;gap:13px;background:#f5f9fc;border-radius:14px;padding:12px}.apm-store-head strong{font-size:16px;color:#1d4362}.apm-store-head p{font-size:12px;color:#667b89;margin:4px 0}.apm-store-avatar{width:54px;height:54px;flex:0 0 auto;background:#deeefa;border-radius:15px;display:grid;place-items:center;color:#2e5d7d;font-size:21px}.apm-rating{color:#ad7b2b;font-weight:850;font-size:12px}.apm-store-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.apm-store-item{text-align:left;padding:9px;border:1px solid #e0e9ee;border-radius:12px;background:#fff;min-width:0}.apm-store-item img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:9px}.apm-store-item span{display:block;font-size:11px;color:#304d6a;margin:6px 0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.apm-store-item b{font-size:11px;color:#1d6656}.apm-review{border-top:1px solid #e2e8ee;padding:10px 0;font-size:11px}.apm-review span{color:#d1a14b}.apm-review p{margin:4px 0;color:#546980}.apm-review small{color:#8c9dad}
+.apm-modal-open{overflow:hidden}#apmFeatureModal{background:rgba(8,23,45,.58);backdrop-filter:blur(6px)}#apmFeatureModal .apm-modal-sheet{max-width:560px;width:100%;max-height:min(86dvh,830px);overflow-y:auto;margin:auto;padding:21px;background:#fff;border:1px solid #e0eaf1;border-radius:25px;box-shadow:0 22px 65px #081c3955}#apmFeatureModal header{position:static;background:#fff!important;box-shadow:none;border:0;display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:14px}#apmFeatureModal h2{font-size:19px;font-weight:850;letter-spacing:-.45px;color:#173955}#apmFeatureModal header button{width:34px;height:34px;flex:0 0 auto;border-radius:12px;background:#edf2f5;color:#547086}
+@media(max-width:640px){body,#appBodyTag{background-position:center top!important;background-attachment:scroll!important}.apm-advanced .filter-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.apm-stat-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.apm-hub-shell{padding:12px}.apm-entry-row{gap:7px}.apm-entry-row button{min-height:73px;padding:9px 6px;font-size:10px}#apmFeatureModal{align-items:flex-end!important;padding:0!important}#apmFeatureModal .apm-modal-sheet{max-height:90dvh;border-radius:24px 24px 0 0;padding:19px 17px calc(16px + env(safe-area-inset-bottom))}#listingsGrid{gap:10px!important}.apm-card-tool-row button{font-size:9px}.apm-record{padding:12px}.apm-section-intro h3{font-size:16px}}
+@media(prefers-reduced-motion:reduce){.apm-entry-row button{transition:none}}
+</style>
 </head>
-<body id="appBodyTag" class="min-h-screen font-sans selection:bg-amber-400 selection:text-slate-950 pb-32">
+<body id="appBodyTag" class="min-h-screen font-sans selection:bg-emerald-100 selection:text-emerald-950 pb-32">
 
   <!-- WELCOME POPUP MODAL -->
-  <div id="welcomeModal" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4 transition-all duration-300">
+  <div id="welcomeModal" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm hidden items-center justify-center p-4 transition-all duration-300">
     <div class="bg-white text-slate-900 rounded-3xl max-w-sm w-full p-6 sm:p-8 relative shadow-2xl text-center border-2 border-emerald-500/20 overflow-hidden">
       <button onclick="window.closeWelcomeModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center font-bold text-sm transition-all z-20">
         <i class="fa-solid fa-xmark"></i>
@@ -82,15 +171,17 @@
   <!-- MAIN HEADER / NAVBAR -->
   <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm">
     <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
-      <div class="flex items-center space-x-3 cursor-pointer" onclick="switchMainTab('home')">
+      <div class="flex items-center space-x-2 min-w-0 cursor-pointer" onclick="switchMainTab('home')">
         <img src="market-logo.png" alt="Logo" class="w-9 h-9 sm:w-10 sm:h-10 object-contain drop-shadow" onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=400'">
         <div>
           <h1 class="font-black text-xs sm:text-base text-slate-900 tracking-tight leading-none">AIMST PRESTIGE MARKET</h1>
-          <p id="navSubTitle" class="text-[7px] sm:text-[8px] uppercase tracking-widest text-emerald-600 font-bold leading-none mt-0.5 truncate">Student Marketplace & Study Hub</p>
+          <p id="navSubTitle" class="text-[8px] sm:text-[9px] tracking-wide text-emerald-700 font-semibold leading-none mt-1 truncate">Exclusively for AIMST</p>
         </div>
       </div>
-      <div class="flex items-center space-x-2">
-        <button id="sellerManagerNavBtn" onclick="openSellerManagerModal()" class="hidden px-3 py-2 rounded-xl bg-amber-100 hover:bg-amber-200 text-amber-900 font-black text-xs items-center space-x-1 border border-amber-300 shadow-sm"><i class="fa-solid fa-shield-halved"></i><span class="hidden sm:inline">Admin Hub</span></button>
+      <div class="flex items-center space-x-1.5 shrink-0">
+         <button id="soundToggle" type="button" class="apm-icon-button" onclick="toggleAPMSound()" aria-label="Toggle button sounds" title="Toggle button sounds"><i class="fa-solid fa-volume-xmark" id="soundIcon"></i></button>
+         <button id="notificationsBtn" type="button" class="apm-icon-button relative" onclick="openNotificationCenter()" aria-label="Notifications" title="Notifications"><i class="fa-regular fa-bell"></i><span id="notificationCount" class="apm-notif-count hidden">0</span></button>
+         <button id="sellerManagerNavBtn" onclick="openSellerManagerModal()" class="hidden px-3 py-2 rounded-xl bg-amber-100 hover:bg-amber-200 text-amber-900 font-black text-xs items-center space-x-1 border border-amber-300 shadow-sm"><i class="fa-solid fa-shield-halved"></i><span class="hidden sm:inline">Admin Hub</span></button>
         <button id="headerAuthBtn" onclick="handleAuthClick()" class="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xs flex items-center space-x-1.5 shadow-sm transition-all"><i id="headerAuthIcon" class="fa-solid fa-right-to-bracket"></i><span id="headerAuthText">Login</span></button>
       </div>
     </div>
@@ -101,14 +192,14 @@
 
     <!-- HOME TAB VIEW PAGE -->
     <div id="viewHome" class="tab-view-page">
-      <div class="rounded-3xl bg-gradient-to-br from-slate-900 via-slate-800 to-emerald-950 text-white p-6 sm:p-10 mb-6 shadow-xl relative overflow-hidden border border-emerald-500/20">
+      <div class="rounded-3xl apm-hero text-slate-900 p-6 sm:p-10 mb-6 relative overflow-hidden">
         <div class="absolute right-0 top-0 bottom-0 w-1/3 opacity-10 bg-[radial-gradient(#34d399_1px,transparent_1px)] [background-size:16px_16px] pointer-events-none"></div>
         <div class="relative z-10 max-w-xl">
-          <h2 class="text-xl sm:text-3xl font-black tracking-tight mb-2">We Listen, We Create, You Enjoy!</h2>
-          <p class="text-xs sm:text-sm text-slate-300 leading-relaxed mb-5">A marketplace for AIMST students and staff to buy, sell, and rent items easily and safely.</p>
+          <div class="apm-eyebrow"><i class="fa-solid fa-circle-check"></i> Made for the AIMST community</div><h2 class="text-2xl sm:text-4xl font-black tracking-tight mb-2">Your campus. Your marketplace.</h2>
+          <p class="text-sm text-slate-600 leading-relaxed mb-5 max-w-md">Buy, sell, rent and discover campus essentials from fellow AIMST students and staff.</p>
           <div class="flex flex-wrap items-center gap-3">
             <button onclick="openAddListingModal()" class="px-5 py-2.5 rounded-2xl bg-emerald-500 hover:bg-emerald-600 text-white font-black text-xs shadow-lg shadow-emerald-500/30 transition-all flex items-center space-x-2"><i class="fa-solid fa-plus"></i><span>Post Listing Now</span></button>
-            <button onclick="scrollToClubs()" class="px-4 py-2.5 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs backdrop-blur-md transition-all border border-white/20 flex items-center space-x-1.5"><i class="fa-solid fa-users"></i><span>Campus Clubs Hub</span></button>
+            <button onclick="scrollToClubs()" class="px-4 py-2.5 rounded-2xl bg-white hover:bg-slate-50 text-slate-800 font-bold text-xs transition-all border border-slate-200 flex items-center space-x-1.5"><i class="fa-solid fa-users"></i><span>Campus Clubs Hub</span></button>
           </div>
         </div>
       </div>
@@ -128,7 +219,8 @@
           <button onclick="setCategory('services', this)" class="category-btn grab-card p-2.5 rounded-2xl flex flex-col items-center justify-center text-center transition-all group"><i class="fa-solid fa-print text-emerald-600 text-base mb-1"></i><span class="text-[10px] font-bold text-slate-800">Services</span></button>
         </div>
 
-        <div id="courseFilterSection" class="bg-white p-3.5 rounded-2xl border-2 border-emerald-500/40 mb-4 shadow-lg hidden transition-all">
+        <div class="apm-entry-row" aria-label="APM quick tools"><button onclick="apmOpenHub('reservations')"><i class="fa-solid fa-calendar-check"></i>Reserve & collect</button><button onclick="apmOpenHub('wanted')"><i class="fa-solid fa-magnifying-glass-dollar"></i>Wanted board</button><button onclick="apmOpenHub('offers')"><i class="fa-solid fa-handshake"></i>My campus hub</button></div>
+<div id="courseFilterSection" class="bg-white p-3.5 rounded-2xl border-2 border-emerald-500/40 mb-4 shadow-lg hidden transition-all">
           <div class="flex items-center justify-between mb-2">
             <div class="flex items-center space-x-2"><i id="courseFilterIcon" class="fa-solid fa-book-medical text-emerald-600 text-sm"></i><span class="text-xs font-black text-slate-900 uppercase">Filter Academic Notes by AIMST Programme / Course</span></div>
             <button id="resetCourseFiltersBtn" onclick="clearCourseFilters()" class="text-[10px] font-bold text-emerald-700 hover:underline">Reset Filters</button>
@@ -140,13 +232,20 @@
         </div>
       </div>
 
-      <!-- SPONSORED ADS ELECTRIC-GATE CONTINUOUS SLIDER -->
+      <details class="apm-advanced" id="apmAdvancedPanel"><summary><span><i class="fa-solid fa-sliders mr-2"></i>Advanced search · price, condition, pickup & availability</span><i class="fa-solid fa-chevron-down"></i></summary><div class="filter-grid">
+<label>Min price (RM)<input id="apmMinPrice" type="number" step="0.01" min="0" inputmode="decimal" placeholder="0" onchange="apmApplyAdvanced()"></label>
+<label>Max price (RM)<input id="apmMaxPrice" type="number" step="0.01" min="0" inputmode="decimal" placeholder="Any" onchange="apmApplyAdvanced()"></label>
+<label>Condition<select id="apmConditionFilter" onchange="apmApplyAdvanced()"><option value="all">All conditions</option><option value="New">New</option><option value="Like New">Like New</option><option value="Used - Good">Used - Good</option><option value="Used - Fair">Used - Fair</option></select></label>
+<label>Availability<select id="apmAvailabilityFilter" onchange="apmApplyAdvanced()"><option value="available">Available</option><option value="all">All statuses</option><option value="reserved">Reserved</option><option value="sold">Sold</option></select></label>
+<label>Pickup area<select id="apmPickupFilter" onchange="apmApplyAdvanced()"><option value="all">All campus areas</option><option value="Library Entrance">Library</option><option value="Student Centre">Student Centre</option><option value="Cafeteria">Cafeteria</option><option value="Hostel Lobby">Hostel</option><option value="AIMST Main Entrance">Main entrance</option><option value="Other (agree with seller)">By arrangement</option></select></label>
+<label>Sort by<select id="apmSortFilter" onchange="apmApplyAdvanced()"><option value="priority">Featured & Pro first</option><option value="newest">Newest first</option><option value="price_low">Lowest price</option><option value="price_high">Highest price</option><option value="oldest">Oldest first</option></select></label></div><button onclick="apmClearAdvanced()" class="apm-action"><i class="fa-solid fa-rotate-left mr-1"></i>Reset search filters</button></details>
+<!-- SPONSORED ADS ELECTRIC-GATE CONTINUOUS SLIDER -->
       <div id="sponsoredSection" class="mb-8 hidden overflow-hidden">
         <div class="flex items-center justify-between mb-3">
           <div class="flex items-center space-x-2"><span class="w-6 h-6 rounded-lg bg-amber-500 text-slate-950 flex items-center justify-center font-black text-xs shadow-sm"><i class="fa-solid fa-bolt"></i></span><h3 class="text-xs sm:text-sm font-black text-slate-900 uppercase tracking-wide">Sponsored Featured Listings</h3></div>
           <span class="text-[10px] text-amber-600 font-bold bg-amber-50 px-2.5 py-0.5 rounded-full border border-amber-200">🚀 Promoted</span>
         </div>
-        <div id="sponsoredCarousel" class="flex space-x-3 overflow-x-hidden no-scrollbar py-2 pt-1 cursor-grab"></div>
+        <div id="sponsoredCarousel" class="flex space-x-3 overflow-x-auto no-scrollbar py-2 pt-1 cursor-grab"></div>
       </div>
 
       <div class="flex items-center justify-between mb-4">
@@ -154,7 +253,7 @@
         <button onclick="toggleCourseFilterPanel()" class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs flex items-center space-x-1.5 transition-all"><i class="fa-solid fa-filter text-emerald-600 text-[10px]"></i><span>Filter Courses</span></button>
       </div>
 
-      <div id="listingsGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 sm:gap-4"></div>
+      <div id="listingsGrid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-5"></div>
 
       <div id="clubsSection" class="mt-12 pt-8 border-t border-slate-200">
         <div class="flex items-center justify-between mb-4">
@@ -173,11 +272,12 @@
       <div class="flex items-center justify-between mb-4">
         <div>
           <h3 class="text-base sm:text-lg font-black text-slate-900">My Listed Products & Rentals</h3>
-          <p class="text-xs text-slate-500">Manage your active posts, edit listings (Pro), boost visibility, or delete items.</p>
+          <p class="text-xs text-slate-500">Keep your listings fresh, manage buyers, and enjoy Pro seller tools.</p>
         </div>
         <button onclick="openAddListingModal()" class="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md"><i class="fa-solid fa-plus mr-1"></i> Add Product</button>
       </div>
-      <div id="myProductsTabContainer" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3"></div>
+      <button onclick="apmOpenHub('reservations')" class="apm-action apm-action-primary mb-4"><i class="fa-solid fa-calendar-check mr-2"></i>Manage pickups, offers & store</button>
+<div id="myProductsTabContainer" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3"></div>
     </div>
 
     <!-- FAVOURITE / WISHLIST TAB VIEW PAGE -->
@@ -197,7 +297,7 @@
         <p id="meTabEmail" class="text-xs text-slate-500 mb-4">email@apm.com</p>
         <div class="mb-4">
           <span id="meTabTierBadge" class="inline-block px-4 py-1.5 rounded-full bg-emerald-50 text-emerald-800 font-extrabold text-xs border border-emerald-300 mb-3 uppercase tracking-wider">VERIFIED SELLER/BUYER (FREE TIER)</span>
-          <p class="text-xs text-slate-600">Active Listings Usage: <span id="meTabListingCount" class="font-bold text-slate-900">0 / 3 Used</span></p>
+          <div class="mb-4"><button onclick="apmOpenHub('store')" class="apm-action apm-action-primary apm-action-full"><i class="fa-solid fa-store mr-2"></i>Open my Campus Hub & Store</button></div><div id="proPerksInProfile" class="apm-profile-perks mb-3 hidden">Priority discovery · Seller badge · Edit listings · 7 active posts</div><p class="text-xs text-slate-600">Active Listings Usage: <span id="meTabListingCount" class="font-bold text-slate-900">0 / 3 Used</span></p>
         </div>
         <div id="meTabProCountdownContainer" class="hidden mb-4 bg-purple-50 p-3 rounded-2xl border border-purple-200">
           <p class="text-[11px] font-bold text-purple-900">👑 Pro Tier Countdown Remaining:</p>
@@ -211,7 +311,8 @@
     </div>
 
     <!-- ABOUT APM & FOUNDERS TAB VIEW PAGE -->
-    <div id="viewAbout" class="tab-view-page hidden">
+    <section id="viewCampusHub" class="tab-view-page hidden"><div class="apm-hub-shell"><div class="mb-4"><span class="text-[10px] font-extrabold tracking-[0.2em] text-amber-700 uppercase">APM · Campus Marketplace</span><h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 mt-1">Campus Hub</h2><p class="text-xs text-slate-500 mt-1">Everything buyers and sellers need, in one place.</p></div><div class="apm-hub-tabs" id="apmHubTabs"></div><div id="apmHubContent" aria-live="polite"></div></div></section>
+<div id="viewAbout" class="tab-view-page hidden">
       <div class="max-w-4xl mx-auto space-y-6">
         <div class="grab-card rounded-3xl p-6 sm:p-8 border border-slate-200 text-center relative overflow-hidden">
           <div class="absolute -right-10 -top-10 w-40 h-40 bg-emerald-500/10 rounded-full blur-2xl pointer-events-none"></div>
@@ -278,6 +379,12 @@
     </div>
   </nav>
 
+  <!-- Original, calm instrumental loop. Playback is opt-in to respect mobile browser autoplay rules. -->
+  <audio id="apmAmbientAudio" src="apm-calm-loop.mp3" preload="none" loop playsinline aria-label="Calm original APM instrumental music"></audio>
+  <button id="apmMusicControl" type="button" onclick="toggleAPMMusic()" aria-label="Play calm background music" aria-pressed="false" title="Play or pause calm background music">
+    <span class="apm-music-icon"><i id="apmMusicIcon" class="fa-solid fa-music"></i></span><span id="apmMusicText">Calm music</span>
+  </button>
+
   <!-- FLOATING POST LISTING BUTTON -->
   <div id="floatingPostBtnContainer" class="fixed right-6 bottom-20 z-30">
     <button id="floatingPostBtn" onclick="openAddListingModal()" style="display: none;" class="flex items-center space-x-2 px-4 py-3 sm:px-5 sm:py-3.5 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold shadow-2xl shadow-emerald-600/40 ring-2 ring-white hover:scale-105 transition-all text-xs sm:text-sm">
@@ -285,34 +392,60 @@
     </button>
   </div>
 
-  <!-- AUTH MODAL -->
-  <div id="authModal" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-3xl max-w-sm w-full p-6 relative shadow-2xl">
-      <button onclick="closeAuthModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 font-bold"><i class="fa-solid fa-xmark text-lg"></i></button>
-      <div class="text-center mb-5">
-        <h3 class="text-lg font-black text-slate-900">APM Verified Access</h3>
-        <p class="text-xs text-slate-500">Login or register to list items & manage products.</p>
-      </div>
-      <div class="flex space-x-1 bg-slate-100 p-1 rounded-2xl mb-4">
-        <button id="tabLoginBtn" onclick="switchAuthTab('login')" class="flex-1 py-1.5 rounded-xl text-xs font-extrabold bg-white text-slate-900 shadow-sm transition-all">Login</button>
-        <button id="tabRegisterBtn" onclick="switchAuthTab('register')" class="flex-1 py-1.5 rounded-xl text-xs font-extrabold text-slate-500 hover:text-slate-900 transition-all">Register</button>
-      </div>
-      <div id="loginFormContainer" class="space-y-3">
-        <div><label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">Student Username / Email</label><input type="text" id="loginUser" placeholder="e.g. keventhiran_e25101420" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-bold text-slate-800 focus:outline-none focus:border-emerald-500"></div>
-        <div><label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">Password</label><input type="password" id="loginPass" placeholder="••••••••" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-bold text-slate-800 focus:outline-none focus:border-emerald-500"></div>
-        <div id="loginError" class="text-[11px] text-rose-500 font-bold hidden"></div>
-        <button onclick="handleLogin()" class="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md">Login to APM</button>
-      </div>
-      <div id="registerFormContainer" class="space-y-3 hidden">
-        <div class="bg-emerald-50 p-3 rounded-2xl border border-emerald-200 text-left">
-          <p class="text-[11px] font-bold text-emerald-900 mb-1"><i class="fa-solid fa-circle-info text-emerald-600"></i> Registration Criteria:</p>
-          <p class="text-[10px] text-emerald-800 leading-relaxed">Do <strong>NOT</strong> use personal Gmail. Your email <strong>MUST</strong> follow the format: <code class="bg-emerald-100 px-1 py-0.5 rounded font-bold">Firstname_matrixID@apm.com</code> (e.g., <span class="font-semibold">keventhiran_e25101420@apm.com</span>). If criteria are not met, registration will fail!</p>
+
+  <!-- NOTIFICATION INBOX / OPT-IN -->
+  <div id="notificationModal" class="fixed inset-0 z-[70] bg-slate-950/40 backdrop-blur-sm hidden items-center justify-center p-3 sm:p-5" role="dialog" aria-modal="true" aria-labelledby="notificationsHeading">
+    <div class="apm-dialog bg-white rounded-3xl max-w-md w-full p-5 sm:p-6 relative shadow-2xl">
+      <button type="button" onclick="closeNotificationCenter()" class="absolute top-4 right-4 apm-icon-button" aria-label="Close notifications"><i class="fa-solid fa-xmark"></i></button>
+      <p class="text-[10px] font-extrabold text-emerald-700 tracking-widest uppercase mb-1">APM Updates</p>
+      <h2 id="notificationsHeading" class="text-xl font-black text-slate-950 mb-1">Notifications</h2>
+      <p class="text-xs text-slate-500 mb-4">Receive the latest marketplace posts and account alerts.</p>
+      <div class="apm-soft-panel p-3 mb-3">
+        <div class="flex items-start justify-between gap-3">
+          <div class="min-w-0"><div class="text-sm font-extrabold text-slate-900">Phone notifications</div><p id="pushStatusText" class="text-[11px] text-slate-500 leading-relaxed mt-1">Optional. Turn on to receive updates when supported.</p></div>
+          <button type="button" id="enablePushBtn" onclick="enableAPMPush()" class="apm-small-action shrink-0">Enable</button>
         </div>
-        <div><label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">Student Email (Firstname_matrixID@apm.com)</label><input type="text" id="regUser" placeholder="e.g. keventhiran_e25101420" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-bold text-slate-800 focus:outline-none focus:border-emerald-500"></div>
-        <div><label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">Create Password</label><input type="password" id="regPass" placeholder="••••••••" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-bold text-slate-800 focus:outline-none focus:border-emerald-500"></div>
-        <div id="registerError" class="text-[11px] text-rose-500 font-bold hidden"></div>
-        <button onclick="handleRegister()" class="w-full py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs shadow-md">Register Account</button>
+        <button type="button" id="disablePushBtn" onclick="disableAPMPush()" class="hidden text-[11px] font-semibold text-rose-600 mt-2">Turn off updates on this device</button>
       </div>
+      <p class="text-[11px] font-bold text-slate-600 mb-2">Recent activity</p>
+      <div id="notificationItems" class="space-y-2 max-h-64 overflow-y-auto"> <p class="text-xs text-slate-400 py-3">No updates yet.</p></div>
+      <button type="button" onclick="clearNotificationInbox()" class="w-full mt-4 text-[11px] font-bold text-slate-500 hover:text-slate-950 py-2">Clear activity</button>
+    </div>
+  </div>
+  <div id="apmToastRegion" role="status" aria-live="polite" class="fixed top-20 left-1/2 -translate-x-1/2 z-[90] w-[min(92vw,420px)] pointer-events-none space-y-2"></div>
+
+  <!-- AUTH MODAL: existing login supported + accessible recovery email for new users -->
+  <div id="authModal" class="fixed inset-0 z-[65] bg-slate-950/45 backdrop-blur-sm hidden items-center justify-center p-3 sm:p-4 overflow-y-auto" role="dialog" aria-modal="true" aria-labelledby="authHeading">
+    <div class="apm-dialog bg-white rounded-3xl max-w-md w-full p-5 sm:p-7 relative shadow-2xl my-auto">
+      <button type="button" onclick="closeAuthModal()" class="absolute top-4 right-4 apm-icon-button" aria-label="Close login"><i class="fa-solid fa-xmark"></i></button>
+      <div class="mb-5 pr-8"><div class="apm-auth-icon"><i class="fa-solid fa-shield-halved"></i></div><p class="text-[10px] text-emerald-700 uppercase tracking-widest font-black mb-1">Members only</p><h2 id="authHeading" class="text-2xl font-black tracking-tight text-slate-950">Welcome to APM</h2><p class="text-sm text-slate-500 mt-1">Sign in or request a verified campus seller account.</p></div>
+      <div class="apm-auth-switch mb-5" role="tablist" aria-label="Account action"><button type="button" id="tabLoginBtn" onclick="switchAuthTab('login')" class="apm-auth-tab selected" role="tab">Sign in</button><button type="button" id="tabRegisterBtn" onclick="switchAuthTab('register')" class="apm-auth-tab" role="tab">Register</button></div>
+      <form id="loginFormContainer" onsubmit="event.preventDefault();handleLogin()" class="space-y-3">
+        <div><label for="loginUser" class="apm-form-label">APM username or email</label><input id="loginUser" type="text" autocomplete="username" required spellcheck="false" autocapitalize="none" placeholder="firstname_matrixid@apm.com" class="apm-field"><p class="text-[11px] text-slate-500 mt-1">New accounts: FirstName_MatrixID@apm.com</p></div>
+        <div><div class="flex items-center justify-between"><label for="loginPass" class="apm-form-label">Password</label><button type="button" onclick="openForgotPassword()" class="text-[11px] font-semibold text-emerald-700">Forgot password?</button></div><input id="loginPass" type="password" autocomplete="current-password" required placeholder="Your password" class="apm-field"></div>
+        <p id="loginError" class="apm-form-error hidden" role="alert"></p>
+        <button type="submit" id="loginSubmitBtn" class="apm-submit">Sign in <i class="fa-solid fa-arrow-right"></i></button>
+        <p class="text-center text-xs text-slate-500">New seller? <button type="button" onclick="switchAuthTab('register')" class="font-bold text-emerald-700">Register for verification</button></p>
+      </form>
+      <form id="registerFormContainer" onsubmit="event.preventDefault();handleRegister()" class="space-y-3 hidden">
+        <div class="apm-soft-panel p-3 text-[11px] text-slate-600 leading-relaxed"><strong class="text-emerald-800">Required APM account format:</strong> <code class="font-bold text-emerald-800 break-all">FirstName_MatrixID@apm.com</code><br>Use your <strong>own first name</strong>, one <strong>underscore (_)</strong> and your <strong>own AIMST matrix ID</strong>. Example: <code class="font-bold break-all">keventhiran_e25101420@apm.com</code>. Personal Gmail, Yahoo and other domains are not accepted. Your account stays pending until founder verification.</div>
+        <div><label for="regUser" class="apm-form-label">Your APM Email / Username (required format)</label><input id="regUser" type="email" inputmode="email" autocomplete="off" spellcheck="false" autocapitalize="none" required placeholder="firstname_matrixid@apm.com" oninput="validateAPMRegistrationFormat()" class="apm-field"><p id="regFormatHint" class="text-[11px] mt-1 text-slate-500" aria-live="polite">Example: keventhiran_e25101420@apm.com</p></div>
+        <div><label for="regRole" class="apm-form-label">I am an AIMST...</label><select id="regRole" class="apm-field"><option value="student">Student</option><option value="staff">Staff member</option></select></div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3"><div><label for="regPass" class="apm-form-label">Create password</label><input id="regPass" type="password" autocomplete="new-password" minlength="8" required placeholder="At least 8 characters" class="apm-field"></div><div><label for="regPassConfirm" class="apm-form-label">Confirm password</label><input id="regPassConfirm" type="password" autocomplete="new-password" required placeholder="Repeat password" class="apm-field"></div></div>
+        <p id="registerError" class="apm-form-error hidden" role="alert"></p>
+        <button type="submit" id="registerSubmitBtn" class="apm-submit">Request verification <i class="fa-solid fa-arrow-right"></i></button>
+        <p class="text-[11px] text-center text-slate-500">Already registered? <button type="button" class="text-emerald-700 font-bold" onclick="switchAuthTab('login')">Sign in</button></p>
+      </form>
+      <form id="forgotFormContainer" onsubmit="event.preventDefault();submitForgotPassword()" class="space-y-3 hidden">
+        <div class="apm-soft-panel p-3 text-xs leading-relaxed text-slate-700"><strong>Important:</strong> APM addresses such as <code class="font-semibold">firstname_matrixid@apm.com</code> are login IDs. They are not automatically working Gmail or email inboxes. If you forgot your password, contact the founders and verify your campus identity for account recovery.</div>
+        <a href="https://wa.me/60126384757?text=Hi%20APM%20Founders%2C%20I%20need%20help%20recovering%20my%20APM%20account.%20Please%20advise%20how%20to%20verify%20my%20campus%20identity." target="_blank" rel="noopener noreferrer" class="apm-submit" style="background:#147e5c">Contact founders for recovery <i class="fa-brands fa-whatsapp"></i></a>
+        <p class="text-[11px] text-slate-500">Only for older accounts registered with a real, accessible email address:</p>
+        <div><label for="forgotEmail" class="apm-form-label">Registered email</label><input id="forgotEmail" type="email" required autocomplete="email" class="apm-field" placeholder="your-real-email@example.com"></div>
+        <p id="forgotError" class="apm-form-error hidden" role="alert"></p>
+        <button type="submit" id="forgotSubmitBtn" class="apm-submit">Send recovery email <i class="fa-solid fa-envelope"></i></button>
+        <button type="button" onclick="switchAuthTab('login')" class="w-full text-center py-2 text-xs font-bold text-slate-500">Back to sign in</button>
+        <p class="text-[11px] text-slate-500">Never send your password or OTP to anyone. The founders must verify your identity before assisting with recovery.</p>
+      </form>
     </div>
   </div>
 
@@ -361,6 +494,7 @@
             <img id="imagePreview" src="" alt="Preview" class="w-20 h-20 rounded-xl object-cover border border-slate-200">
           </div>
         </div>
+<div class="grid grid-cols-2 gap-3"><label class="apm-label">Item condition<select id="itemCondition" class="apm-field"><option value="New">New</option><option value="Like New">Like New</option><option value="Used - Good">Used - Good</option><option value="Used - Fair">Used - Fair</option></select></label><label class="apm-label">Pickup area<select id="itemPickup" class="apm-field"><option>AIMST Main Entrance</option><option>Library Entrance</option><option>Student Centre</option><option>Cafeteria</option><option>Hostel Lobby</option><option>Other (agree with seller)</option></select></label></div>
         <div>
           <label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">Detailed Description</label>
           <textarea id="itemDesc" rows="3" required placeholder="Describe condition, pickup location, notes coverage..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-semibold text-slate-800 focus:outline-none focus:border-emerald-500"></textarea>
@@ -396,6 +530,7 @@
             <input type="text" id="editItemContact" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-bold text-slate-800 focus:outline-none focus:border-purple-500">
           </div>
         </div>
+<div class="grid grid-cols-2 gap-3"><label class="apm-label">Item condition<select id="editItemCondition" class="apm-field"><option value="New">New</option><option value="Like New">Like New</option><option value="Used - Good">Used - Good</option><option value="Used - Fair">Used - Fair</option></select></label><label class="apm-label">Pickup area<select id="editItemPickup" class="apm-field"><option>AIMST Main Entrance</option><option>Library Entrance</option><option>Student Centre</option><option>Cafeteria</option><option>Hostel Lobby</option><option>Other (agree with seller)</option></select></label></div>
         <div>
           <label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">Detailed Description</label>
           <textarea id="editItemDesc" rows="3" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-semibold text-slate-800 focus:outline-none focus:border-purple-500"></textarea>
@@ -464,7 +599,7 @@
       <!-- HEADER WITH FOUNDER RED QUOTA BUTTON -->
       <div class="flex flex-wrap items-center justify-between gap-2 mb-1">
         <h3 class="text-base font-black text-slate-900"><i class="fa-solid fa-shield-halved text-amber-500"></i> Founder Admin Hub</h3>
-        <button onclick="openFounderQuotaModal()" class="px-3 py-1.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-black text-xs shadow-md flex items-center space-x-1.5 transition-all animate-pulse"><i class="fa-solid fa-database"></i><span>Live Quota (GitHub)</span></button>
+        <button onclick="openFounderQuotaModal()" class="px-3 py-1.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-black text-xs shadow-md flex items-center space-x-1.5 transition-all animate-pulse"><i class="fa-solid fa-database"></i><span>Activity estimate</span></button>
       </div>
       <p class="text-xs text-slate-500 mb-4">Manage pending student verifications, pro upgrades, and ad boosts.</p>
 
@@ -503,8 +638,8 @@
     <div class="bg-white rounded-3xl max-w-sm w-full p-6 relative shadow-2xl border-2 border-rose-500 text-center">
       <button onclick="closeFounderQuotaModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 font-bold"><i class="fa-solid fa-xmark text-lg"></i></button>
       <div class="w-14 h-14 rounded-2xl bg-rose-100 text-rose-600 flex items-center justify-center text-2xl mx-auto mb-3 shadow-inner"><i class="fa-solid fa-chart-pie"></i></div>
-      <h3 class="text-base font-black text-slate-900 mb-1">GitHub & Firestore Live Quota</h3>
-      <p class="text-[11px] text-slate-500 mb-4">Daily operation counts & resets based on GitHub repository & Firebase limits.</p>
+      <h3 class="text-base font-black text-slate-900 mb-1">Local Activity Estimate</h3>
+      <p class="text-[11px] text-slate-500 mb-4">This browser's estimated operations only — not actual Firebase or GitHub quota usage.</p>
       
       <div class="space-y-2 mb-5 text-left">
         <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 flex items-center justify-between">
@@ -635,8 +770,9 @@
   <!-- SCRIPT MODULES - PART 1 -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { initializeFirestore, memoryLocalCache, collection, getDocs, addDoc, deleteDoc, doc, updateDoc, setDoc, query, increment, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-    import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import { initializeFirestore, memoryLocalCache, collection, getDocs, addDoc, deleteDoc, doc, updateDoc, setDoc, query, increment, onSnapshot, where, runTransaction } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, sendPasswordResetEmail, deleteUser } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import { getMessaging, getToken, onMessage, isSupported, deleteToken } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-messaging.js";
     import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
 
     const firebaseConfig = {
@@ -731,7 +867,7 @@
       const writes = parseInt(localStorage.getItem('apm_op_writes')) || 0;
       const deletes = parseInt(localStorage.getItem('apm_op_deletes')) || 0;
 
-      document.getElementById('quotaReadCount').innerText = `${reads} / 50,000 (Free Daily Limit)`;
+      document.getElementById('quotaReadCount').innerText = `${reads} / 50,000 (Local Estimate)`;
       document.getElementById('quotaWriteCount').innerText = `${writes} / 20,000 (Free Daily Limit)`;
       document.getElementById('quotaDeleteCount').innerText = `${deletes} / 20,000 (Free Daily Limit)`;
       document.getElementById('quotaResetInfo').innerText = `Current Date: ${getTodayDateString()} (Auto resets at midnight)`;
@@ -743,38 +879,136 @@
       document.getElementById('founderQuotaModal').classList.add('hidden');
     };
 
-    // Request Notification Permission on load
-    if ("Notification" in window && Notification.permission !== "granted") {
-      Notification.requestPermission();
-    }
-
-    function playWishlistBellSound() {
+    // Sound is OFF by default; audio starts only after user interaction.
+    let soundEnabled = localStorage.getItem('apm_sounds') === 'on';
+    let audioContext = null;
+    function drawSoundIcon() { const icon = document.getElementById('soundIcon'); if(icon) icon.className = soundEnabled ? 'fa-solid fa-volume-high' : 'fa-solid fa-volume-xmark'; }
+    window.toggleAPMSound = () => { soundEnabled = !soundEnabled; localStorage.setItem('apm_sounds',soundEnabled?'on':'off'); drawSoundIcon(); toastAPM(soundEnabled ? 'Interface sounds enabled' : 'Interface sounds muted'); };
+    drawSoundIcon();
+    function playButtonSound(btn) {
+      if (!soundEnabled || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
       try {
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(880, audioCtx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(1760, audioCtx.currentTime + 0.15);
-        gain.gain.setValueAtTime(0.4, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.5);
-        osc.connect(gain); gain.connect(audioCtx.destination);
-        osc.start(); osc.stop(audioCtx.currentTime + 0.5);
-      } catch(e) {}
+        audioContext = audioContext || new (window.AudioContext || window.webkitAudioContext)();
+        if (audioContext.state === 'suspended') audioContext.resume();
+        const label=(btn.getAttribute('aria-label') || btn.textContent || btn.id || 'tap').trim().toLowerCase();
+        let seed=0; for (const chr of label) seed=((seed*31)+chr.charCodeAt(0))>>>0;
+        const cancel=/close|cancel|delete|reject|remove|log out|back|xmark/.test(label);
+        const confirm=/publish|register|sign in|approve|accept|save|verify|paid/.test(label);
+        const frequency=(cancel?260:confirm?560:390)+(seed%14)*23;
+        const oscillator=audioContext.createOscillator(); const gain=audioContext.createGain(); const t=audioContext.currentTime;
+        oscillator.type=cancel?'triangle':confirm?'sine':'sine';
+        oscillator.frequency.setValueAtTime(frequency,t); oscillator.frequency.exponentialRampToValueAtTime(Math.max(100, frequency*(cancel?.78:1.22)),t+.085);
+        gain.gain.setValueAtTime(.0001,t);gain.gain.exponentialRampToValueAtTime(.028,t+.012);gain.gain.exponentialRampToValueAtTime(.0001,t+.13);
+        oscillator.connect(gain);gain.connect(audioContext.destination);oscillator.start(t);oscillator.stop(t+.14);
+      }catch(e){ /* supported browsers only */ }
     }
+    document.addEventListener('click', e => { const el=e.target.closest('button, a'); if (el) playButtonSound(el); }, {passive:true});
 
-    function triggerDesktopNotification(title, body) {
-      playWishlistBellSound();
-      if ("Notification" in window && Notification.permission === "granted") {
-        try {
-          new Notification(title, {
-            body: body,
-            icon: "market-logo.png"
-          });
-        } catch(e) {}
+    const APMLocalInboxKey = 'apm_inbox_v1';
+    const readAPMInbox = () => { try{return JSON.parse(localStorage.getItem(APMLocalInboxKey)||'[]')}catch{return []} };
+    const clockString = iso => {try{return new Date(iso).toLocaleString('en-MY',{dateStyle:'medium',timeStyle:'short'})}catch{return ''}};
+    const safeText = text => {const el=document.createElement('div');el.textContent=String(text||'');return el.innerHTML};
+    function refreshNotificationInbox(){
+      const items=readAPMInbox(); const indicator=document.getElementById('notificationCount');
+      const unread=items.filter(v=>!v.read).length;
+      if(indicator){indicator.textContent=unread>9?'9+':String(unread);indicator.classList.toggle('hidden',!unread)}
+      const pane=document.getElementById('notificationItems'); if(!pane)return;
+      pane.innerHTML=items.length ? items.map(v=>`<div class="apm-inbox-entry"><i class="fa-solid ${v.kind==='admin'?'fa-shield-halved':'fa-bell'}"></i><div class="min-w-0"><strong>${safeText(v.title)}</strong><p>${safeText(v.body)}</p><time>${clockString(v.at)}</time></div></div>`).join('') : '<p class="text-xs text-slate-400 py-3">No updates yet.</p>';
+    }
+    function inboxAPM(title,body,kind='general',silent=false){
+      const records=readAPMInbox(); records.unshift({title:String(title),body:String(body),kind,at:new Date().toISOString(),read:false});
+      localStorage.setItem(APMLocalInboxKey,JSON.stringify(records.slice(0,50)));refreshNotificationInbox();if(!silent)toastAPM(title,body);
+    }
+    function toastAPM(title,message=''){
+      const holder=document.getElementById('apmToastRegion');if(!holder)return;
+      const el=document.createElement('div');el.className='bg-slate-950 text-white rounded-2xl shadow-xl px-4 py-3 text-xs font-bold border border-slate-700';
+      el.innerHTML=`<div>${safeText(title)}</div>${message?`<div class="text-[11px] text-slate-300 mt-1 font-normal">${safeText(message)}</div>`:''}`;
+      holder.appendChild(el);setTimeout(()=>el.remove(),4700);
+    }
+    window.openNotificationCenter=()=>{const modal=document.getElementById('notificationModal');modal.classList.remove('hidden');modal.classList.add('flex');const items=readAPMInbox().map(x=>({...x,read:true}));localStorage.setItem(APMLocalInboxKey,JSON.stringify(items));refreshNotificationInbox();refreshPushStatus();};
+    window.closeNotificationCenter=()=>{const modal=document.getElementById('notificationModal');modal.classList.add('hidden');modal.classList.remove('flex')};
+    window.clearNotificationInbox=()=>{localStorage.removeItem(APMLocalInboxKey);refreshNotificationInbox()};
+    refreshNotificationInbox();
+    function showFounderAlertModal(message){
+      if(!isFounderUser)return;
+      const modal=document.getElementById('founderPaymentAlertModal');
+      if(!modal)return;
+      document.getElementById('founderAlertText').textContent=message;
+      modal.classList.remove('hidden');
+    }
+    window.closeFounderAlertModal=()=>document.getElementById('founderPaymentAlertModal').classList.add('hidden');
+    window.openAdminHubFromAlert=()=>{closeFounderAlertModal();openSellerManagerModal()};
+    function triggerDesktopNotification(title,body){
+      inboxAPM(title,body,'admin');
+      if(isFounderUser && document.visibilityState==='visible')showFounderAlertModal(body);
+      if(document.visibilityState==='visible')return;
+      if('Notification' in window && Notification.permission==='granted'){
+        try{new Notification(title,{body,icon:'market-logo.png'})}catch(e){}
       }
     }
-
+    let messagingInstance=null;let pushListenerSet=false;
+    async function getAPMMessaging(){
+      if(messagingInstance)return messagingInstance;
+      if(!('serviceWorker' in navigator) || !('Notification' in window) || !await isSupported())throw new Error('Push notifications are not supported in this browser.');
+      messagingInstance=getMessaging(app);
+      if(!pushListenerSet){onMessage(messagingInstance,payload=>{
+        const data=payload.data||{};
+        inboxAPM(data.title||payload.notification?.title||'New APM update',data.body||payload.notification?.body||'Check the newest campus listings.',data.kind||'general');
+      });pushListenerSet=true;}
+      return messagingInstance;
+    }
+    let pushSavedForUID=null;
+    function refreshPushStatus(){
+      const status=document.getElementById('pushStatusText'),btn=document.getElementById('enablePushBtn');if(!status||!btn)return;
+      const subscribed=Boolean(localStorage.getItem('apm_push_subscriber')?.startsWith((auth.currentUser?.uid||'anonymous')+'_'));
+      document.getElementById('disablePushBtn')?.classList.toggle('hidden',!subscribed);
+      if(!window.isSecureContext){status.textContent='Push requires HTTPS (or localhost).';btn.disabled=true;return}
+      if(!('Notification' in window)){status.textContent='This browser does not support notifications.';btn.disabled=true;return}
+      if(Notification.permission==='denied'){status.textContent='Blocked in browser settings. Change permission in your device settings.';btn.disabled=true;return}
+      const configured=Boolean(window.APM_PUSH_VAPID_KEY && window.APM_PUSH_VAPID_KEY.length>40);
+      if(!configured){status.textContent='Phone push setup is pending Firebase Cloud Messaging configuration. In-app alerts still work.';btn.disabled=true;return}
+      if(!auth.currentUser){status.textContent='Sign in to turn on product and account notifications.';btn.disabled=false;btn.textContent='Sign in';return}
+      btn.disabled=false;btn.textContent=subscribed?'Connected':Notification.permission==='granted'?'Connect':'Enable';
+      status.textContent=subscribed?'Updates are enabled on this device. You can disable them below.':Notification.permission==='granted'?'Notifications permitted. Connect this device to APM.':'Allow APM notifications on this device. You can turn them off in your device settings.';
+    }
+    window.enableAPMPush=async()=>{
+      if(!auth.currentUser){closeNotificationCenter();openAuthModal();return}
+      if(!window.APM_PUSH_VAPID_KEY || window.APM_PUSH_VAPID_KEY.length<40){refreshPushStatus();return}
+      const btn=document.getElementById('enablePushBtn');btn.disabled=true;btn.textContent='Connecting...';
+      try{
+        const permission=await Notification.requestPermission();
+        if(permission!=='granted')throw new Error('Notification permission was not granted.');
+        const worker=await navigator.serviceWorker.register('./firebase-messaging-sw.js');
+        const messaging=await getAPMMessaging();
+        const token=await getToken(messaging,{vapidKey:window.APM_PUSH_VAPID_KEY,serviceWorkerRegistration:worker});
+        if(!token)throw new Error('Could not obtain a device notification token.');
+        let deviceId=localStorage.getItem('apm_device_id');if(!deviceId){deviceId=crypto.randomUUID();localStorage.setItem('apm_device_id',deviceId)}
+        const key=`${auth.currentUser.uid}_${deviceId}`;
+        await setDoc(doc(db,'push_devices',key),{uid:auth.currentUser.uid,email:(auth.currentUser.email||'').toLowerCase(),token,allowNewListings:true,allowAdmin:true,platform:navigator.userAgent.slice(0,100),updatedAt:new Date().toISOString()});
+        pushSavedForUID=auth.currentUser.uid;
+        localStorage.setItem('apm_push_subscriber',key);
+        inboxAPM('Notifications connected','This device will receive APM updates when background messaging is deployed.','general');
+      }catch(err){toastAPM('Notifications not connected',err.message||'Please check browser permissions and Firebase setup.')}
+      finally{refreshPushStatus()}
+    };
+    window.disableAPMPush=async()=>{
+      const key=localStorage.getItem('apm_push_subscriber');
+      if(!key || !auth.currentUser || !key.startsWith(auth.currentUser.uid+'_'))return;
+      try{
+        await deleteDoc(doc(db,'push_devices',key));
+        if(messagingInstance)await deleteToken(messagingInstance).catch(()=>{});
+        localStorage.removeItem('apm_push_subscriber');pushSavedForUID=null;
+        toastAPM('Notifications disabled','This device will no longer receive APM push updates.');
+      }catch(e){toastAPM('Could not disable notifications',e.message)}
+      refreshPushStatus();
+    };
+    async function initPushOnLogin(){
+      if(pushSavedForUID===auth.currentUser?.uid)return;
+      // Do not automatically ask for permission. A token is registered only after a clear opt-in.
+      if('Notification' in window && Notification.permission==='granted' && window.APM_PUSH_VAPID_KEY){
+        try{await getAPMMessaging()}catch(e){}
+      }
+    }
     window.addEventListener('beforeinstallprompt', (e) => {
       e.preventDefault(); deferredPrompt = e;
       const installBtn = document.getElementById('installAppBtn');
@@ -802,7 +1036,7 @@
       }
       document.querySelectorAll('.tab-view-page').forEach(el => el.classList.add('hidden'));
       const sellerProfile = allSellers.find(s => s.email.toLowerCase() === currentUserEmail);
-      const isPro = sellerProfile && sellerProfile.tier === 'pro';
+      const isPro = isActiveProProfile(sellerProfile);
       const activeClass = isPro ? 'active-pro-tab' : 'active-tab';
 
       document.querySelectorAll('.nav-bottom-btn').forEach(btn => { btn.classList.remove('active-tab'); btn.classList.remove('active-pro-tab'); });
@@ -858,7 +1092,7 @@
       }
       const now = new Date();
       const sellerProfile = allSellers.find(s => (s.email || '').toLowerCase() === currentUserEmail);
-      const isPro = (sellerProfile && sellerProfile.tier === 'pro') || isFounderUser;
+      const isPro = (isActiveProProfile(sellerProfile)) || isFounderUser;
 
       container.innerHTML = myListings.map(item => {
         let boostStatusHTML = '';
@@ -904,7 +1138,7 @@
       document.getElementById('meTabUsername').innerText = currentUser;
       document.getElementById('meTabEmail').innerText = currentUserEmail || `${currentUser}@apm.com`;
       const sellerProfile = allSellers.find(s => s.email.toLowerCase() === currentUserEmail);
-      const isPro = sellerProfile && sellerProfile.tier === 'pro';
+      const isPro = isActiveProProfile(sellerProfile);
       const tierBadge = document.getElementById('meTabTierBadge');
       const upgradeBtn = document.getElementById('meTabUpgradeBtn');
       const proCountdown = document.getElementById('meTabProCountdownContainer');
@@ -915,9 +1149,10 @@
         return currentUser && (currentUser.toLowerCase() === itemSeller || currentUser.includes(itemSeller));
       });
       const maxAllowed = isPro ? 7 : 3;
-      if (profileListingCount) profileListingCount.innerText = `${myListings.length} / ${maxAllowed} Used`;
+      if (profileListingCount) profileListingCount.innerText = `${myListings.filter(i=>hubStatus(i)!=="sold").length} / ${maxAllowed} Used`;
       if (profileCountdownInterval) clearInterval(profileCountdownInterval);
 
+      document.getElementById('proPerksInProfile')?.classList.toggle('hidden',!isPro);
       if (isPro) {
         tierBadge.innerText = "APM PRO TIER SELLER/BUYER (UNLOCKED)";
         tierBadge.className = "inline-block px-4 py-1.5 rounded-full bg-amber-100 text-amber-900 font-extrabold text-xs border border-amber-300 mb-3 uppercase tracking-wider";
@@ -1034,61 +1269,9 @@
     };
 
     function applyUserTheme(isPro) {
-      const banner = document.getElementById('installBanner');
-      const subTitle = document.getElementById('navSubTitle');
-      const liveBanner = document.getElementById('liveSyncBanner');
-      const liveDot = document.getElementById('liveDotSpan');
-      const syncBorder1 = document.getElementById('syncBorder1');
-      const syncBorder2 = document.getElementById('syncBorder2');
-      const storeIcon = document.getElementById('syncStoreIcon');
-      const checkIcon = document.getElementById('syncCheckIcon');
-      const courseFilterSec = document.getElementById('courseFilterSection');
-      const courseFilterIcon = document.getElementById('courseFilterIcon');
-      const resetFilterBtn = document.getElementById('resetCourseFiltersBtn');
-      const courseSelectLabel = document.getElementById('courseSelectLabel');
-      const courseSelectEl = document.getElementById('itemCourseSelect');
-      const floatingPostBtn = document.getElementById('floatingPostBtn');
-      const metaThemeColor = document.getElementById('metaThemeColor');
-      const welcomeBadgeDiv = document.getElementById('welcomeBadgeDiv');
-      const welcomeStartBtn = document.getElementById('welcomeStartBtn');
-
-      if (isPro) {
-        if (metaThemeColor) metaThemeColor.content = "#581c87";
-        if (banner) banner.className = "bg-gradient-to-r from-purple-950 via-indigo-950 to-slate-900 text-white py-2 px-3 text-center text-xs font-medium flex flex-wrap items-center justify-center gap-2 sm:gap-4 border-b border-purple-700 shadow-md transition-all";
-        if (subTitle) subTitle.className = "text-[7px] sm:text-[8px] uppercase tracking-widest text-purple-600 font-bold leading-none mt-0.5 truncate";
-        if (liveBanner) liveBanner.className = "bg-purple-50 border-b border-purple-200 py-1.5 px-3 text-center text-[10px] sm:text-[11px] font-medium text-purple-900 flex flex-wrap items-center justify-center gap-2 sm:gap-6 transition-all";
-        if (liveDot) liveDot.className = "w-2 h-2 rounded-full bg-purple-600 animate-pulse";
-        if (syncBorder1) syncBorder1.className = "flex items-center space-x-1 border-l border-purple-300 pl-2";
-        if (syncBorder2) syncBorder2.className = "flex items-center space-x-1 border-l border-purple-300 pl-2";
-        if (storeIcon) storeIcon.className = "fa-solid fa-store text-purple-600 text-[9px]";
-        if (checkIcon) checkIcon.className = "fa-solid fa-circle-check text-purple-600 text-[9px]";
-        if (courseFilterSec) courseFilterSec.className = "bg-white p-3.5 rounded-2xl border-2 border-purple-500/40 mb-4 shadow-lg hidden transition-all";
-        if (courseFilterIcon) courseFilterIcon.className = "fa-solid fa-book-medical text-purple-600 text-sm";
-        if (resetFilterBtn) resetFilterBtn.className = "text-[10px] font-bold text-purple-700 hover:underline";
-        if (courseSelectLabel) courseSelectLabel.className = "block text-[11px] font-bold text-purple-800 uppercase tracking-wider mb-1";
-        if (courseSelectEl) courseSelectEl.className = "w-full bg-purple-50 border border-purple-300 rounded-xl px-3.5 py-2.5 text-xs text-purple-950 font-bold focus:outline-none focus:border-purple-500";
-        if (floatingPostBtn) floatingPostBtn.className = "flex items-center space-x-2 px-4 py-3 sm:px-5 sm:py-3.5 rounded-2xl bg-purple-700 hover:bg-purple-800 text-white font-bold shadow-2xl shadow-purple-700/40 ring-2 ring-white hover:scale-105 transition-all text-xs sm:text-sm";
-        if (welcomeBadgeDiv) welcomeBadgeDiv.className = "inline-block px-4 py-1.5 rounded-full bg-purple-50 text-purple-700 font-bold text-xs sm:text-sm border border-purple-200";
-        if (welcomeStartBtn) welcomeStartBtn.className = "relative z-10 w-full py-3.5 px-6 rounded-2xl bg-gradient-to-r from-purple-700 to-indigo-700 hover:from-purple-800 hover:to-indigo-800 text-white font-bold text-sm shadow-xl shadow-purple-700/20 flex items-center justify-center space-x-3 transition-all hover:scale-[1.02]";
-      } else {
-        if (metaThemeColor) metaThemeColor.content = "#059669";
-        if (banner) banner.className = "bg-gradient-to-r from-emerald-900 via-teal-900 to-slate-900 text-white py-2 px-3 text-center text-xs font-medium flex flex-wrap items-center justify-center gap-2 sm:gap-4 border-b border-emerald-700 shadow-md transition-all";
-        if (subTitle) subTitle.className = "text-[7px] sm:text-[8px] uppercase tracking-widest text-emerald-600 font-bold leading-none mt-0.5 truncate";
-        if (liveBanner) liveBanner.className = "bg-emerald-50 border-b border-emerald-200 py-1.5 px-3 text-center text-[10px] sm:text-[11px] font-medium text-emerald-900 flex flex-wrap items-center justify-center gap-2 sm:gap-6 transition-all";
-        if (liveDot) liveDot.className = "w-2 h-2 rounded-full bg-emerald-500 animate-pulse";
-        if (syncBorder1) syncBorder1.className = "flex items-center space-x-1 border-l border-emerald-300 pl-2";
-        if (syncBorder2) syncBorder2.className = "flex items-center space-x-1 border-l border-emerald-300 pl-2";
-        if (storeIcon) storeIcon.className = "fa-solid fa-store text-emerald-600 text-[9px]";
-        if (checkIcon) checkIcon.className = "fa-solid fa-circle-check text-emerald-600 text-[9px]";
-        if (courseFilterSec) courseFilterSec.className = "bg-white p-3.5 rounded-2xl border-2 border-emerald-500/40 mb-4 shadow-lg hidden transition-all";
-        if (courseFilterIcon) courseFilterIcon.className = "fa-solid fa-book-medical text-emerald-600 text-sm";
-        if (resetFilterBtn) resetFilterBtn.className = "text-[10px] font-bold text-emerald-700 hover:underline";
-        if (courseSelectLabel) courseSelectLabel.className = "block text-[11px] font-bold text-emerald-800 uppercase tracking-wider mb-1";
-        if (courseSelectEl) courseSelectEl.className = "w-full bg-emerald-50 border border-emerald-300 rounded-xl px-3.5 py-2.5 text-xs text-emerald-950 font-bold focus:outline-none focus:border-emerald-500";
-        if (floatingPostBtn) floatingPostBtn.className = "flex items-center space-x-2 px-4 py-3 sm:px-5 sm:py-3.5 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold shadow-2xl shadow-emerald-600/40 ring-2 ring-white hover:scale-105 transition-all text-xs sm:text-sm";
-        if (welcomeBadgeDiv) welcomeBadgeDiv.className = "inline-block px-4 py-1.5 rounded-full bg-emerald-50 text-emerald-700 font-bold text-xs sm:text-sm border border-emerald-200";
-        if (welcomeStartBtn) welcomeStartBtn.className = "relative z-10 w-full py-3.5 px-6 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold text-sm shadow-xl shadow-emerald-600/20 flex items-center justify-center space-x-3 transition-all hover:scale-[1.02]";
-      }
+      document.body.classList.toggle('apm-pro-member',Boolean(isPro));
+      const meta=document.getElementById('metaThemeColor');if(meta)meta.content='#ffffff';
+      const button=document.getElementById('floatingPostBtn');if(button)button.classList.toggle('apm-pro-cta',Boolean(isPro));
     }
 
     function sanitizeInput(str) {
@@ -1124,9 +1307,9 @@
     }
 
     function updateMetrics() {
-      const activeBuyerListings = allListings.filter(item => !item.isDisabled);
+      const activeBuyerListings = allListings.filter(item => !item.isDisabled && hubStatus(item)==='available');
       document.getElementById('statActiveCount').innerText = activeBuyerListings.length;
-      document.getElementById('statSoldsCount').innerText = soldCount;
+      document.getElementById('statSoldsCount').innerText = soldCount + allListings.filter(item => hubStatus(item)==='sold').length;
       document.getElementById('wishlistCountBadge').innerText = getWishlist().length;
       document.getElementById('listingCount').innerText = `Showing ${activeBuyerListings.length} item(s)`;
     }
@@ -1166,11 +1349,11 @@
       const days = parseInt(document.getElementById('boostDaysSelect').value) || 1;
       const targetItem = allListings.find(i => i.id === activeBoostItemId);
       if (!targetItem) return;
-      targetItem.boostStatus = 'pending'; targetItem.boostRequestedDays = days;
       try {
-        incrementQuota('write');
         await updateDoc(doc(db, "listings", activeBoostItemId), { boostStatus: 'pending', boostRequestedDays: days });
-      } catch(e){}
+        incrementQuota('write');
+        targetItem.boostStatus = 'pending'; targetItem.boostRequestedDays = days;
+      } catch(e){toastAPM('Boost request not submitted',e.message);return}
       try {
         incrementQuota('write');
         await addDoc(collection(db, "payment_alerts"), {
@@ -1189,35 +1372,33 @@
       if (!item) return;
       const days = item.boostRequestedDays || 1;
       const boostExpiry = new Date(Date.now() + (days * 24 * 60 * 60 * 1000)).toISOString();
-      item.isBoosted = true; item.boostStatus = 'approved'; item.boostExpiryDate = boostExpiry;
+      if(!isFounderUser)return;
       try {
-        incrementQuota('write');
         await updateDoc(doc(db, "listings", itemId), { isBoosted: true, boostStatus: 'approved', boostExpiryDate: boostExpiry });
-      } catch(e){}
-      syncLocalStorage(); renderListings(); renderSellerManagerTable();
-      alert(`Approved Ad Boost for "${item.title}" (${days} days)!`);
+        incrementQuota('write');item.isBoosted = true;item.boostStatus = 'approved';item.boostExpiryDate = boostExpiry;
+        renderListings();renderSellerManagerTable();toastAPM('Boost approved',`${item.title} is featured for ${days} day(s).`);
+      } catch(e){toastAPM('Could not approve boost',e.message)}
     };
 
     window.rejectBoost = async function(itemId) {
       const item = allListings.find(i => i.id === itemId);
       if (!item) return;
-      item.isBoosted = false; item.boostStatus = 'rejected';
+      if(!isFounderUser)return;
       try {
-        incrementQuota('write');
         await updateDoc(doc(db, "listings", itemId), { isBoosted: false, boostStatus: 'rejected' });
-      } catch(e){}
-      syncLocalStorage(); renderListings(); renderSellerManagerTable();
+        incrementQuota('write');item.isBoosted = false;item.boostStatus = 'rejected';
+        renderListings();renderSellerManagerTable();toastAPM('Boost request declined');
+      } catch(e){toastAPM('Could not decline boost',e.message)}
     };
 
     window.requestProUpgrade = async function() {
       if (!currentUserEmail) { alert("Please login first."); return; }
       const seller = allSellers.find(s => s.email.toLowerCase() === currentUserEmail);
       if (seller) {
-        seller.proUpgradeStatus = 'pending';
         try {
-          incrementQuota('write');
           await updateDoc(doc(db, "verified_sellers", seller.id), { proUpgradeStatus: 'pending' });
-        } catch(e){}
+          incrementQuota('write');seller.proUpgradeStatus = 'pending';
+        } catch(e){toastAPM('Upgrade request could not be recorded',e.message);return}
       }
       try {
         incrementQuota('write');
@@ -1252,6 +1433,8 @@
       document.getElementById('editItemPrice').value = item.price || 0;
       document.getElementById('editItemContact').value = item.contact || '';
       document.getElementById('editItemDesc').value = item.desc || '';
+      document.getElementById('editItemCondition').value = item.itemCondition || 'Used - Good';
+      document.getElementById('editItemPickup').value = item.pickupArea || 'Other (agree with seller)';
       document.getElementById('editListingModal').classList.remove('hidden');
     };
     window.closeEditListingModal = function() {
@@ -1259,121 +1442,120 @@
     };
 
     window.handleUpdateListing = async function(e) {
-      if (e) e.preventDefault();
-      const itemId = document.getElementById('editItemId').value;
-      const title = sanitizeInput(document.getElementById('editItemTitle').value);
-      const price = parseFloat(document.getElementById('editItemPrice').value) || 0;
-      const contact = sanitizeInput(document.getElementById('editItemContact').value);
-      const desc = sanitizeInput(document.getElementById('editItemDesc').value);
-
-      const targetItem = allListings.find(i => i.id === itemId);
-      if (targetItem) {
-        targetItem.title = title;
-        targetItem.price = price;
-        targetItem.contact = contact;
-        targetItem.desc = desc;
-        try {
-          incrementQuota('write');
-          await updateDoc(doc(db, "listings", itemId), { title, price, contact, desc });
-        } catch(err) {}
-      }
-      closeEditListingModal();
-      renderListings();
-      renderMyProductsTab();
-      alert("Product updated successfully!");
+      if(e)e.preventDefault();
+      const itemId=document.getElementById('editItemId').value;
+      const item=allListings.find(i=>i.id===itemId);
+      if(!item||!currentUser)return;
+      const owner=(item.seller||'').toLowerCase()===(currentUser||'').toLowerCase();
+      const seller=allSellers.find(s=>s.email===currentUserEmail);
+      if(!owner||(!isFounderUser&&!isActiveProProfile(seller))) {toastAPM('Pro seller only','This action requires Pro access.');return}
+      const title=sanitizeInput(document.getElementById('editItemTitle').value),
+            price=Number(document.getElementById('editItemPrice').value),
+            contact=sanitizeInput(document.getElementById('editItemContact').value),
+            desc=sanitizeInput(document.getElementById('editItemDesc').value);
+      if(!title||!contact||!desc||!Number.isFinite(price)||price<0){toastAPM('Check product details','Fill in a valid title, price, contact and description.');return}
+      const btn=document.getElementById('updateListingSubmitBtn');btn.disabled=true;
+      try{
+        const itemCondition = document.getElementById('editItemCondition').value;const pickupArea=document.getElementById('editItemPickup').value;
+        await updateDoc(doc(db,'listings',itemId),{title,price,contact,desc,itemCondition,pickupArea});incrementQuota('write');
+        Object.assign(item,{title,price,contact,desc,itemCondition,pickupArea});
+        closeEditListingModal();renderListings();renderMyProductsTab();toastAPM('Product updated successfully');
+      }catch(error){toastAPM('Product not updated',error.message)}
+      finally{btn.disabled=false}
     };
 
     window.approveProUpgrade = async function(sellerId) {
-      const seller = allSellers.find(s => s.id === sellerId);
-      if (seller) {
-        seller.tier = 'pro'; seller.proUpgradeStatus = 'approved';
-        seller.proExpiryDate = new Date(Date.now() + (30 * 24 * 60 * 60 * 1000)).toISOString();
-        try {
-          incrementQuota('write');
-          await updateDoc(doc(db, "verified_sellers", sellerId), { tier: 'pro', proUpgradeStatus: 'approved', proExpiryDate: seller.proExpiryDate });
-        } catch(e){}
-        syncLocalStorage(); renderSellerManagerTable();
-        alert(`Approved Pro Tier for ${seller.username}!`);
-      }
+      if(!isFounderUser)return;
+      const seller=allSellers.find(s=>s.id===sellerId);if(!seller)return;
+      const expiry=new Date(Date.now()+30*24*60*60*1000).toISOString();
+      try{
+        await updateDoc(doc(db,'verified_sellers',sellerId),{tier:'pro',proUpgradeStatus:'approved',proExpiryDate:expiry});
+        incrementQuota('write');seller.tier='pro';seller.proUpgradeStatus='approved';seller.proExpiryDate=expiry;
+        syncLocalStorage();renderSellerManagerTable();renderListings();toastAPM('Pro activated',`${seller.username} has 30 days of Pro access.`);
+      }catch(e){toastAPM('Could not approve Pro',e.message)}
     };
-
     window.rejectProUpgrade = async function(sellerId) {
-      const seller = allSellers.find(s => s.id === sellerId);
-      if (seller) {
-        seller.proUpgradeStatus = 'rejected';
-        try {
-          incrementQuota('write');
-          await updateDoc(doc(db, "verified_sellers", sellerId), { proUpgradeStatus: 'rejected' });
-        } catch(e){}
-        syncLocalStorage(); renderSellerManagerTable();
-      }
+      if(!isFounderUser)return;
+      const seller=allSellers.find(s=>s.id===sellerId);if(!seller)return;
+      try{await updateDoc(doc(db,'verified_sellers',sellerId),{proUpgradeStatus:'rejected'});
+        incrementQuota('write');seller.proUpgradeStatus='rejected';syncLocalStorage();renderSellerManagerTable();toastAPM('Pro request declined');
+      }catch(e){toastAPM('Could not decline Pro',e.message)}
     };
 
-    window.switchAuthTab = function(tab) {
-      if (tab === 'login') {
-        document.getElementById('loginFormContainer').classList.remove('hidden');
-        document.getElementById('registerFormContainer').classList.add('hidden');
-        document.getElementById('tabLoginBtn').className = "flex-1 py-1.5 rounded-xl text-xs font-extrabold bg-white text-slate-900 shadow-sm transition-all";
-        document.getElementById('tabRegisterBtn').className = "flex-1 py-1.5 rounded-xl text-xs font-extrabold text-slate-500 hover:text-slate-900 transition-all";
-      } else {
-        document.getElementById('loginFormContainer').classList.add('hidden');
-        document.getElementById('registerFormContainer').classList.remove('hidden');
-        document.getElementById('tabRegisterBtn').className = "flex-1 py-1.5 rounded-xl text-xs font-extrabold bg-white text-slate-900 shadow-sm transition-all";
-        document.getElementById('tabLoginBtn').className = "flex-1 py-1.5 rounded-xl text-xs font-extrabold text-slate-500 hover:text-slate-900 transition-all";
-      }
+    let registrationInProgress=false;
+    window.switchAuthTab=function(tab){
+      for(const id of ['loginFormContainer','registerFormContainer','forgotFormContainer'])document.getElementById(id).classList.add('hidden');
+      document.getElementById((tab==='register'?'register':tab==='forgot'?'forgot':'login')+'FormContainer').classList.remove('hidden');
+      document.getElementById('tabLoginBtn').classList.toggle('selected',tab!=='register');
+      document.getElementById('tabRegisterBtn').classList.toggle('selected',tab==='register');
+      document.getElementById('authHeading').textContent=tab==='register'?'Join the AIMST community':tab==='forgot'?'Reset your password':'Welcome to APM';
+      for(const id of ['loginError','registerError','forgotError'])document.getElementById(id).classList.add('hidden');
     };
-
-    window.handleRegister = async function() {
-      let rawUser = document.getElementById('regUser').value.trim().toLowerCase();
-      const pass = document.getElementById('regPass').value.trim();
-      const errEl = document.getElementById('registerError');
-      errEl.classList.add('hidden');
-
-      if (!rawUser || !pass) { 
-        errEl.innerText = "Please fill in all registration fields."; 
-        errEl.classList.remove('hidden'); 
-        return; 
+    window.openForgotPassword=()=>{
+      const typed=document.getElementById('loginUser').value.trim();
+      const username=typed.toLowerCase(); const profile=allSellers.find(s=>(s.username||'').toLowerCase()===username);
+      const email=typed.includes('@')?typed:(profile?.email || '');
+      document.getElementById('forgotEmail').value=email.toLowerCase().endsWith('@apm.com')?'':email;
+      switchAuthTab('forgot');
+    };
+    window.submitForgotPassword=async()=>{
+      const err=document.getElementById('forgotError');err.classList.add('hidden');
+      const email=document.getElementById('forgotEmail').value.trim().toLowerCase();
+      if(email.endsWith('@apm.com')){err.textContent='@apm.com is a login ID, not necessarily a working email inbox. Please use Contact founders for recovery above; do not share your password.';err.classList.remove('hidden');return}
+      const btn=document.getElementById('forgotSubmitBtn');btn.disabled=true;
+      try{await sendPasswordResetEmail(auth,email);err.className='text-[11px] font-semibold text-emerald-700';err.textContent='If this email is registered, a password reset link has been sent. Check your inbox and spam.';toastAPM('Password reset requested','Check your email inbox.');}
+      catch(error){err.className='apm-form-error';err.textContent='Could not send the email right now. Check the email and try again.'}
+      finally{btn.disabled=false}
+    };
+    const apmEmailPattern = /^[a-z]{2,30}_[a-z0-9]{4,18}@apm\.com$/i;
+    window.validateAPMRegistrationFormat=()=>{
+      const field=document.getElementById('regUser');
+      const hint=document.getElementById('regFormatHint');
+      if(!field||!hint)return;
+      const typed=field.value.trim();
+      const valid=apmEmailPattern.test(typed);
+      hint.textContent=!typed?'Example: keventhiran_e25101420@apm.com':valid?'Correct APM format ✓':'Use FirstName_MatrixID@apm.com — your own first name, underscore (_), matrix ID and @apm.com. No Gmail.';
+      hint.className='text-[11px] mt-1 '+(!typed?'text-slate-500':valid?'text-emerald-700 font-bold':'text-rose-600 font-semibold');
+    };
+    window.handleRegister=async()=>{
+      const email=document.getElementById('regUser').value.trim().toLowerCase();
+      const username=email.split('@')[0];
+      const role=document.getElementById('regRole').value;
+      const pass=document.getElementById('regPass').value, confirmPass=document.getElementById('regPassConfirm').value;
+      const err=document.getElementById('registerError');err.className='apm-form-error hidden';
+      if(!apmEmailPattern.test(email)){
+        err.textContent='Invalid APM email. You MUST use FirstName_MatrixID@apm.com, with your own first name, an underscore (_), your AIMST matrix ID and @apm.com. Example: keventhiran_e25101420@apm.com. Gmail and other formats are not accepted.';
+        err.classList.remove('hidden');return;
       }
-
-      if (!rawUser.endsWith('@apm.com')) {
-        rawUser = `${rawUser}@apm.com`;
-      }
-      
-      const emailPrefix = rawUser.split('@')[0];
-      if (!emailPrefix.includes('_') || emailPrefix.includes('@gmail.com') || emailPrefix.includes('gmail')) {
-        errEl.innerText = "Registration Failed! You haven't followed the criteria. Email MUST be in the format: Firstname_matrixID@apm.com (e.g. keventhiran_e25101420@apm.com). Personal Gmail is not allowed.";
-        errEl.classList.remove('hidden');
-        return;
-      }
-
-      const cleanUsername = emailPrefix;
-      try {
-        await createUserWithEmailAndPassword(auth, rawUser, pass);
-        const newSellerDoc = { id: 'seller-' + Date.now(), username: cleanUsername, email: rawUser.toLowerCase(), isVerified: false, tier: 'free' };
-        try {
-          incrementQuota('write');
-          await setDoc(doc(db, "verified_sellers", newSellerDoc.id), newSellerDoc);
-        } catch(e){}
-        
-        try {
-          incrementQuota('write');
-          await addDoc(collection(db, "payment_alerts"), {
-            type: "New Student Verification", seller: cleanUsername, email: rawUser, amount: "0.00", createdAt: new Date().toISOString()
-          });
-        } catch(e){}
-
-        allSellers.push(newSellerDoc); syncLocalStorage(); await signOut(auth);
-        alert("Registration Successful! Your account is pending Founder approval. Please check back soon.");
-        switchAuthTab('login');
-      } catch (err) { 
-        errEl.innerText = `Registration Error: ${err.message}`;
-        errEl.classList.remove('hidden');
-      }
+      if(pass.length<8){err.textContent='Please use a password of at least 8 characters.';err.classList.remove('hidden');return}
+      if(pass!==confirmPass){err.textContent='Passwords do not match.';err.classList.remove('hidden');return}
+      if(allSellers.some(s=>(s.username||'').toLowerCase()===username)){err.textContent='Username already taken. Try signing in or choose another campus username.';err.classList.remove('hidden');return}
+      const btn=document.getElementById('registerSubmitBtn');btn.disabled=true;registrationInProgress=true;
+      let newAuthUser=null;
+      try{
+        const credential=await createUserWithEmailAndPassword(auth,email,pass);
+        newAuthUser=credential.user;
+        const newSellerDoc={id:'seller-'+credential.user.uid,uid:credential.user.uid,username,email,role,isVerified:false,tier:'free',createdAt:new Date().toISOString()};
+        // Must persist pending request before signing out. If denied, don't claim a completed registration.
+        await setDoc(doc(db,'verified_sellers',newSellerDoc.id),newSellerDoc);
+        newAuthUser=null; // successful profile save; keep the Auth user
+        allSellers.push(newSellerDoc);syncLocalStorage();
+        try{await addDoc(collection(db,'payment_alerts'),{type:'New Student Verification',seller:username,email,amount:'0.00',createdAt:new Date().toISOString()})}catch(e){console.warn('Founder alert collection not writable:',e)}
+        await signOut(auth);document.getElementById('registerFormContainer').reset();
+        switchAuthTab('login');toastAPM('Registration submitted','Your account awaits founder verification.');
+        inboxAPM('Verification pending','Your seller registration was sent for founder review.','general',true);
+      }catch(error){
+        if(newAuthUser)await deleteUser(newAuthUser).catch(()=>{});
+        err.textContent=error.code==='auth/email-already-in-use'?'This email already has an account. Please sign in.':'Registration could not be completed: '+error.message;
+        err.classList.remove('hidden');
+        if(auth.currentUser)await signOut(auth).catch(()=>{});
+      }finally{registrationInProgress=false;btn.disabled=false}
     };
 
     window.handleAuthClick = function() { if (currentUser) switchMainTab('me'); else openAuthModal(); };
 
     onAuthStateChanged(auth, async (user) => {
+      if (registrationInProgress) return;
       if (user) {
         currentUserEmail = (user.email || '').toLowerCase();
         const founderEmails = ['keventhiran_e25101420@apm.com', 'taarisini_e25101220@apm.com'];
@@ -1382,12 +1564,13 @@
 
         await loadSellers();
         const sellerProfile = allSellers.find(s => (s.email || '').toLowerCase() === currentUserEmail);
-        if (sellerProfile && !sellerProfile.isVerified && !isFounderUser) {
+        currentUser = sellerProfile?.username || currentUser;
+        if ((!sellerProfile || !sellerProfile.isVerified) && !isFounderUser) {
           await signOut(auth);
-          alert("Your account is pending founder verification. Please check back soon!");
+          toastAPM("Account awaiting approval", "The founder must verify your campus account before you can sign in.");
           return;
         }
-        const isPro = sellerProfile && sellerProfile.tier === 'pro';
+        const isPro = isActiveProProfile(sellerProfile);
         applyUserTheme(isPro);
 
         document.getElementById('floatingPostBtn').style.display = 'block';
@@ -1395,48 +1578,70 @@
         if (isFounderUser) {
           document.getElementById('sellerManagerNavBtn').style.display = 'flex';
           setupFounderRealtimeListeners();
+          updateFounderAlertBadge();
         }
 
         checkExpiredBoostsForSeller();
+        initPushOnLogin();
       } else {
+        stopFounderRealtimeListeners();
         currentUser = null; currentUserEmail = null; isFounderUser = false;
         applyUserTheme(false);
         document.getElementById('floatingPostBtn').style.display = 'none';
         document.getElementById('addClubBtn').style.display = 'none';
         document.getElementById('sellerManagerNavBtn').style.display = 'none';
       }
-      updateNavTabVisuals(); renderListings(); renderClubs(); loadContributors();
+      refreshPushStatus();updateNavTabVisuals(); renderListings(); renderClubs(); loadContributors();
       if (isFounderUser) renderSellerManagerTable();
     });
 
-    function setupFounderRealtimeListeners() {
-      try {
-        onSnapshot(collection(db, "payment_alerts"), (snapshot) => {
-          incrementQuota('read');
-          snapshot.docChanges().forEach((change) => {
-            if (change.type === "added") {
-              const data = change.doc.data();
-              if (!localStorage.getItem(`apm_notified_${change.doc.id}`)) {
-                localStorage.setItem(`apm_notified_${change.doc.id}`, 'true');
-                triggerDesktopNotification("APM Founder Alert!", `${data.type} submitted by ${data.seller}! Check Admin Hub.`);
-              }
-            }
+    let founderUnsubs=[];
+    let founderSellerListenerInitial=false;
+    function pendingFounderTotal(){return allSellers.filter(s=>!s.isVerified).length+allSellers.filter(s=>s.proUpgradeStatus==='pending').length+allListings.filter(i=>i.boostStatus==='pending').length}
+    function updateFounderAlertBadge(){
+      const nav=document.getElementById('sellerManagerNavBtn');if(!nav)return;
+      const n=pendingFounderTotal();nav.title=n?`${n} requests awaiting approval`:'Founder Admin Hub';
+      let dot=document.getElementById('founderPendingDot');
+      if(!dot){dot=document.createElement('span');dot.id='founderPendingDot';dot.className='ml-1 bg-amber-500 text-white rounded-full px-1.5 py-0.5 text-[9px]';nav.appendChild(dot)}
+      dot.textContent=n?String(n):'';dot.classList.toggle('hidden',!n);
+    }
+    function stopFounderRealtimeListeners(){founderUnsubs.forEach(fn=>fn());founderUnsubs=[];founderSellerListenerInitial=false}
+    function setupFounderRealtimeListeners(){
+      stopFounderRealtimeListeners();
+      const unsubSellers=onSnapshot(collection(db,'verified_sellers'),snap=>{
+        const changes=snap.docChanges();
+        allSellers=snap.docs.map(d=>({id:d.id,...d.data(),email:(d.data().email||'').toLowerCase()}));
+        syncLocalStorage();updateFounderAlertBadge();
+        if(founderSellerListenerInitial){
+          changes.filter(c=>c.type==='added'&&c.doc.data().isVerified===false).forEach(change=>{
+            triggerDesktopNotification('New seller to verify',`${change.doc.data().username||'An AIMST member'} is waiting for approval.`);
           });
-        });
-
-        onSnapshot(collection(db, "verified_sellers"), (snapshot) => {
-          incrementQuota('read');
-          snapshot.docChanges().forEach((change) => {
-            if (change.type === "added") {
-              const data = change.doc.data();
-              if (data.isVerified === false && !localStorage.getItem(`apm_seller_notified_${change.doc.id}`)) {
-                localStorage.setItem(`apm_seller_notified_${change.doc.id}`, 'true');
-                triggerDesktopNotification("New Student Registration!", `New student ${data.username} requested verification.`);
-              }
-            }
+          changes.filter(c=>c.type==='modified'&&c.doc.data().proUpgradeStatus==='pending').forEach(change=>{
+            triggerDesktopNotification('Pro upgrade request',`${change.doc.data().username||'A seller'} requested Pro approval.`);
           });
-        });
-      } catch(e) {}
+        }else{
+          founderSellerListenerInitial=true;
+          const pending=allSellers.filter(s=>!s.isVerified).length;
+          if(pending){
+            const message=`${pending} seller application(s) are waiting for founder approval.`;
+            inboxAPM('Founder review queue',message,'admin',true);
+            showFounderAlertModal(message);
+          }
+        }
+        const modal=document.getElementById('sellerManagerModal');
+        if(!modal.classList.contains('hidden'))renderSellerManagerTable();
+      },err=>console.warn('Founder verified_sellers listener:',err));
+      founderUnsubs.push(unsubSellers);
+      let paymentsInitial=false;
+      const unsubPayments=onSnapshot(collection(db,'payment_alerts'),snap=>{
+        if(paymentsInitial){snap.docChanges().filter(c=>c.type==='added').forEach(change=>{
+          const d=change.doc.data();
+          if(d.type==='New Student Verification')return; // already delivered from sellers listener
+          triggerDesktopNotification('Founder action requested',`${d.type||'New request'} by ${d.seller||'A seller'}.`);
+        })}
+        paymentsInitial=true;
+      },err=>console.warn('Founder payment listener:',err));
+      founderUnsubs.push(unsubPayments);
     }
 
     function checkExpiredBoostsForSeller() {
@@ -1473,15 +1678,33 @@
       checkWelcomeModal(); populateCourseDropdowns(); renderCourseFilterPills();
       await loadSellers(); await loadListings(); await loadClubs(); await loadContributors();
       updateMetrics(); updateNavTabVisuals();
-      startDailyBoostPopupSequence();
-      setInterval(startDailyBoostPopupSequence, 5 * 60 * 1000);
+      // Sponsored listings appear in the featured slider; no intrusive popup on page load.
+      startListingsRealtime();
+    }
+
+    let listingsUnsub=null, listingsRealtimeInitial=false;
+    function startListingsRealtime(){
+      if(listingsUnsub)return;
+      listingsUnsub=onSnapshot(collection(db,'listings'),snapshot=>{
+        if(listingsRealtimeInitial){
+          snapshot.docChanges().filter(change=>change.type==='added').forEach(change=>{
+            const item=change.doc.data();
+            if(currentUser && item.seller===currentUser)return;
+            inboxAPM('New campus listing',`${item.title||'New item'} is now available.`, 'listing',true);
+          });
+        }
+        listingsRealtimeInitial=true;
+        allListings=snapshot.docs.map(d=>({id:d.id,clicksCount:0,...d.data()}));
+        renderListings();updateMetrics();updateFounderAlertBadge();
+        const my=document.getElementById('viewMyProducts');if(my&&!my.classList.contains('hidden'))renderMyProductsTab();
+      },err=>console.warn('Realtime listings unavailable:',err));
     }
 
     function startDailyBoostPopupSequence() {
       const now = new Date(); const todayStr = new Date().toDateString();
       const activeBoosted = allListings.filter(item => {
         if (!item.isBoosted || !item.boostExpiryDate) return false;
-        return new Date(item.boostExpiryDate) > now && !item.isDisabled;
+        return new Date(item.boostExpiryDate) > now && !item.isDisabled && hubStatus(item)==="available";
       }).sort((a, b) => new Date(b.boostExpiryDate) - new Date(a.boostExpiryDate));
 
       if (activeBoosted.length === 0) return;
@@ -1616,7 +1839,11 @@
           await updateDoc(doc(db, "listings", id), { clicksCount: increment(1) });
         } catch(e) {}
       }
-      window.open(contactUrl, '_blank');
+      try{
+        const url=new URL(contactUrl,location.href);
+        if(!['wa.me','api.whatsapp.com','chat.whatsapp.com','www.whatsapp.com','web.whatsapp.com'].includes(url.hostname) || url.protocol!=='https:')throw new Error('Please use a valid WhatsApp contact link.');
+        window.open(url.href,'_blank','noopener,noreferrer');
+      }catch(error){toastAPM('Invalid seller contact','This listing does not have a valid WhatsApp link.')}
     };
 
     window.setCategory = function(cat, btn) {
@@ -1632,6 +1859,13 @@
 
     window.filterListings = function() { renderListings(); };
 
+    function isActiveProProfile(s){return Boolean(s && s.tier==='pro' && (!s.proExpiryDate || new Date(s.proExpiryDate).getTime()>Date.now()))}
+    function sellerIsPro(item){
+      const name=(item.seller||'').toLowerCase();
+      const seller=allSellers.find(s=>(s.username||'').toLowerCase()===name || (s.email||'').toLowerCase()===name);
+      return Boolean(seller&&seller.isVerified&&isActiveProProfile(seller));
+    }
+    function listingPriority(item){return ((item.isBoosted&&item.boostExpiryDate&&new Date(item.boostExpiryDate)>new Date())?200:0)+(sellerIsPro(item)?100:0)}
     window.renderListings = function() {
       const grid = document.getElementById('listingsGrid');
       const sponsoredSec = document.getElementById('sponsoredSection');
@@ -1660,8 +1894,11 @@
           carouselAnimId = requestAnimationFrame(startTicker);
         }
         carouselContainer.onmouseenter = () => cancelAnimationFrame(carouselAnimId);
-        carouselContainer.onmouseleave = () => startTicker();
-        startTicker();
+        carouselContainer.onmouseleave = () => {
+          if(window.innerWidth>=768 && !matchMedia('(prefers-reduced-motion: reduce)').matches)startTicker();
+        };
+        // Mobile users swipe the carousel themselves; avoiding autoplay saves battery.
+        if(window.innerWidth>=768 && !matchMedia('(prefers-reduced-motion: reduce)').matches)startTicker();
       } else {
         sponsoredSec.classList.add('hidden');
       }
@@ -1678,8 +1915,8 @@
         }
 
         const matchesSearch = (item.title || '').toLowerCase().includes(searchTxt) || (item.desc || '').toLowerCase().includes(searchTxt) || (item.courseNick || '').toLowerCase().includes(searchTxt) || (item.category || '').toLowerCase().includes(searchTxt);
-        return matchesCategory && matchesCourse && matchesSearch;
-      });
+        return matchesCategory && matchesCourse && matchesSearch && hubMatchesFilter(item);
+      }).sort(hubCompareItems);
 
       if (filtered.length === 0) {
         grid.innerHTML = `<div class="col-span-full py-16 text-center grab-card rounded-3xl p-8 border border-slate-200"><i class="fa-solid fa-box-open text-4xl mb-3 text-emerald-500"></i><h4 class="text-base font-black text-slate-900 mb-1">No products available</h4><p class="text-xs text-slate-500 max-w-sm mx-auto mb-4">No items matching your criteria right now.</p></div>`;
@@ -1697,7 +1934,7 @@
       const diffHrs = Math.floor(diffMs / (1000 * 60 * 60));
       const diffMins = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
 
-      return `<div class="shrink-0 w-64 sm:w-72 boosted-card rounded-2xl overflow-hidden p-3 flex flex-col justify-between relative shadow-lg"><div><div class="relative w-full h-36 rounded-xl overflow-hidden bg-slate-100 mb-2"><img src="${item.image || 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=800'}" alt="${item.title}" class="w-full h-full object-cover"><span class="absolute top-2 left-2 bg-amber-500 text-slate-950 font-black text-[8px] py-0.5 px-2 rounded-md uppercase tracking-wider shadow-md"><i class="fa-solid fa-bolt"></i> SPONSORED</span><span class="absolute bottom-2 right-2 bg-slate-900/90 text-amber-400 font-bold text-[9px] py-0.5 px-2 rounded-md shadow-md backdrop-blur-sm"><i class="fa-solid fa-clock"></i> ${diffHrs}h ${diffMins}m</span></div><h4 class="font-black text-xs text-slate-900 truncate mb-0.5">${item.title}</h4><p class="text-[10px] text-emerald-700 font-extrabold mb-2">RM ${safePrice.toFixed(2)}</p></div><a href="${contactHref}" target="_blank" onclick="handleChatClick('${item.id}', '${contactHref}')" class="w-full py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs shadow-md transition-all flex items-center justify-center space-x-1.5"><i class="fa-brands fa-whatsapp text-sm"></i><span>BUY NOW & CHAT</span></a></div>`;
+      return `<div class="shrink-0 w-64 sm:w-72 boosted-card rounded-2xl overflow-hidden p-3 flex flex-col justify-between relative shadow-lg"><div><div class="relative w-full h-36 rounded-xl overflow-hidden bg-slate-100 mb-2"><img src="${item.image || 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=800'}" alt="${item.title}" class="w-full h-full object-cover"><span class="absolute top-2 left-2 bg-amber-500 text-slate-950 font-black text-[8px] py-0.5 px-2 rounded-md uppercase tracking-wider shadow-md"><i class="fa-solid fa-bolt"></i> SPONSORED</span><span class="absolute bottom-2 right-2 bg-slate-900/90 text-amber-400 font-bold text-[9px] py-0.5 px-2 rounded-md shadow-md backdrop-blur-sm"><i class="fa-solid fa-clock"></i> ${diffHrs}h ${diffMins}m</span></div><h4 class="font-black text-xs text-slate-900 truncate mb-0.5">${item.title}</h4><p class="text-[10px] text-emerald-700 font-extrabold mb-2">RM ${safePrice.toFixed(2)}</p></div><a href="${contactHref}" target="_blank" rel="noopener noreferrer" onclick="event.preventDefault();handleChatClick('${item.id}', '${contactHref}')" class="w-full py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs shadow-md transition-all flex items-center justify-center space-x-1.5"><i class="fa-brands fa-whatsapp text-sm"></i><span>BUY NOW & CHAT</span></a></div>`;
     }
 
     function createCardHTML(item) {
@@ -1711,12 +1948,13 @@
       const shouldTruncate = fullDesc.length > 55;
       const wishlist = getWishlist();
       const isWishlisted = wishlist.includes(item.id);
+      const proSeller = sellerIsPro(item);
       const isRental = item.category === 'rentals';
       const priceUnit = isRental ? '/ day' : '';
 
       const courseBadge = item.courseNick ? `<span class="absolute top-8 left-2.5 px-2 py-0.5 rounded-lg bg-emerald-50 text-emerald-800 text-[8px] font-black uppercase tracking-wider shadow-sm border border-emerald-200">${item.courseNick}</span>` : '';
 
-      return `<div class="grab-card rounded-2xl overflow-hidden transition-all group flex flex-col justify-between relative text-left"><div><div class="relative w-full aspect-square overflow-hidden bg-slate-100"><img src="${item.image || 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=800'}" alt="${item.title}" class="w-full h-full object-cover group-hover:scale-105 transition-all duration-300"><span class="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-lg bg-white/95 backdrop-blur-md text-[9px] font-extrabold uppercase tracking-wider text-slate-800 shadow-sm border border-slate-200">${item.category === 'rentals' ? 'Belongings Rental' : (item.category || 'general')}</span>${courseBadge}<button onclick="toggleWishlist('${item.id}')" title="Save to Favourite" class="absolute top-2.5 right-2.5 z-20 w-7 h-7 rounded-full bg-white/95 backdrop-blur-md shadow-md flex items-center justify-center transition-all hover:scale-110"><i class="fa-solid fa-heart ${isWishlisted ? 'text-rose-500' : 'text-slate-300'} text-xs"></i></button>${(isFounderUser || isOwner) ? `<button onclick="terminateListing('${item.id}')" class="absolute top-11 right-2.5 px-2 py-0.5 rounded-lg bg-rose-600 text-white font-bold text-[9px] shadow-md hover:bg-rose-700 z-10 transition-all">${isFounderUser ? 'TERMINATE' : 'Delete'}</button>` : ''}</div><div class="p-2.5 sm:p-3"><h4 class="font-bold text-xs sm:text-sm text-slate-900 mb-1 line-clamp-2 leading-snug">${item.title || 'Item Title'}</h4><div class="text-[10px] text-slate-500 mb-2 leading-relaxed">${isExpanded || !shouldTruncate ? fullDesc : fullDesc.substring(0, 55) + '...'}${shouldTruncate ? `<button onclick="toggleDescription('${item.id}')" class="text-emerald-700 font-bold hover:underline ml-1 focus:outline-none">${isExpanded ? 'Show Less' : 'Show More'}</button>` : ''}</div><div class="flex items-baseline justify-between mb-1"><div class="flex items-baseline space-x-1"><span class="text-[10px] text-emerald-600 font-bold">RM</span><span class="text-base sm:text-lg font-black text-emerald-700 leading-none">${safePrice.toFixed(2)}</span>${priceUnit ? `<span class="text-[9px] text-slate-500 font-bold">${priceUnit}</span>` : ''}</div><span class="text-[9px] text-slate-400 flex items-center space-x-1"><i class="fa-solid fa-location-dot text-emerald-500 text-[8px]"></i><span>AIMST</span></span></div></div></div><div class="p-2.5 sm:p-3 pt-0 mt-auto"><div class="pt-2 border-t border-slate-100 flex items-center justify-between gap-1 text-[10px]"><span class="text-slate-600 truncate max-w-[50%] font-semibold">${itemSeller}</span><div class="flex items-center space-x-1 shrink-0">${(isOwner || isFounderUser) ? `<button onclick="markItemSold('${item.id}')" class="px-2 py-1 rounded-lg bg-slate-100 text-slate-700 hover:bg-emerald-600 hover:text-white font-bold text-[9px] transition-all border border-slate-200">Sold</button>` : ''}<button onclick="handleChatClick('${item.id}', '${contactHref}')" class="px-2 py-1 rounded-xl bg-emerald-50 hover:bg-emerald-600 hover:text-white text-emerald-700 font-bold transition-all border border-slate-200 flex items-center space-x-1 text-[10px] shadow-sm"><i class="fa-brands fa-whatsapp text-xs"></i><span>Chat</span></button></div></div></div></div>`;
+      return `<div class="grab-card ${proSeller?'apm-pro-card':''} rounded-2xl overflow-hidden transition-all group flex flex-col justify-between relative text-left"><div><div class="relative w-full aspect-square overflow-hidden bg-slate-100"><img src="${item.image || 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=800'}" alt="${item.title}" class="w-full h-full object-cover group-hover:scale-105 transition-all duration-300"><span class="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-lg bg-white/95 backdrop-blur-md text-[9px] font-extrabold uppercase tracking-wider text-slate-800 shadow-sm border border-slate-200">${item.category === 'rentals' ? 'Belongings Rental' : (item.category || 'general')}</span>${courseBadge}${proSeller?'<span class="apm-pro-ribbon"><i class="fa-solid fa-crown"></i> APM PRO SELLER</span>':''}<button onclick="toggleWishlist('${item.id}')" title="Save to Favourite" class="absolute top-2.5 right-2.5 z-20 w-7 h-7 rounded-full bg-white/95 backdrop-blur-md shadow-md flex items-center justify-center transition-all hover:scale-110" aria-label="Save to favourites"><i class="fa-solid fa-heart ${isWishlisted ? 'text-rose-500' : 'text-slate-300'} text-xs"></i></button>${(isFounderUser || isOwner) ? `<button onclick="terminateListing('${item.id}')" class="absolute top-11 right-2.5 px-2 py-0.5 rounded-lg bg-rose-600 text-white font-bold text-[9px] shadow-md hover:bg-rose-700 z-10 transition-all">${isFounderUser ? 'TERMINATE' : 'Delete'}</button>` : ''}</div><div class="p-2.5 sm:p-3"><h4 class="font-bold text-xs sm:text-sm text-slate-900 mb-1 line-clamp-2 leading-snug">${item.title || 'Item Title'}</h4><div class="text-[10px] text-slate-500 mb-2 leading-relaxed">${isExpanded || !shouldTruncate ? fullDesc : fullDesc.substring(0, 55) + '...'}${shouldTruncate ? `<button onclick="toggleDescription('${item.id}')" class="text-emerald-700 font-bold hover:underline ml-1 focus:outline-none">${isExpanded ? 'Show Less' : 'Show More'}</button>` : ''}</div><div class="flex items-baseline justify-between mb-1"><div class="flex items-baseline space-x-1"><span class="text-[10px] text-emerald-600 font-bold">RM</span><span class="text-base sm:text-lg font-black text-emerald-700 leading-none">${safePrice.toFixed(2)}</span>${priceUnit ? `<span class="text-[9px] text-slate-500 font-bold">${priceUnit}</span>` : ''}</div><span class="text-[9px] text-slate-400 flex items-center space-x-1"><i class="fa-solid fa-location-dot text-emerald-500 text-[8px]"></i><span>AIMST</span></span></div></div></div><div class="p-2.5 sm:p-3 pt-0 mt-auto"><div class="pt-2 border-t border-slate-100 flex items-center justify-between gap-1 text-[10px]"><span class="text-slate-600 truncate max-w-[50%] font-semibold">${itemSeller}</span><div class="flex items-center space-x-1 shrink-0">${(isOwner || isFounderUser) ? `<button onclick="markItemSold('${item.id}')" class="px-2 py-1 rounded-lg bg-slate-100 text-slate-700 hover:bg-emerald-600 hover:text-white font-bold text-[9px] transition-all border border-slate-200">Sold</button>` : ''}<button onclick="handleChatClick('${item.id}', '${contactHref}')" class="px-2 py-1 rounded-xl bg-emerald-50 hover:bg-emerald-600 hover:text-white text-emerald-700 font-bold transition-all border border-slate-200 flex items-center space-x-1 text-[10px] shadow-sm"><i class="fa-brands fa-whatsapp text-xs"></i><span>Chat</span></button></div></div></div></div>`;
     }
 
     window.renderClubs = function() {
@@ -1728,7 +1966,7 @@
     };
 
     window.renderSellerManagerTable = async function() {
-      await loadSellers(); await loadListings();
+      // Display cached/realtime records. Avoid fetching all collections on every keystroke.
       const searchPendingBoosts = (document.getElementById('searchPendingBoostsInput')?.value || '').toLowerCase();
       const searchPendingPro = (document.getElementById('searchPendingProInput')?.value || '').toLowerCase();
       const searchPendingStudents = (document.getElementById('searchPendingStudentsInput')?.value || '').toLowerCase();
@@ -1748,6 +1986,7 @@
       document.getElementById('pendingProCountBadge').innerText = `${pendingProSellers.length} Pending`;
       pendingProContainer.innerHTML = pendingProSellers.length === 0 ? `<p class="text-[11px] text-purple-800 italic">No matching pending pro upgrades.</p>` : pendingProSellers.map(s => `<div class="bg-white p-2.5 rounded-xl border border-purple-300 flex items-center justify-between text-xs"><div><span class="font-extrabold text-slate-900 block">${s.username}</span><span class="text-[10px] text-slate-500">${s.email} | Pro Tier (RM5)</span></div><div class="space-x-1 shrink-0"><button onclick="approveProUpgrade('${s.id}')" class="px-2.5 py-1 rounded-lg bg-emerald-600 text-white font-bold text-[10px]">Accept</button><button onclick="rejectProUpgrade('${s.id}')" class="px-2.5 py-1 rounded-lg bg-rose-600 text-white font-bold text-[10px]">Reject</button></div></div>`).join('');
 
+      updateFounderAlertBadge();
       const pendingStudents = allSellers.filter(s => !s.isVerified && (s.username.toLowerCase().includes(searchPendingStudents) || s.email.toLowerCase().includes(searchPendingStudents)));
       document.getElementById('pendingCountBadge').innerText = `${pendingStudents.length} Pending`;
       pendingContainer.innerHTML = pendingStudents.length === 0 ? `<p class="text-[11px] text-amber-800 italic">No matching pending students.</p>` : pendingStudents.map(s => `<div class="bg-white p-2.5 rounded-xl border border-amber-300 flex items-center justify-between text-xs"><div><span class="font-extrabold text-slate-900 block">${s.username}</span><span class="text-[10px] text-slate-500">${s.email}</span></div><div class="space-x-1 shrink-0"><button onclick="approveSeller('${s.id}')" class="px-2.5 py-1 rounded-lg bg-emerald-600 text-white font-bold text-[10px]">Accept</button><button onclick="rejectSeller('${s.id}')" class="px-2.5 py-1 rounded-lg bg-rose-600 text-white font-bold text-[10px]">Reject</button></div></div>`).join('');
@@ -1768,29 +2007,24 @@
     };
 
     window.approveSeller = async function(id) {
-      const s = allSellers.find(x => x.id === id);
-      if (s) { 
-        s.isVerified = true; 
-        try {
-          incrementQuota('write');
-          await updateDoc(doc(db, "verified_sellers", id), { isVerified: true });
-        } catch(e) { 
-          try {
-            incrementQuota('write');
-            await setDoc(doc(db, "verified_sellers", id), s);
-          } catch(err) {} 
-        }
-        syncLocalStorage(); renderSellerManagerTable(); alert(`Successfully verified ${s.username}!`); 
-      }
+      if(!isFounderUser)return;
+      const s=allSellers.find(x=>x.id===id);
+      if(!s)return;
+      try{
+        await updateDoc(doc(db,'verified_sellers',id),{isVerified:true});incrementQuota('write');
+        s.isVerified=true;syncLocalStorage();renderSellerManagerTable();updateFounderAlertBadge();
+        inboxAPM('Seller approved',`${s.username} can now use APM.`,'admin');
+      }catch(e){toastAPM('Approval unsuccessful',e.message||'Please check Firestore permissions.')}
     };
 
     window.rejectSeller = async function(id) {
-      allSellers = allSellers.filter(x => x.id !== id);
-      try {
-        incrementQuota('delete');
-        await deleteDoc(doc(db, "verified_sellers", id));
-      } catch(e){}
-      syncLocalStorage(); renderSellerManagerTable();
+      if(!isFounderUser || !confirm('Revoke this seller account?'))return;
+      try{
+        await deleteDoc(doc(db,'verified_sellers',id));incrementQuota('delete');
+        allSellers=allSellers.filter(x=>x.id!==id);
+        syncLocalStorage();renderSellerManagerTable();updateFounderAlertBadge();
+        toastAPM('Seller access revoked');
+      }catch(e){toastAPM('Cannot revoke seller',e.message||'Please review your access permissions.')}
     };
 
     window.terminateListing = async function(id) {
@@ -1804,28 +2038,41 @@
     };
 
     window.markItemSold = async function(id) {
-      if (!confirm("Mark as sold?")) return;
-      try {
-        incrementQuota('delete');
-        await deleteDoc(doc(db, "listings", id));
-        allListings = allListings.filter(item => item.id !== id);
-        soldCount += 1; syncLocalStorage(); renderListings(); renderMyProductsTab(); updateMetrics();
-      } catch (e) { alert("Error: " + e.message); }
+      const item=allListings.find(v=>v.id===id);
+      if(!item||!(isFounderUser||(item.seller||'').toLowerCase()===(currentUser||'').toLowerCase()))return;
+      if(hubStatus(item)==='reserved')return toastAPM('Pickup in progress','Manage this reservation from Campus Hub first.');
+      if(hubStatus(item)==='sold')return;
+      if(!confirm('Mark this listing as sold? It will be hidden from available items.'))return;
+      try {await updateDoc(doc(db,'listings',id),{availability:'sold',soldAt:new Date().toISOString()});item.availability='sold';syncLocalStorage();renderListings();renderMyProductsTab();updateMetrics();toastAPM('Item marked sold')}
+      catch(e){hubShowError('Could not mark item sold',e)}
     };
 
-    window.handleLogin = async function() {
-      const email = document.getElementById('loginUser').value.trim().toLowerCase();
-      const pass = document.getElementById('loginPass').value.trim();
-      const formatted = email.includes('@') ? email : `${email}@apm.com`;
-      try { await signInWithEmailAndPassword(auth, formatted, pass); closeAuthModal(); } catch (err) {
-        document.getElementById('loginError').innerText = "Invalid credentials.";
-        document.getElementById('loginError').classList.remove('hidden');
+    window.handleLogin=async()=>{
+      const typed=document.getElementById('loginUser').value.trim().toLowerCase();
+      const pass=document.getElementById('loginPass').value;
+      const err=document.getElementById('loginError');err.classList.add('hidden');
+      if(!typed||!pass){err.textContent='Enter your username/email and password.';err.classList.remove('hidden');return}
+      const matched=allSellers.find(s=>(s.username||'').toLowerCase()===typed);
+      const email=typed.includes('@')?typed:(matched?.email||`${typed}@apm.com`);
+      const btn=document.getElementById('loginSubmitBtn');btn.disabled=true;
+      try{
+        await signInWithEmailAndPassword(auth,email,pass);
+        await loadSellers();
+        const profile=allSellers.find(s=>(s.email||'').toLowerCase()===email);
+        const founder=['keventhiran_e25101420@apm.com','taarisini_e25101220@apm.com'].includes(email);
+        if(!founder && (!profile || !profile.isVerified)) {
+          await signOut(auth);
+          err.textContent='Your account is not verified yet. A founder must approve it before you can sign in.';
+          err.classList.remove('hidden');return;
+        }
+        closeAuthModal();document.getElementById('loginPass').value='';
       }
+      catch(error){err.textContent='Username or password is incorrect, or the account was not found. Try again, reset your password, or register for seller verification.';err.classList.remove('hidden')}
+      finally{btn.disabled=false}
     };
-
-    window.openAuthModal = function() { document.getElementById('authModal').classList.remove('hidden'); };
-    window.closeAuthModal = function() { document.getElementById('authModal').classList.add('hidden'); };
-    window.performLogout = function() { signOut(auth).then(() => { applyUserTheme(false); switchMainTab('home'); }); };
+    window.openAuthModal=()=>{switchAuthTab('login');const m=document.getElementById('authModal');m.classList.remove('hidden');m.classList.add('flex')};
+    window.closeAuthModal=()=>{const m=document.getElementById('authModal');m.classList.add('hidden');m.classList.remove('flex')};
+    window.performLogout=async()=>{try{if(localStorage.getItem('apm_push_subscriber'))await disableAPMPush();await signOut(auth);applyUserTheme(false);switchMainTab('home');toastAPM('Signed out')}catch(e){toastAPM('Could not sign out',e.message)}};
 
     window.openSellerManagerModal = function() { renderSellerManagerTable(); document.getElementById('sellerManagerModal').classList.remove('hidden'); };
     window.closeSellerManagerModal = function() { document.getElementById('sellerManagerModal').classList.add('hidden'); };
@@ -1840,7 +2087,7 @@
       }
 
       const sellerProfile = allSellers.find(s => (s.email || '').toLowerCase() === currentUserEmail);
-      const isPro = sellerProfile && sellerProfile.tier === 'pro';
+      const isPro = isActiveProProfile(sellerProfile);
 
       const founderEmails = ['keventhiran_e25101420@apm.com', 'taarisini_e25101220@apm.com'];
       const isFounder = founderEmails.includes((currentUserEmail || '').toLowerCase());
@@ -1852,7 +2099,7 @@
           return currentUser && (currentUser.toLowerCase() === itemSeller || currentUser.includes(itemSeller));
         });
 
-        if (myListings.length >= maxAllowed) {
+        if (myListings.filter(i=>hubStatus(i)!=='sold').length >= maxAllowed) {
           if (!isPro) { 
             alert(`⚠️ Active Listing Limit Reached!\n\nFree Tier sellers can list up to 3 active products. Upgrade to Pro Tier (RM5/month) for 7 listings!`); 
             openUpgradeModal(); 
@@ -1872,6 +2119,19 @@
     window.closeAddListingModal = function() { 
       document.getElementById('addListingModal').classList.add('hidden'); 
     };
+
+    async function compressListingPhoto(file){
+      if(!file.type.startsWith('image/'))throw new Error('Please choose a valid image file.');
+      if(file.size>12*1024*1024)throw new Error('Photo is too large. Select an image smaller than 12 MB.');
+      const bitmap=await createImageBitmap(file);
+      const scale=Math.min(1,1080/Math.max(bitmap.width,bitmap.height));
+      const canvas=document.createElement('canvas');canvas.width=Math.round(bitmap.width*scale);canvas.height=Math.round(bitmap.height*scale);
+      canvas.getContext('2d').drawImage(bitmap,0,0,canvas.width,canvas.height);bitmap.close?.();
+      let quality=.76, output=canvas.toDataURL('image/jpeg',quality);
+      while(output.length>380000 && quality>.29){quality-=.12;output=canvas.toDataURL('image/jpeg',quality)}
+      if(output.length>600000)throw new Error('This photo could not be compressed enough. Try a smaller photo.');
+      return output;
+    }
 
     window.handlePostListing = async function(e) {
       if (e) e.preventDefault();
@@ -1899,12 +2159,7 @@
         }
 
         const file = fileInput.files[0];
-        const base64Image = await new Promise((resolve, reject) => {
-          const reader = new FileReader();
-          reader.onload = () => resolve(reader.result);
-          reader.onerror = error => reject(error);
-          reader.readAsDataURL(file);
-        });
+        const base64Image = await compressListingPhoto(file);
 
         const newItem = { 
           title, 
@@ -1916,7 +2171,12 @@
           contact, 
           image: base64Image, 
           desc, 
-          seller: currentUser, 
+          seller: currentUser,
+          sellerUid: auth.currentUser?.uid || '',
+          itemCondition: document.getElementById('itemCondition')?.value || 'New',
+          pickupArea: document.getElementById('itemPickup')?.value || 'Other (agree with seller)',
+          availability: 'available',
+          viewsCount: 0, savesCount: 0, clicksCount: 0,
           isDisabled: false, 
           isBoosted: false,
           createdAt: new Date().toISOString()
@@ -1960,6 +2220,12 @@
         alert("Upload Error: " + err.message);
       }
     };
+
+    window.openAddClubModal=function(){
+      if(!currentUser){openAuthModal();return}
+      document.getElementById('addClubModal').classList.remove('hidden');
+    };
+    window.closeAddClubModal=function(){document.getElementById('addClubModal').classList.add('hidden')};
 
     window.handlePostClub = async function(e) {
       if (e) e.preventDefault();
@@ -2020,7 +2286,186 @@
       }
     });
 
+    // Close notification dialog on backdrop tap; honor Escape.
+    document.getElementById('notificationModal')?.addEventListener('click',e=>{if(e.target.id==='notificationModal')closeNotificationCenter()});
+    document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeNotificationCenter();closeAuthModal()}});
     loadData();
+  
+
+    /* =============================================================
+       APM CAMPUS HUB — nine integrated marketplace capabilities.
+       Firestore access is permission-gated by the PROJECT'S rules.
+       Never trust client-side founder/Pro badges for authorization.
+       ============================================================= */
+    const HUB_PLACES=['AIMST Main Entrance','Library Entrance','Student Centre','Cafeteria','Hostel Lobby','Other (agree with seller)'];
+    const HUB_CATS=['academic','rentals','tech','hostel','services','events'];
+    const hubEsc=value=>safeText(String(value??''));
+    const hubAttr=value=>hubEsc(value).replace(/`/g,'&#96;');
+    const hubMoney=value=>'RM '+(Number(value)||0).toFixed(2);
+    const hubDate=value=>{try{return new Date(value).toLocaleString('en-MY',{dateStyle:'medium',timeStyle:'short'})}catch{return '—'}};
+    const hubUser=()=>auth.currentUser;
+    const hubLogin=()=>{if(hubUser()&&currentUser)return true;toastAPM('Sign in required','Only verified AIMST members can use this feature.');window.openAuthModal();return false};
+    const hubOwn=item=>Boolean(hubUser() && (item.sellerUid===hubUser().uid || (item.seller||'').toLowerCase()===(currentUser||'').toLowerCase()));
+    const hubPro=()=>isFounderUser||isActiveProProfile(allSellers.find(s=>(s.email||'').toLowerCase()===currentUserEmail));
+    const hubItem=id=>allListings.find(v=>v.id===id);
+    const hubStatus=item=>item.availability||'available';
+    const hubShowError=(label,e)=>{console.warn(label,e);toastAPM(label,e?.code==='permission-denied'?'Firebase security rules need to allow this action. See the deployment guide.':(e?.message||'Please try again.'))};
+    const hubFormValue=id=>(document.getElementById(id)?.value||'').trim();
+    const hubText=(value,max=500)=>String(value||'').trim().slice(0,max);
+    let hubReservations=[],hubOffers=[],hubReviews=[],hubWants=[],hubWantedReplies=[],hubWatches=[],hubReports=[],hubPublicProfiles=[];
+    let hubListenerStops=[];let hubActivePanel='reservations';let hubModalItemId=null;let hubPreviousListings=new Map();let hubListingSnapshotReady=false;
+    let hubMinimum='',hubMaximum='',hubCondition='all',hubAvailability='available',hubPickup='all',hubSort='priority';
+    
+    function hubModal(title,body){const modal=document.getElementById('apmFeatureModal');document.getElementById('apmFeatureTitle').textContent=title;document.getElementById('apmFeatureBody').innerHTML=body;modal.classList.remove('hidden');modal.classList.add('flex');document.body.classList.add('apm-modal-open');}
+    window.closeAPMFeature=()=>{document.getElementById('apmFeatureModal').classList.add('hidden');document.getElementById('apmFeatureModal').classList.remove('flex');document.body.classList.remove('apm-modal-open')};
+    const hubButton=(label,action,style='outline')=>`<button type="button" onclick="${action}" class="apm-action apm-action-${style}">${label}</button>`;
+    const hubEmpty=(message,icon='box-open')=>`<div class="apm-empty"><i class="fa-solid fa-${icon}"></i><p>${hubEsc(message)}</p></div>`;
+    const hubSelect=(id,values,selected='')=>`<select id="${id}" class="apm-field">${values.map(v=>`<option value="${hubAttr(v)}" ${v===selected?'selected':''}>${hubEsc(v)}</option>`).join('')}</select>`;
+    const hubInput=(id,label,type='text',placeholder='',value='')=>`<label class="apm-label">${label}<input class="apm-field" id="${id}" type="${type}" placeholder="${hubAttr(placeholder)}" value="${hubAttr(value)}" ${type==='number'?'min="0" step="0.01"':''} /></label>`;
+    const hubTextarea=(id,label,placeholder='',value='')=>`<label class="apm-label">${label}<textarea class="apm-field" id="${id}" rows="3" placeholder="${hubAttr(placeholder)}">${hubEsc(value)}</textarea></label>`;
+
+    window.apmOpenHub=(panel='reservations')=>{if(!hubLogin())return;document.querySelectorAll('.tab-view-page').forEach(el=>el.classList.add('hidden'));document.querySelectorAll('.nav-bottom-btn').forEach(el=>el.classList.remove('active-tab','active-pro-tab'));document.getElementById('viewCampusHub').classList.remove('hidden');hubActivePanel=panel;hubRenderPanel();window.scrollTo({top:0,behavior:'smooth'})};
+    window.apmSwitchHub=panel=>{hubActivePanel=panel;hubRenderPanel()};
+    function hubRenderPanel(){const nav=document.getElementById('apmHubTabs');const content=document.getElementById('apmHubContent');if(!nav||!content)return;
+      const panels=[['reservations','Pickup & Orders','calendar-check'],['offers','My Offers','handshake'],['wanted','Wanted Board','bullhorn'],['alerts','My Alerts','bell'],['store','My Store','store'],['analytics','Seller Insights','chart-line'],['reports','Safety Centre','shield-halved']];
+      nav.innerHTML=panels.map(([key,label,ico])=>`<button class="apm-hub-tab ${hubActivePanel===key?'selected':''}" onclick="apmSwitchHub('${key}')"><i class="fa-solid fa-${ico}"></i><span>${label}</span></button>`).join('');
+      const views={reservations:hubReservationsHTML,offers:hubOffersHTML,wanted:hubWantedHTML,alerts:hubAlertsHTML,store:hubMyStoreHTML,analytics:hubAnalyticsHTML,reports:hubReportsHTML};content.innerHTML=(views[hubActivePanel]||hubReservationsHTML)();
+    }
+    function hubOwnerEmail(item){return item?.sellerUid||allSellers.find(s=>(s.username||'').toLowerCase()===(item?.seller||'').toLowerCase())?.uid||''}
+    // ===== 2. RESERVE NOW, COLLECT LATER =====
+    window.apmReserve=id=>{if(!hubLogin())return;const item=hubItem(id);if(!item||hubOwn(item)||hubStatus(item)!=='available'){toastAPM('Not available','This item cannot be reserved right now.');return}
+      hubModal('Reserve this item',`<div class="apm-product-heading"><strong>${hubEsc(item.title)}</strong><span>${hubMoney(item.price)}</span></div><p class="apm-help">Your reservation is exclusive once successfully submitted. The seller will confirm your chosen meeting.</p><label class="apm-label">Preferred pickup location${hubSelect('apmReservePlace',HUB_PLACES)}</label>${hubInput('apmReserveDate','Preferred pickup date & time','datetime-local')} ${hubTextarea('apmReserveNote','Message to seller (optional)','Any extra pickup instructions')}<button type="button" class="apm-action apm-action-primary apm-action-full" onclick="apmSendReservation('${hubAttr(id)}')">Request Reservation</button>`);
+      document.getElementById('apmReserveDate').min=new Date(Date.now()-new Date().getTimezoneOffset()*60000).toISOString().slice(0,16);
+    };
+    window.apmSendReservation=async id=>{const item=hubItem(id);if(!item||!hubLogin())return;const time=hubFormValue('apmReserveDate');if(!time||new Date(time).getTime()<Date.now()-60000){toastAPM('Choose a future pickup time');return}const place=hubFormValue('apmReservePlace');const note=hubText(hubFormValue('apmReserveNote'),250);const newReservation=doc(collection(db,'apm_reservations'));const idOwner=hubOwnerEmail(item);
+      try {await runTransaction(db,async tx=>{const listingRef=doc(db,'listings',id);const current=await tx.get(listingRef);if(!current.exists()||!['available',null,undefined].includes(current.data().availability))throw new Error('Someone has already reserved this listing.');tx.update(listingRef,{availability:'reserved',activeReservationId:newReservation.id});tx.set(newReservation,{listingId:id,listingTitle:item.title,seller:item.seller||'',sellerUid:idOwner,buyerUid:hubUser().uid,buyerName:currentUser||'',pickupPlace:place,pickupAt:new Date(time).toISOString(),note,status:'requested',createdAt:new Date().toISOString()})});closeAPMFeature();toastAPM('Reservation submitted','The seller can now confirm your campus pickup.');inboxAPM('Reservation submitted',item.title,'general',true)}catch(e){hubShowError('Reservation not submitted',e)}};
+    async function hubReservationDecision(id,next){if(!hubLogin())return;const res=hubReservations.find(r=>r.id===id);if(!res)return;const seller=(res.seller||'').toLowerCase()===(currentUser||'').toLowerCase()||res.sellerUid===hubUser().uid;const buyer=res.buyerUid===hubUser().uid;const allowed=seller?({requested:['confirmed','declined'],confirmed:['collected','declined']}[res.status]||[]):buyer?(['requested','confirmed'].includes(res.status)?['cancelled']:[]):[];
+      if(!allowed.includes(next))return toastAPM('Action unavailable','You cannot make this status change.');if(next==='collected'&&!confirm('Confirm the buyer collected this item?'))return;
+      try{await runTransaction(db,async tx=>{const resRef=doc(db,'apm_reservations',id),listRef=doc(db,'listings',res.listingId),r=await tx.get(resRef),item=await tx.get(listRef);if(!r.exists()||!item.exists()||r.data().status!==res.status)throw new Error('Reservation changed. Refresh and try again.');if(item.data().activeReservationId!==id)throw new Error('Another reservation is active.');tx.update(resRef,{status:next,updatedAt:new Date().toISOString(),...(next==='collected'?{completedAt:new Date().toISOString()}:{})});if(next==='collected')tx.update(listRef,{availability:'sold',activeReservationId:null});if(['declined','cancelled'].includes(next))tx.update(listRef,{availability:'available',activeReservationId:null})});toastAPM('Reservation updated',`Status: ${next}`);hubRenderPanel()}catch(e){hubShowError('Could not update pickup',e)}}
+    window.apmReservationDecision=hubReservationDecision;
+    function hubReservationsHTML(){const mine=hubReservations.filter(r=>r.buyerUid===hubUser()?.uid||r.sellerUid===hubUser()?.uid||(r.seller||'').toLowerCase()===(currentUser||'').toLowerCase());return `<div class="apm-section-intro"><div><h3>Pickup & reservations</h3><p>Arrange a campus handover without double-booking an item.</p></div></div>${mine.length?mine.sort((a,b)=>(b.createdAt||'').localeCompare(a.createdAt||'')).map(r=>{const buyer=r.buyerUid===hubUser()?.uid;const seller=!buyer;const status=r.status;const actions=buyer?`${['requested','confirmed'].includes(status)?hubButton('Cancel booking',`apmReservationDecision('${r.id}','cancelled')`):''}${status==='collected'?hubButton('Rate seller',`apmReview('${r.id}')`,'primary'):''}`:`${status==='requested'?hubButton('Confirm pickup',`apmReservationDecision('${r.id}','confirmed')`,'primary')+hubButton('Decline',`apmReservationDecision('${r.id}','declined')`):''}${status==='confirmed'?hubButton('Mark collected',`apmReservationDecision('${r.id}','collected')`,'primary')+hubButton('Cancel',`apmReservationDecision('${r.id}','declined')`):''}`;return `<article class="apm-record"><div class="apm-record-head"><strong>${hubEsc(r.listingTitle)}</strong><span class="apm-state state-${hubAttr(status)}">${hubEsc(status)}</span></div><p>${buyer?'Seller: '+hubEsc(r.seller):'Buyer: '+hubEsc(r.buyerName)}</p><p><i class="fa-solid fa-location-dot"></i> ${hubEsc(r.pickupPlace)} · ${hubDate(r.pickupAt)}</p>${r.note?`<p class="apm-help">${hubEsc(r.note)}</p>`:''}<div class="apm-action-row">${actions}</div></article>`}).join(''):hubEmpty('No reservations yet. Open a product and tap Reserve.', 'calendar')}`}
+    // ===== 3. VERIFIED SELLER REVIEWS =====
+    window.apmReview=id=>{if(!hubLogin())return;const res=hubReservations.find(r=>r.id===id);if(!res||res.buyerUid!==hubUser().uid||res.status!=='collected'||hubReviews.some(v=>v.reservationId===id))return toastAPM('Review unavailable','Reviews are available once per completed pickup.');hubModal('Review your seller',`<p class="apm-help">Only completed pickups qualify for a verified rating.</p><label class="apm-label">Star rating${hubSelect('apmRating',['5','4','3','2','1'],'5')}</label>${hubTextarea('apmReviewText','Your experience','Describe the pickup, product and seller experience')}<button class="apm-action apm-action-primary apm-action-full" onclick="apmSubmitReview('${id}')">Publish review</button>`)};
+    window.apmSubmitReview=async id=>{const res=hubReservations.find(r=>r.id===id);if(!res||res.buyerUid!==hubUser()?.uid||res.status!=='collected')return;const body=hubText(hubFormValue('apmReviewText'),380);const rating=Number(hubFormValue('apmRating'));if(!body||rating<1||rating>5)return toastAPM('Add your review and rating');try{await setDoc(doc(db,'apm_reviews',id),{reservationId:id,listingId:res.listingId,seller:res.seller.toLowerCase(),sellerUid:res.sellerUid||'',buyerUid:hubUser().uid,buyerName:currentUser,rating,body,createdAt:new Date().toISOString()});closeAPMFeature();toastAPM('Review published','Thank you for helping other students.')}catch(e){hubShowError('Review not saved',e)}};
+    function hubReviewsFor(seller){return hubReviews.filter(r=>r.seller===(seller||'').toLowerCase())}
+    function hubRatingFor(seller){const entries=hubReviewsFor(seller);return entries.length?`<i class="fa-solid fa-star"></i> ${(entries.reduce((a,b)=>a+Number(b.rating||0),0)/entries.length).toFixed(1)} (${entries.length})`:'New seller'}
+    // ===== 4. WISHLIST / WATCHES =====
+    const hubWatchKey=id=>`${hubUser()?.uid||'guest'}_${id}`;
+    const previousToggleWishlist=window.toggleWishlist;
+    window.toggleWishlist=function(id){const was=getWishlist().includes(id);previousToggleWishlist(id);if(!hubUser()||was===getWishlist().includes(id))return;const item=hubItem(id);if(!item)return;const saved=!was;const ref=doc(db,'apm_watches',hubWatchKey(id));(saved?setDoc(ref,{uid:hubUser().uid,listingId:id,category:item.category,priceAtSave:Number(item.price)||0,createdAt:new Date().toISOString()}):deleteDoc(ref)).catch(e=>hubShowError('Watch sync unavailable',e));updateDoc(doc(db,'listings',id),{savesCount:increment(saved?1:-1)}).catch(()=>{});
+    };
+    window.apmFollowCategory=async category=>{if(!hubLogin())return;const key=`${hubUser().uid}_cat_${category}`;const selected=hubWatches.some(w=>w.id===key);try{if(selected)await deleteDoc(doc(db,'apm_watches',key));else await setDoc(doc(db,'apm_watches',key),{uid:hubUser().uid,category,watchType:'category',createdAt:new Date().toISOString()});toastAPM(selected?'Category unfollowed':'Category followed',category)}catch(e){hubShowError('Follow not updated',e)}};
+    function hubAlertsHTML(){return `<div class="apm-section-intro"><div><h3>Your smart alerts</h3><p>Follow departments or save products. Price drops and matching new items appear in your APM inbox while you use the site; background push requires Firebase deployment.</p></div></div><h4 class="apm-subheading">Follow categories</h4><div class="apm-chip-row">${HUB_CATS.map(c=>{const checked=hubWatches.some(w=>w.id===`${hubUser()?.uid}_cat_${c}`);return `<button onclick="apmFollowCategory('${c}')" class="apm-chip ${checked?'on':''}">${checked?'✓ ': '+ '}${c}</button>`}).join('')}</div><h4 class="apm-subheading">Saved products</h4><div class="apm-records">${(allListings.filter(i=>getWishlist().includes(i.id))).map(i=>`<div class="apm-record"><strong>${hubEsc(i.title)}</strong><p>${hubMoney(i.price)} · ${hubEsc(hubStatus(i))}</p><div class="apm-action-row">${hubButton('View product',`apmViewProduct('${i.id}')`)}${hubButton('Remove',`toggleWishlist('${i.id}');apmSwitchHub('alerts')`)}</div></div>`).join('')||hubEmpty('Save a product using its heart button to track changes.','heart')}</div>`}
+    function hubWatchListingChanges(){if(!hubListingSnapshotReady){hubPreviousListings=new Map(allListings.map(i=>[i.id,{price:i.price,availability:i.availability,category:i.category}]));hubListingSnapshotReady=true;return}const categories=new Set(hubWatches.filter(w=>w.watchType==='category').map(w=>w.category));const favorites=new Set(getWishlist());for(const item of allListings){const previous=hubPreviousListings.get(item.id);if(previous){if(favorites.has(item.id)&&Number(item.price)<Number(previous.price))inboxAPM('Price dropped',`${item.title}: ${hubMoney(previous.price)} → ${hubMoney(item.price)}`,'listing',true);if(favorites.has(item.id)&&previous.availability==='reserved'&&hubStatus(item)==='available')inboxAPM('Back in stock',`${item.title} can be reserved again.`,'listing',true)}else if(categories.has(item.category)&&item.seller!==currentUser)inboxAPM('New matching item',`${item.title} added to ${item.category}`,'listing',true)}hubPreviousListings=new Map(allListings.map(i=>[i.id,{price:i.price,availability:i.availability,category:i.category}]))}
+    // ===== 5. BUYER OFFERS / COUNTEROFFERS =====
+    window.apmOffer=id=>{if(!hubLogin())return;const item=hubItem(id);if(!item||hubOwn(item)||hubStatus(item)!=='available')return toastAPM('Offers unavailable');hubModal('Make an offer',`<div class="apm-product-heading"><strong>${hubEsc(item.title)}</strong><span>${hubMoney(item.price)}</span></div>${hubInput('apmOfferAmount','Your offer (RM)','number','e.g. 35')} ${hubTextarea('apmOfferNote','Message to seller (optional)','I can collect tomorrow afternoon')}<p class="apm-help">Offers do not reserve stock. Reserve the product separately after agreeing on a price.</p><button onclick="apmSendOffer('${id}')" class="apm-action apm-action-primary apm-action-full">Send offer</button>`)};
+    window.apmSendOffer=async id=>{const item=hubItem(id);if(!item||!hubLogin()||hubOwn(item)||hubStatus(item)!=='available')return;const amount=Number(hubFormValue('apmOfferAmount'));if(!Number.isFinite(amount)||amount<=0||amount>999999)return toastAPM('Enter a valid offer amount');try{await addDoc(collection(db,'apm_offers'),{listingId:id,listingTitle:item.title,listingPrice:Number(item.price)||0,seller:item.seller,sellerUid:hubOwnerEmail(item),buyerUid:hubUser().uid,buyerName:currentUser,amount,note:hubText(hubFormValue('apmOfferNote'),250),status:'pending',createdAt:new Date().toISOString()});closeAPMFeature();toastAPM('Offer sent','The seller can accept, counter or decline it.')}catch(e){hubShowError('Offer not sent',e)}};
+    window.apmOfferAction=async(id,action)=>{const offer=hubOffers.find(o=>o.id===id);if(!offer||!hubLogin())return;const seller=offer.sellerUid===hubUser().uid||(offer.seller||'').toLowerCase()===(currentUser||'').toLowerCase();const buyer=offer.buyerUid===hubUser().uid;const allowed=seller?({pending:['accepted','declined','countered'],countered:['declined']}[offer.status]||[]):buyer?({countered:['accepted','declined'],pending:['cancelled']}[offer.status]||[]):[];if(!allowed.includes(action))return toastAPM('Offer action not allowed');if(action==='countered'){hubModal('Counter this offer',`${hubInput('apmCounterAmount','Your counteroffer (RM)','number',String(offer.amount))}<button class="apm-action apm-action-primary apm-action-full" onclick="apmSendCounter('${id}')">Send counteroffer</button>`);return}try{await updateDoc(doc(db,'apm_offers',id),{status:action,updatedAt:new Date().toISOString()});toastAPM('Offer updated',action)}catch(e){hubShowError('Offer not updated',e)}};
+    window.apmSendCounter=async id=>{const offer=hubOffers.find(o=>o.id===id);if(!offer||!hubLogin()||(offer.seller||'').toLowerCase()!==currentUser.toLowerCase()||offer.status!=='pending')return;const amount=Number(hubFormValue('apmCounterAmount'));if(!Number.isFinite(amount)||amount<=0)return toastAPM('Enter a valid counteroffer');try{await updateDoc(doc(db,'apm_offers',id),{status:'countered',counterAmount:amount,updatedAt:new Date().toISOString()});closeAPMFeature();toastAPM('Counteroffer sent')}catch(e){hubShowError('Counteroffer failed',e)}};
+    function hubOffersHTML(){const mine=hubOffers.filter(o=>o.buyerUid===hubUser()?.uid||o.sellerUid===hubUser()?.uid||(o.seller||'').toLowerCase()===(currentUser||'').toLowerCase());return `<div class="apm-section-intro"><div><h3>Offers & negotiation</h3><p>Keep track of bids and counteroffers from your campus community.</p></div></div>${mine.length?mine.sort((a,b)=>(b.createdAt||'').localeCompare(a.createdAt||'')).map(o=>{const buyer=o.buyerUid===hubUser()?.uid,owner=!buyer;let actions='';if(owner&&o.status==='pending')actions=hubButton('Accept',`apmOfferAction('${o.id}','accepted')`,'primary')+hubButton('Counter',`apmOfferAction('${o.id}','countered')`)+hubButton('Decline',`apmOfferAction('${o.id}','declined')`);if(buyer&&o.status==='countered')actions=hubButton('Accept counter',`apmOfferAction('${o.id}','accepted')`,'primary')+hubButton('Decline',`apmOfferAction('${o.id}','declined')`);if(buyer&&o.status==='pending')actions=hubButton('Withdraw',`apmOfferAction('${o.id}','cancelled')`);return `<div class="apm-record"><div class="apm-record-head"><strong>${hubEsc(o.listingTitle)}</strong><span class="apm-state state-${hubAttr(o.status)}">${hubEsc(o.status)}</span></div><p>${buyer?'To: '+hubEsc(o.seller):'From: '+hubEsc(o.buyerName)} · Offered <strong>${hubMoney(o.amount)}</strong></p>${o.counterAmount?`<p>Counteroffer: <strong>${hubMoney(o.counterAmount)}</strong></p>`:''}${o.status==='accepted'?'<p class="apm-help">Offer accepted — coordinate collection and reserve the item.</p>':''}<div class="apm-action-row">${actions}</div></div>`}).join(''):hubEmpty('No offers yet. Open a product and tap Make an offer.','handshake')}`}
+    // ===== 6. PRO ANALYTICS =====
+    function hubAnalyticsHTML(){if(!hubPro())return `<div class="apm-section-intro"><h3>Pro Seller Insights</h3><p>Available to verified APM Pro members for RM5/month.</p></div><div class="apm-empty"><i class="fa-solid fa-crown"></i><p>Upgrade to Pro to see product views, contact clicks and saves.</p>${hubButton('Explore APM Pro',`openUpgradeModal()`,'primary')}</div>`;
+      const mine=allListings.filter(i=>hubOwn(i));const sum=field=>mine.reduce((n,i)=>n+Number(i[field]||0),0);return `<div class="apm-section-intro"><div><h3>Pro Seller Insights <i class="fa-solid fa-crown" style="color:#bf8f36"></i></h3><p>Analytics update as members open product details, save items and use contact links.</p></div></div><div class="apm-stat-grid"><div><span>Product views</span><strong>${sum('viewsCount')}</strong></div><div><span>WhatsApp clicks</span><strong>${sum('clicksCount')}</strong></div><div><span>Saves</span><strong>${sum('savesCount')}</strong></div><div><span>Active listings</span><strong>${mine.filter(i=>hubStatus(i)==='available').length}</strong></div></div>${mine.length?mine.map(i=>`<div class="apm-record"><strong>${hubEsc(i.title)}</strong><p>${hubMoney(i.price)} · ${hubEsc(hubStatus(i))}</p><div class="apm-mini-stats"><span><i class="fa-solid fa-eye"></i> ${Number(i.viewsCount||0)} views</span><span><i class="fa-solid fa-comments"></i> ${Number(i.clicksCount||0)} clicks</span><span><i class="fa-solid fa-heart"></i> ${Number(i.savesCount||0)} saves</span></div></div>`).join(''):hubEmpty('Publish a product to start gathering insights.','chart-simple')}`}
+    // ===== 7. ADVANCED SEARCH =====
+    window.apmApplyAdvanced=()=>{hubMinimum=hubFormValue('apmMinPrice');hubMaximum=hubFormValue('apmMaxPrice');hubCondition=hubFormValue('apmConditionFilter')||'all';hubAvailability=hubFormValue('apmAvailabilityFilter')||'available';hubPickup=hubFormValue('apmPickupFilter')||'all';hubSort=hubFormValue('apmSortFilter')||'priority';renderListings();};
+    window.apmClearAdvanced=()=>{hubMinimum='';hubMaximum='';hubCondition='all';hubAvailability='available';hubPickup='all';hubSort='priority';['apmMinPrice','apmMaxPrice'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=''});[['apmConditionFilter','all'],['apmAvailabilityFilter','available'],['apmPickupFilter','all'],['apmSortFilter','priority']].forEach(([id,val])=>{const el=document.getElementById(id);if(el)el.value=val});renderListings()};
+    function hubMatchesFilter(item){const price=Number(item.price)||0;if(hubMinimum!==''&&price<Number(hubMinimum))return false;if(hubMaximum!==''&&price>Number(hubMaximum))return false;if(hubCondition!=='all'&&(item.itemCondition||'unspecified')!==hubCondition)return false;if(hubPickup!=='all'&&(item.pickupArea||'unspecified')!==hubPickup)return false;if(hubAvailability!=='all'&&hubStatus(item)!==hubAvailability)return false;return true}
+    function hubCompareItems(a,b){return hubSort==='price_low'?Number(a.price)-Number(b.price):hubSort==='price_high'?Number(b.price)-Number(a.price):hubSort==='newest'?new Date(b.createdAt||0)-new Date(a.createdAt||0):hubSort==='oldest'?new Date(a.createdAt||0)-new Date(b.createdAt||0):listingPriority(b)-listingPriority(a)||new Date(b.createdAt||0)-new Date(a.createdAt||0)}
+    // ===== 8. WANTED BOARD =====
+    window.apmWantedPost=()=>{if(!hubLogin())return;hubModal('Request an item',`${hubInput('apmWantedTitle','What are you looking for?','text','e.g. Biochemistry textbook')}<label class="apm-label">Category${hubSelect('apmWantedCategory',HUB_CATS)}</label>${hubInput('apmWantedBudget','Maximum budget (RM)','number','e.g. 40')}${hubTextarea('apmWantedDesc','Details','Condition, size or course preferred')}<button class="apm-action apm-action-primary apm-action-full" onclick="apmSaveWanted()">Post request</button>`)};
+    window.apmSaveWanted=async()=>{if(!hubLogin())return;const title=hubText(hubFormValue('apmWantedTitle'),90),budget=Number(hubFormValue('apmWantedBudget'));if(title.length<5||!Number.isFinite(budget)||budget<=0)return toastAPM('Add a title and valid budget');try{await addDoc(collection(db,'apm_wanted'),{title,budget,category:hubFormValue('apmWantedCategory'),desc:hubText(hubFormValue('apmWantedDesc'),450),buyerUid:hubUser().uid,buyerName:currentUser,status:'open',createdAt:new Date().toISOString()});closeAPMFeature();toastAPM('Wanted request posted');apmOpenHub('wanted')}catch(e){hubShowError('Request not saved',e)}};
+    window.apmWantedReply=id=>{if(!hubLogin())return;const want=hubWants.find(w=>w.id===id);if(!want||want.buyerUid===hubUser().uid||want.status!=='open')return;hubModal('Respond to wanted request',`<p class="apm-help">${hubEsc(want.title)} · budget ${hubMoney(want.budget)}</p>${hubTextarea('apmWantedReplyBody','Your offer','Tell the buyer what you have, price and how to reach you')}<button class="apm-action apm-action-primary apm-action-full" onclick="apmSendWantedReply('${id}')">Send response</button>`)};
+    window.apmSendWantedReply=async id=>{const want=hubWants.find(w=>w.id===id);if(!want||!hubLogin()||want.buyerUid===hubUser().uid)return;const body=hubText(hubFormValue('apmWantedReplyBody'),450);if(body.length<8)return toastAPM('Please add some details');try{await addDoc(collection(db,'apm_wanted_responses'),{wantedId:id,buyerUid:want.buyerUid,sellerUid:hubUser().uid,sellerName:currentUser,body,createdAt:new Date().toISOString()});closeAPMFeature();toastAPM('Response submitted','The buyer can see it in the Wanted Board.')}catch(e){hubShowError('Response failed',e)}};
+    window.apmCloseWanted=async id=>{const w=hubWants.find(v=>v.id===id);if(!w||w.buyerUid!==hubUser()?.uid)return;try{await updateDoc(doc(db,'apm_wanted',id),{status:'closed'});toastAPM('Request closed')}catch(e){hubShowError('Could not close request',e)}};
+    function hubWantedHTML(){return `<div class="apm-section-intro"><div><h3>Wanted Items Board</h3><p>Need a textbook or campus essential? Post what you need. Sellers can respond.</p></div>${hubButton('<i class="fa-solid fa-plus"></i> Post request','apmWantedPost()','primary')}</div>${hubWants.filter(w=>w.status==='open'||w.buyerUid===hubUser()?.uid).sort((a,b)=>(b.createdAt||'').localeCompare(a.createdAt||'')).map(w=>{const owner=w.buyerUid===hubUser()?.uid;const replies=hubWantedReplies.filter(r=>r.wantedId===w.id&&owner);return `<article class="apm-record"><div class="apm-record-head"><strong>${hubEsc(w.title)}</strong><span class="apm-state state-${hubAttr(w.status)}">${hubEsc(w.status)}</span></div><p>${hubEsc(w.category)} · Budget ${hubMoney(w.budget)} · ${hubEsc(w.buyerName)}</p><p>${hubEsc(w.desc)}</p><div class="apm-action-row">${!owner&&w.status==='open'?hubButton('I have this',`apmWantedReply('${w.id}')`,'primary'):''}${owner&&w.status==='open'?hubButton('Close request',`apmCloseWanted('${w.id}')`):''}</div>${replies.length?`<div class="apm-replies"><strong>${replies.length} seller response(s)</strong>${replies.map(r=>`<p><b>${hubEsc(r.sellerName)}</b>: ${hubEsc(r.body)}</p>`).join('')}</div>`:''}</article>`}).join('')||hubEmpty('No requests yet. Be the first to post one.','bullhorn')}`}
+    // ===== 9. PERSONAL STOREFRONTS =====
+    window.apmOpenStorefront=seller=>{const name=String(seller||'').toLowerCase();const profile=hubPublicProfiles.find(p=>p.seller===name);const listings=allListings.filter(i=>(i.seller||'').toLowerCase()===name&&!i.isDisabled&&hubStatus(i)!=='sold');const reviews=hubReviewsFor(name);const editable=hubUser()&&name===(currentUser||'').toLowerCase()&&hubPro();
+      hubModal(`${hubEsc(profile?.shopName||seller)} · APM Store`, `<div class="apm-store-head"><div class="apm-store-avatar"><i class="fa-solid fa-store"></i></div><div><strong>${hubEsc(profile?.shopName||seller)}</strong><p>${hubEsc(profile?.bio||'Verified AIMST marketplace member')}</p><div class="apm-rating">${hubRatingFor(name)}</div></div></div><div class="apm-action-row">${hubButton('Share storefront',`apmShareStore('${hubAttr(name)}')`)}${editable?hubButton('Customize (Pro)',`apmCustomizeStore()`,'primary'):''}</div><h4 class="apm-subheading">Available items (${listings.length})</h4><div class="apm-store-grid">${listings.map(i=>`<button onclick="apmViewProduct('${i.id}')" class="apm-store-item"><img src="${hubAttr(i.image||'market-logo.png')}" alt=""><span>${hubEsc(i.title)}</span><b>${hubMoney(i.price)}</b></button>`).join('')||hubEmpty('No active products.')}</div><h4 class="apm-subheading">Verified pickup reviews (${reviews.length})</h4>${reviews.length?reviews.slice(0,10).map(r=>`<div class="apm-review"><span>${'★'.repeat(Number(r.rating))}${'☆'.repeat(5-Number(r.rating))}</span><p>${hubEsc(r.body)}</p><small>${hubEsc(r.buyerName)}</small></div>`).join(''):hubEmpty('No verified reviews yet.','star')}`);
+    };
+    window.apmShareStore=async name=>{const url=`${location.origin}${location.pathname}?seller=${encodeURIComponent(name)}`;try{await navigator.clipboard.writeText(url);toastAPM('Store link copied')}catch{window.prompt('Copy your store link:',url)}};
+    window.apmCustomizeStore=()=>{if(!hubPro()||!hubLogin())return;const p=hubPublicProfiles.find(v=>v.seller===(currentUser||'').toLowerCase());hubModal('Customize your Pro storefront',`${hubInput('apmStoreName','Store display name','text','e.g. Keven Campus Essentials',p?.shopName||currentUser)}${hubTextarea('apmStoreBio','Store introduction','What can your campus friends buy from you?',p?.bio||'')}<button onclick="apmSaveStorefront()" class="apm-action apm-action-primary apm-action-full">Save storefront</button>`)};
+    window.apmSaveStorefront=async()=>{if(!hubLogin()||!hubPro())return;const title=hubText(hubFormValue('apmStoreName'),60),bio=hubText(hubFormValue('apmStoreBio'),240);if(!title)return toastAPM('Enter your shop name');try{await setDoc(doc(db,'apm_public_profiles',hubUser().uid),{seller:currentUser.toLowerCase(),sellerUid:hubUser().uid,shopName:title,bio,updatedAt:new Date().toISOString()},{merge:true});closeAPMFeature();toastAPM('Store updated');apmOpenHub('store')}catch(e){hubShowError('Could not save storefront',e)}};
+    function hubMyStoreHTML(){return `<div class="apm-section-intro"><div><h3>Your seller storefront</h3><p>Let buyers discover all of your listings and verified reviews in one place.</p></div></div><div class="apm-record"><strong>${hubEsc(currentUser||'APM Seller')}</strong><p>${hubRatingFor(currentUser)}</p><div class="apm-action-row">${hubButton('View my storefront',`apmOpenStorefront('${hubAttr(currentUser||'')}')`,'primary')}${hubButton('Copy share link',`apmShareStore('${hubAttr(currentUser||'')}')`)}${hubPro()?hubButton('Customize shop (Pro)','apmCustomizeStore()'):''}</div></div>`}
+    // ===== 10. BUYER PROTECTION & REPORTS =====
+    window.apmReport=(id,type='listing')=>{if(!hubLogin())return;const item=type==='listing'?hubItem(id):null;hubModal('Report a concern',`<p class="apm-help">Founders review reports privately. Do not share passwords or financial information.</p><strong>${hubEsc(item?.title||id)}</strong><label class="apm-label">Reason${hubSelect('apmReportReason',['Possible scam','Misleading information','Inappropriate content','Counterfeit / prohibited item','Safety concern','Other'])}</label>${hubTextarea('apmReportDetails','What happened?','Please describe the issue clearly')}<button onclick="apmSendReport('${hubAttr(id)}','${hubAttr(type)}')" class="apm-action apm-action-primary apm-action-full">Submit report</button>`)};
+    window.apmSendReport=async(id,type)=>{if(!hubLogin())return;const body=hubText(hubFormValue('apmReportDetails'),650);if(body.length<12)return toastAPM('Please describe the concern');try{await addDoc(collection(db,'apm_reports'),{targetId:id,targetType:type,reason:hubFormValue('apmReportReason'),details:body,reporterUid:hubUser().uid,reporterName:currentUser,status:'pending',createdAt:new Date().toISOString()});closeAPMFeature();toastAPM('Report submitted','Founders will review your concern privately.')}catch(e){hubShowError('Report not submitted',e)}};
+    window.apmReviewReport=async(id,status,disable=false)=>{if(!isFounderUser||!hubLogin())return;const rep=hubReports.find(r=>r.id===id);if(!rep)return;try{if(disable&&rep.targetType==='listing')await updateDoc(doc(db,'listings',rep.targetId),{isDisabled:true});await updateDoc(doc(db,'apm_reports',id),{status,reviewedAt:new Date().toISOString()});toastAPM('Report updated',status)}catch(e){hubShowError('Report update failed',e)}};
+    function hubReportsHTML(){const mine=isFounderUser?hubReports:hubReports.filter(r=>r.reporterUid===hubUser()?.uid);return `<div class="apm-section-intro"><div><h3>Safety & report centre</h3><p>Report listings that appear unsafe or misleading. Founders can investigate and hide reported listings.</p></div></div>${isFounderUser?'<p class="apm-help">Founder moderation · reports awaiting action are shown first</p>':''}${mine.sort((a,b)=>(a.status==='pending'?0:1)-(b.status==='pending'?0:1)).map(r=>`<div class="apm-record"><div class="apm-record-head"><strong>${hubEsc(r.reason)}</strong><span class="apm-state state-${hubAttr(r.status)}">${hubEsc(r.status)}</span></div><p>${hubEsc(r.targetType)} · ${hubEsc(r.targetId)}</p><p>${hubEsc(r.details)}</p><p class="apm-help">Submitted ${hubDate(r.createdAt)}</p>${isFounderUser&&r.status==='pending'?`<div class="apm-action-row">${hubButton('Resolve',`apmReviewReport('${r.id}','resolved')`,'primary')}${hubButton('Dismiss',`apmReviewReport('${r.id}','dismissed')`)}${r.targetType==='listing'?hubButton('Hide listing',`apmReviewReport('${r.id}','resolved',true)`):''}</div>`:''}</div>`).join('')||hubEmpty('No reports to display.','shield-halved')}`}
+    // ===== PRODUCT DETAILS & ACTIONS =====
+    window.apmViewProduct=async id=>{const item=hubItem(id);if(!item)return;hubModal(item.title||'Product details',`<img src="${hubAttr(item.image||'market-logo.png')}" class="apm-detail-photo" alt="${hubAttr(item.title)}"><div class="apm-product-heading"><strong>${hubEsc(item.title)}</strong><span>${hubMoney(item.price)}</span></div><div class="apm-mini-stats"><span>${hubEsc(item.itemCondition||'Condition not specified')}</span><span>${hubEsc(item.pickupArea||'Pickup by arrangement')}</span><span>${hubEsc(hubStatus(item))}</span></div><p class="apm-detail-desc">${hubEsc(item.desc||'No details supplied.')}</p><button class="apm-seller-link" onclick="apmOpenStorefront('${hubAttr(item.seller||'')}')"><i class="fa-solid fa-store"></i> ${hubEsc(item.seller)} · ${hubRatingFor(item.seller)}</button><div class="apm-action-row">${hubStatus(item)==='available'&&!hubOwn(item)?hubButton('Reserve',`apmReserve('${id}')`,'primary')+hubButton('Make offer',`apmOffer('${id}')`):''}${hubButton('Report',`apmReport('${id}')`)}${hubButton('Seller profile',`apmOpenStorefront('${hubAttr(item.seller)}')`)}</div>`);
+      if(hubUser()&&!hubOwn(item)){const onceKey='apm_view_'+hubUser().uid+'_'+id;if(!sessionStorage.getItem(onceKey)){sessionStorage.setItem(onceKey,'1');updateDoc(doc(db,'listings',id),{viewsCount:increment(1)}).catch(()=>sessionStorage.removeItem(onceKey))}}
+    };
+    const oldRenderListings=window.renderListings;
+    window.renderListings=function(){oldRenderListings();const grid=document.getElementById('listingsGrid');if(!grid)return;for(const card of grid.querySelectorAll('.grab-card')){const action=card.querySelector('button[onclick^="toggleWishlist("]');if(!action)continue;const match=action.getAttribute('onclick').match(/'([^']+)'/);const id=match?.[1];const item=hubItem(id);if(!item)continue;const footer=card.lastElementChild;const details=document.createElement('div');details.className='apm-card-tools';const status=hubStatus(item);details.innerHTML=`<div class="apm-card-subline"><span>${hubEsc(item.itemCondition||'AIMST campus')}</span><span>${hubEsc(item.pickupArea||'Pickup by agreement')}</span></div><div class="apm-card-tool-row"><button onclick="apmViewProduct('${hubAttr(id)}')"><i class="fa-solid fa-eye"></i> Details</button>${status==='available'&&!hubOwn(item)?`<button onclick="apmReserve('${hubAttr(id)}')"><i class="fa-solid fa-calendar-check"></i> Reserve</button><button onclick="apmOffer('${hubAttr(id)}')"><i class="fa-solid fa-handshake"></i> Offer</button>`:`<span class="apm-state state-${hubAttr(status)}">${hubEsc(status)}</span>`}</div>`;footer?.parentElement?.insertBefore(details,footer);
+        const ownerText=footer?.querySelector('span.text-slate-600');if(ownerText){const link=document.createElement('button');link.className='apm-seller-link-small';link.textContent=item.seller||'Seller';link.onclick=()=>window.apmOpenStorefront(item.seller);ownerText.replaceWith(link)}
+      }
+    };
+    // Refresh render pipeline filters and default availability: original filter applies before this hook.
+    // Live data helpers. Query only the logged-in member's private transactions.
+    function hubWatch(collectionName,queryObject,target,persistent=false){try{const stop=onSnapshot(queryObject,snap=>{target(snap.docs.map(d=>({id:d.id,...d.data()})));if(!document.getElementById('viewCampusHub')?.classList.contains('hidden'))hubRenderPanel()},err=>console.warn('APM Hub listener',collectionName,err.code||err.message));if(!persistent)hubListenerStops.push(stop)}catch(e){console.warn('APM Hub listener failed',collectionName,e)}}
+    function hubStopListeners(){hubListenerStops.forEach(fn=>{try{fn()}catch{}});hubListenerStops=[];hubReservations=[];hubOffers=[];hubWatches=[];hubWantedReplies=[];hubReports=[];}
+    function hubLiveInbox(tag,items,onChange){
+      const key='apm_seen_'+tag+'_'+(hubUser()?.uid||'guest');
+      const cacheKey=key+'_list';
+      let seen;try{seen=JSON.parse(sessionStorage.getItem(cacheKey)||'null')}catch{seen=null}
+      const next=Object.fromEntries(items.map(v=>[v.id,v.status||'new']));
+      if(seen!==null){for(const item of items){if(seen[item.id]!==next[item.id])onChange(item,seen[item.id]===undefined?'new':'changed')}}
+      sessionStorage.setItem(cacheKey,JSON.stringify(next));
+    }
+    function hubLoadUserListeners(){hubStopListeners();if(!hubUser())return;const uid=hubUser().uid;const email=(hubUser().email||'').toLowerCase();const username=email.split('@')[0];
+      const resCache={buyer:[],seller:[]};const offCache={buyer:[],seller:[]};function mergeCaches(cache,fn){const map=new Map([...cache.buyer,...cache.seller].map(d=>[d.id,d]));fn([...map.values()])}
+      hubWatch('my bookings',query(collection(db,'apm_reservations'),where('buyerUid','==',uid)),data=>{resCache.buyer=data;mergeCaches(resCache,v=>hubReservations=v);hubLiveInbox('outgoing_reservations',data,(r,change)=>{if(change==='changed')inboxAPM('Pickup status changed',`${r.listingTitle}: ${r.status}`,'general',true)})});
+      hubWatch('seller bookings',query(collection(db,'apm_reservations'),where('seller','==',username)),data=>{resCache.seller=data;mergeCaches(resCache,v=>hubReservations=v);hubLiveInbox('incoming_reservations',data,(r,change)=>{if(r.status==='requested')inboxAPM('New pickup request',r.listingTitle||'New reservation','general',true)})});
+      hubWatch('offers I made',query(collection(db,'apm_offers'),where('buyerUid','==',uid)),data=>{offCache.buyer=data;mergeCaches(offCache,v=>hubOffers=v);hubLiveInbox('outgoing_offers',data,(o,change)=>{if(change==='changed')inboxAPM('Your offer changed',`${o.listingTitle}: ${o.status}`,'general',true)})});
+      hubWatch('offers on my items',query(collection(db,'apm_offers'),where('seller','==',username)),data=>{offCache.seller=data;mergeCaches(offCache,v=>hubOffers=v);hubLiveInbox('incoming_offers',data,(o,change)=>{if(o.status==='pending')inboxAPM('New buyer offer',o.listingTitle||'New offer','general',true)})});
+      hubWatch('my watches',query(collection(db,'apm_watches'),where('uid','==',uid)),data=>hubWatches=data);
+      hubWatch('wanted responses',query(collection(db,'apm_wanted_responses'),where('buyerUid','==',uid)),data=>hubWantedReplies=data);
+      hubWatch('reports I submitted',query(collection(db,'apm_reports'),where('reporterUid','==',uid)),data=>{if(!isFounderUser)hubReports=data});
+      if(['keventhiran_e25101420@apm.com','taarisini_e25101220@apm.com'].includes(email))hubWatch('founder reports',collection(db,'apm_reports'),data=>hubReports=data);
+    }
+    hubWatch('wanted public',collection(db,'apm_wanted'),data=>hubWants=data,true);
+    hubWatch('public reviews',collection(db,'apm_reviews'),data=>hubReviews=data,true);
+    hubWatch('storefronts',collection(db,'apm_public_profiles'),data=>hubPublicProfiles=data,true);
+    onAuthStateChanged(auth,()=>{hubLoadUserListeners();setTimeout(()=>{if(!document.getElementById('viewCampusHub')?.classList.contains('hidden'))hubRenderPanel()},550)});
+    // Update price-drop inbox only after the listing data has been synchronized.
+    const hubOldWatchListing=window.renderListings;
+    window.renderListings=function(){hubOldWatchListing();hubWatchListingChanges()};
+    // Initial merchant storefront deep-link once listings load.
+    const storefrontFromURL=new URLSearchParams(location.search).get('seller');if(storefrontFromURL){let attempts=0;const openWhenReady=setInterval(()=>{if(allListings.length||++attempts>10){clearInterval(openWhenReady);window.apmOpenStorefront(storefrontFromURL)}},600)}
+
+</script>
+  <script>
+    // Original APM instrumental. Opt-in music: most mobile browsers block unsolicited autoplay.
+    (() => {
+      const audio = document.getElementById('apmAmbientAudio');
+      const button = document.getElementById('apmMusicControl');
+      const icon = document.getElementById('apmMusicIcon');
+      const label = document.getElementById('apmMusicText');
+      if (!audio || !button || !icon || !label) return;
+      audio.volume = 0.24; // Quiet enough for reading and shopping.
+      const show = (playing) => {
+        button.classList.toggle('is-playing', playing);
+        button.setAttribute('aria-pressed', String(playing));
+        button.setAttribute('aria-label', playing ? 'Pause calm background music' : 'Play calm background music');
+        label.textContent = playing ? 'Pause music' : 'Calm music';
+        icon.className = playing ? 'fa-solid fa-pause' : 'fa-solid fa-music';
+      };
+      audio.addEventListener('play', () => show(true));
+      audio.addEventListener('pause', () => show(false));
+      audio.addEventListener('ended', () => { audio.currentTime = 0; audio.play().catch(() => show(false)); });
+      audio.addEventListener('error', () => { show(false); label.textContent = 'Music unavailable'; });
+      window.toggleAPMMusic = async () => {
+        if (!audio.paused) { audio.pause(); return; }
+        try { await audio.play(); }
+        catch (error) {
+          show(false);
+          label.textContent = 'Tap to play';
+          console.warn('APM background audio blocked or unavailable:', error);
+        }
+      };
+      show(false);
+    })();
   </script>
+<div id="apmFeatureModal" class="fixed inset-0 z-[90] hidden items-center justify-center p-3" role="dialog" aria-modal="true" aria-labelledby="apmFeatureTitle"><div class="apm-modal-sheet"><header><h2 id="apmFeatureTitle">Campus Hub</h2><button onclick="closeAPMFeature()" aria-label="Close feature dialog"><i class="fa-solid fa-xmark"></i></button></header><div id="apmFeatureBody"></div></div></div>
 </body>
 </html>
