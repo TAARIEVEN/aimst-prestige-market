@@ -2290,6 +2290,10 @@
     .grab-card { background: #ffffff; border: 1px solid #e2e8f0; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03); }
     .grab-card:hover { box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04); border-color: #cbd5e1; }
     .boosted-card { border: 2px solid #f59e0b !important; background: linear-gradient(180deg, #fffbeb 0%, #ffffff 100%) !important; box-shadow: 0 8px 20px -4px rgba(245, 158, 11, 0.25) !important; }
+    /* Premium sponsored cards: GPU/browser-native smooth scrolling, no 60-fps JS loop. */
+    #sponsoredCarousel { scroll-behavior: smooth; overscroll-behavior-x: contain; -webkit-overflow-scrolling: touch; }
+    @media (prefers-reduced-motion: reduce) { #sponsoredCarousel { scroll-behavior: auto; } }
+
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     .nav-bottom-btn { transition: all 0.2s ease-in-out; }
@@ -2529,7 +2533,7 @@
   </div>
 
   <!-- DAILY RANDOM BOOSTED AD POPUP MODAL -->
-  <div id="randomBoostPopupModal" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm hidden flex items-center justify-center p-3">
+  <div id="randomBoostPopupModal" role="dialog" aria-modal="true" aria-label="Sponsored campus listing" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm hidden flex items-center justify-center p-3">
     <div class="bg-white rounded-3xl max-w-sm w-full p-5 relative shadow-2xl text-center border-2 border-amber-400 overflow-hidden">
       <button onclick="closeRandomBoostPopup()" class="absolute top-4 right-4 w-7 h-7 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center font-bold text-xs transition-all z-20"><i class="fa-solid fa-xmark"></i></button>
       <div class="absolute top-2 left-2 bg-amber-500 text-slate-950 font-black text-[9px] py-0.5 px-2 rounded-md uppercase tracking-wider shadow-sm flex items-center space-x-1 z-10">
@@ -2622,7 +2626,7 @@
           <div class="flex items-center space-x-2"><span class="w-6 h-6 rounded-lg bg-amber-500 text-slate-950 flex items-center justify-center font-black text-xs shadow-sm"><i class="fa-solid fa-bolt"></i></span><h3 class="text-xs sm:text-sm font-black text-slate-900 uppercase tracking-wide">Sponsored Featured Listings</h3></div>
           <span class="text-[10px] text-amber-600 font-bold bg-amber-50 px-2.5 py-0.5 rounded-full border border-amber-200">🚀 Promoted</span>
         </div>
-        <div id="sponsoredCarousel" class="flex space-x-3 overflow-x-auto no-scrollbar py-2 pt-1 cursor-grab"></div>
+        <div id="sponsoredCarousel" class="apm-sponsored-auto flex space-x-3 overflow-x-auto no-scrollbar py-2 pt-1 cursor-grab"></div>
       </div>
 
       <div class="flex items-center justify-between mb-4">
@@ -3175,7 +3179,14 @@
     let selectedCourses = new Set();
     let expandedDescIds = new Set();
     let activeBoostItemId = null;
-    let carouselAnimId = null;
+    // Sponsored ads: one inexpensive 2-second timer and a 3-minute popup timer.
+    let sponsoredCarouselTimer = null;
+    let sponsoredAutoDirection = 1;
+    let sponsoredPauseUntil = 0;
+    let sponsoredEventsInstalled = false;
+    let sponsoredPopupTimer = null;
+    let sponsoredPopupRotationIndex = 0;
+
     let profileCountdownInterval = null;
     let expiredBoostQueue = [];
     // One live listener for everyone: Firebase pushes additions/edits/deletions without refresh.
@@ -4029,28 +4040,80 @@
 
     async function loadData() {
       checkWelcomeModal(); populateCourseDropdowns(); renderCourseFilterPills();
-      listenToListings(); // Start live product updates immediately, even for guest visitors.
-      // Other sections do not block the marketplace while their queries load.
+      listenToListings(); // Listen continuously: newly published listings appear without refreshing.
+      installSponsoredCarouselAutoplay();
+      // Schedule ads independently of the slower secondary Firebase collections.
+      // The first 3-minute countdown starts AFTER the opening splash has ended.
+      if (document.body.classList.contains('apm-splash-active')) {
+        window.addEventListener('apm:splash-finished', startSponsoredPopupSchedule, { once: true });
+      } else {
+        startSponsoredPopupSchedule();
+      }
+      // Avoid blocking the first product render on the other Firebase collections.
       await Promise.allSettled([loadSellers(), loadClubs(), loadContributors()]);
       updateMetrics(); updateNavTabVisuals();
-      startDailyBoostPopupSequence();
-      window.addEventListener('apm:splash-finished', startDailyBoostPopupSequence, {once:true});
-      setInterval(startDailyBoostPopupSequence, 5 * 60 * 1000);
     }
 
-    function startDailyBoostPopupSequence() {
-      const now = new Date(); const todayStr = new Date().toDateString();
-      const activeBoosted = allListings.filter(item => {
-        if (!item.isBoosted || !item.boostExpiryDate) return false;
-        return new Date(item.boostExpiryDate) > now && !item.isDisabled;
-      }).sort((a, b) => new Date(b.boostExpiryDate) - new Date(a.boostExpiryDate));
-
-      if (activeBoosted.length === 0 || document.body.classList.contains('apm-splash-active') || document.hidden) return;
-      const unshownAd = activeBoosted.find(ad => !localStorage.getItem(`apm_boost_shown_${ad.id}_${todayStr}`));
-      if (unshownAd) {
-        showRandomBoostPopup(unshownAd);
-        localStorage.setItem(`apm_boost_shown_${unshownAd.id}_${todayStr}`, 'true');
+    // Advance a card every 2 seconds, reverse at the end: no visual jump or duplicated images.
+    function installSponsoredCarouselAutoplay() {
+      if (sponsoredCarouselTimer !== null) return;
+      const carousel = document.getElementById('sponsoredCarousel');
+      if (!carousel) return;
+      const pauseForInteraction = () => { sponsoredPauseUntil = Date.now() + 6500; };
+      if (!sponsoredEventsInstalled) {
+        ['pointerdown', 'touchstart', 'wheel', 'focusin'].forEach(name =>
+          carousel.addEventListener(name, pauseForInteraction, { passive: true }));
+        carousel.addEventListener('mouseenter', () => { sponsoredPauseUntil = Date.now() + 3500; });
+        sponsoredEventsInstalled = true;
       }
+      sponsoredCarouselTimer = window.setInterval(() => {
+        if (document.hidden || Date.now() < sponsoredPauseUntil ||
+            document.body.classList.contains('apm-splash-active') ||
+            window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
+            document.getElementById('sponsoredSection')?.classList.contains('hidden') ||
+            document.getElementById('viewHome')?.classList.contains('hidden')) return;
+        const items = carousel.children;
+        if (items.length < 2) return;
+        const maxLeft = Math.max(0, carousel.scrollWidth - carousel.clientWidth);
+        if (maxLeft < 4) return; // Everything fits on screen; no sliding needed.
+        const gap = Number.parseFloat(window.getComputedStyle(carousel).columnGap) || 12;
+        const step = items[0].getBoundingClientRect().width + gap;
+        let nextLeft = carousel.scrollLeft + sponsoredAutoDirection * step;
+        if (nextLeft >= maxLeft - 2) {
+          nextLeft = maxLeft;
+          sponsoredAutoDirection = -1; // Glide backwards when the end is reached.
+        } else if (nextLeft <= 2) {
+          nextLeft = 0;
+          sponsoredAutoDirection = 1;
+        }
+        carousel.scrollTo({ left: nextLeft, behavior: 'smooth' });
+      }, 2000);
+    }
+
+    // Sponsored popup: once every 3 minutes of marketplace browsing, if eligible ads exist.
+    // The rotation is in-memory; the same active ad can return on a later 3-minute cycle.
+    function startSponsoredPopupSchedule() {
+      if (sponsoredPopupTimer !== null) return; // Never create duplicate timers.
+      sponsoredPopupTimer = window.setInterval(showScheduledSponsoredPopup, 3 * 60 * 1000);
+    }
+
+    function showScheduledSponsoredPopup() {
+      if (document.hidden || document.body.classList.contains('apm-splash-active')) return;
+      const popup = document.getElementById('randomBoostPopupModal');
+      if (!popup || !popup.classList.contains('hidden')) return; // Don't stack ads.
+      // Don't interrupt login, checkout, or an existing dialogue.
+      const anotherDialogIsOpen = Array.from(document.querySelectorAll('[id$="Modal"]'))
+        .some(el => el !== popup && window.getComputedStyle(el).display !== 'none');
+      if (anotherDialogIsOpen) return;
+      const now = Date.now();
+      const eligibleAds = allListings.filter(item =>
+        item.isBoosted && item.boostExpiryDate &&
+        new Date(item.boostExpiryDate).getTime() > now && !item.isDisabled &&
+        item.boostStatus !== 'rejected' && item.boostStatus !== 'pending');
+      if (!eligibleAds.length) return; // No active sponsored listing = no popup.
+      const ad = eligibleAds[sponsoredPopupRotationIndex % eligibleAds.length];
+      sponsoredPopupRotationIndex += 1;
+      showRandomBoostPopup(ad);
     }
 
     function showRandomBoostPopup(item) {
@@ -4201,10 +4264,12 @@
 
       if (boostedItems.length > 0) {
         sponsoredSec.classList.remove('hidden');
-        // Manual, touch-friendly horizontal scrolling replaces the constant animation frame loop.
+        // Touch swipe remains available; the low-frequency timer glides cards every 2 seconds.
         const signature = boostedItems.map(i => [i.id, i.title, i.price, i.image?.length || 0, i.boostExpiryDate, i.isDisabled].join(':')).join('|');
         if (signature !== sponsoredSignature) {
           carouselContainer.innerHTML = boostedItems.map(item => createSponsoredCardHTML(item, now)).join('');
+          sponsoredAutoDirection = 1;
+          carouselContainer.scrollLeft = 0;
           sponsoredSignature = signature;
         }
       } else {
