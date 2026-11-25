@@ -2944,7 +2944,6 @@
         <button onclick="openFounderQuotaModal()" class="px-3 py-1.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-black text-xs shadow-md flex items-center space-x-1.5 transition-all animate-pulse"><i class="fa-solid fa-database"></i><span>Live Quota (GitHub)</span></button>
       </div>
       <p class="text-xs text-slate-500 mb-4">Manage pending student verifications, pro upgrades, and ad boosts.</p>
-      <p id="founderRequestSyncStatus" class="hidden text-[11px] text-rose-700 bg-rose-50 border border-rose-200 rounded-xl px-3 py-2 mb-3" role="status"></p>
 
       <div class="space-y-6 max-h-[70vh] overflow-y-auto pr-2">
         <div class="bg-amber-50 p-4 rounded-2xl border border-amber-200">
@@ -3721,7 +3720,7 @@
       try {
         incrementQuota('write');
         await addDoc(collection(db, "payment_alerts"), {
-          type: "Ad Boost", seller: currentUser, email: currentUserEmail, listingId: activeBoostItemId, title: targetItem.title, boostRequestedDays: days, amount: (days * 1.00).toFixed(2), createdAt: new Date().toISOString()
+          type: "Ad Boost", seller: currentUser, email: currentUserEmail, title: targetItem.title, amount: (days * 1.00).toFixed(2), createdAt: new Date().toISOString()
         });
       } catch(e){}
       const waMsg = `Hi Founder Keven, I have paid for my ad boost. Product Name: "${targetItem.title}", Total Days: ${days} Day(s), Total Amount: RM ${(days * 1.00).toFixed(2)}. Here is my payment receipt screenshot.`;
@@ -3769,7 +3768,7 @@
       try {
         incrementQuota('write');
         await addDoc(collection(db, "payment_alerts"), {
-          type: "Pro Upgrade", seller: currentUser, email: currentUserEmail, sellerId: seller?.id || null, amount: "5.00", createdAt: new Date().toISOString()
+          type: "Pro Upgrade", seller: currentUser, email: currentUserEmail, amount: "5.00", createdAt: new Date().toISOString()
         });
       } catch(e){}
       syncLocalStorage();
@@ -3905,7 +3904,7 @@
         try {
           incrementQuota('write');
           await addDoc(collection(db, "payment_alerts"), {
-            type: "New Student Verification", seller: cleanUsername, email: rawUser, sellerId: newSellerDoc.id, amount: "0.00", createdAt: new Date().toISOString()
+            type: "New Student Verification", seller: cleanUsername, email: rawUser, amount: "0.00", createdAt: new Date().toISOString()
           });
         } catch(e){}
 
@@ -3958,12 +3957,6 @@
       if (isFounderUser) renderSellerManagerTable();
     });
 
-    // Founder request inbox: alerts and approval records are separate Firestore collections.
-    // Keep the alerts as a second source of truth for displaying submitted request DETAILS.
-    let founderPaymentAlerts = [];
-    let founderAlertsReady = false;
-    let founderAlertsError = '';
-    let founderSellersError = '';
     const founderUnsubscribers = [];
     function stopFounderRealtimeListeners() {
       while (founderUnsubscribers.length) {
@@ -3975,10 +3968,6 @@
       try {
         founderUnsubscribers.push(onSnapshot(collection(db, "payment_alerts"), (snapshot) => {
           incrementQuota('read');
-          founderAlertsReady = true;
-          founderAlertsError = '';
-          founderPaymentAlerts = snapshot.docs.map(d => ({ ...d.data(), id:d.id }));
-          if (!document.getElementById('sellerManagerModal')?.classList.contains('hidden')) renderSellerManagerTable();
           snapshot.docChanges().forEach((change) => {
             if (change.type === "added") {
               const data = change.doc.data();
@@ -3988,16 +3977,11 @@
               }
             }
           });
-        }, (err) => {
-          founderAlertsError = err.code || err.message || 'Permission denied';
-          console.warn('Founder requests unavailable:', founderAlertsError);
-          if (!document.getElementById('sellerManagerModal')?.classList.contains('hidden')) renderSellerManagerTable();
         }));
 
         founderUnsubscribers.push(onSnapshot(collection(db, "verified_sellers"), (snapshot) => {
           incrementQuota('read');
-          founderSellersError = '';
-          allSellers = snapshot.docs.map(d => ({ ...d.data(), id:d.id, email:String(d.data().email || '').toLowerCase(), username: String(d.data().username || d.data().email || d.id).split('@')[0] }));
+          allSellers = snapshot.docs.map(d => ({ id:d.id, ...d.data(), email:(d.data().email || '').toLowerCase() }));
           syncLocalStorage();
           if (!document.getElementById('sellerManagerModal')?.classList.contains('hidden')) renderSellerManagerTable();
           snapshot.docChanges().forEach((change) => {
@@ -4009,10 +3993,6 @@
               }
             }
           });
-        }, (err) => {
-          founderSellersError = err.code || err.message || 'Permission denied';
-          console.warn('Founder seller profiles unavailable:', founderSellersError);
-          if (!document.getElementById('sellerManagerModal')?.classList.contains('hidden')) renderSellerManagerTable();
         }));
       } catch(e) { console.warn('Founder listeners:', e.message); }
     }
@@ -4167,10 +4147,7 @@
           const querySnapshot = await getDocs(collection(db, 'verified_sellers'));
           allSellers = querySnapshot.docs.map(d => ({ id:d.id, ...d.data(), email:(d.data().email || '').toLowerCase() }));
           syncLocalStorage();
-        } catch (err) {
-          console.warn('Seller profiles unavailable:', err.code || err.message);
-          if (isFounderUser) founderSellersError = err.code || err.message || 'Permission denied';
-        }
+        } catch (err) { console.warn('Seller profiles unavailable:', err.code || err.message); }
       })();
       try { await pendingSellersFetch; } finally { pendingSellersFetch = null; }
     }
@@ -4312,95 +4289,19 @@
       const tbody = document.getElementById('sellersTableBody');
       const now = new Date();
 
-      // Alert documents arrive independently of seller/listing documents.
-      // Show the request details even when its linked profile has not synced yet.
-      const safe = v => String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-      const norm = v => String(v ?? '').trim().toLowerCase();
-      const activeAlerts = founderPaymentAlerts.filter(a => !['approved','rejected','resolved','dismissed','cancelled'].includes(norm(a.status)))
-        .sort((a,b) => Date.parse(b.createdAt || '') - Date.parse(a.createdAt || ''));
-      const sellerFromAlert = a => allSellers.find(s => (a.sellerId && s.id === a.sellerId) || (a.email && norm(s.email) === norm(a.email)) || (a.seller && norm(s.username) === norm(a.seller)));
-      const listingFromAlert = a => allListings.find(i => (a.listingId && i.id === a.listingId) || (a.title && norm(i.title) === norm(a.title) && norm(i.seller) === norm(a.seller)));
-      const alertKind = a => norm(a.type).replace(/[_-]/g,' ');
-      const isProAlert = a => alertKind(a).includes('pro') || alertKind(a).includes('subscription');
-      const isBoostAlert = a => alertKind(a).includes('boost') || alertKind(a).includes('advertis');
-      const isStudentAlert = a => alertKind(a).includes('student') || alertKind(a).includes('verification') || alertKind(a).includes('registr');
-      const dateLabel = a => {
-        if (!a?.createdAt) return '';
-        const date = a.createdAt?.toDate ? a.createdAt.toDate() : new Date(a.createdAt);
-        return Number.isNaN(date.getTime()) ? '' : date.toLocaleString('en-MY', {dateStyle:'medium',timeStyle:'short'});
-      };
-      const details = a => a ? `<div class="text-[10px] leading-relaxed text-slate-600 mt-1 break-words">
-        <div><b>Account:</b> ${safe(a.email || a.seller || 'Not provided')}</div>
-        ${a.title ? `<div><b>Product:</b> ${safe(a.title)}</div>` : ''}
-        ${a.amount !== undefined && a.amount !== null ? `<div><b>Amount:</b> RM ${safe(a.amount)}</div>` : ''}
-        ${dateLabel(a) ? `<div><b>Requested:</b> ${safe(dateLabel(a))}</div>` : ''}
-      </div>` : '';
-      const buttons = (kind, id) => id ? `<div class="flex gap-1.5 shrink-0">
-        <button onclick="${kind==='boost'?'approveBoost':kind==='pro'?'approveProUpgrade':'approveSeller'}('${id}')" class="px-2.5 py-1.5 rounded-lg bg-emerald-600 text-white font-bold text-[10px]">Accept</button>
-        <button onclick="${kind==='boost'?'rejectBoost':kind==='pro'?'rejectProUpgrade':'rejectSeller'}('${id}')" class="px-2.5 py-1.5 rounded-lg bg-rose-600 text-white font-bold text-[10px]">Reject</button>
-      </div>` : `<span class="text-[10px] text-rose-700">Linked record unavailable — check Firebase permissions or missing profile.</span>`;
-      const row = (kind, title, alert, id, note = '') => `<div class="bg-white p-2.5 rounded-xl border border-slate-200 text-xs flex flex-col gap-2">
-        <div class="flex items-start justify-between gap-2"><div class="min-w-0 break-words"><b class="text-slate-900">${safe(title)}</b>
-          ${details(alert)}${note ? `<div class="text-[10px] text-slate-500 mt-1">${safe(note)}</div>` : ''}
-        </div>${buttons(kind,id)}</div></div>`;
-      const getLatest = (type, matcher) => activeAlerts.find(a => type(a) && matcher(a));
+      const pendingBoosts = allListings.filter(i => i.boostStatus === 'pending' && (i.title.toLowerCase().includes(searchPendingBoosts) || (i.seller||'').toLowerCase().includes(searchPendingBoosts)));
+      document.getElementById('pendingBoostsCountBadge').innerText = `${pendingBoosts.length} Pending`;
+      pendingBoostsContainer.innerHTML = pendingBoosts.length === 0 ? `<p class="text-[11px] text-amber-800 italic">No matching pending ad boosts.</p>` : pendingBoosts.map(i => `<div class="bg-white p-2.5 rounded-xl border border-amber-300 flex items-center justify-between text-xs"><div><span class="font-extrabold text-slate-900 block">${i.title}</span><span class="text-[10px] text-slate-500">Seller: ${i.seller} | Requested: ${i.boostRequestedDays || 1} Day(s)</span></div><div class="space-x-1 shrink-0"><button onclick="approveBoost('${i.id}')" class="px-2.5 py-1 rounded-lg bg-emerald-600 text-white font-bold text-[10px]">Accept</button><button onclick="rejectBoost('${i.id}')" class="px-2.5 py-1 rounded-lg bg-rose-600 text-white font-bold text-[10px]">Reject</button></div></div>`).join('');
 
-      // AD BOOSTS: first use the live listing records, then fill in any alert not represented there.
-      const boostEntries = allListings.filter(i => i.boostStatus === 'pending').map(i => ({
-        item:i, alert:getLatest(isBoostAlert, a => (a.listingId && a.listingId === i.id) || (norm(a.title) === norm(i.title) && norm(a.seller) === norm(i.seller)))
-      }));
-      for (const a of activeAlerts.filter(isBoostAlert)) {
-        if (boostEntries.some(x => x.alert?.id === a.id || (x.item && a.listingId && x.item.id === a.listingId))) continue;
-        const item = listingFromAlert(a);
-        if (item && (item.isBoosted || ['approved','rejected'].includes(norm(item.boostStatus)))) continue;
-        // Only display one most recent outstanding request for the same listing.
-        if (boostEntries.some(x => x.item?.id && x.item.id === item?.id)) continue;
-        boostEntries.push({item,alert:a});
-      }
-      const shownBoosts = boostEntries.filter(x => norm(x.item?.title || x.alert?.title).includes(searchPendingBoosts) || norm(x.item?.seller || x.alert?.seller || x.alert?.email).includes(searchPendingBoosts));
-      document.getElementById('pendingBoostsCountBadge').innerText = `${shownBoosts.length} Pending`;
-      pendingBoostsContainer.innerHTML = shownBoosts.length ? shownBoosts.map(({item,alert}) => row('boost', item?.title || alert?.title || 'Ad Boost Request', alert, item?.id,
-        item ? `Seller: ${item.seller || alert?.seller || ''} • ${item.boostRequestedDays || alert?.boostRequestedDays || alert?.amount || 1} day(s)` : 'Listing has not synced — approval unavailable')).join('') : `<p class="text-[11px] text-amber-800 italic">${founderAlertsReady ? 'No matching pending ad boosts.' : 'Loading boost requests...'}</p>`;
+      const pendingProSellers = allSellers.filter(s => s.proUpgradeStatus === 'pending' && (s.username.toLowerCase().includes(searchPendingPro) || s.email.toLowerCase().includes(searchPendingPro)));
+      document.getElementById('pendingProCountBadge').innerText = `${pendingProSellers.length} Pending`;
+      pendingProContainer.innerHTML = pendingProSellers.length === 0 ? `<p class="text-[11px] text-purple-800 italic">No matching pending pro upgrades.</p>` : pendingProSellers.map(s => `<div class="bg-white p-2.5 rounded-xl border border-purple-300 flex items-center justify-between text-xs"><div><span class="font-extrabold text-slate-900 block">${s.username}</span><span class="text-[10px] text-slate-500">${s.email} | Pro Tier (RM5)</span></div><div class="space-x-1 shrink-0"><button onclick="approveProUpgrade('${s.id}')" class="px-2.5 py-1 rounded-lg bg-emerald-600 text-white font-bold text-[10px]">Accept</button><button onclick="rejectProUpgrade('${s.id}')" class="px-2.5 py-1 rounded-lg bg-rose-600 text-white font-bold text-[10px]">Reject</button></div></div>`).join('');
 
-      // PRO UPGRADES: render profile requests and payment alerts together; avoid duplicate rows.
-      const proEntries = allSellers.filter(s => norm(s.proUpgradeStatus) === 'pending').map(s => ({seller:s,alert:getLatest(isProAlert,a => (a.sellerId && s.id === a.sellerId) || (a.email && norm(s.email) === norm(a.email)) || norm(a.seller) === norm(s.username))}));
-      for (const a of activeAlerts.filter(isProAlert)) {
-        if (proEntries.some(x => x.alert?.id === a.id || (a.email && norm(x.seller?.email) === norm(a.email)))) continue;
-        const seller = sellerFromAlert(a);
-        if (seller && (norm(seller.proUpgradeStatus) === 'approved' || (seller.tier === 'pro' && norm(seller.proUpgradeStatus) !== 'pending') || norm(seller.proUpgradeStatus) === 'rejected')) continue;
-        if (proEntries.some(x => x.seller?.id && x.seller.id === seller?.id)) continue;
-        proEntries.push({seller,alert:a});
-      }
-      const shownPro = proEntries.filter(x => norm(x.seller?.username || x.alert?.seller).includes(searchPendingPro) || norm(x.seller?.email || x.alert?.email).includes(searchPendingPro));
-      document.getElementById('pendingProCountBadge').innerText = `${shownPro.length} Pending`;
-      pendingProContainer.innerHTML = shownPro.length ? shownPro.map(({seller,alert}) => row('pro', seller?.username || alert?.seller || 'Pro Upgrade Request', alert, seller?.id,
-        seller ? (seller.email || '') + ' • Pro Tier (RM5)' : 'Account record unavailable — approval unavailable')).join('') : `<p class="text-[11px] text-purple-800 italic">${founderAlertsReady ? 'No matching pending pro upgrades.' : 'Loading Pro requests...'}</p>`;
+      const pendingStudents = allSellers.filter(s => !s.isVerified && (s.username.toLowerCase().includes(searchPendingStudents) || s.email.toLowerCase().includes(searchPendingStudents)));
+      document.getElementById('pendingCountBadge').innerText = `${pendingStudents.length} Pending`;
+      pendingContainer.innerHTML = pendingStudents.length === 0 ? `<p class="text-[11px] text-amber-800 italic">No matching pending students.</p>` : pendingStudents.map(s => `<div class="bg-white p-2.5 rounded-xl border border-amber-300 flex items-center justify-between text-xs"><div><span class="font-extrabold text-slate-900 block">${s.username}</span><span class="text-[10px] text-slate-500">${s.email}</span></div><div class="space-x-1 shrink-0"><button onclick="approveSeller('${s.id}')" class="px-2.5 py-1 rounded-lg bg-emerald-600 text-white font-bold text-[10px]">Accept</button><button onclick="rejectSeller('${s.id}')" class="px-2.5 py-1 rounded-lg bg-rose-600 text-white font-bold text-[10px]">Reject</button></div></div>`).join('');
 
-      // REGISTRATION: account creation may succeed even if a Firestore profile write fails.
-      // Keep the original request visible instead of falsely displaying "0 Pending".
-      const studentEntries = allSellers.filter(s => !s.isVerified).map(s => ({seller:s,alert:getLatest(isStudentAlert,a => (a.sellerId && a.sellerId === s.id) || (a.email && norm(a.email) === norm(s.email)) || norm(a.seller) === norm(s.username))}));
-      for (const a of activeAlerts.filter(isStudentAlert)) {
-        if (studentEntries.some(x => x.alert?.id === a.id || (a.email && norm(x.seller?.email) === norm(a.email)))) continue;
-        const seller = sellerFromAlert(a);
-        if (seller?.isVerified === true) continue;
-        if (studentEntries.some(x => x.seller?.id && x.seller.id === seller?.id)) continue;
-        studentEntries.push({seller,alert:a});
-      }
-      const shownStudents = studentEntries.filter(x => norm(x.seller?.username || x.alert?.seller).includes(searchPendingStudents) || norm(x.seller?.email || x.alert?.email).includes(searchPendingStudents));
-      document.getElementById('pendingCountBadge').innerText = `${shownStudents.length} Pending`;
-      pendingContainer.innerHTML = shownStudents.length ? shownStudents.map(({seller,alert}) => row('student', seller?.username || alert?.seller || 'New Student Registration', alert, seller?.id,
-        seller ? seller.email || '' : 'Registration account record unavailable — approval unavailable')).join('') : `<p class="text-[11px] text-slate-600 italic">${founderAlertsReady ? 'No matching pending students.' : 'Loading registration requests...'}</p>`;
-
-      const syncNotice = document.getElementById('founderRequestSyncStatus');
-      if (syncNotice) {
-        const errors = [];
-        if (founderSellersError) errors.push(`Seller profiles: ${founderSellersError}`);
-        if (founderAlertsError) errors.push(`Payment alerts: ${founderAlertsError}`);
-        syncNotice.classList.toggle('hidden', errors.length === 0);
-        syncNotice.textContent = errors.length ? `Firebase could not sync some Founder Hub details. ${errors.join(' • ')}. Check your Firestore rules.` : '';
-      }
-
-      tbody.innerHTML = allSellers.filter(s => s.isVerified && (norm(s.username).includes(searchVerified) || norm(s.email).includes(searchVerified))).map(seller => {
+      tbody.innerHTML = allSellers.filter(s => s.isVerified && (s.username.toLowerCase().includes(searchVerified) || s.email.toLowerCase().includes(searchVerified))).map(seller => {
         let tierDisplay = `<span class="px-2 py-1 rounded-lg text-[9px] font-black uppercase bg-slate-100 text-slate-700">FREE</span>`;
         if (seller.tier === 'pro') {
           if (seller.proExpiryDate) {
