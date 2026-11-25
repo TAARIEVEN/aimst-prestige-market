@@ -28,7 +28,7 @@
     .nav-bottom-btn.disabled-tab { opacity: 0.4; cursor: not-allowed; filter: grayscale(80%); }
   </style>
 
-  <!-- APM 3-SECOND CAMPUS LAUNCH SPLASH: self-contained artwork, phone friendly -->
+  <!-- APM 60-SECOND CAMPUS LAUNCH SPLASH: artwork embedded; optional soundtrack: splashscreenbgm.mp3 -->
   <style id="apmLaunchSplashStyles">
     body.apm-splash-active { overflow: hidden !important; }
     #apmLaunchSplash { position: fixed; inset: 0; z-index: 2147483000; background: linear-gradient(125deg, #f2f8ff 0%, #ffffff 39%, #e9f5ff 100%); display: flex; justify-content: center; align-items: center; overflow: hidden; opacity: 1; transition: opacity .32s ease, visibility .32s ease; isolation: isolate; }
@@ -40,9 +40,14 @@
     #apmLaunchSplash .apm-launch-art:not([hidden]) + .apm-launch-fallback { display:none; }
     #apmLaunchSplash .apm-launch-shine { position:absolute; top:0; bottom:0; left:0; width:55%; pointer-events:none; opacity:.25; background:linear-gradient(105deg,transparent 24%,rgba(255,255,255,.1) 42%,rgba(255,255,255,.8) 50%,transparent 68%); transform:translate3d(-220%,0,0); animation:apm-launch-shine 2.6s ease-in-out .25s both; }
     #apmLaunchSplash .apm-launch-progress { position:absolute; left:50%; bottom:max(12px,env(safe-area-inset-bottom)); width:min(190px,48%); height:3px; transform:translateX(-50%); border-radius:20px; background:rgba(25,79,137,.13); overflow:hidden; }
-    #apmLaunchSplash .apm-launch-progress::after { content:""; display:block; height:100%; background:linear-gradient(90deg,#2160bd,#16a48f,#e4b858); border-radius:inherit; transform-origin:left; animation:apm-launch-progress 9.7s linear forwards; }
+    #apmLaunchSplash .apm-launch-progress::after { content:""; display:block; height:100%; background:linear-gradient(90deg,#2160bd,#16a48f,#e4b858); border-radius:inherit; transform-origin:left; animation:apm-launch-progress 60s linear forwards; }
     #apmLaunchSplash .apm-launch-skip { position:absolute; top:max(12px,env(safe-area-inset-top)); right:12px; padding:6px 12px; color:#244b7c; background:rgba(255,255,255,.85); border:1px solid rgba(184,208,236,.75); border-radius:999px; font:600 11px system-ui,sans-serif; cursor:pointer; z-index:2; }
     #apmLaunchSplash .apm-launch-skip:focus-visible { outline:2px solid #1a6cab; outline-offset:3px; }
+    #apmLaunchSplash .apm-launch-music { position:absolute; top:max(12px,env(safe-area-inset-top)); left:12px; z-index:3; border:1px solid rgba(184,208,236,.85); border-radius:999px; padding:8px 12px; background:rgba(255,255,255,.94); color:#193f6c; font:700 11px system-ui,sans-serif; cursor:pointer; box-shadow:0 3px 14px rgba(24,58,103,.08); }
+    #apmLaunchSplash .apm-launch-music:focus-visible { outline:2px solid #1a6cab; outline-offset:3px; }
+    #apmLaunchSplash .apm-launch-music[data-playing="true"] { color:#086950; border-color:#7bbfad; }
+    @media(max-width:380px){ #apmLaunchSplash .apm-launch-music { max-width:53vw; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; } }
+
     @keyframes apm-launch-appear { from { opacity: .25; transform: scale(.975) } to { opacity: 1; transform: scale(1) } }
     @keyframes apm-launch-shine { 0% { transform:translate3d(-220%,0,0) } 100% { transform:translate3d(320%,0,0) } }
     @keyframes apm-launch-progress { from { transform:scaleX(0) } to { transform:scaleX(1) } }
@@ -58,25 +63,89 @@
       <div class="apm-launch-fallback"><strong>AIMST PRESTIGE MARKET</strong><small>We Listen, We Create, You Enjoy!</small></div>
       <span class="apm-launch-shine" aria-hidden="true"></span>
       <span class="apm-launch-progress" aria-hidden="true"></span>
+      <button type="button" class="apm-launch-music" id="apmSplashMusicButton" onclick="window.toggleAPMSplashMusic?.()" aria-label="Play splash screen music" aria-pressed="false">♫ Tap for music</button>
+      <audio id="apmSplashMusic" src="splashscreenbgm.mp3" preload="auto" playsinline aria-label="APM 60-second splash screen soundtrack"></audio>
       <button type="button" class="apm-launch-skip" onclick="window.finishAPMLaunchSplash?.()" aria-label="Skip opening animation">Skip</button>
     </div>
   </div>
   <script>
-    /* Runs independently of Firebase, so the splash never blocks login or loading. */
+    /* 60-second campus opening. Music auto-plays only where the browser permits.
+       If blocked, visitors can tap the music button; Skip always ends both. */
     (function () {
+      const overlay = document.getElementById('apmLaunchSplash');
+      const soundtrack = document.getElementById('apmSplashMusic');
+      const musicButton = document.getElementById('apmSplashMusicButton');
       let closed = false;
       let timer;
+      let requestedPlay = 0;
+
+      function updateMusicButton(text, playing) {
+        if (!musicButton || closed) return;
+        musicButton.textContent = text;
+        musicButton.dataset.playing = String(Boolean(playing));
+        musicButton.setAttribute('aria-pressed', String(Boolean(playing)));
+        musicButton.setAttribute('aria-label', playing ? 'Pause splash music' : 'Play splash music');
+      }
+
+      function stopSplashMusic() {
+        if (!soundtrack) return;
+        requestedPlay++;
+        soundtrack.pause();
+        try { soundtrack.currentTime = 0; } catch (error) { /* not loaded yet */ }
+      }
+
       window.finishAPMLaunchSplash = function () {
         if (closed) return;
         closed = true;
         clearTimeout(timer);
-        const overlay = document.getElementById('apmLaunchSplash');
+        stopSplashMusic();
         if (!overlay) return;
         overlay.classList.add('apm-launch-finish');
         document.body.classList.remove('apm-splash-active');
         window.setTimeout(function () { overlay.remove(); }, 350);
       };
-      timer = window.setTimeout(window.finishAPMLaunchSplash, 9700);
+
+      function playSplashMusic() {
+        if (closed || !soundtrack) return;
+        const attempt = ++requestedPlay;
+        soundtrack.volume = 0.65;
+        const result = soundtrack.play();
+        if (result && typeof result.then === 'function') {
+          result.then(function () {
+            if (closed || attempt !== requestedPlay) return;
+            updateMusicButton('♫ Music on · Pause', true);
+          }).catch(function () {
+            if (closed || attempt !== requestedPlay) return;
+            updateMusicButton('♫ Tap for music', false);
+          });
+        } else {
+          updateMusicButton('♫ Music on · Pause', true);
+        }
+      }
+
+      window.toggleAPMSplashMusic = function () {
+        if (closed || !soundtrack) return;
+        if (soundtrack.paused) {
+          playSplashMusic();
+        } else {
+          requestedPlay++;
+          soundtrack.pause();
+          updateMusicButton('♫ Resume music', false);
+        }
+      };
+
+      soundtrack.addEventListener('error', function () {
+        updateMusicButton('♪ Music file missing', false);
+        if (musicButton) musicButton.title = 'Upload splashscreenbgm.mp3 to the same GitHub folder as index.html';
+      });
+      soundtrack.addEventListener('ended', function () {
+        updateMusicButton('♪ Music finished', false);
+      });
+
+      // Full 60-second opening from page load; fade-out follows for 0.35s.
+      timer = window.setTimeout(window.finishAPMLaunchSplash, 60000);
+      // Browsers that prohibit autoplay will show the Tap for music button.
+      playSplashMusic();
     })();
   </script>
 
