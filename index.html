@@ -2936,14 +2936,15 @@
   <!-- ADMIN SELLER MANAGER MODAL -->
   <div id="sellerManagerModal" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm hidden flex items-center justify-center p-4 overflow-y-auto">
     <div class="bg-white rounded-3xl max-w-2xl w-full p-6 relative shadow-2xl my-8">
-      <button onclick="closeSellerManagerModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+      <button onclick="closeSellerManagerModal()" aria-label="Close Founder Admin Hub" class="absolute top-4 right-4 text-slate-500 hover:text-slate-700 text-xl font-bold">&times;</button>
       
       <!-- HEADER WITH FOUNDER RED QUOTA BUTTON -->
       <div class="flex flex-wrap items-center justify-between gap-2 mb-1">
         <h3 class="text-base font-black text-slate-900"><i class="fa-solid fa-shield-halved text-amber-500"></i> Founder Admin Hub</h3>
         <button onclick="openFounderQuotaModal()" class="px-3 py-1.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-black text-xs shadow-md flex items-center space-x-1.5 transition-all animate-pulse"><i class="fa-solid fa-database"></i><span>Live Quota (GitHub)</span></button>
       </div>
-      <p class="text-xs text-slate-500 mb-4">Manage pending student verifications, pro upgrades, and ad boosts.</p>
+      <p class="text-xs text-slate-500 mb-2">Manage pending student verifications, pro upgrades, and ad boosts.</p>
+      <p id="apmFounderSyncWarning" class="hidden text-[11px] text-rose-700 bg-rose-50 border border-rose-200 rounded-lg px-3 py-2 mb-3" role="alert"></p>
 
       <div class="space-y-6 max-h-[70vh] overflow-y-auto pr-2">
         <div class="bg-amber-50 p-4 rounded-2xl border border-amber-200">
@@ -2974,6 +2975,21 @@
       </div>
     </div>
   </div>
+
+  <style id="apm-founder-bugfix-layout">
+    #sellerManagerModal > div { max-height:calc(100dvh - 28px); display:flex; flex-direction:column; }
+    #sellerManagerModal > div > button[onclick="closeSellerManagerModal()"] {z-index:12;top:10px;right:10px;width:31px;height:31px;border-radius:50%;background:white;display:grid;place-items:center;}
+    #sellerManagerModal > div > .flex.flex-wrap {padding-right:32px;}
+    #sellerManagerModal > div > .space-y-6 { max-height:none; min-height:0; flex:1; overflow-y:auto; overscroll-behavior:contain; }
+    #pendingSellersContainer, #pendingProContainer, #pendingBoostsContainer {max-height:240px;overflow-y:auto;overscroll-behavior:contain;}
+    @media(max-width:640px){
+      #sellerManagerModal {padding:10px;align-items:center;}
+      #sellerManagerModal > div { padding:16px; margin:0; border-radius:22px; max-height:calc(100dvh - 22px); }
+      #sellerManagerModal > div > .space-y-6 {padding-right:2px;gap:14px;}
+      #sellerManagerModal .bg-amber-50, #sellerManagerModal .bg-purple-50, #sellerManagerModal .bg-slate-50 {padding:12px;}
+      #pendingSellersContainer,#pendingProContainer,#pendingBoostsContainer {max-height:190px;}
+    }
+  </style>
 
   <!-- FOUNDER LIVE QUOTA MODAL -->
   <div id="founderQuotaModal" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm hidden flex items-center justify-center p-4">
@@ -3112,7 +3128,7 @@
   <!-- SCRIPT MODULES - PART 1 -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { initializeFirestore, memoryLocalCache, collection, getDocs, addDoc, deleteDoc, doc, updateDoc, setDoc, query, increment, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { initializeFirestore, memoryLocalCache, collection, getDocs, getDocsFromServer, getDocFromServer, addDoc, deleteDoc, doc, updateDoc, setDoc, query, increment, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
     import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
     import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
 
@@ -3187,6 +3203,60 @@
     let sponsoredSignature = null;
     let visibleListingCount = window.matchMedia('(max-width: 699px)').matches ? 12 : 20;
     let searchRenderTimer = 0;
+    let registrationInProgress = false;
+    let sellerProfilesLoadError = '';
+    let founderProfilesReady = false;
+    const founderActionsRunning = new Set();
+    let unsubscribeCurrentSeller = null;
+    let founderHubRenderTimer = null;
+
+    function findSellerByEmail(email) {
+      const matches = allSellers.filter(s => (s.email || '').trim().toLowerCase() === (email || '').trim().toLowerCase());
+      // Multiple legacy documents may exist for the same account. A verified record wins.
+      return matches.find(s => s.isVerified === true) || matches[0] || null;
+    }
+    function showFounderSyncError(message) {
+      const el = document.getElementById('apmFounderSyncWarning');
+      if (!el) return;
+      el.textContent = message || '';
+      el.classList.toggle('hidden', !message);
+    }
+    function founderOnlyAction() {
+      if (isFounderUser && auth.currentUser) return true;
+      alert('Only the logged-in Founder can approve these requests.');
+      return false;
+    }
+    function queueFounderHubRender() {
+      if (document.getElementById('sellerManagerModal')?.classList.contains('hidden')) return;
+      clearTimeout(founderHubRenderTimer);
+      founderHubRenderTimer = setTimeout(() => window.renderSellerManagerTable(), 160);
+    }
+    function escapeAdminHTML(value) {
+      return String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    }
+    function startCurrentSellerListener(sellerId, userId) {
+      if (unsubscribeCurrentSeller) { unsubscribeCurrentSeller(); unsubscribeCurrentSeller = null; }
+      unsubscribeCurrentSeller = onSnapshot(doc(db, 'verified_sellers', sellerId), snap => {
+        if (auth.currentUser?.uid !== userId) return;
+        if (!snap.exists()) {
+          alert('Your seller account has been removed. Contact the Founder for help.');
+          signOut(auth); return;
+        }
+        const updated = { ...snap.data(), id:snap.id, email:(snap.data().email || '').toLowerCase() };
+        allSellers = [...allSellers.filter(s => s.id !== snap.id), updated];
+        if (!updated.isVerified) {
+          alert('Your seller account is awaiting Founder approval.');
+          signOut(auth); return;
+        }
+        applyUserTheme(updated.tier === 'pro' && (!updated.proExpiryDate || new Date(updated.proExpiryDate) > new Date()));
+        if (!document.getElementById('viewMe')?.classList.contains('hidden')) renderMeTabDetails();
+        if (!document.getElementById('viewMyProducts')?.classList.contains('hidden')) renderMyProductsTab();
+      }, error => {
+        console.warn('APM seller status sync failed:', error);
+        // The next login will still verify status using the Firestore server.
+      });
+    }
+
 
     function updateRealtimeStatus(message, healthy) {
       const label = document.getElementById('apmRealtimeStatus');
@@ -3712,70 +3782,80 @@
       const days = parseInt(document.getElementById('boostDaysSelect').value) || 1;
       const targetItem = allListings.find(i => i.id === activeBoostItemId);
       if (!targetItem) return;
-      targetItem.boostStatus = 'pending'; targetItem.boostRequestedDays = days;
       try {
-        incrementQuota('write');
-        await updateDoc(doc(db, "listings", activeBoostItemId), { boostStatus: 'pending', boostRequestedDays: days });
-      } catch(e){}
-      try {
-        incrementQuota('write');
-        await addDoc(collection(db, "payment_alerts"), {
-          type: "Ad Boost", seller: currentUser, email: currentUserEmail, title: targetItem.title, amount: (days * 1.00).toFixed(2), createdAt: new Date().toISOString()
+        await updateDoc(doc(db, 'listings', activeBoostItemId), {
+          boostStatus:'pending', boostRequestedDays:days
         });
-      } catch(e){}
-      const waMsg = `Hi Founder Keven, I have paid for my ad boost. Product Name: "${targetItem.title}", Total Days: ${days} Day(s), Total Amount: RM ${(days * 1.00).toFixed(2)}. Here is my payment receipt screenshot.`;
+        incrementQuota('write');
+      } catch (err) {
+        alert('Boost request NOT saved to Firebase. Please retry. ' + (err.code || err.message));
+        return;
+      }
+      // Notifications are supplemental; the listing itself is the approval source of truth.
+      try {
+        await addDoc(collection(db, 'payment_alerts'), {
+          type:'Ad Boost', listingId:targetItem.id, seller:currentUser,
+          email:currentUserEmail, title:targetItem.title, amount:(days * 1).toFixed(2),
+          status:'pending', createdAt:new Date().toISOString()
+        });
+        incrementQuota('write');
+      } catch (err) { console.warn('Boost alert not delivered:', err); }
+      const waMsg = `Hi Founder Keven, I have paid for my ad boost. Product Name: "${targetItem.title}", Total Days: ${days} Day(s), Total Amount: RM ${(days * 1).toFixed(2)}. Here is my payment receipt screenshot.`;
       closeBoostModal();
       window.open(`https://wa.me/60126384757?text=${encodeURIComponent(waMsg)}`, '_blank');
-      alert("Boost payment submitted! Awaiting Founder verification.");
+      alert('Boost request saved. Awaiting Founder approval.');
       renderMyProductsTab();
     };
 
     window.approveBoost = async function(itemId) {
+      if (!founderOnlyAction() || founderActionsRunning.has('boost:'+itemId)) return;
       const item = allListings.find(i => i.id === itemId);
-      if (!item) return;
-      const days = item.boostRequestedDays || 1;
-      const boostExpiry = new Date(Date.now() + (days * 24 * 60 * 60 * 1000)).toISOString();
-      item.isBoosted = true; item.boostStatus = 'approved'; item.boostExpiryDate = boostExpiry;
+      if (!item || item.boostStatus !== 'pending') return;
+      const days = Number(item.boostRequestedDays) || 1;
+      const boostExpiry = new Date(Date.now() + days * 86400000).toISOString();
+      founderActionsRunning.add('boost:'+itemId); queueFounderHubRender();
       try {
+        await updateDoc(doc(db, 'listings', itemId), { isBoosted:true, boostStatus:'approved', boostExpiryDate:boostExpiry });
         incrementQuota('write');
-        await updateDoc(doc(db, "listings", itemId), { isBoosted: true, boostStatus: 'approved', boostExpiryDate: boostExpiry });
-      } catch(e){}
-      syncLocalStorage(); renderListings(); renderSellerManagerTable();
-      alert(`Approved Ad Boost for "${item.title}" (${days} days)!`);
+        alert(`Ad boost approved and saved for "${item.title}".`);
+      } catch (err) { alert('Approval NOT saved in Firebase: '+(err.code || err.message)); }
+      finally {founderActionsRunning.delete('boost:'+itemId); queueFounderHubRender();}
     };
-
     window.rejectBoost = async function(itemId) {
+      if (!founderOnlyAction() || founderActionsRunning.has('boost:'+itemId)) return;
       const item = allListings.find(i => i.id === itemId);
-      if (!item) return;
-      item.isBoosted = false; item.boostStatus = 'rejected';
+      if (!item || item.boostStatus !== 'pending') return;
+      founderActionsRunning.add('boost:'+itemId); queueFounderHubRender();
       try {
+        await updateDoc(doc(db, 'listings', itemId), { isBoosted:false, boostStatus:'rejected' });
         incrementQuota('write');
-        await updateDoc(doc(db, "listings", itemId), { isBoosted: false, boostStatus: 'rejected' });
-      } catch(e){}
-      syncLocalStorage(); renderListings(); renderSellerManagerTable();
+      } catch(err) { alert('Rejection NOT saved in Firebase: '+(err.code || err.message)); }
+      finally { founderActionsRunning.delete('boost:'+itemId); queueFounderHubRender(); }
     };
 
     window.requestProUpgrade = async function() {
-      if (!currentUserEmail) { alert("Please login first."); return; }
-      const seller = allSellers.find(s => s.email.toLowerCase() === currentUserEmail);
-      if (seller) {
-        seller.proUpgradeStatus = 'pending';
-        try {
-          incrementQuota('write');
-          await updateDoc(doc(db, "verified_sellers", seller.id), { proUpgradeStatus: 'pending' });
-        } catch(e){}
+      if (!currentUserEmail) { alert('Please login first.'); return; }
+      const seller = findSellerByEmail(currentUserEmail);
+      if (!seller || !seller.isVerified) { alert('Your seller profile must be verified first.'); return; }
+      if (seller.proUpgradeStatus === 'pending') { alert('Your Pro upgrade is already awaiting approval.'); return; }
+      try {
+        await updateDoc(doc(db, 'verified_sellers', seller.id), { proUpgradeStatus:'pending' });
+        incrementQuota('write');
+      } catch(err) {
+        alert('Pro upgrade request NOT saved in Firebase. ' + (err.code || err.message));
+        return;
       }
       try {
-        incrementQuota('write');
-        await addDoc(collection(db, "payment_alerts"), {
-          type: "Pro Upgrade", seller: currentUser, email: currentUserEmail, amount: "5.00", createdAt: new Date().toISOString()
+        await addDoc(collection(db, 'payment_alerts'), {
+          type:'Pro Upgrade', sellerId:seller.id, seller:currentUser,
+          email:currentUserEmail, amount:'5.00', status:'pending', createdAt:new Date().toISOString()
         });
-      } catch(e){}
-      syncLocalStorage();
+        incrementQuota('write');
+      } catch(err) { console.warn('Pro alert not delivered:', err); }
       const waMsg = `Hi Founder Keven, I have paid RM5 for the APM Pro Tier upgrade. Here is my payment receipt screenshot. Seller Account: ${currentUserEmail}`;
       closeUpgradeModal();
       window.open(`https://wa.me/60126384757?text=${encodeURIComponent(waMsg)}`, '_blank');
-      alert("Pro tier upgrade payment sent to Founder! Awaiting verification.");
+      alert('Pro upgrade request saved. Awaiting Founder approval.');
     };
 
     window.requestProUpgradeFromLockedEdit = function() {
@@ -3830,29 +3910,30 @@
     };
 
     window.approveProUpgrade = async function(sellerId) {
+      if (!founderOnlyAction() || founderActionsRunning.has('pro:'+sellerId)) return;
       const seller = allSellers.find(s => s.id === sellerId);
-      if (seller) {
-        seller.tier = 'pro'; seller.proUpgradeStatus = 'approved';
-        seller.proExpiryDate = new Date(Date.now() + (30 * 24 * 60 * 60 * 1000)).toISOString();
-        try {
-          incrementQuota('write');
-          await updateDoc(doc(db, "verified_sellers", sellerId), { tier: 'pro', proUpgradeStatus: 'approved', proExpiryDate: seller.proExpiryDate });
-        } catch(e){}
-        syncLocalStorage(); renderSellerManagerTable();
-        alert(`Approved Pro Tier for ${seller.username}!`);
-      }
+      if (!seller || seller.proUpgradeStatus !== 'pending') return;
+      const expiry = new Date(Date.now() + 30 * 86400000).toISOString();
+      founderActionsRunning.add('pro:'+sellerId); queueFounderHubRender();
+      try {
+        await updateDoc(doc(db, 'verified_sellers', sellerId), {
+          tier:'pro', proUpgradeStatus:'approved', proExpiryDate:expiry
+        });
+        incrementQuota('write');
+        alert('Pro upgrade approved in Firebase for '+seller.username+'.');
+      } catch(err) { alert('Pro approval NOT saved in Firebase: '+(err.code || err.message)); }
+      finally { founderActionsRunning.delete('pro:'+sellerId); queueFounderHubRender(); }
     };
-
     window.rejectProUpgrade = async function(sellerId) {
+      if (!founderOnlyAction() || founderActionsRunning.has('pro:'+sellerId)) return;
       const seller = allSellers.find(s => s.id === sellerId);
-      if (seller) {
-        seller.proUpgradeStatus = 'rejected';
-        try {
-          incrementQuota('write');
-          await updateDoc(doc(db, "verified_sellers", sellerId), { proUpgradeStatus: 'rejected' });
-        } catch(e){}
-        syncLocalStorage(); renderSellerManagerTable();
-      }
+      if (!seller || seller.proUpgradeStatus !== 'pending') return;
+      founderActionsRunning.add('pro:'+sellerId); queueFounderHubRender();
+      try {
+        await updateDoc(doc(db, 'verified_sellers', sellerId), { proUpgradeStatus:'rejected' });
+        incrementQuota('write');
+      } catch(err) { alert('Pro rejection NOT saved in Firebase: '+(err.code || err.message)); }
+      finally { founderActionsRunning.delete('pro:'+sellerId); queueFounderHubRender(); }
     };
 
     window.switchAuthTab = function(tab) {
@@ -3874,46 +3955,49 @@
       const pass = document.getElementById('regPass').value.trim();
       const errEl = document.getElementById('registerError');
       errEl.classList.add('hidden');
-
-      if (!rawUser || !pass) { 
-        errEl.innerText = "Please fill in all registration fields."; 
-        errEl.classList.remove('hidden'); 
-        return; 
+      if (!rawUser || !pass) {
+        errEl.innerText = 'Please fill in all registration fields.';
+        errEl.classList.remove('hidden'); return;
       }
-
-      if (!rawUser.endsWith('@apm.com')) {
-        rawUser = `${rawUser}@apm.com`;
+      if (!rawUser.endsWith('@apm.com')) rawUser += '@apm.com';
+      const prefix = rawUser.split('@')[0];
+      if (!/^[a-z][a-z0-9]*_[a-z][a-z0-9]+$/.test(prefix) || !rawUser.endsWith('@apm.com')) {
+        errEl.innerText = 'Use the format Firstname_MatrixID@apm.com, for example keventhiran_e25101420@apm.com.';
+        errEl.classList.remove('hidden'); return;
       }
-      
-      const emailPrefix = rawUser.split('@')[0];
-      if (!emailPrefix.includes('_') || emailPrefix.includes('@gmail.com') || emailPrefix.includes('gmail')) {
-        errEl.innerText = "Registration Failed! You haven't followed the criteria. Email MUST be in the format: Firstname_matrixID@apm.com (e.g. keventhiran_e25101420@apm.com). Personal Gmail is not allowed.";
-        errEl.classList.remove('hidden');
-        return;
-      }
-
-      const cleanUsername = emailPrefix;
+      registrationInProgress = true;
       try {
-        await createUserWithEmailAndPassword(auth, rawUser, pass);
-        const newSellerDoc = { id: 'seller-' + Date.now(), username: cleanUsername, email: rawUser.toLowerCase(), isVerified: false, tier: 'free' };
+        const credential = await createUserWithEmailAndPassword(auth, rawUser, pass);
+        const sellerId = 'seller-' + credential.user.uid;
+        const seller = {
+          id:sellerId, uid:credential.user.uid, username:prefix, email:rawUser,
+          isVerified:false, tier:'free', createdAt:new Date().toISOString()
+        };
         try {
+          await setDoc(doc(db, 'verified_sellers', sellerId), seller);
           incrementQuota('write');
-          await setDoc(doc(db, "verified_sellers", newSellerDoc.id), newSellerDoc);
-        } catch(e){}
-        
+        } catch(err) {
+          errEl.innerText = `Firebase account created, but the approval request could not be saved (${err.code || err.message}). Log in again to retry profile creation; tell the Founder if this continues.`;
+          errEl.classList.remove('hidden');
+          return;
+        }
         try {
-          incrementQuota('write');
-          await addDoc(collection(db, "payment_alerts"), {
-            type: "New Student Verification", seller: cleanUsername, email: rawUser, amount: "0.00", createdAt: new Date().toISOString()
+          await addDoc(collection(db, 'payment_alerts'), {
+            type:'New Student Verification', sellerId, uid:credential.user.uid,
+            seller:prefix, email:rawUser, amount:'0.00', status:'pending',
+            createdAt:new Date().toISOString()
           });
-        } catch(e){}
-
-        allSellers.push(newSellerDoc); syncLocalStorage(); await signOut(auth);
-        alert("Registration Successful! Your account is pending Founder approval. Please check back soon.");
+          incrementQuota('write');
+        } catch(err) { console.warn('Registration alert unavailable:', err); }
+        allSellers = [...allSellers.filter(s => s.id !== seller.id), seller];
+        alert('Registration saved successfully! Founder approval is pending.');
         switchAuthTab('login');
-      } catch (err) { 
+      } catch(err) {
         errEl.innerText = `Registration Error: ${err.message}`;
         errEl.classList.remove('hidden');
+      } finally {
+        try { await signOut(auth); } catch(err) { console.warn('Signout after registration:',err); }
+        registrationInProgress = false;
       }
     };
 
@@ -3921,80 +4005,115 @@
 
     onAuthStateChanged(auth, async (user) => {
       if (!unsubscribeListings) listenToListings();
+      if (user && registrationInProgress) return; // Auth event fires before profile creation completes.
+      if (unsubscribeCurrentSeller) { unsubscribeCurrentSeller(); unsubscribeCurrentSeller=null; }
       if (user) {
         currentUserEmail = (user.email || '').toLowerCase();
-        const founderEmails = ['keventhiran_e25101420@apm.com', 'taarisini_e25101220@apm.com'];
-        isFounderUser = founderEmails.includes(currentUserEmail);
-        currentUser = user.email.split('@')[0];
-
-        await loadSellers();
-        const sellerProfile = allSellers.find(s => (s.email || '').toLowerCase() === currentUserEmail);
-        if (sellerProfile && !sellerProfile.isVerified && !isFounderUser) {
+        isFounderUser = ['keventhiran_e25101420@apm.com', 'taarisini_e25101220@apm.com'].includes(currentUserEmail);
+        currentUser = currentUserEmail.split('@')[0];
+        const profilesReady = await loadSellers();
+        if (auth.currentUser?.uid !== user.uid) return;
+        let sellerProfile = findSellerByEmail(currentUserEmail);
+        if (!profilesReady && !isFounderUser) {
           await signOut(auth);
-          alert("Your account is pending founder verification. Please check back soon!");
+          alert('Cannot check your account approval because Firebase seller profiles are unavailable. Please check Firestore permissions and your internet connection.');
           return;
         }
-        const isPro = sellerProfile && sellerProfile.tier === 'pro';
-        applyUserTheme(isPro);
-
+        // Recover Firebase Auth accounts whose first registration failed to create a seller document.
+        if (!sellerProfile && !isFounderUser) {
+          const recoveryId = 'seller-' + user.uid;
+          const recovery = {id:recoveryId,uid:user.uid,username:currentUser, email:currentUserEmail,
+            isVerified:false, tier:'free', createdAt:new Date().toISOString()};
+          try {
+            await setDoc(doc(db,'verified_sellers',recoveryId),recovery);
+            incrementQuota('write');
+            await signOut(auth);
+            alert('Your missing seller profile has been created. Please wait for Founder approval before signing in.');
+          } catch(err) {
+            await signOut(auth);
+            alert('Your Firebase login exists, but the seller profile is missing and could not be repaired ('+(err.code || err.message)+'). Check Firestore rules.');
+          }
+          return;
+        }
+        if (!isFounderUser && sellerProfile && sellerProfile.isVerified !== true) {
+          await signOut(auth);
+          alert(sellerProfile.approvalStatus === 'rejected' ? 'Your account request was rejected or revoked. Please contact the Founder.' : 'Your account is awaiting Founder verification. Please check back after approval.');
+          return;
+        }
+        const isPro = sellerProfile?.tier === 'pro' && (!sellerProfile.proExpiryDate || new Date(sellerProfile.proExpiryDate) > new Date());
+        applyUserTheme(!!isPro);
         document.getElementById('floatingPostBtn').style.display = 'block';
         document.getElementById('addClubBtn').style.display = 'flex';
         if (isFounderUser) {
           document.getElementById('sellerManagerNavBtn').style.display = 'flex';
           setupFounderRealtimeListeners();
+        } else if (sellerProfile) {
+          startCurrentSellerListener(sellerProfile.id, user.uid);
         }
-
         checkExpiredBoostsForSeller();
       } else {
         stopFounderRealtimeListeners();
-        currentUser = null; currentUserEmail = null; isFounderUser = false;
+        if (unsubscribeCurrentSeller) { unsubscribeCurrentSeller(); unsubscribeCurrentSeller=null; }
+        currentUser=null; currentUserEmail=null; isFounderUser=false;
         applyUserTheme(false);
         document.getElementById('floatingPostBtn').style.display = 'none';
         document.getElementById('addClubBtn').style.display = 'none';
         document.getElementById('sellerManagerNavBtn').style.display = 'none';
+        founderProfilesReady=false;
       }
       updateNavTabVisuals(); renderListings(); renderClubs(); loadContributors();
-      if (isFounderUser) renderSellerManagerTable();
+      if (isFounderUser) queueFounderHubRender();
     });
 
     const founderUnsubscribers = [];
     function stopFounderRealtimeListeners() {
       while (founderUnsubscribers.length) {
-        try { founderUnsubscribers.pop()(); } catch(e) {}
+        try { founderUnsubscribers.pop()(); } catch(err) {console.warn('Unsubscribe:',err);}
       }
+      founderProfilesReady = false;
     }
     function setupFounderRealtimeListeners() {
-      if (founderUnsubscribers.length) return; // Prevent duplicate subscriptions after login.
-      try {
-        founderUnsubscribers.push(onSnapshot(collection(db, "payment_alerts"), (snapshot) => {
-          incrementQuota('read');
-          snapshot.docChanges().forEach((change) => {
-            if (change.type === "added") {
-              const data = change.doc.data();
-              if (!localStorage.getItem(`apm_notified_${change.doc.id}`)) {
-                localStorage.setItem(`apm_notified_${change.doc.id}`, 'true');
-                triggerDesktopNotification("APM Founder Alert!", `${data.type} submitted by ${data.seller}! Check Admin Hub.`);
-              }
-            }
-          });
-        }));
-
-        founderUnsubscribers.push(onSnapshot(collection(db, "verified_sellers"), (snapshot) => {
-          incrementQuota('read');
-          allSellers = snapshot.docs.map(d => ({ id:d.id, ...d.data(), email:(d.data().email || '').toLowerCase() }));
-          syncLocalStorage();
-          if (!document.getElementById('sellerManagerModal')?.classList.contains('hidden')) renderSellerManagerTable();
-          snapshot.docChanges().forEach((change) => {
-            if (change.type === "added") {
-              const data = change.doc.data();
-              if (data.isVerified === false && !localStorage.getItem(`apm_seller_notified_${change.doc.id}`)) {
-                localStorage.setItem(`apm_seller_notified_${change.doc.id}`, 'true');
-                triggerDesktopNotification("New Student Registration!", `New student ${data.username} requested verification.`);
-              }
-            }
-          });
-        }));
-      } catch(e) { console.warn('Founder listeners:', e.message); }
+      if (!isFounderUser || founderUnsubscribers.length) return;
+      let alertsInitialized = false;
+      let profilesInitialized = false;
+      founderUnsubscribers.push(onSnapshot(collection(db, 'payment_alerts'), snapshot => {
+        // Old alerts from earlier sessions must never ring like new requests on login.
+        if (!alertsInitialized) {alertsInitialized=true;return;}
+        snapshot.docChanges().forEach(change => {
+          if (change.type !== 'added') return;
+          const data=change.doc.data();
+          if (data.status === 'approved' || data.status === 'rejected' || data.type === 'New Student Verification') return;
+          if (!localStorage.getItem(`apm_notified_${change.doc.id}`)) {
+            localStorage.setItem(`apm_notified_${change.doc.id}`,'true');
+            triggerDesktopNotification('APM Founder Alert', `${data.type || 'Request'} from ${data.seller || data.email || 'APM member'}.`);
+          }
+        });
+      }, err => {
+        console.warn('Payment alerts unavailable:',err);
+        // Approval uses linked seller/listing records and does not depend on alerts.
+      }));
+      founderUnsubscribers.push(onSnapshot(collection(db, 'verified_sellers'), snapshot => {
+        if (profilesInitialized) snapshot.docChanges().forEach(change => {
+          const data=change.doc.data();
+          if (change.type==='added' && data.isVerified===false && data.approvalStatus!=='rejected' &&
+              !localStorage.getItem('apm_seller_notified_'+change.doc.id)) {
+            localStorage.setItem('apm_seller_notified_'+change.doc.id,'true');
+            triggerDesktopNotification('New Student Registration', `${data.username||data.email||'Student'} requested approval.`);
+          }
+        });
+        profilesInitialized=true;
+        founderProfilesReady=true;
+        sellerProfilesLoadError='';
+        allSellers=snapshot.docs.map(d=>({ ...d.data(),id:d.id,email:(d.data().email||'').toLowerCase() }));
+        syncLocalStorage();
+        showFounderSyncError('');
+        queueFounderHubRender();
+      }, err => {
+        founderProfilesReady=false;
+        sellerProfilesLoadError=err.code || err.message;
+        showFounderSyncError('Cannot read seller requests from Firebase ('+sellerProfilesLoadError+'). Check Firestore rules. Approvals are not available.');
+        queueFounderHubRender();
+      }));
     }
 
     function checkExpiredBoostsForSeller() {
@@ -4142,14 +4261,21 @@
     async function loadSellers() {
       if (pendingSellersFetch) return pendingSellersFetch;
       pendingSellersFetch = (async () => {
-        incrementQuota('read');
         try {
-          const querySnapshot = await getDocs(collection(db, 'verified_sellers'));
-          allSellers = querySnapshot.docs.map(d => ({ id:d.id, ...d.data(), email:(d.data().email || '').toLowerCase() }));
+          const snapshot=await getDocsFromServer(collection(db, 'verified_sellers'));
+          allSellers=snapshot.docs.map(d=>({ ...d.data(),id:d.id,email:(d.data().email||'').toLowerCase() }));
+          sellerProfilesLoadError='';
           syncLocalStorage();
-        } catch (err) { console.warn('Seller profiles unavailable:', err.code || err.message); }
+          incrementQuota('read');
+          return true;
+        } catch(err) {
+          sellerProfilesLoadError=err.code || err.message;
+          console.warn('Cannot confirm seller profiles on Firebase server:',err);
+          showFounderSyncError('Firebase seller records could not be loaded ('+sellerProfilesLoadError+'). Check Firestore rules.');
+          return false; // Never grant approval based only on localStorage.
+        }
       })();
-      try { await pendingSellersFetch; } finally { pendingSellersFetch = null; }
+      try {return await pendingSellersFetch;} finally {pendingSellersFetch=null;}
     }
 
     window.toggleDescription = function(itemId) {
@@ -4276,70 +4402,111 @@
       }).join('');
     };
 
-    window.renderSellerManagerTable = async function() {
-      // Use already loaded state. Realtime listing listener keeps this current.
-      const searchPendingBoosts = (document.getElementById('searchPendingBoostsInput')?.value || '').toLowerCase();
-      const searchPendingPro = (document.getElementById('searchPendingProInput')?.value || '').toLowerCase();
-      const searchPendingStudents = (document.getElementById('searchPendingStudentsInput')?.value || '').toLowerCase();
-      const searchVerified = (document.getElementById('sellerSearchInput')?.value || '').toLowerCase();
+    window.renderSellerManagerTable = function() {
+      const boostSearch=(document.getElementById('searchPendingBoostsInput')?.value||'').toLowerCase();
+      const proSearch=(document.getElementById('searchPendingProInput')?.value||'').toLowerCase();
+      const studentSearch=(document.getElementById('searchPendingStudentsInput')?.value||'').toLowerCase();
+      const verifiedSearch=(document.getElementById('sellerSearchInput')?.value||'').toLowerCase();
+      const pendingBoostsContainer=document.getElementById('pendingBoostsContainer');
+      const pendingProContainer=document.getElementById('pendingProContainer');
+      const pendingContainer=document.getElementById('pendingSellersContainer');
+      const tbody=document.getElementById('sellersTableBody');
+      if (!pendingContainer || !pendingProContainer || !pendingBoostsContainer || !tbody) return;
+      if (sellerProfilesLoadError) showFounderSyncError('Firebase seller profiles unavailable ('+sellerProfilesLoadError+'). Check Firestore Database → Rules.');
+      else showFounderSyncError('');
+      const safe=escapeAdminHTML;
+      const loading=!founderProfilesReady && !sellerProfilesLoadError;
+      const actionBtns=(kind,id,accept,reject)=>{
+        const busy=founderActionsRunning.has(kind+':'+id);
+        const disabled=busy?'disabled aria-disabled="true"':'';
+        const saved=safe(id);
+        return `<div class="flex shrink-0 gap-1.5"><button ${disabled} onclick="${accept}('${saved}')" class="px-3 py-1.5 rounded-lg bg-emerald-600 text-white text-[10px] font-bold disabled:opacity-50">${busy?'Saving...':'Accept'}</button><button ${disabled} onclick="${reject}('${saved}')" class="px-3 py-1.5 rounded-lg bg-rose-600 text-white text-[10px] font-bold disabled:opacity-50">Reject</button></div>`;
+      };
+      const approvedEmails=new Set(allSellers.filter(s=>s.isVerified===true).map(s=>(s.email||'').toLowerCase()));
+      const uniquePending=new Map();
+      // Never resurrect a pending duplicate after the same account has been verified.
+      allSellers.forEach(s=>{
+        const email=(s.email||'').toLowerCase();
+        if (s.isVerified!==false || s.approvalStatus==='rejected' || (email && approvedEmails.has(email))) return;
+        const key=email || s.id;
+        if (!uniquePending.has(key)) uniquePending.set(key,s);
+      });
+      const pendingStudents=[...uniquePending.values()].filter(s=>
+        `${s.username||''} ${s.email||''}`.toLowerCase().includes(studentSearch));
+      document.getElementById('pendingCountBadge').textContent=`${pendingStudents.length} Pending`;
+      pendingContainer.innerHTML=loading?'<p class="text-xs text-slate-500">Loading requests...</p>':
+        sellerProfilesLoadError?'<p class="text-xs text-rose-600">Cannot confirm pending accounts.</p>':
+        !pendingStudents.length?'<p class="text-xs text-slate-500">No pending student verifications.</p>':
+        pendingStudents.map(s=>`<div class="bg-white border border-slate-200 rounded-xl p-2.5 flex items-center justify-between gap-2 text-xs"><div class="min-w-0"><div class="font-bold text-slate-900 break-words">${safe(s.username||'Student')}</div><div class="text-[10px] text-slate-500 break-all">${safe(s.email||'')}</div></div>${actionBtns('seller',s.id,'approveSeller','rejectSeller')}</div>`).join('');
 
-      const pendingBoostsContainer = document.getElementById('pendingBoostsContainer');
-      const pendingProContainer = document.getElementById('pendingProContainer');
-      const pendingContainer = document.getElementById('pendingSellersContainer');
-      const tbody = document.getElementById('sellersTableBody');
-      const now = new Date();
+      const uniquePro=new Map();
+      allSellers.forEach(s=>{
+        const email=(s.email||'').toLowerCase();
+        if (s.proUpgradeStatus!=='pending' || s.tier==='pro' || !s.isVerified) return;
+        const key=email || s.id;
+        if (!uniquePro.has(key)) uniquePro.set(key,s);
+      });
+      const pendingPro=[...uniquePro.values()].filter(s=>
+        `${s.username||''} ${s.email||''}`.toLowerCase().includes(proSearch));
+      document.getElementById('pendingProCountBadge').textContent=`${pendingPro.length} Pending`;
+      pendingProContainer.innerHTML=loading?'<p class="text-xs text-slate-500">Loading requests...</p>':
+        sellerProfilesLoadError?'<p class="text-xs text-rose-600">Cannot confirm Pro requests.</p>':
+        !pendingPro.length?'<p class="text-xs text-slate-500">No pending Pro upgrades.</p>':
+        pendingPro.map(s=>`<div class="bg-white border border-purple-200 rounded-xl p-2.5 flex items-center justify-between gap-2 text-xs"><div class="min-w-0"><div class="font-bold break-words">${safe(s.username||'Seller')}</div><div class="text-[10px] text-slate-500 break-all">${safe(s.email||'')} · RM5</div></div>${actionBtns('pro',s.id,'approveProUpgrade','rejectProUpgrade')}</div>`).join('');
 
-      const pendingBoosts = allListings.filter(i => i.boostStatus === 'pending' && (i.title.toLowerCase().includes(searchPendingBoosts) || (i.seller||'').toLowerCase().includes(searchPendingBoosts)));
-      document.getElementById('pendingBoostsCountBadge').innerText = `${pendingBoosts.length} Pending`;
-      pendingBoostsContainer.innerHTML = pendingBoosts.length === 0 ? `<p class="text-[11px] text-amber-800 italic">No matching pending ad boosts.</p>` : pendingBoosts.map(i => `<div class="bg-white p-2.5 rounded-xl border border-amber-300 flex items-center justify-between text-xs"><div><span class="font-extrabold text-slate-900 block">${i.title}</span><span class="text-[10px] text-slate-500">Seller: ${i.seller} | Requested: ${i.boostRequestedDays || 1} Day(s)</span></div><div class="space-x-1 shrink-0"><button onclick="approveBoost('${i.id}')" class="px-2.5 py-1 rounded-lg bg-emerald-600 text-white font-bold text-[10px]">Accept</button><button onclick="rejectBoost('${i.id}')" class="px-2.5 py-1 rounded-lg bg-rose-600 text-white font-bold text-[10px]">Reject</button></div></div>`).join('');
+      const pendingBoosts=allListings.filter(i=>i.boostStatus==='pending' && `${i.title||''} ${i.seller||''}`.toLowerCase().includes(boostSearch));
+      document.getElementById('pendingBoostsCountBadge').textContent=`${pendingBoosts.length} Pending`;
+      pendingBoostsContainer.innerHTML=!pendingBoosts.length?'<p class="text-xs text-slate-500">No pending ad boosts.</p>':
+        pendingBoosts.map(i=>`<div class="bg-white border border-amber-200 rounded-xl p-2.5 flex items-center justify-between gap-2 text-xs"><div class="min-w-0"><div class="font-bold break-words">${safe(i.title||'Listing')}</div><div class="text-[10px] text-slate-500 break-words">${safe(i.seller||'Seller')} · ${Number(i.boostRequestedDays)||1} day(s)</div></div>${actionBtns('boost',i.id,'approveBoost','rejectBoost')}</div>`).join('');
 
-      const pendingProSellers = allSellers.filter(s => s.proUpgradeStatus === 'pending' && (s.username.toLowerCase().includes(searchPendingPro) || s.email.toLowerCase().includes(searchPendingPro)));
-      document.getElementById('pendingProCountBadge').innerText = `${pendingProSellers.length} Pending`;
-      pendingProContainer.innerHTML = pendingProSellers.length === 0 ? `<p class="text-[11px] text-purple-800 italic">No matching pending pro upgrades.</p>` : pendingProSellers.map(s => `<div class="bg-white p-2.5 rounded-xl border border-purple-300 flex items-center justify-between text-xs"><div><span class="font-extrabold text-slate-900 block">${s.username}</span><span class="text-[10px] text-slate-500">${s.email} | Pro Tier (RM5)</span></div><div class="space-x-1 shrink-0"><button onclick="approveProUpgrade('${s.id}')" class="px-2.5 py-1 rounded-lg bg-emerald-600 text-white font-bold text-[10px]">Accept</button><button onclick="rejectProUpgrade('${s.id}')" class="px-2.5 py-1 rounded-lg bg-rose-600 text-white font-bold text-[10px]">Reject</button></div></div>`).join('');
-
-      const pendingStudents = allSellers.filter(s => !s.isVerified && (s.username.toLowerCase().includes(searchPendingStudents) || s.email.toLowerCase().includes(searchPendingStudents)));
-      document.getElementById('pendingCountBadge').innerText = `${pendingStudents.length} Pending`;
-      pendingContainer.innerHTML = pendingStudents.length === 0 ? `<p class="text-[11px] text-amber-800 italic">No matching pending students.</p>` : pendingStudents.map(s => `<div class="bg-white p-2.5 rounded-xl border border-amber-300 flex items-center justify-between text-xs"><div><span class="font-extrabold text-slate-900 block">${s.username}</span><span class="text-[10px] text-slate-500">${s.email}</span></div><div class="space-x-1 shrink-0"><button onclick="approveSeller('${s.id}')" class="px-2.5 py-1 rounded-lg bg-emerald-600 text-white font-bold text-[10px]">Accept</button><button onclick="rejectSeller('${s.id}')" class="px-2.5 py-1 rounded-lg bg-rose-600 text-white font-bold text-[10px]">Reject</button></div></div>`).join('');
-
-      tbody.innerHTML = allSellers.filter(s => s.isVerified && (s.username.toLowerCase().includes(searchVerified) || s.email.toLowerCase().includes(searchVerified))).map(seller => {
-        let tierDisplay = `<span class="px-2 py-1 rounded-lg text-[9px] font-black uppercase bg-slate-100 text-slate-700">FREE</span>`;
-        if (seller.tier === 'pro') {
-          if (seller.proExpiryDate) {
-            const exp = new Date(seller.proExpiryDate);
-            if (exp > now) {
-              const diffMs = exp - now; const days = Math.floor(diffMs / (1000 * 60 * 60 * 24)); const hrs = Math.floor((diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-              tierDisplay = `<div class="flex flex-col items-center"><span class="px-2 py-0.5 rounded-lg text-[9px] font-black uppercase bg-amber-100 text-amber-900 mb-0.5">PRO</span><span class="text-[9px] font-bold text-amber-700">${days > 0 ? days + 'd ' : ''}${hrs}h left</span></div>`;
-            } else { seller.tier = 'free'; tierDisplay = `<span class="px-2 py-1 rounded-lg text-[9px] font-black uppercase bg-slate-100 text-slate-700">EXPIRED</span>`; }
-          } else { tierDisplay = `<span class="px-2 py-1 rounded-lg text-[9px] font-black uppercase bg-amber-100 text-amber-900">PRO</span>`; }
-        }
-        return `<tr class="hover:bg-slate-50 transition-all"><td class="p-3"><div class="font-bold text-slate-900">${seller.username}</div><div class="text-[10px] text-slate-400">${seller.email}</div></td><td class="p-3 text-center">${tierDisplay}</td><td class="p-3 text-right"><button onclick="rejectSeller('${seller.id}')" class="px-2 py-1 rounded-xl bg-rose-600 text-white text-[10px] font-bold">Revoke</button></td></tr>`;
-      }).join('');
+      const now=new Date();
+      const verifiedByEmail=new Map();
+      allSellers.filter(s=>s.isVerified===true).forEach(s=>{const key=s.email||s.id;if (!verifiedByEmail.has(key)) verifiedByEmail.set(key,s);});
+      const verified=[...verifiedByEmail.values()].filter(s=>`${s.username||''} ${s.email||''}`.toLowerCase().includes(verifiedSearch));
+      tbody.innerHTML=loading?'<tr><td colspan="3" class="p-3 text-slate-500">Loading verified users...</td></tr>':
+        sellerProfilesLoadError?'<tr><td colspan="3" class="p-3 text-rose-600">Unable to load verified users from Firebase.</td></tr>':
+        !verified.length?'<tr><td colspan="3" class="p-3 text-slate-500">No verified users.</td></tr>':
+        verified.map(s=>{
+          const isPro=s.tier==='pro' && (!s.proExpiryDate || new Date(s.proExpiryDate)>now);
+          const tier=isPro?'PRO':'FREE';
+          return `<tr class="border-b border-slate-100"><td class="p-3"><div class="font-bold break-words">${safe(s.username||'Member')}</div><div class="text-[10px] text-slate-500 break-all">${safe(s.email||'')}</div></td><td class="p-3 text-center font-bold">${tier}</td><td class="p-3 text-right"><button onclick="rejectSeller('${safe(s.id)}')" class="rounded-lg bg-rose-600 px-2.5 py-1.5 text-white text-[10px] font-bold">Revoke</button></td></tr>`;
+        }).join('');
     };
 
     window.approveSeller = async function(id) {
-      const s = allSellers.find(x => x.id === id);
-      if (s) { 
-        s.isVerified = true; 
-        try {
-          incrementQuota('write');
-          await updateDoc(doc(db, "verified_sellers", id), { isVerified: true });
-        } catch(e) { 
-          try {
-            incrementQuota('write');
-            await setDoc(doc(db, "verified_sellers", id), s);
-          } catch(err) {} 
-        }
-        syncLocalStorage(); renderSellerManagerTable(); alert(`Successfully verified ${s.username}!`); 
+      if (!founderOnlyAction() || founderActionsRunning.has('seller:'+id)) return;
+      const seller=allSellers.find(s=>s.id===id);
+      if (!seller || seller.isVerified===true) return;
+      founderActionsRunning.add('seller:'+id);
+      queueFounderHubRender();
+      try {
+        await updateDoc(doc(db, 'verified_sellers', id), {isVerified:true, approvalStatus:'approved'});
+        // Confirm the real server value, not a local optimistic state change.
+        const serverRecord=await getDocFromServer(doc(db, 'verified_sellers',id));
+        if (!serverRecord.exists() || serverRecord.data().isVerified!==true) throw new Error('The server did not confirm verification.');
+        incrementQuota('write');
+        alert(`${seller.username} has been verified successfully.`);
+      } catch(err) {
+        console.error('APM approval failed:',err);
+        alert(`Approval FAILED — no Firebase confirmation. ${err.code||err.message}
+Check Firestore Rules and your Founder account permissions.`);
+      } finally {
+        founderActionsRunning.delete('seller:'+id);
+        queueFounderHubRender();
       }
     };
-
     window.rejectSeller = async function(id) {
-      allSellers = allSellers.filter(x => x.id !== id);
+      if (!founderOnlyAction() || founderActionsRunning.has('seller:'+id)) return;
+      const seller=allSellers.find(s=>s.id===id);
+      if (!seller) return;
+      if (!confirm(`Revoke or reject ${seller.username||seller.email}?`)) return;
+      founderActionsRunning.add('seller:'+id); queueFounderHubRender();
       try {
-        incrementQuota('delete');
-        await deleteDoc(doc(db, "verified_sellers", id));
-      } catch(e){}
-      syncLocalStorage(); renderSellerManagerTable();
+        // Keep the seller record marked rejected so login cannot recreate a fresh pending request.
+        await updateDoc(doc(db,'verified_sellers',id), { isVerified:false, approvalStatus:'rejected' });
+        incrementQuota('write');
+      } catch(err) {alert('Firebase did NOT save this rejection: '+(err.code||err.message));}
+      finally {founderActionsRunning.delete('seller:'+id);queueFounderHubRender();}
     };
 
     window.terminateListing = async function(id) {
@@ -4376,7 +4543,7 @@
     window.closeAuthModal = function() { document.getElementById('authModal').classList.add('hidden'); };
     window.performLogout = function() { signOut(auth).then(() => { applyUserTheme(false); switchMainTab('home'); }); };
 
-    window.openSellerManagerModal = function() { renderSellerManagerTable(); document.getElementById('sellerManagerModal').classList.remove('hidden'); };
+    window.openSellerManagerModal = function() { document.getElementById('sellerManagerModal').classList.remove('hidden'); renderSellerManagerTable(); };
     window.closeSellerManagerModal = function() { document.getElementById('sellerManagerModal').classList.add('hidden'); };
     window.openUpgradeModal = function() { document.getElementById('upgradeModal').classList.remove('hidden'); };
     window.closeUpgradeModal = function() { document.getElementById('upgradeModal').classList.add('hidden'); };
